@@ -15,6 +15,7 @@ const ShowCourses = () => {
     axios
       .get(`api/course/getcourse?courseId=${id}`)
       .then(({ data }) => {
+        console.log(data);
         setSingleCourse(data);
       })
       .catch((e) => console.log(e));
@@ -84,7 +85,7 @@ const ShowCourses = () => {
                     <label
                       onClick={() => updateCourse(course._id)}
                       htmlFor="my-modal"
-                      className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2"
+                      className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 text-white"
                     >
                       Update
                     </label>

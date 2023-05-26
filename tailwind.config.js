@@ -8,7 +8,8 @@ module.exports = {
       primary: "#FF4B00",
       white:"#FFFFFF",
       black:"#000",
-      button:"#FF4B00"
+      button:"#FF4B00",
+      red:"#FF0000",
     },
     extend: {
     },

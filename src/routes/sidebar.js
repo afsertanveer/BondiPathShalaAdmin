@@ -99,7 +99,7 @@ const routes = [
     name: 'Exam', // name that appear in Sidebar
     submenu : [
       {
-        path: '/dashboard/exam/create-new', //url
+        path: '/dashboard/exams/create-new', //url
         icon: <UserIcon className={submenuIconClasses}/>, // icon component
         name: 'Add Exam', // name that appear in Sidebar
       },
@@ -109,7 +109,7 @@ const routes = [
         name: 'Add Question',
       },
       {
-        path: '/dashboard/exam/assigncourse',
+        path: '/dashboard/exam/show',
         icon: <MoonIcon className={submenuIconClasses}/>,
         name: 'Show Exam',
       },

@@ -41,7 +41,6 @@ const routes = [
     path: '/exams/create-new', // the url
     component: AddExam, // view rendered
   },
-  
   {
     path: '/courses/show', // the url
     component: ShowCourses, // view rendered

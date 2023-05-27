@@ -111,6 +111,7 @@ const ShowExam = () => {
     }).then(data=>{
       toast.success("success");
       form.reset();
+      window.location.reload(false);
     }).catch(e=>console.log(e))
     document.getElementById("my-modal-2").checked = false;
   };

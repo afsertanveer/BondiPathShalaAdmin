@@ -116,28 +116,6 @@ const routes = [
     ]
   }, 
 
-  // {
-  //   path: '', //no url needed as this has submenu
-  //   icon: <Cog6ToothIcon className={`${iconClasses} inline` }/>, // icon component
-  //   name: 'Settings', // name that appear in Sidebar
-  //   submenu : [
-  //     {
-  //       path: '/dashboard/settings-profile', //url
-  //       icon: <UserIcon className={submenuIconClasses}/>, // icon component
-  //       name: 'Profile', // name that appear in Sidebar
-  //     },
-  //     {
-  //       path: '/dashboard/settings-billing',
-  //       icon: <WalletIcon className={submenuIconClasses}/>,
-  //       name: 'Billing',
-  //     },
-  //     {
-  //       path: '/dashboard/settings-team', // url
-  //       icon: <UsersIcon className={submenuIconClasses}/>, // icon component
-  //       name: 'Team Members', // name that appear in Sidebar
-  //     },
-  //   ]
-  // },  
 ]
 
 export default routes

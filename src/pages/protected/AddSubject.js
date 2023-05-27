@@ -8,29 +8,32 @@ import { toast } from "react-hot-toast";
 const AddSubject = () => {
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedCourse,setSelectedCourse] = useState(null);
+  const [selectedCourse, setSelectedCourse] = useState(null);
 
-  const assignStudent = async(e) => {
+  const assignStudent = async (e) => {
     e.preventDefault();
     const form = e.target;
     const name = form.subject.value;
     const descr = form.description.value;
     const file = form.iLink.files[0];
     const formdata = new FormData();
-    formdata.append("iLink",file);
-    const subject ={
-        name,
-        descr,
-        courseId:selectedCourse
+    formdata.append("iLink", file);
+    const subject = {
+      name,
+      descr,
+      courseId: selectedCourse
     }
-    console.log(subject,file);
-    await axios.post(`/api/subject/createsubject?courseId=${selectedCourse}&name=${name}&descr=${descr}`,formdata,{
-        // headers: {
-        //     "Content-Type": "multipart/form-data",
-        //   }
-    }).then(({data})=>{
-        toast.success(data.message);
-        form.reset();
+    formdata.append('name', name);
+    formdata.append('descr', descr);
+    formdata.append('courseId', selectedCourse);
+    // console.log(subject,file);
+    await axios.post(`/api/subject/createsubject`, formdata, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      }
+    }).then(({ data }) => {
+      toast.success(data.message);
+      form.reset();
     })
   };
   useEffect(() => {
@@ -49,7 +52,7 @@ const AddSubject = () => {
         {isLoading && <Loader></Loader>}
         <div className="px-4 lg:px-20">
           <form onSubmit={assignStudent}>
-          <div className="form-control">
+            <div className="form-control">
               <label htmlFor="" className=" label">
                 <span className="label-text">Subject Name </span>
               </label>
@@ -92,7 +95,7 @@ const AddSubject = () => {
                 id="course_list"
                 className="input border-black input-bordered my-5"
                 required
-                onChange={e=>setSelectedCourse(e.target.value)}
+                onChange={e => setSelectedCourse(e.target.value)}
               >
                 <option value=""></option>
                 {courses.length > 0 &&

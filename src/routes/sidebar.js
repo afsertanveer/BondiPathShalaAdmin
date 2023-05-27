@@ -104,11 +104,6 @@ const routes = [
         name: 'Add Exam', // name that appear in Sidebar
       },
       {
-        path: '/dashboard/exams/add-questions',
-        icon: <MoonIcon className={submenuIconClasses}/>,
-        name: 'Add Question',
-      },
-      {
         path: '/dashboard/exam/show',
         icon: <MoonIcon className={submenuIconClasses}/>,
         name: 'Show Exam',

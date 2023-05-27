@@ -18,11 +18,7 @@ const AddSubject = () => {
     const file = form.iLink.files[0];
     const formdata = new FormData();
     formdata.append("iLink", file);
-    const subject = {
-      name,
-      descr,
-      courseId: selectedCourse
-    }
+    
     formdata.append('name', name);
     formdata.append('descr', descr);
     formdata.append('courseId', selectedCourse);

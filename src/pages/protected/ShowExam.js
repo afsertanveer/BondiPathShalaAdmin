@@ -94,14 +94,23 @@ const ShowExam = () => {
       status:true,
       examId:singleExamId
     }
+    formdata.append('questionText',questionText);
+    formdata.append('type',isText);
+    formdata.append('options',options);
+    formdata.append('optionCount',numberOfOptions);
+    formdata.append('correctOption',parseInt(correctOption));
+    formdata.append('status',true);
+    formdata.append('examId',singleExamId);
+
     console.log(question);
 
-    await axios.post(`/api/exam/addquestionmcq?questionObj=${JSON.stringify(question)}`,formdata,{
+    await axios.post(`/api/exam/addquestionmcq`,formdata,{
       headers: {
         "Content-Type": "multipart/ form-data",
       }
     }).then(data=>{
-      toast.success(data);
+      toast.success("success");
+      form.reset();
     }).catch(e=>console.log(e))
     document.getElementById("my-modal-2").checked = false;
   };
@@ -504,7 +513,7 @@ const ShowExam = () => {
                   name="type"
                   id="type"
                   className="input border-black input-bordered w-full "
-                  onChange={(e) => setIsText(e.target.value)}
+                  onChange={(e) => setIsText(!isText)}
                   required
                 >
                   <option value={true}>Text</option>

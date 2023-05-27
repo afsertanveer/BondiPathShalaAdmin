@@ -88,7 +88,7 @@ const AddQuestion = () => {
         <h1 className="text-3xl  font-bold text-center">Add EXAM</h1>
         {isLoading && <Loader></Loader>}
         <div className="px-4 lg:px-10">
-          <form className="addExam-form" onSubmit={handleAddExam}>
+          <form className="add-form" onSubmit={handleAddExam}>
             <div className="form-control">
               <label htmlFor="" className=" label">
                 <span className="label-text">Exam Name </span>

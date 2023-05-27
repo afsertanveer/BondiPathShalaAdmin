@@ -50,6 +50,10 @@ const ShowExam = () => {
     "Y",
     "Z",
   ];
+  const  handleAssignExamId = id=>{
+    console.log(id);
+    setSingleExamId(id);
+  }
   const handleUpdateExam = async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -87,7 +91,8 @@ const ShowExam = () => {
       options,
       optionCount:numberOfOptions,
       correctOption:parseInt(correctOption),
-      status:true
+      status:true,
+      examId:singleExamId
     }
     console.log(question);
 
@@ -205,7 +210,7 @@ const ShowExam = () => {
                     <td>
                       <div className="flex flex-col lg:flex-row justify-center">
                       <label
-                        onClick={() => setSingleExamId(exam._id)}
+                        onClick={() => handleAssignExamId(exam._id)}
                         htmlFor="my-modal"
                         className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                       >
@@ -213,6 +218,7 @@ const ShowExam = () => {
                       </label>
                       <label
                         htmlFor="my-modal-2"
+                        onClick={()=>setSingleExamId(exam._id)}
                         className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                       >
                         Add Questions

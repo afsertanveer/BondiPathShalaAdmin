@@ -34,6 +34,28 @@
  
 }
 
+.addExam-form input,select{
+  height: 35px !important;
+  
+}
+
+.addExam-form .form-control{
+  padding: 0;
+}
+.addExam-form span{
+
+  margin: 0 !important;
+}
+
+.addExam-form .label-text{
+  margin-bottom: 5px;
+}
+
+
+.addExam-form label{
+  padding: 2px 8px !important;
+  font-weight: 600 !important;
+}
 
 .loading-indicator:before {
     content: '';

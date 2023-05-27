@@ -25,10 +25,9 @@ const AddSubject = () => {
     }
     console.log(subject,file);
     await axios.post(`/api/subject/createsubject?courseId=${selectedCourse}&name=${name}&descr=${descr}`,formdata,{
-        headers: {
-            "Content-Type": "multipart/ form-data",
-            withCredentials: true,
-          }
+        // headers: {
+        //     "Content-Type": "multipart/form-data",
+        //   }
     }).then(({data})=>{
         toast.success(data.message);
         form.reset();

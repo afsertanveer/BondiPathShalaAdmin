@@ -6,7 +6,7 @@ import Loader from "../../Shared/Loader";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-const AddExam = () => {
+const AddQuestion = () => {
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -360,4 +360,4 @@ const AddExam = () => {
   );
 };
 
-export default AddExam;
+export default AddQuestion;

@@ -37,13 +37,19 @@ const ShowSubjects = () => {
     }
     console.log(updatedSubject);
 
-    await axios.put("/api/subject/updatesubject",updatedSubject).then(({data})=>{
+    await axios.put("api/subject/updatesubject",{name,descr,iLink,courseId,subjectId}).then(({data})=>{
       toast.success(data);
       form.reset();
       window.location.reload(false);
-    })
+    }).catch(e=>toast.error(e.response.data))
     form.reset();
     document.getElementById('my-modal').checked = false;
+  }
+  const removeSubject = async(subjectId)=>{
+    console.log(subjectId);
+    await axios.put('api/subject/deactivatesubject',{subjectId}).then(({data})=>{
+      toast.success("Subject Deactivated");
+    })
   }
   useEffect(() => {
     setIsLoading(true);
@@ -104,7 +110,7 @@ const ShowSubjects = () => {
                     >
                       Update
                     </label>
-                    <button className="btn">Deactivate</button>
+                    <button className="btn" onClick={()=>removeSubject(subject._id)}>Deactivate</button>
                   </td>
                 </tr>
               ))}

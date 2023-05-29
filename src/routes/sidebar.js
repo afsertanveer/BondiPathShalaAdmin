@@ -109,7 +109,7 @@ const routes = [
         name: 'Show Exam',
       },
       {
-        path: '/dashboard/students/assigncourse',
+        path: '/dashboard/exam/show-questions',
         icon: <MoonIcon className={submenuIconClasses}/>,
         name: 'Show Question',
       },

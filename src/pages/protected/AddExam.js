@@ -28,7 +28,6 @@ const AddExam = () => {
     const duration = parseInt(form.duration.value);
     const totalQuestionMcq = parseInt(form.total_questions.value);
     const marksPerMcq = parseInt(form.marks_per_question.value);
-    const totalMarksMcq = parseInt(form.total_marks.value);
     const status = true;
     const negativeMarks = parseFloat(form.negative_marking.value);
     const iLink = form.iLink.files[0];
@@ -44,7 +43,6 @@ const AddExam = () => {
       duration,
       totalQuestionMcq,
       marksPerMcq,
-      totalMarksMcq,
       status,
       subjectId: selectedSubject,
       courseId: selectedCourse,
@@ -242,7 +240,7 @@ const AddExam = () => {
               </div>
             </div>
             <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-start">
-              <div className="w-full lg:w-1/4">
+              <div className="w-full lg:w-1/3">
                 <label htmlFor="" className="label">
                   Total Question
                 </label>
@@ -257,7 +255,7 @@ const AddExam = () => {
                   required
                 />
               </div>
-              <div className="w-full lg:w-1/4">
+              <div className="w-full lg:w-1/3">
                 <label htmlFor="" className="label">
                   Marks Per Question
                 </label>
@@ -272,21 +270,7 @@ const AddExam = () => {
                   required
                 />
               </div>
-              <div className="w-full lg:w-1/4">
-                <label htmlFor="" className="label">
-                  Total Marks
-                </label>
-                <input
-                  type="number"
-                  className="input w-full input-bordered  border-black  mb-3"
-                  name="total_marks"
-                  id="total_marks"
-                  onInput={(e) =>
-                    e.target.value < 0 ? (e.target.value = "") : e.target.value
-                  }
-                  required
-                />
-              </div>
+            
             </div>
             <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-center">
               <div className="w-full lg:w-1/3">

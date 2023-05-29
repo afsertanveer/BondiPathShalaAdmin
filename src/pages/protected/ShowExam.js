@@ -14,11 +14,6 @@ const ShowExam = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [singleExamId, setSingleExamId] = useState(null);
   const [singleExam, setsingleExam] = useState({});
-  const [selectedType, setSelectedType] = useState(-1);
-  const [selectedVariation, setSelectedVariation] = useState(-1);
-  const [isFree, setIsFree] = useState(false);
-  const [isSSC, setIsSSC] = useState(false);
-  const [isHSC, setIsHSC] = useState(false);
   const [isText, setIsText] = useState(true);
   const [numberOfOptions, setNumberOfOptions] = useState(0);
   const [correctOption, setCorrectOption] = useState(null);
@@ -57,7 +52,46 @@ const ShowExam = () => {
   const handleUpdateExam = async (e) => {
     e.preventDefault();
     const form = e.target;
-
+    const name = form.exam.value;
+    const type = form.type.value;
+    const variation = form.variation.value;
+    const free = document.getElementById("free").checked===true? true : false ;
+    const startTime = form.start_time.value;
+    const endTime = form.end_time.value;
+    const totalQuestionMcq = form.total_questions.value;
+    const marksPerMcq = form.marks_per_question.value;
+    const duration = form.duration.value;
+    const negativeMarks = form.negative_marking.value;
+    const ssc = document.getElementById("ssc").checked===true? true : false;
+    const hsc = document.getElementById("hsc").checked===true? true : false;
+    const updatedExam = {
+      examId:singleExam._id,
+      name,
+      examType:type,
+      subjectId:singleExam.subjectId._id,
+      courseId:singleExam.courseId._id,
+      examVariation:variation,
+      examFreeOrNot:free,
+      startTime,endTime,
+      totalQuestionMcq,marksPerMcq,
+      status:true,
+      duration:duration,
+      negativeMarks,
+      sscStatus:ssc,
+      hscStatus:hsc
+    }
+    console.log(updatedExam);
+    await axios.put('/api/exam/updateexam',updatedExam).then(({data})=>{
+      toast.success(data);
+      let prevExams = [...exams];
+      for(let i=0 ;i<prevExams.length;i++){
+        if(prevExams[i]._id._id===singleExam._Id){
+          prevExams[i] = updatedExam
+        }
+      }
+      setExams(prevExams);
+      form.reset();
+    })
     form.reset();
     document.getElementById("my-modal").checked = false;
   };
@@ -96,7 +130,7 @@ const ShowExam = () => {
     }
     formdata.append('questionText',questionText);
     formdata.append('type',isText);
-    formdata.append('options',options);
+    formdata.append('options',JSON.stringify(options));
     formdata.append('optionCount',numberOfOptions);
     formdata.append('correctOption',parseInt(correctOption));
     formdata.append('status',true);
@@ -118,9 +152,23 @@ const ShowExam = () => {
     }).catch(e=>console.log(e))
     document.getElementById("my-modal-2").checked = false;
   };
+  const deactivateExam = async(examId) =>{
+    await axios.put('api/exam/deactivateexam',{examId}).then(({data})=>{
+      toast.success("Exam Deactivated");
+      let allExam = [...exams];
+      allExam = allExam.filter(ex=>ex._id!==examId);
+      setExams(allExam)
+    })
+  }
+
   const handleChangeNumberOfInput = e=>{
     setNumberOfOptions(parseInt(e.target.value))
     document.getElementById("num_of_options").disabled = true;
+  }
+  const handleChangeCourse = e =>{
+    setSelectedCourse(e.target.value);
+    setSelectedSubject("");
+    setExams([]);
   }
   useEffect(() => {
     setIsLoading(true);
@@ -142,6 +190,7 @@ const ShowExam = () => {
       axios
         .get(`api/exam/getExamBySub?subjectId=${selectedSubject}`)
         .then(({ data }) => {
+          console.log(data);
           setExams(data);
           setIsLoading(false);
         });
@@ -172,7 +221,7 @@ const ShowExam = () => {
               id="course_list"
               className="input w-full border-black input-bordered"
               required
-              onChange={(e) => setSelectedCourse(e.target.value)}
+              onChange={(e) =>handleChangeCourse(e)}
             >
               <option value=""></option>
               {courses.length > 0 &&
@@ -236,7 +285,7 @@ const ShowExam = () => {
                       >
                         Add Questions
                       </label>
-                      <button className="btn">Deactivate</button>
+                      <button className="btn" onClick={()=>deactivateExam(exam._id)}>Deactivate</button>
                       </div>
                     </td>
                   </tr>
@@ -274,7 +323,6 @@ const ShowExam = () => {
                     name="type"
                     id="type"
                     className="input border-black input-bordered w-full "
-                    onChange={(e) => setSelectedType(e.target.value)}
                     required
                   >
                     <option value={singleExam.examType} defaultChecked>
@@ -297,7 +345,6 @@ const ShowExam = () => {
                     name="variation"
                     id="variation"
                     className="input border-black input-bordered w-full "
-                    onChange={(e) => setSelectedVariation(e.target.value)}
                     required
                   >
                     <option value={singleExam.examVariation}>
@@ -316,8 +363,9 @@ const ShowExam = () => {
                   <div className="flex items-center mt-0 lg:mt-5 ">
                     <input
                       type="checkbox"
-                      checked={singleExam.examFreeOrNot ? "checked" : ""}
-                      onChange={(e) => setIsFree(!isFree)}
+                      defaultChecked={singleExam.examFreeOrNot ? "checked" : ""}
+                      name="free"
+                      id="free"
                       className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                     />
                     <label
@@ -358,30 +406,6 @@ const ShowExam = () => {
                   />
                 </div>
               </div>
-              <div className="form-control">
-                <div className="w-full">
-                  <label className="label" htmlFor="">
-                    Duration
-                  </label>
-                  <input
-                    type="mumber"
-                    className="input w-full input-bordered border-black "
-                    name="duration"
-                    id="duration"
-                    defaultValue={singleExam.duration}
-                    min="1"
-                    onInput={(e) =>
-                      e.target.value < 0
-                        ? (e.target.value = "")
-                        : e.target.value
-                    }
-                    required
-                  />
-                  <span className="text-red text-sm ml-0 lg:ml-2">
-                    (minutes)
-                  </span>
-                </div>
-              </div>
               <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-start">
                 <div className="w-full lg:w-1/4">
                   <label htmlFor="" className="label">
@@ -419,16 +443,17 @@ const ShowExam = () => {
                     required
                   />
                 </div>
-                <div className="w-full lg:w-1/4">
-                  <label htmlFor="" className="label">
-                    Total Marks
+                <div className="w-full lg:w-1/3">
+                  <label className="label" htmlFor="">
+                    Duration
                   </label>
                   <input
-                    type="number"
-                    className="input w-full input-bordered  border-black  mb-3"
-                    name="total_marks"
-                    id="total_marks"
-                    defaultValue={singleExam.totalMarksMcq}
+                    type="mumber"
+                    className="input w-full input-bordered border-black "
+                    name="duration"
+                    id="duration"
+                    defaultValue={singleExam.duration}
+                    min="1"
                     onInput={(e) =>
                       e.target.value < 0
                         ? (e.target.value = "")
@@ -436,6 +461,9 @@ const ShowExam = () => {
                     }
                     required
                   />
+                  <span className="text-red text-sm ml-0 lg:ml-2">
+                    (minutes)
+                  </span>
                 </div>
               </div>
               <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-center">
@@ -460,10 +488,10 @@ const ShowExam = () => {
                 </div>
                 <div className="flex items-center mt-0 lg:mt-5 ">
                   <input
-                    id="disabled-checked-checkbox"
+                    id="ssc"
                     type="checkbox"
-                    checked={singleExam.sscStatus ? "checked" : ""}
-                    onChange={(e) => setIsSSC(!isSSC)}
+                    name="ssc"
+                    defaultChecked={singleExam.sscStatus ? "checked" : ""}
                     className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                   />
                   <label
@@ -475,10 +503,10 @@ const ShowExam = () => {
                 </div>
                 <div className="flex items-center mt-0 lg:mt-5 ">
                   <input
-                    id="disabled-checked-checkbox"
+                    id="hsc"
                     type="checkbox"
-                    checked={singleExam.hscStatus ? "checked" : ""}
-                    onChange={(e) => setIsHSC(!isHSC)}
+                    name="hsc"
+                    defaultChecked={singleExam.hscStatus ? "checked" : ""}
                     className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                   />
                   <label

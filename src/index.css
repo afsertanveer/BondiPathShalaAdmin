@@ -27,9 +27,12 @@
   }
 
   
-  th,td,tr{
-    border: 1px solid bisque !important;
+  th{
+    border: 1px solid #FF4B00 !important;
     text-align: center;
+  }
+  tr,td{
+    border: 1px solid #FF4B00 !important;
   }
  
 }

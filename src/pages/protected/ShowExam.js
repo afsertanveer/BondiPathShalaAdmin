@@ -147,6 +147,7 @@ const ShowExam = () => {
       form.reset();
       
     document.getElementById("num_of_options").disabled =false;
+    setNumberOfOptions(0);
     setIsText(true);
 
     }).catch(e=>console.log(e))

@@ -29,6 +29,8 @@ const ShowExam = lazy(()=>import('../pages/protected/ShowExam'));
 const ShowQuestions = lazy(()=>import('../pages/protected/ShowQuestions'));
 const ExamDetails = lazy(()=>import('../pages/protected/ExamDetails'));
 const ExamSolution= lazy(()=>import('../pages/protected/ExamSolution'));
+const StudentHistory = lazy(()=>import('./../pages/protected/StudentHistory'));
+
 
 
 
@@ -100,6 +102,11 @@ const routes = [
   {
     path: '/students/assigncourse', // the url
     component: AssignCourse, // view rendered
+    
+  },
+  {
+    path: '/students/:studentId/history', // the url
+    component: StudentHistory, // view rendered
     
   },
   {

@@ -105,7 +105,7 @@ const AddSubject = () => {
             <div className="form-control">
               <input
                 type="submit"
-                value="Upload File"
+                value="Add Subject"
                 className="btn w-[150px]"
               />
             </div>

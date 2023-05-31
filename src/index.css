@@ -33,6 +33,7 @@
   }
   tr,td{
     border: 1px solid #FF4B00 !important;
+    text-align: center;
   }
  
 }

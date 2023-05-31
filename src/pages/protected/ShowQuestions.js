@@ -264,7 +264,7 @@ const ShowQuestions = () => {
         </label>
       </div>
       }
-          <table className="table w-full my-10">
+          <table className="table w-full my-10 customTable">
             <thead>
               <tr>
                 <th className="bg-white w-[10px] text-left">

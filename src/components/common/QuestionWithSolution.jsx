@@ -44,7 +44,7 @@ function Question({ question, index }) {
           <label htmlFor="explanationModal" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
           <h3 className="text-lg font-bold">Explanation!</h3>
           <p className="py-4">
-            {question.explanationILink && (<img src={`${process.env.REACT_APP_FILES_HOST}/${question.explanationILink}`} alt="explanation" />)}
+            {question.explanationILink && (<img src={`${process.env.REACT_APP_API_HOST}/${question.explanationILink}`} alt="explanation" />)}
           </p> 
         </div>
       </div>

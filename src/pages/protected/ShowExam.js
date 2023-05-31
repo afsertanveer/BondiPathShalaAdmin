@@ -258,7 +258,7 @@ const ShowExam = () => {
       {isLoading && <Loader></Loader>}
       {exams.length > 0 && (
         <div className="overflow-x-auto">
-          <table className="table w-full">
+          <table className="table w-full customTable">
             <thead>
               <tr>
                 <th className="bg-white">Exam Name</th>

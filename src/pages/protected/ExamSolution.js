@@ -1,8 +1,9 @@
-import { Suspense, lazy, useEffect, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import QuestionWithSolution from "../../components/common/QuestionWithSolution";
 import axios from "../../utils/axios";
+import Loader from "../../Shared/Loader";
 
 const ExamInfoDetails = lazy(() => import("../../components/common/ExamInfoDetails"));
 
@@ -44,10 +45,10 @@ const ExamSolution = () => {
               
           }
 
-          <div className="border border-color-4 px-6 md:px-2 py-6 md:py-4 mt-4">
+          <div className=" bg-white px-6 md:px-2 py-6 md:py-4 mt-4">
             {examData ? examData.map((question, index) => (
               <QuestionWithSolution question={question} index={++index} key={index} />
-            )) : <p> NO Data found</p> }
+            )) : <Loader></Loader> }
           </div>
         </div>
       </div>

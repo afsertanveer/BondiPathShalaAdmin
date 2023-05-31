@@ -49,7 +49,10 @@ const ShowSubjects = () => {
     console.log(subjectId);
     await axios.put('api/subject/deactivatesubject',{subjectId}).then(({data})=>{
       toast.success("Subject Deactivated");
-    })
+      let prevsub = [...subjects]
+      prevsub = prevsub.filter(s=>s._id!==subjectId);
+      setSubjects(prevsub)
+    }).catch(e=>console.log(e))
   }
   useEffect(() => {
     setIsLoading(true);
@@ -59,9 +62,13 @@ const ShowSubjects = () => {
     });
     if(singleCourse!==""){
       axios.get(`api/subject/getsubjectbycourse?courseId=${singleCourse}`).then(({data})=>{
-        setSubjects(data);
+        
+        setSubjects(data.data);
         setIsLoading(false);
-    })  
+    }).catch(e=>{
+      setSubjects([]);
+      console.log(e)
+    })
     }else{
       setSubjects([]);
     }
@@ -89,8 +96,8 @@ const ShowSubjects = () => {
       </div>
       {isLoading && <Loader></Loader>}
       {
-        subjects.length>0 && <div className="overflow-x-auto">
-        <table className="table w-full">
+        subjects?.length>0 && <div className="overflow-x-auto">
+        <table className="table w-full customTable">
           <thead>
             <tr>
               <th className="bg-white">Subject Name</th>
@@ -117,6 +124,9 @@ const ShowSubjects = () => {
           </tbody>
         </table>
       </div>
+      }
+      {
+        !subjects && <p className="text-center pt-20 text-3xl font-bold text-red">No Data Found</p>
       }
       <input type="checkbox" id="my-modal" className="modal-toggle" />
       <div className="modal">

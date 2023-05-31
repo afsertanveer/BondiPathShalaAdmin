@@ -10,7 +10,8 @@ const ExamDetails = () => {
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [exams, setExams] = useState([]);
-  const [detailedExam,setDetailedExam] = useState([])
+  const [detailedExam,setDetailedExam] = useState([]);
+  const [examInfo,setExamInfo] = useState({});
   const [selectedCourse, setSelectedCourse] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedExam, setSelectedExam] = useState("");
@@ -43,14 +44,14 @@ const ExamDetails = () => {
     axios.get("api/course/getallcourse?status=true").then(({ data }) => {
       setCourses(data.courses);
       setIsLoading(false);
-    });
+    }).catch(e=>console.log(e))
     if (selectedCourse !== "") {
       axios
         .get(`api/subject/getsubjectbycourse?courseId=${selectedCourse}`)
         .then(({ data }) => {
           setSubjects(data.data);
           setIsLoading(false);
-        });
+        }).catch(e=>console.log(e))
     } else {
       setSubjects([]);
     }
@@ -60,7 +61,7 @@ const ExamDetails = () => {
         .then(({ data }) => {
           setExams(data);
           setIsLoading(false);
-        });
+        }).catch(e=>console.log(e))
     } else {
       setExams([]);
     }
@@ -68,12 +69,14 @@ const ExamDetails = () => {
       axios
         .get(`api/student/gethistorybyexamid?examId=${selectedExam}`)
         .then(({ data }) => {
-          console.log(data?.resultData);
-          setDetailedExam(data?.resultData);
+          console.log(data);
+          setDetailedExam(data?.data);
+          setExamInfo(data.examInfo)
           setIsLoading(false);
-        });
+        }).catch(e=>console.log(e))
     } else {
         setDetailedExam([]);
+        setExamInfo({});
     }
   }, [selectedCourse, selectedSubject, selectedExam]);
   return (
@@ -150,15 +153,19 @@ const ExamDetails = () => {
           {/* head */}
           <thead>
             <tr className="text-center">
-              <th className="py-5 min-w-full w-[80px]">Sl No.</th>
-              <th className="min-w-full w-[160px]">Date</th>
-              <th className="min-w-full w-[160px]">Title</th>
-              <th className="min-w-full w-[160px]">Subject</th>
-              <th className="min-w-full w-[160px]">D/W/M</th>
-              <th className="min-w-full w-[160px]">Exam Type</th>
-              <th className="min-w-full w-[90px]">Marks</th>
-              <th className="min-w-full w-[110px]">Merit Postition</th>
-              <th className="min-w-full w-[200px]">Action</th>
+              <th className="py-5 w-[80px]">Sl No.</th>
+              <th className="py-5 w-[80px]">Name</th>
+              <th className="py-5 w-[180px]">Registration Number</th>
+              <th className="py-5 w-[180px]">Mobile Number</th>
+              <th className="w-[160px]">Start Time</th>
+              <th className="w-[160px]">End Time</th>
+              <th className="w-[160px]">Title</th>
+              <th className="w-[160px]">Subject</th>
+              <th className="w-[160px]">D/W/M</th>
+              <th className="w-[160px]">Exam Type</th>
+              <th className="w-[90px]">Marks</th>
+              <th className="w-[110px]">Merit Postition</th>
+              <th className="w-[200px]">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -168,12 +175,16 @@ const ExamDetails = () => {
                   key={index}
                   className="even:bg-table-row-even odd:bg-table-row-odd text-center "
                 >
-                  <th className="py-5">{index + 1}</th>
+                  <td>{index + 1}</td>
+                  <td>{data.examStud.studentId.name}</td>
+                  <td>{data.examStud.studentId.regNo}</td>
+                  <td>{data.examStud.studentId.mobileNo}</td>
                   <td>{data.examStartTime}</td>
-                  <td>{data.title}</td>
-                  <td>{data.subjectName}</td>
-                  <td>{variation[parseInt(data.variation)]}</td>
-                  <td>{examType[parseInt(data.type)]}</td>
+                  <td>{data.examEndTime}</td>
+                  <td>{examInfo.name}</td>
+                  <td>{examInfo.subjectName}</td>
+                  <td>{examInfo.variation}</td>
+                  <td>{examInfo.type}</td>
                   <td>{data.totalObtainedMarks ?? 0}/{data.totalMarksMcq}</td>
                   <td>{data.meritPosition}</td>
                   <td>
@@ -181,7 +192,7 @@ const ExamDetails = () => {
                       <button className="bg-color-one h-[38px] w-[38px] rounded-full text-center tooltip" data-tip="View Exam Result">
                         <img className="inline-block" src={v1} alt="quick-view" />
                       </button>
-                      <Link to={`/dashboard/exams/${data.studentId}/${data.examId}/solution`} className="tooltip bg-color-two rounded-full text-center h-[38px] w-[38px]" data-tip="Get Solution">
+                      <Link to={`/dashboard/exams/${data.studentId}/${examInfo.id}/solution`} className="tooltip bg-color-two rounded-full text-center h-[38px] w-[38px]" data-tip="Get Solution">
                         <img className="inline-flex img p-2" src={v2} alt="view-solution" />
                       </Link>
                      {/* <button className="bg-color-two h-[38px] w-[38px] rounded-full text-center tooltip" data-tip="Get Solution">

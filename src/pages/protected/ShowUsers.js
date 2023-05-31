@@ -48,7 +48,7 @@ const ShowUsers = () => {
     setIsLoading(true);
     if(getRole!==""){
         axios.get("api/user/getuserbyrole?role="+getRole).then(({ data }) => {
-            setUsers(data);
+            setUsers(data.user);
             setIsLoading(false);
           });
     }else{
@@ -57,9 +57,9 @@ const ShowUsers = () => {
   }, [getRole]);
   return (
     <div className="">
-      <div className=" py-4 px-2 my-3">
-        <label htmlFor="" className="label-text font-semibold">Select Role</label>
-        <select name="" id="" onChange={e=>setGetRole(e.target.value)} className="input  border-black input-bordered mb-3">
+      <div className=" py-4 px-2 lg:px-20 my-3">
+        <label htmlFor="" className="label-text text-3xl font-semibold">Select Role</label>
+        <select name="" id="" onChange={e=>setGetRole(e.target.value)} className="input  border-black input-bordered mb-3 ml-5">
             <option value=""></option>
             <option value="2">Moderators</option>
             <option value="3">Teachers</option>
@@ -67,7 +67,8 @@ const ShowUsers = () => {
       </div>
       {isLoading && <Loader></Loader>}
       <div className="overflow-x-auto">
-        <table className="table w-full">
+        {
+          users.length>0 && <table className="table w-full customTable">
           <thead>
             <tr>
               <th className="bg-white">Name</th>
@@ -106,6 +107,7 @@ const ShowUsers = () => {
               ))}
           </tbody>
         </table>
+        }
       </div>
       <input type="checkbox" id="my-modal" className="modal-toggle" />
       <div className="modal">

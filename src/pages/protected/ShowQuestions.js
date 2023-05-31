@@ -48,11 +48,13 @@ const ShowQuestions = () => {
     "Z",
   ];
   const handleChangeCourse = (e) => {
-    setSelectedCourse(e.target.value);
     setSelectedSubject("");
+    setSubjects([]);
     setExams("");
     setExams([]);
     setQuestions([]);
+    setSelectedCourse(e.target.value);
+    
   };
   const handleChangeSecondCourse = (e) => {
     setQuestionCourse(e.target.value);
@@ -61,7 +63,7 @@ const ShowQuestions = () => {
     axios
       .get(`api/subject/getsubjectbycourse?courseId=${e.target.value}`)
       .then(({ data }) => {
-        setSecondSubjects(data);
+        setSecondSubjects(data.data);
         setIsLoading(false);
       });
   };
@@ -78,7 +80,7 @@ const ShowQuestions = () => {
     axios
       .get(`api/exam/getExamBySub?subjectId=${e.target.value}`)
       .then(({ data }) => {
-        setSecondExams(data);
+        setSecondExams(data.data);
         setIsLoading(false);
       });
   };
@@ -155,7 +157,7 @@ const ShowQuestions = () => {
       axios
         .get(`api/subject/getsubjectbycourse?courseId=${selectedCourse}`)
         .then(({ data }) => {
-          setSubjects(data);
+          setSubjects(data.data);
           setIsLoading(false);
         });
     } else {
@@ -175,7 +177,6 @@ const ShowQuestions = () => {
       axios
         .get(`api/exam/questionbyexamid?examId=${selectedExam}`)
         .then(({ data }) => {
-          console.log(data);
           setQuestions(data);
           setIsLoading(false);
         });
@@ -219,7 +220,7 @@ const ShowQuestions = () => {
               onChange={(e) => handleChangeSubject(e)}
             >
               <option value=""></option>
-              {subjects.length > 0 &&
+              {subjects?.length > 0 &&
                 subjects.map((subject) => (
                   <option key={subject._id} value={subject._id}>
                     {subject.name}

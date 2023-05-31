@@ -27,6 +27,11 @@ const ShowSubjects = lazy(()=>import('../pages/protected/ShowSubjects'));
 const AddExam = lazy(()=>import('../pages/protected/AddExam'));
 const ShowExam = lazy(()=>import('../pages/protected/ShowExam'));
 const ShowQuestions = lazy(()=>import('../pages/protected/ShowQuestions'));
+const ExamDetails = lazy(()=>import('../pages/protected/ExamDetails'));
+const ExamSolution= lazy(()=>import('../pages/protected/ExamSolution'));
+
+
+
 
 
 const routes = [
@@ -41,6 +46,14 @@ const routes = [
   {
     path: '/exams/create-new', // the url
     component: AddExam, // view rendered
+  },
+  {
+    path: '/exams/examdetaisbyexam', // the url
+    component: ExamDetails, // view rendered
+  },
+  {
+    path: '/exams/:studentId/:examId/solution', // the url
+    component: ExamSolution, // view rendered
   },
   {
     path: '/courses/show', // the url

@@ -36,6 +36,13 @@
   }
  
 }
+.customTable{
+  margin-top: 20px;
+}
+.customTable thead th{
+  background-color: #224156 !important;
+  color: white;
+}
 
 .add-form input,select{
   height: 35px !important;

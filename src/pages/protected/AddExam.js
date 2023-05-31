@@ -72,7 +72,7 @@ const AddExam = () => {
       axios
         .get(`api/subject/getsubjectbycourse?courseId=${selectedCourse}`)
         .then(({ data }) => {
-          setSubjects(data);
+          setSubjects(data.data);
           setIsLoading(false);
         });
     } else {

@@ -1,23 +1,43 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-  ],
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    colors:{
+    colors: {
       primary: "#FF4B00",
-      white:"#FFFFFF",
-      black:"#000",
-      button:"#FF4B00",
-      red:"#FF0000",
+      white: "#FFFFFF",
+      black: "#000",
+      button: "#FF4B00",
+      red: "#FF0000",
+      "footer-bg-top": "#101017",
+      "footer-bg-bottom": "#252530",
+      "btn-bg-top": "#FF4B00",
+      "btn-bg-bottom": "#932000",
+      "border-color": "#C5CBC9",
+      "title-color": "#154C74",
+      "border-color-2": "#FFF2ED",
+      "border-color-3": "#FF9E7F",
+      "border-color-4": "#FFA488",
+      "border-color-5": "#E2E2E2",
+      "table-header": "#224156",
+      "table-row-even": "#FFEBE4",
+      "table-row-odd": "#E8F8FF",
+      "color-one": "#FF4B00",
+      "color-two": "#2CC4FF",
+      "color-three": "#224156",
+      "color-four": "#5BD1FF",
+      "color-five": "#A7B3BB",
+      "color-six": "#FFB799",
+      "color-seven": "#FFEEE9",
+      "color-eight": "#DCE1E4",
+      "color-nine": "#D0F2FF",
+      "color-ten": "#F1FBFF",
+      "color-eleven": "#1FB875",
+      "border-one": "#F1F1F1",
     },
-    extend: {
-    },
+    extend: {},
   },
   plugins: [require("@tailwindcss/typography"), require("daisyui")],
   daisyui: {
-    themes: ["light", "dark","bumblebee"],
+    themes: ["light", "dark", "bumblebee"],
   },
-
-}
-
+};

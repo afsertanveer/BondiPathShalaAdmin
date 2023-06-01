@@ -10,16 +10,12 @@ const ShowUsers = () => {
   const[getRole,setGetRole] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [singleuser, setSingleuser] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagiNationData, setPagiNationData] = useState({});
 
   const updateuser = (id) => {
     console.log(id);
-    axios
-      .get(`api/user/getuserbyid?id=${id}`)
-      .then(({ data }) => {
-        console.log(data);
-        setSingleuser(data);
-      })
-      .catch((e) => console.log(e));
+    setSingleuser(users.filter(us=>us._id===id)[0]);
   };
   const deactiveuser = (_id) => {
     axios.put(`api/user/deactivateuser`,{_id}).then(({ data }) => {
@@ -47,14 +43,15 @@ const ShowUsers = () => {
   useEffect(() => {
     setIsLoading(true);
     if(getRole!==""){
-        axios.get("api/user/getuserbyrole?role="+getRole).then(({ data }) => {
+        axios.get(`api/user/getuserbyrole?role=${getRole}&page=${currentPage}`).then(({ data }) => {
             setUsers(data.user);
+            setPagiNationData(data.paginaeData);
             setIsLoading(false);
           });
     }else{
         setIsLoading(false)
     }
-  }, [getRole]);
+  }, [getRole,currentPage]);
   return (
     <div className="">
       <div className=" py-4 px-2 lg:px-20 my-3">
@@ -108,6 +105,22 @@ const ShowUsers = () => {
           </tbody>
         </table>
         }
+      </div>
+      <div className="flex justify-center items-center mt-4 ">
+        <div className="flex justify-center w-full px-4 lg:px-16">
+          {pagiNationData?.totalPages > 1 &&
+            [...Array(pagiNationData.totalPages).keys()].map((i) => {
+              return (
+                <button
+                  key={i}
+                  className="bg-button px-4 py-2 mr-2"
+                  onClick={(e) => setCurrentPage(i + 1)}
+                >
+                  {i + 1}
+                </button>
+              );
+            })}
+        </div>
       </div>
       <input type="checkbox" id="my-modal" className="modal-toggle" />
       <div className="modal">

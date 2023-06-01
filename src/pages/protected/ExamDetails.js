@@ -6,6 +6,7 @@ import Loader from "./../../Shared/Loader";
 import { Link } from "react-router-dom";
 import v1 from "../../assets/img/icons/tasksquare.svg";
 import v2 from "../../assets/img/icons/eye.svg";
+import { toast } from "react-hot-toast";
 const ExamDetails = () => {
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -16,8 +17,9 @@ const ExamDetails = () => {
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedExam, setSelectedExam] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const examType =["","MCQ","Written","Both"];
-  const variation = ["","Daily","Weekly","Monthly"];
+  const [currentPage,setCurrentPage] = useState(1);
+  const [pagiNationData,setPagiNationData] = useState({});
+  
  
   const handleChangeCourse = (e) => {
     setSelectedSubject("");
@@ -67,18 +69,19 @@ const ExamDetails = () => {
     }
     if (selectedExam !== "") {
       axios
-        .get(`api/student/gethistorybyexamid?examId=${selectedExam}`)
+        .get(`api/student/gethistorybyexamid?examId=${selectedExam}&page=${currentPage}`)
         .then(({ data }) => {
           console.log(data);
           setDetailedExam(data?.data);
           setExamInfo(data.examInfo)
+          setPagiNationData(data.paginateData);
           setIsLoading(false);
-        }).catch(e=>console.log(e))
+        }).catch(e=>toast.error(e.response.data))
     } else {
         setDetailedExam([]);
         setExamInfo({});
     }
-  }, [selectedCourse, selectedSubject, selectedExam]);
+  }, [selectedCourse, selectedSubject, selectedExam,currentPage]);
   return (
     <div className=" bg-white  min-h-[800px]">
       <div className=" py-4 px-2 my-3 ">
@@ -207,6 +210,22 @@ const ExamDetails = () => {
               )) : (<tr><td colSpan={9}><p  className="my-2 text-3xl text-center font-bold text-red">No Data Found</p></td></tr>)}
           </tbody>
         </table>
+        <div className="flex justify-center items-center mt-4 ">
+        <div className="flex justify-center w-full px-4 lg:px-16">
+          {pagiNationData?.totalPages > 1 &&
+            [...Array(pagiNationData.totalPages).keys()].map((i) => {
+              return (
+                <button
+                  key={i}
+                  className="bg-button px-4 py-2 mr-2"
+                  onClick={(e) => setCurrentPage(i + 1)}
+                >
+                  {i + 1}
+                </button>
+              );
+            })}
+        </div>
+      </div>
       </div>
       )}
      

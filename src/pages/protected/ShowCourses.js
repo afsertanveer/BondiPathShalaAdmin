@@ -9,6 +9,8 @@ const ShowCourses = () => {
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [singleCourse, setSingleCourse] = useState({});
+  const [currentPage,setCurrentPage] = useState(1);
+  const [pagiNationData,setPagiNationData] = useState({});
 
   const updateCourse = (id) => {
     console.log(id);
@@ -51,16 +53,21 @@ const ShowCourses = () => {
   }
   useEffect(() => {
     setIsLoading(true);
-    axios.get("api/course/getallcourse?status=true").then(({ data }) => {
+    axios.get("api/course/getallcourse?status=true&page="+currentPage).then(({ data }) => {
       setCourses(data.courses);
+      setPagiNationData(data.paginateData);
       setIsLoading(false);
-    });
-  }, []);
+    }).catch(e=>{
+      console.log(e);
+      setPagiNationData({});
+      setCourses({});
+    })
+  }, [currentPage]);
   return (
     <div className="">
       <div className=" py-4 px-2 my-3">
         <h1 className="text-3xl text-center py-3  bg-white">
-          Active Courses :{isLoading === false && courses.length}
+           Courses
         </h1>
       </div>
       {isLoading && <Loader></Loader>}
@@ -101,6 +108,23 @@ const ShowCourses = () => {
           </tbody>
         </table>
       </div>
+      <div className="flex justify-center items-center mt-4 ">
+        <div className="flex justify-center w-full px-4 lg:px-16">
+          {pagiNationData?.totalPages > 1 &&
+            [...Array(pagiNationData.totalPages).keys()].map((i) => {
+              return (
+                <button
+                  key={i}
+                  className="bg-button px-4 py-2 mr-2"
+                  onClick={(e) => setCurrentPage(i + 1)}
+                >
+                  {i + 1}
+                </button>
+              );
+            })}
+        </div>
+      </div>
+
       <input type="checkbox" id="my-modal" className="modal-toggle" />
       <div className="modal">
         <div className="modal-box">

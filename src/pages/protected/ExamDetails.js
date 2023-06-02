@@ -157,7 +157,7 @@ const ExamDetails = () => {
           <thead>
             <tr className="text-center">
               <th className="py-5 w-[80px]">Sl No.</th>
-              <th className="py-5 w-[80px]">Name</th>
+              <th className="py-5 w-[180px]">Name</th>
               <th className="py-5 w-[180px]">Registration Number</th>
               <th className="py-5 w-[180px]">Mobile Number</th>
               <th className="w-[160px]">Start Time</th>
@@ -188,22 +188,13 @@ const ExamDetails = () => {
                   <td>{examInfo.subjectName}</td>
                   <td>{examInfo.variation}</td>
                   <td>{examInfo.type}</td>
-                  <td>{data.totalObtainedMarks ?? 0}/{data.totalMarksMcq}</td>
+                  <td>{data.totalObtainedMarks ?? 0}/{examInfo.totalMarksMcq}</td>
                   <td>{data.meritPosition}</td>
                   <td>
                     <div className="flex px-2 justify-evenly">
-                      <button className="bg-color-one h-[38px] w-[38px] rounded-full text-center tooltip" data-tip="View Exam Result">
-                        <img className="inline-block" src={v1} alt="quick-view" />
-                      </button>
                       <Link to={`/dashboard/exams/${data.studentId}/${examInfo.id}/solution`} className="tooltip bg-color-two rounded-full text-center h-[38px] w-[38px]" data-tip="Get Solution">
                         <img className="inline-flex img p-2" src={v2} alt="view-solution" />
                       </Link>
-                     {/* <button className="bg-color-two h-[38px] w-[38px] rounded-full text-center tooltip" data-tip="Get Solution">
-                        <img className="inline-block" src={v2} alt="view-solution" />
-                      </button> */}
-                      {/* <button className="bg-color-three h-[38px] w-[38px] rounded-full text-center tooltip" data-tip="Retake the exam">
-                        <img className="inline-block" src={v3} alt="retake" />
-                      </button> */}
                     </div>
                   </td>
                 </tr>

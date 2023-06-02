@@ -8,23 +8,31 @@ import { toast } from "react-hot-toast";
 const AssignToCourse = () => {
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedCourse,setSelectedCourse] = useState(null);
+  const [selectedCourse, setSelectedCourse] = useState(null);
 
-  const assignStudent = async(e) => {
+  const assignStudent = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const form = e.target;
     const file = form.student_file.files[0];
     const formdata = new FormData();
-    formdata.append("excelFile",file);
-    await axios.post(`/api/coursevsstudent/addstudenttocourse?courseId=${selectedCourse}`,formdata,{
-        headers: {
+    formdata.append("excelFile", file);
+    await axios
+      .post(
+        `/api/coursevsstudent/addstudenttocourse?courseId=${selectedCourse}`,
+        formdata,
+        {
+          headers: {
             "Content-Type": "multipart/ form-data",
-          }
-    }).then(data=>{
+          },
+        }
+      )
+      .then((data) => {
         console.log(data);
         toast.success("Assigned Students Successfully");
         form.reset();
-    })
+        setIsLoading(false);
+      });
   };
   useEffect(() => {
     setIsLoading(true);
@@ -60,7 +68,7 @@ const AssignToCourse = () => {
                 id="course_list"
                 className="input border-black input-bordered my-5"
                 required
-                onChange={e=>setSelectedCourse(e.target.value)}
+                onChange={(e) => setSelectedCourse(e.target.value)}
               >
                 <option value=""></option>
                 {courses.length > 0 &&

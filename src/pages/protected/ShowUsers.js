@@ -47,10 +47,14 @@ const ShowUsers = () => {
             setUsers(data.user);
             setPagiNationData(data.paginaeData);
             setIsLoading(false);
-          });
+          }).catch(e=>{
+            toast.error(e.response.data);
+            setIsLoading(false);
+          })
     }else{
         setIsLoading(false)
     }
+    setIsLoading(false)
   }, [getRole,currentPage]);
   return (
     <div className="">

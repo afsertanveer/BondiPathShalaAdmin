@@ -65,7 +65,7 @@ const ShowQuestions = () => {
       .then(({ data }) => {
         setSecondSubjects(data.data);
         setIsLoading(false);
-      });
+      }).catch(e=>console.log(e))
   };
 
   const handleChangeSubject = (e) => {
@@ -80,9 +80,10 @@ const ShowQuestions = () => {
     axios
       .get(`api/exam/getExamBySub?subjectId=${e.target.value}`)
       .then(({ data }) => {
-        setSecondExams(data.data);
+        console.log(data);
+        setSecondExams(data);
         setIsLoading(false);
-      });
+      }).catch(e=>console.log(e))
   };
   function arrayRemove(arr, value) {
     return arr.filter(function (ele) {
@@ -134,7 +135,7 @@ const ShowQuestions = () => {
       toast.success(data);
       e.target.reset();      
       document.getElementById("my-modal").checked = false;
-    })
+    }).catch(e=>console.log(e))
   }
 
   const removeQuestion = (questionId)=>{
@@ -159,7 +160,7 @@ const ShowQuestions = () => {
         .then(({ data }) => {
           setSubjects(data.data);
           setIsLoading(false);
-        });
+        }).catch(e=>console.log(e))
     } else {
       setSubjects([]);
     }
@@ -169,7 +170,7 @@ const ShowQuestions = () => {
         .then(({ data }) => {
           setExams(data);
           setIsLoading(false);
-        });
+        }).catch(e=>console.log(e))
     } else {
       setExams([]);
     }
@@ -179,7 +180,7 @@ const ShowQuestions = () => {
         .then(({ data }) => {
           setQuestions(data);
           setIsLoading(false);
-        });
+        }).catch(e=>console.log(e))
     } else {
       setQuestions([]);
     }

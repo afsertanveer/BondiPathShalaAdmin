@@ -10,13 +10,11 @@ const ExamInfoDetails = lazy(() => import("../../components/common/ExamInfoDetai
 
 const ExamSolution = () => {
   const params = useParams();
-  console.log(params);
   const [examData, setExamData] = useState(null);
   const [examDetails, setExamDetails] = useState(null);
 
   useEffect(() => {
     axios.get(`/api/student/viewsollutionadmin?studentId=${params.studentId}&examId=${params.examId}`).then(data=>{
-        console.log(data);
         setExamData(data.data)
     }).catch(err => {
         console.log(err);

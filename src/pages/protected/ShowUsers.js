@@ -4,6 +4,8 @@ import { useState } from "react";
 import axios from "../../utils/axios";
 import Loader from "./../../Shared/Loader";
 import { toast } from "react-hot-toast";
+import DeactivateButton from "../../features/common/components/DeactivateButton";
+import PopUpModal from "../../features/common/components/PopUpModal";
 
 const ShowUsers = () => {
   const[users,setUsers] = useState([]);
@@ -12,9 +14,9 @@ const ShowUsers = () => {
   const [singleuser, setSingleuser] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [pagiNationData, setPagiNationData] = useState({});
+  const [deactivateUser,setDeactivateUser] = useState("");
 
   const updateuser = (id) => {
-    console.log(id);
     setSingleuser(users.filter(us=>us._id===id)[0]);
   };
   const deactiveuser = (_id) => {
@@ -58,7 +60,7 @@ const ShowUsers = () => {
   }, [getRole,currentPage]);
   return (
     <div className="">
-      <div className=" py-4 px-2 lg:px-20 my-3">
+      <div className=" py-4 px-2 my-3 flex justify-center items-center bg-white">
         <label htmlFor="" className="label-text text-3xl font-semibold">Select Role</label>
         <select name="" id="" onChange={e=>setGetRole(e.target.value)} className="input  border-black input-bordered mb-3 ml-5">
             <option value=""></option>
@@ -97,12 +99,7 @@ const ShowUsers = () => {
                     >
                       Update
                     </label>
-                    <button
-                      onClick={(e) => deactiveuser(user._id)}
-                      className="btn"
-                    >
-                      Deactive
-                    </button>
+                    <DeactivateButton setter={setDeactivateUser} value={user._id}></DeactivateButton>
                   </td>
                 </tr>
               ))}
@@ -179,6 +176,7 @@ const ShowUsers = () => {
           </div>
         </div>
       </div>
+      <PopUpModal modalData={deactivateUser} remove={deactiveuser}></PopUpModal>
     </div>
   );
 };

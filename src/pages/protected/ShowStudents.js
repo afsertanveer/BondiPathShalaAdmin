@@ -14,12 +14,24 @@ const ShowStudents = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pagiNationData, setPagiNationData] = useState({});
 
+  const handleStudents = e =>{
+    e.preventDefault();
+    const rgn = e.target.rgn_number.value;
+    console.log(rgn);
+    axios.get(`api/student/getstudentbycoursereg?courseId=${selectedCourse}&regNo=${rgn}`).then(({data})=>{
+      console.log(data);
+      setStudents([]);
+      let newStudent = [];
+      newStudent.push(data);
+      setStudents(newStudent);
+    })
+  }
   useEffect(() => {
     setIsLoading(true);
     axios.get("api/course/getallcourse?status=true").then(({ data }) => {
       setCourses(data.courses);
       setIsLoading(false);
-    });
+    }).catch(e=>console.log(e))
     if (selectedCourse !== "") {
       axios
         .get(
@@ -27,6 +39,7 @@ const ShowStudents = () => {
         )
         .then(({ data }) => {
           setStudents(data.data);
+          console.log(data.data);
           setPagiNationData(data.paginateData);
         })
         .catch((e) => {
@@ -43,7 +56,7 @@ const ShowStudents = () => {
   return (
     <div className="">
       <div className=" py-4 px-2 my-3">
-        <label className="label-text" htmlFor="">
+        <label className="label-text mr-3" htmlFor="">
           Select Course
         </label>
         <select
@@ -62,6 +75,25 @@ const ShowStudents = () => {
             ))}
         </select>
       </div>
+      {
+            students.length>200000000 && <div className="flex justify-center items-center">
+             <form onSubmit={handleStudents}>
+               <div className="">
+            <label className="label-text font-semibold ml-3" htmlFor="">
+              Search Registration Number
+            </label>
+            <input
+              name="rgn_number"
+              id="rgn_number"
+              className="input w-2/3 border-black input-bordered"
+              placeholder="Registration Number"
+              required
+            />
+            <input type="submit" value="Search" className="ml-3 btn " />
+          </div>
+             </form>
+            </div>
+          }
       {isLoading && <Loader></Loader>}
       {students?.length > 0 && (
         <div className="overflow-x-auto">

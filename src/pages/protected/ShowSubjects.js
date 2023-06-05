@@ -4,6 +4,8 @@ import { useState } from "react";
 import axios from "../../utils/axios";
 import Loader from "./../../Shared/Loader";
 import { toast } from "react-hot-toast";
+import PopUpModal from "../../features/common/components/PopUpModal";
+import DeactivateButton from "../../features/common/components/DeactivateButton";
 
 const ShowSubjects = () => {
   const [courses, setCourses] = useState([]);
@@ -11,6 +13,7 @@ const ShowSubjects = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [singleCourse, setSingleCourse] = useState("");
   const [singleSubject, setSingleSubject] = useState({});
+  const [deactivateSubject,setDeactivateSubject] = useState("");
 
   const updateSubject = (id) => {
     console.log(id);
@@ -58,7 +61,6 @@ const ShowSubjects = () => {
     document.getElementById("my-modal").checked = false;
   };
   const removeSubject = async (subjectId) => {
-    console.log(subjectId);
     await axios
       .put("api/subject/deactivatesubject", { subjectId })
       .then(({ data }) => {
@@ -68,6 +70,7 @@ const ShowSubjects = () => {
         setSubjects(prevsub);
       })
       .catch((e) => console.log(e));
+      document.getElementById("my-modal-1").checked = false;
   };
   useEffect(() => {
     setIsLoading(true);
@@ -92,14 +95,14 @@ const ShowSubjects = () => {
   }, [singleCourse]);
   return (
     <div className="">
-      <div className=" py-4 px-2 my-3">
+      <div className=" py-4 px-2 my-3 flex justify-center items-center bg-white">
         <label className="label-text" htmlFor="">
           Select Course
         </label>
         <select
           name="course_list"
           id="course_list"
-          className="input border-black input-bordered my-5"
+          className="input border-black input-bordered my-5 ml-4"
           required
           onChange={(e) => setSingleCourse(e.target.value)}
         >
@@ -147,12 +150,14 @@ const ShowSubjects = () => {
                       >
                         Update
                       </label>
-                      <button
-                        className="btn"
-                        onClick={() => removeSubject(subject._id)}
+                      {/* <label
+                        className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 text-white"
+                        htmlFor="my-modal-1" 
+                        onClick={()=>setDeactivateSubject(subject._id)}                       
                       >
                         Deactivate
-                      </button>
+                      </label> */}
+                      <DeactivateButton setter={setDeactivateSubject} value={subject._id}></DeactivateButton>
                     </td>
                   </tr>
                 ))}
@@ -230,6 +235,7 @@ const ShowSubjects = () => {
           </div>
         </div>
       </div>
+      <PopUpModal modalData={deactivateSubject} remove={removeSubject}></PopUpModal>
     </div>
   );
 };

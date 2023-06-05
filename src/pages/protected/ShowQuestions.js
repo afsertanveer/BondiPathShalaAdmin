@@ -4,6 +4,8 @@ import { useState } from "react";
 import axios from "../../utils/axios";
 import Loader from "./../../Shared/Loader";
 import { toast } from "react-hot-toast";
+import DeactivateButton from "../../features/common/components/DeactivateButton";
+import PopUpModal from "../../features/common/components/PopUpModal";
 const ShowQuestions = () => {
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -16,6 +18,7 @@ const ShowQuestions = () => {
   const [selectedExam, setSelectedExam] = useState("");
   const [questionCourse, setQuestionCourse] = useState("");
   const [questionSubject, setQuestionSubject] = useState("");
+  const [selectedQuestionId,setSelectedQuestionId] = useState("");
   const [questionExam, setQuestionExam] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
@@ -100,9 +103,7 @@ const ShowQuestions = () => {
         prev = arrayRemove(prev, id);
       }
     }
-
     setSelectedQuestions(prev);
-    console.table(prev);
   };
 
   const setQuestionBulkAll  =  () =>{
@@ -130,22 +131,24 @@ const ShowQuestions = () => {
       examId,
       questionArray:selectedQuestions
     }
-    console.log(questionSet);
     await axios.put("/api/exam/addQuestionMcqBulk",questionSet).then(({data})=>{
-      toast.success(data);
+      toast.success("Successfully added all the questions");
       e.target.reset();      
       document.getElementById("my-modal").checked = false;
+      window.location.reload(false);
     }).catch(e=>console.log(e))
   }
 
   const removeQuestion = (questionId)=>{
-    console.log(questionId);
      axios.put("api/exam/updatequestionstatus",{questionId}).then(({data})=>{
       toast.success("Removed Successfuly");
       let prev = [...questions];
       prev = prev.filter(pr=>pr.questionId!==questionId);
       setQuestions(prev);
     }).catch(e=>console.log(e))
+    
+    document.getElementById("my-modal-1").checked = false;
+    
   }
 
   useEffect(() => {
@@ -180,7 +183,11 @@ const ShowQuestions = () => {
         .then(({ data }) => {
           setQuestions(data);
           setIsLoading(false);
-        }).catch(e=>console.log(e))
+        }).catch(e=>{
+          setQuestions([]);
+          setSelectedQuestions([]);
+          toast.error(e.response.data);
+        })
     } else {
       setQuestions([]);
     }
@@ -265,7 +272,8 @@ const ShowQuestions = () => {
         </label>
       </div>
       }
-          <table className="table w-full my-10 customTable">
+          {
+            questions.length>0 && <table className="table w-full my-10 customTable">
             <thead>
               <tr>
                 <th className="bg-white w-[10px] text-left">
@@ -286,8 +294,7 @@ const ShowQuestions = () => {
               </tr>
             </thead>
             <tbody>
-              {questions.length > 0 &&
-                questions.map((question) => (
+              {  questions.map((question) => (
                   <tr key={question.questionId}>
                     <td className="w-[10px]">
                       <input
@@ -342,13 +349,14 @@ const ShowQuestions = () => {
                         alt=""
                       />
                     </td>
-                    <td>
-                      <button className="btn" onClick={()=>removeQuestion(question.questionId)}>Remove</button>
+                    <td>                      
+                      <DeactivateButton setter={setSelectedQuestionId} value={question.questionId}></DeactivateButton>
                     </td>
                   </tr>
                 ))}
             </tbody>
           </table>
+          }
         </div>
       )}
      
@@ -421,6 +429,7 @@ const ShowQuestions = () => {
           </div>
         </div>
       </div>
+      <PopUpModal modalData={selectedQuestionId} remove={removeQuestion}></PopUpModal>
     </div>
   );
 };

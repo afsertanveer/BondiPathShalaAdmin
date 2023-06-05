@@ -4,6 +4,8 @@ import { useState } from "react";
 import axios from "../../utils/axios";
 import Loader from "./../../Shared/Loader";
 import { toast } from "react-hot-toast";
+import DeactivateButton from './../../features/common/components/DeactivateButton';
+import PopUpModal from './../../features/common/components/PopUpModal';
 
 const ShowExam = () => {
   const [courses, setCourses] = useState([]);
@@ -17,6 +19,7 @@ const ShowExam = () => {
   const [isText, setIsText] = useState(true);
   const [numberOfOptions, setNumberOfOptions] = useState(0);
   const [correctOption, setCorrectOption] = useState(null);
+  const [selectedExamId,setSelectedExamId] = useState("");
   const optionName = [
     "A",
     "B",
@@ -191,10 +194,12 @@ const ShowExam = () => {
       axios
         .get(`api/exam/getExamBySub?subjectId=${selectedSubject}`)
         .then(({ data }) => {
-          console.log(data);
           setExams(data);
           setIsLoading(false);
-        });
+          if(data.length===0){
+            toast.error("No Data")
+          }
+        }).catch(e=>toast.error(e.response.data))
     } else {
       setExams([]);
     }
@@ -286,7 +291,7 @@ const ShowExam = () => {
                       >
                         Add Questions
                       </label>
-                      <button className="btn" onClick={()=>deactivateExam(exam._id)}>Deactivate</button>
+                      <DeactivateButton setter={setSelectedExamId} value={exam._id}></DeactivateButton>
                       </div>
                     </td>
                   </tr>
@@ -470,7 +475,7 @@ const ShowExam = () => {
               <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-center">
                 <div className="w-full lg:w-1/3">
                   <label htmlFor="" className="label">
-                    Negative Marking
+                    Negative Marking (%)
                   </label>
                   <input
                     type="number"
@@ -660,6 +665,7 @@ const ShowExam = () => {
             </div>
           </div>
       </div>
+      <PopUpModal modalData={selectedExamId} remove={deactivateExam}></PopUpModal>
     </div>
   );
 };

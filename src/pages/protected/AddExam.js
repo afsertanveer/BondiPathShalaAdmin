@@ -275,7 +275,7 @@ const AddExam = () => {
             <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-center">
               <div className="w-full lg:w-1/3">
                 <label htmlFor="" className="label">
-                  Negative Marking (Per Question)
+                  Negative Marking (%) (Per Question)
                 </label>
                 <input
                   type="number"

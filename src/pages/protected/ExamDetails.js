@@ -76,7 +76,10 @@ const ExamDetails = () => {
           setExamInfo(data.examInfo)
           setPagiNationData(data.paginateData);
           setIsLoading(false);
-        }).catch(e=>toast.error(e.response.data))
+        }).catch(e=>{
+          toast.error(e.response.data);
+          setDetailedExam([]);
+        })
     } else {
         setDetailedExam([]);
         setExamInfo({});
@@ -146,8 +149,7 @@ const ExamDetails = () => {
                 ))}
             </select>
           </div>
-        </div>
-        
+        </div>        
       </div>
       {isLoading && <Loader></Loader>}
       {detailedExam?.length > 0 && (
@@ -167,7 +169,7 @@ const ExamDetails = () => {
               <th className="w-[160px]">D/W/M</th>
               <th className="w-[160px]">Exam Type</th>
               <th className="w-[90px]">Marks</th>
-              <th className="w-[110px]">Merit Postition</th>
+              {/* <th className="w-[110px]">Merit Postition</th> */}
               <th className="w-[200px]">Action</th>
             </tr>
           </thead>
@@ -189,7 +191,7 @@ const ExamDetails = () => {
                   <td>{examInfo.variation}</td>
                   <td>{examInfo.type}</td>
                   <td>{data.totalObtainedMarks ?? 0}/{examInfo.totalMarksMcq}</td>
-                  <td>{data.meritPosition}</td>
+                  {/* <td>{data.meritPosition}</td> */}
                   <td>
                     <div className="flex px-2 justify-evenly">
                       <Link to={`/dashboard/exams/${data.studentId}/${examInfo.id}/solution`} className="tooltip bg-color-two rounded-full text-center h-[38px] w-[38px]" data-tip="Get Solution">

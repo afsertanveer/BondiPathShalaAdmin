@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export default axios.create({
-  baseURL: "http://localhost:5011/",
+  baseURL: "https://api.bpexam.live/",
   responseType: "json",
   headers: {
     "Content-Type": "application/json"

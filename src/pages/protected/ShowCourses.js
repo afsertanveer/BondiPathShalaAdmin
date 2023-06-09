@@ -23,19 +23,8 @@ const ShowCourses = () => {
       }).catch(e=>{
         console.log(e);
         setPagiNationData({});
-        setCourses({});
+        setCourses([]);
       })
-    }else{
-      setIsLoading(true);
-    axios.get("api/course/getallcourse?status=true&page="+currentPage).then(({ data }) => {
-      setCourses(data.courses);
-      setPagiNationData(data.paginateData);
-      setIsLoading(false);
-    }).catch(e=>{
-      console.log(e);
-      setPagiNationData({});
-      setCourses({});
-    })
     }
   }
 

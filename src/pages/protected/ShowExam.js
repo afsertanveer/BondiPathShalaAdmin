@@ -78,6 +78,8 @@ const ShowExam = () => {
       toast.error(`${e.response.data.message}`);
       console.log(e);
     }
+    
+    document.getElementById("my-modal-3").checked = false;
   }
   const handleUpdateExam = async (e) => {
     e.preventDefault();

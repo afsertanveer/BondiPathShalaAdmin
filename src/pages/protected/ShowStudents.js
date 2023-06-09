@@ -14,17 +14,9 @@ const ShowStudents = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pagiNationData, setPagiNationData] = useState({});
 
-  const handleStudents = e =>{
-    e.preventDefault();
-    const rgn = e.target.rgn_number.value;
-    console.log(rgn);
-    axios.get(`api/student/getstudentbycoursereg?courseId=${selectedCourse}&regNo=${rgn}`).then(({data})=>{
-      console.log(data);
-      setStudents([]);
-      let newStudent = [];
-      newStudent.push(data);
-      setStudents(newStudent);
-    })
+  const handleChangeOption = e =>{
+    setSelectedCourse(e.target.value);
+    setCurrentPage(1);
   }
   useEffect(() => {
     setIsLoading(true);
@@ -64,7 +56,7 @@ const ShowStudents = () => {
           id="course_list"
           className="input border-black input-bordered my-5"
           required
-          onChange={(e) => setSelectedCourse(e.target.value)}
+          onChange={(e) =>handleChangeOption(e)}
         >
           <option value=""></option>
           {courses.length > 0 &&

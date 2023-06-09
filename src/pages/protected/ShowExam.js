@@ -52,6 +52,33 @@ const ShowExam = () => {
     console.log(id);
     setSingleExamId(id);
   }
+  const handleAddRule = async(e) =>{
+    e.preventDefault();
+
+    setIsLoading(true);
+    const form = e.target;
+    const file = e.target.ruleILink.files[0];
+    const formData = new FormData();
+    formData.append("examId",singleExam._id);
+    formData.append("ruleILink", file);
+    try {
+      await axios
+        .post("api/exam/examruleset", formData, {
+          headers: {
+            "Content-Type": "multipart/ form-data",
+          },
+        })
+        .then(({ data }) => {
+          toast.success("Rules Added Successfully");
+          form.reset();
+          setIsLoading(false);
+        })
+        .catch((e) => console.log(e));
+    } catch (e) {
+      toast.error(`${e.response.data.message}`);
+      console.log(e);
+    }
+  }
   const handleUpdateExam = async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -279,6 +306,13 @@ const ShowExam = () => {
                       <div className="flex flex-col lg:flex-row justify-center">
                       <label
                         onClick={() => handleAssignExamId(exam._id)}
+                        htmlFor="my-modal-3"
+                        className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                      >
+                        Add Exam Rule
+                      </label>
+                      <label
+                        onClick={() => handleAssignExamId(exam._id)}
                         htmlFor="my-modal"
                         className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                       >
@@ -300,6 +334,33 @@ const ShowExam = () => {
           </table>
         </div>
       )}
+      <div id="add-modal">
+        <input type="checkbox" id="my-modal-3" className="modal-toggle" />
+        <div className="modal">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg text-center">Update Subject</h3>
+            <form className="add-form" onSubmit={handleAddRule}>
+            <div className="form-control">
+              <label htmlFor="" className=" label">
+                <span className="label-text mb-2">Add Rule Image </span>
+              </label>
+              <input
+                type="file"
+                name="ruleILink"
+                id="ruleILink"
+                className="file-input w-full max-w-xs mb-2 input input-bordered border-black pl-0"
+              />
+            </div>
+            <input type="submit" value="Add"  className="btn w-32"  />
+            </form>
+            <div className="modal-action">
+                  <label htmlFor="my-modal-3" className="btn bg-[red] ">
+                    Close!
+                  </label>
+                </div>
+          </div>
+        </div>
+      </div>
       <div id="update-modal">
         <input type="checkbox" id="my-modal" className="modal-toggle" />
         <div className="modal">

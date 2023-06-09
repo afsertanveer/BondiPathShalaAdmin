@@ -12,6 +12,33 @@ const ShowCourses = () => {
   const [currentPage,setCurrentPage] = useState(1);
   const [pagiNationData,setPagiNationData] = useState({});
 
+  const handleSearch = e =>{
+    const courseName = e.target.value;
+    if(courseName.length>2){      
+      setIsLoading(true);
+      axios.get(`api/course/getallcoursesearch?courseName=${courseName}`).then(({data})=>{
+        setCourses(data.courses);
+        setPagiNationData({});
+        setIsLoading(false);
+      }).catch(e=>{
+        console.log(e);
+        setPagiNationData({});
+        setCourses({});
+      })
+    }else{
+      setIsLoading(true);
+    axios.get("api/course/getallcourse?status=true&page="+currentPage).then(({ data }) => {
+      setCourses(data.courses);
+      setPagiNationData(data.paginateData);
+      setIsLoading(false);
+    }).catch(e=>{
+      console.log(e);
+      setPagiNationData({});
+      setCourses({});
+    })
+    }
+  }
+
   const updateCourse = (id) => {
     console.log(id);
     axios
@@ -23,13 +50,11 @@ const ShowCourses = () => {
       .catch((e) => console.log(e));
   };
   const deactiveCourse = (id) => {
-    console.log(id);
-    
 
     axios.put(`api/course/deactivatecourse?id=${id}`).then(({ data }) => {
       toast.success("Course Deactivation Successful");
       window.location.reload(false);
-    });
+    }).catch(e=>console.log(e))
   };
   const handleUpdate = e =>{
     e.preventDefault();
@@ -65,6 +90,23 @@ const ShowCourses = () => {
   }, [currentPage]);
   return (
     <div className="">
+      <div className="flex justify-center items-center mb-10" >
+        <form  className="flex flex-row justify-center items-center bg-white w-full lg:w-1/4 py-5" >
+          <div className=" flex items-center ">
+            <label className="label-text font-semibold ml-3" htmlFor="">
+              Search
+            </label>
+            <input
+              name="course_search"
+              id="course_search"
+              className="input w-2/3 border-black input-bordered mx-3 font-bold"
+              placeholder="please type"
+              onChange={handleSearch}
+              required
+            />
+          </div>
+        </form>
+      </div>
       <div className=" py-4 px-2 my-3">
         <h1 className="text-3xl text-center py-3  bg-white">
            Courses
@@ -82,7 +124,7 @@ const ShowCourses = () => {
             </tr>
           </thead>
           <tbody>
-            {courses.length > 0 &&
+            {courses?.length > 0 &&
               courses.map((course) => (
                 <tr key={course._id}>
                   <td>{course.name}</td>

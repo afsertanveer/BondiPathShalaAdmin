@@ -29,6 +29,7 @@ const AddStudent = () => {
           //console.log(data);
           form.reset();
           const newArr = JSON.stringify(data);
+          console.log(newArr);
           setStudents(newArr);
           setIsLoading(false);
         })

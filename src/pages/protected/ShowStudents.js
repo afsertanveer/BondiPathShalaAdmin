@@ -75,25 +75,6 @@ const ShowStudents = () => {
             ))}
         </select>
       </div>
-      {
-            students.length>200000000 && <div className="flex justify-center items-center">
-             <form onSubmit={handleStudents}>
-               <div className="">
-            <label className="label-text font-semibold ml-3" htmlFor="">
-              Search Registration Number
-            </label>
-            <input
-              name="rgn_number"
-              id="rgn_number"
-              className="input w-2/3 border-black input-bordered"
-              placeholder="Registration Number"
-              required
-            />
-            <input type="submit" value="Search" className="ml-3 btn " />
-          </div>
-             </form>
-            </div>
-          }
       {isLoading && <Loader></Loader>}
       {students?.length > 0 && (
         <div className="overflow-x-auto">

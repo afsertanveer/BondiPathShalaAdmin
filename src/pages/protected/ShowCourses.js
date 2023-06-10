@@ -18,11 +18,20 @@ const ShowCourses = () => {
     if(courseName.length>2){      
       setIsLoading(true);
       axios.get(`api/course/getallcoursesearch?courseName=${courseName}`).then(({data})=>{
-        setCourses(data);
+        setCourses(data.courses);
         setIsLoading(false);
       }).catch(e=>{
         console.log(e);
         setCourses([]);
+      })
+    }
+    if(courseName.length===0){
+      axios.get("api/course/getallcourseadmin").then(({ data }) => {
+        setCourses(data.courses);
+        setIsLoading(false);
+      }).catch(e=>{
+        console.log(e);
+        setCourses({});
       })
     }
   }
@@ -66,7 +75,6 @@ const ShowCourses = () => {
   useEffect(() => {
     setIsLoading(true);
     axios.get("api/course/getallcourseadmin").then(({ data }) => {
-      console.log(data);
       setCourses(data.courses);
       setIsLoading(false);
     }).catch(e=>{

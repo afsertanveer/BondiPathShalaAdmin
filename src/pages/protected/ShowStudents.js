@@ -5,6 +5,7 @@ import axios from "../../utils/axios";
 import Loader from "./../../Shared/Loader";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import Pagination from "../../components/common/Pagination";
 
 const ShowStudents = () => {
   const [courses, setCourses] = useState([]);
@@ -14,6 +15,40 @@ const ShowStudents = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pagiNationData, setPagiNationData] = useState({});
 
+    const handlePageClick = (event) => {
+      let clickedPage = parseInt(event.selected) + 1;
+      if (event.selected > 1) {
+        axios
+        .get(
+          `/api/coursevsstudent/getstudentbycourse?courseId=${selectedCourse}&page=${clickedPage}`
+        )
+        .then(({ data }) => {
+          setStudents(data.data);
+          setPagiNationData(data.paginateData);
+        })
+        .catch((e) => {
+          console.log(e);
+          setPagiNationData({});
+          setStudents([]);
+          toast.error(e.response.data);
+        });
+      } else {
+        axios
+        .get(
+          `/api/coursevsstudent/getstudentbycourse?courseId=${selectedCourse}&page=${1}`
+        )
+        .then(({ data }) => {
+          setStudents(data.data);
+          setPagiNationData(data.paginateData);
+        })
+        .catch((e) => {
+          console.log(e);
+          setPagiNationData({});
+          setStudents([]);
+          toast.error(e.response.data);
+        });
+      }
+    };
   const handleChangeOption = e =>{
     setSelectedCourse(e.target.value);
     setCurrentPage(1);
@@ -106,25 +141,9 @@ const ShowStudents = () => {
             </table>
         </div>
     </div>
-
-
-      {/* 
-      <div className="flex justify-center items-center mt-4 ">
-        <div className="flex justify-center w-full px-4 lg:px-16">
-          {pagiNationData?.totalPages > 1 &&
-            [...Array(pagiNationData.totalPages).keys()].map((i) => {
-              return (
-                <button
-                  key={i}
-                  className="bg-button px-4 py-2 mr-2"
-                  onClick={(e) => setCurrentPage(i + 1)}
-                >
-                  {i + 1}
-                </button>
-              );
-            })}
+    <div className="mb-6">
+          {pagiNationData && (<Pagination pageCount={pagiNationData.totalPages} currentPage={pagiNationData.currentPage} handlePageClick={(e) => handlePageClick(e)} />)}
         </div>
-      </div> */}
     </div>
   );
 };

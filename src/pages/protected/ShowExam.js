@@ -51,6 +51,13 @@ const ShowExam = () => {
     "Y",
     "Z",
   ];
+  const generator = (id) =>{
+    axios.put(`api/student/updatestudentexaminfo?examId=${id}`).then((data)=>{
+      axios.post(`api/student/updaterank?examId=${id}`).then((data)=>{
+        toast.success('Rank Generated Successfully');
+      }).catch(e=>console.log(e))
+    }).catch(e=>console.log(e))
+  }
   const handleAssignRule = id =>{
     axios.get(`api/exam/examruleget?examId=${id}`).then(({data})=>{
       if(data!==null){
@@ -361,7 +368,7 @@ const ShowExam = () => {
                     </label>  
                       }
                        
-                      
+                      <button className="btn mr-2" onClick={e=>generator(exam._id)}>Generate MeritList</button>
                       <label
                         onClick={() => handleAssignExamId(exam._id)}
                         htmlFor="my-modal"

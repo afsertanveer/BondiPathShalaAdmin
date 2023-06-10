@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import v1 from "../../assets/img/icons/tasksquare.svg";
 import v2 from "../../assets/img/icons/eye.svg";
 import { toast } from "react-hot-toast";
+import Pagination from "../../components/common/Pagination";
 const ExamDetails = () => {
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -39,7 +40,36 @@ const ExamDetails = () => {
   };
 
 
-
+  const handlePageClick = (event) => {
+    let clickedPage = parseInt(event.selected) + 1;
+    if (event.selected > 0) {
+      axios
+        .get(`api/student/gethistorybyexamid?examId=${selectedExam}&page=${clickedPage}`)
+        .then(({ data }) => {
+          console.log(data);
+          setDetailedExam(data?.data);
+          setExamInfo(data.examInfo)
+          setPagiNationData(data.paginateData);
+          setIsLoading(false);
+        }).catch(e=>{
+          toast.error(e.response.data);
+          setDetailedExam([]);
+        })
+    } else {
+      axios
+      .get(`api/student/gethistorybyexamid?examId=${selectedExam}&page=${1}`)
+      .then(({ data }) => {
+        console.log(data);
+        setDetailedExam(data?.data);
+        setExamInfo(data.examInfo)
+        setPagiNationData(data.paginateData);
+        setIsLoading(false);
+      }).catch(e=>{
+        toast.error(e.response.data);
+        setDetailedExam([]);
+      })
+    }
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -175,7 +205,7 @@ const ExamDetails = () => {
               <th className="w-[160px]">D/W/M</th>
               <th className="w-[160px]">Exam Type</th>
               <th className="w-[90px]">Marks</th>
-              {/* <th className="w-[110px]">Merit Postition</th> */}
+              <th className="w-[110px]">Merit Postition</th>
               <th className="w-[200px]">Action</th>
             </tr>
           </thead>
@@ -197,7 +227,7 @@ const ExamDetails = () => {
                   <td>{examInfo.variation}</td>
                   <td>{examInfo.type}</td>
                   <td>{data.totalObtainedMarks ?? 0}/{examInfo.totalMarksMcq}</td>
-                  {/* <td>{data.meritPosition}</td> */}
+                   <td>{data.meritPosition==="-1"? "Pending" : data.meritPosition}</td> 
                   <td>
                     <div className="flex px-2 justify-evenly">
                       <Link to={`/dashboard/exams/${data.studentId}/${examInfo.id}/solution`} className="tooltip bg-color-two rounded-full text-center h-[38px] w-[38px]" data-tip="Get Solution">
@@ -210,19 +240,8 @@ const ExamDetails = () => {
           </tbody>
         </table>
         <div className="flex justify-center items-center mt-4 ">
-        <div className="flex justify-center w-full px-4 lg:px-16">
-          {pagiNationData?.totalPages > 1 &&
-            [...Array(pagiNationData.totalPages).keys()].map((i) => {
-              return (
-                <button
-                  key={i}
-                  className="bg-button px-4 py-2 mr-2"
-                  onClick={(e) => setCurrentPage(i + 1)}
-                >
-                  {i + 1}
-                </button>
-              );
-            })}
+        <div className="mb-6">
+          {pagiNationData && (<Pagination pageCount={pagiNationData.totalPages} currentPage={pagiNationData.currentPage} handlePageClick={(e) => handlePageClick(e)} />)}
         </div>
       </div>
       </div>

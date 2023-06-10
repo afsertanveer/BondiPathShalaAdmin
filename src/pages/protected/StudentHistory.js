@@ -61,7 +61,7 @@ const StudentHistory = () => {
                   <td>{type[data.type]}</td>
                   <td>{variation[data.variation]}</td>
                   <td>{data.totalObtainedMarks ?? 0}/{data.totalMarksMcq}</td>
-                  <td>{data.meritPosition}</td>
+                  <td>{data.meritPosition==="-1"? "Pending" :data.meritPosition }</td>
                   <td>
                     <div className="flex px-2 justify-evenly">
                       <Link to={`/dashboard/exams/${studentId}/${data.examId}/solution`} className="tooltip bg-color-two rounded-full text-center h-[38px] w-[38px]" data-tip="Get Solution">

@@ -8,6 +8,7 @@ import Loader from "../../Shared/Loader";
 const AddStudent = () => {
   const [students, setStudents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [success,setSuccess] = useState(false);
 
   const AddStudents = async (e) => {
     e.preventDefault();
@@ -31,6 +32,7 @@ const AddStudent = () => {
           const newArr = JSON.stringify(data);
           console.log(newArr);
           setStudents(newArr);
+          setSuccess(true);
           setIsLoading(false);
         })
         .catch((e) => console.log(e));
@@ -66,15 +68,20 @@ const AddStudent = () => {
               />
             </div>
           </form>
+          {
+            success && <div className="flex justify-end">
+            <CSVLink
+          className="btn bg-button px-4 py-4 mt-3 "
+          data={students}
+          filename={"studentIds.csv"}
+        >
+          Download{" "}
+        </CSVLink>
+            </div>
+          }
         </div>
       </div>
-      <CSVLink
-        className="btn bg-button px-4 py-4"
-        data={students}
-        filename={"studentIds.csv"}
-      >
-        Download{" "}
-      </CSVLink>
+      
     </div>
   );
 };

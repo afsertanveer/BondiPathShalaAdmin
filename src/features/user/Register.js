@@ -58,7 +58,7 @@ function Register(){
 
                         </div>
 
-                        <ErrorText styleClass="mt-8">{errorMessage}</ErrorText>
+                        <ErrorText styleclassName="mt-8">{errorMessage}</ErrorText>
                         <button type="submit" className={"btn mt-2 w-full btn-primary" + (loading ? " loading" : "")}>Register</button>
 
                         <div className='text-center mt-4'>Already have an account? <Link to="/login"><span className="  inline-block  hover:text-primary hover:underline hover:cursor-pointer transition duration-200">Login</span></Link></div>

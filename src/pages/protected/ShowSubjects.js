@@ -74,7 +74,7 @@ const ShowSubjects = () => {
   };
   useEffect(() => {
     setIsLoading(true);
-    axios.get("api/course/getallcourse?status=true").then(({ data }) => {
+    axios.get("api/course/getallcourseadmin").then(({ data }) => {
       setCourses(data.courses);
       setIsLoading(false);
     });
@@ -82,6 +82,7 @@ const ShowSubjects = () => {
       axios
         .get(`api/subject/getsubjectbycourse?courseId=${singleCourse}`)
         .then(({ data }) => {
+          console.log(data);
           setSubjects(data.data);
           setIsLoading(false);
         })
@@ -107,7 +108,7 @@ const ShowSubjects = () => {
           onChange={(e) => setSingleCourse(e.target.value)}
         >
           <option value=""></option>
-          {courses.length > 0 &&
+          {courses?.length > 0 &&
             courses.map((course) => (
               <option key={course._id} value={course._id}>
                 {course.name}

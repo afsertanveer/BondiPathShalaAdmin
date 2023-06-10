@@ -71,7 +71,7 @@ function Login(){
                         <div className='text-right text-primary'><Link to="/forgot-password"><span className="text-sm  inline-block  hover:text-primary hover:underline hover:cursor-pointer transition duration-200">Forgot Password?</span></Link>
                         </div>
 
-                        <ErrorText styleClass="mt-8">{errorMessage}</ErrorText>
+                        <ErrorText styleclassName="mt-8">{errorMessage}</ErrorText>
                         <button type="submit" className={"btn mt-2 w-full btn-primary" + (loading ? " loading" : "")}>Login</button>
                     </form>
                 </div>

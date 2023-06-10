@@ -6,7 +6,7 @@ import Subtitle from "../Typography/Subtitle"
           <div className={"card w-full p-6 bg-base-100 shadow-xl " + (topMargin || "mt-6")}>
 
             {/* Title for Card */}
-              <Subtitle styleClass={TopSideButtons ? "inline-block" : ""}>
+              <Subtitle styleclassName={TopSideButtons ? "inline-block" : ""}>
                 {title}
 
                 {/* Top side button, show only if present */}

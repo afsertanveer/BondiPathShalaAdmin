@@ -6,8 +6,10 @@ import Loader from "./../../Shared/Loader";
 import { toast } from "react-hot-toast";
 import DeactivateButton from './../../features/common/components/DeactivateButton';
 import PopUpModal from './../../features/common/components/PopUpModal';
+import { type, variation } from "../../utils/globalVariables";
 
 const ShowExam = () => {
+  
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [exams, setExams] = useState([]);
@@ -20,6 +22,7 @@ const ShowExam = () => {
   const [numberOfOptions, setNumberOfOptions] = useState(0);
   const [correctOption, setCorrectOption] = useState(null);
   const [selectedExamId,setSelectedExamId] = useState("");
+  const [ruleImg,setRuleImg] = useState("");
   const optionName = [
     "A",
     "B",
@@ -48,6 +51,17 @@ const ShowExam = () => {
     "Y",
     "Z",
   ];
+  const handleAssignRule = id =>{
+    axios.get(`api/exam/examruleget?examId=${id}`).then(({data})=>{
+      if(data!==null){
+        setRuleImg(data.ruleILink);
+        return data.ruleILink;
+      }
+      console.log(data);
+      
+    }).catch(e=>{console.log(e);
+    })
+  }
   const  handleAssignExamId = id=>{
     console.log(id);
     setSingleExamId(id);
@@ -70,6 +84,7 @@ const ShowExam = () => {
         })
         .then(({ data }) => {
           toast.success("Rules Added Successfully");
+          window.location.reload(false);
           form.reset();
           setIsLoading(false);
         })
@@ -205,7 +220,7 @@ const ShowExam = () => {
   }
   useEffect(() => {
     setIsLoading(true);
-    axios.get("api/course/getallcourse?status=true").then(({ data }) => {
+    axios.get("api/course/getallcourseadmin").then(({ data }) => {
       setCourses(data.courses);
       setIsLoading(false);
     });
@@ -223,11 +238,12 @@ const ShowExam = () => {
       axios
         .get(`api/exam/getExamBySub?subjectId=${selectedSubject}`)
         .then(({ data }) => {
-          setExams(data);
-          setIsLoading(false);
+          console.log(data);
+          setExams(data);      
           if(data.length===0){
             toast.error("No Data")
           }
+          setIsLoading(false);
         }).catch(e=>toast.error(e.response.data))
     } else {
       setExams([]);
@@ -244,9 +260,9 @@ const ShowExam = () => {
     }
   }, [selectedCourse, singleExamId, selectedSubject]);
   return (
-    <div className=" bg-white w-full lg:w-1/2 mx-auto">
-      <div className=" py-4 px-2 my-3 ">
-        <div className="flex flex-row justify-evenly items-center">
+    <div className="mx-auto">
+      <div className="flex justify-center items-center py-4 px-2 my-3  ">
+        <div className="bg-white w-full lg:w-1/2 py-4 flex flex-row justify-evenly items-center">
           <div className="form-control">
             <label className="label-text" htmlFor="">
               Select Course
@@ -291,28 +307,61 @@ const ShowExam = () => {
       </div>
       {isLoading && <Loader></Loader>}
       {exams.length > 0 && (
-        <div className="overflow-x-auto">
-          <table className="table w-full customTable">
+        <div className='overflow-x-auto w-full'>
+        <table className='mx-auto w-full whitespace-nowrap rounded-lg  divide-y  overflow-hidden'>
             <thead>
               <tr>
-                <th className="bg-white">Exam Name</th>
-                <th className="bg-white">Action</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">SI No.</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Exam Name</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Start Time</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">End Time</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Type</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Variation</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Duration</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Free Status</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">SSC Required?</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">HSC Required?</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Marks/Questions</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Total Questions</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Total Marks</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Action</th>
               </tr>
             </thead>
             <tbody>
               {exams.length > 0 &&
-                exams.map((exam) => (
-                  <tr key={exam._id}>
-                    <td>{exam.name}</td>
-                    <td>
+                exams.map((exam,idx) => (
+                  <tr key={exam._id} className="even:bg-table-row-even odd:bg-table-row-odd text-center"> 
+                    <td className="px-6 py-4 text-center">{idx+1}</td>
+                    <td className="px-6 py-4 text-center">{exam.name}</td>
+                    <td className="px-1 py-4 text-center">{new Date(exam.startTime).toString().split("GMT")[0]}</td>
+                    <td className="px-1 py-4 text-center">{new Date(exam.endTime).toString().split("GMT")[0]}</td>
+                    <td className="px-6 py-4 text-center">{type[exam.examType]}</td>
+                    <td className="px-6 py-4 text-center">{variation[exam.examVariation]}</td>
+                    <td className="px-6 py-4 text-center">{exam.duration} Minutes</td>
+                    <td className="px-6 py-4 text-center">{exam.examFreeOrNot? "Yes" : "No"}</td>
+                    <td className="px-6 py-4 text-center">{exam.sscStatus? "Yes" : "No"}</td>
+                    <td className="px-6 py-4 text-center">{exam.hscStatus? "Yes" : "No"}</td>
+                    <td className="px-6 py-4 text-center">{exam.marksPerMcq}</td>
+                    <td className="px-6 py-4 text-center">{exam.totalQuestionMcq}</td>
+                    <td className="px-6 py-4 text-center">{exam.totalMarksMcq}</td>
+                    <td className="px-6 py-4 text-center">
                       <div className="flex flex-col lg:flex-row justify-center">
-                      <label
-                        onClick={() => handleAssignExamId(exam._id)}
-                        htmlFor="my-modal-3"
+                      {
+                        exam.RuleImage!=='0'? <label
+                        onClick={() => handleAssignRule(exam._id)}
+                        htmlFor="my-modal-4"
                         className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                      >
-                        Add Exam Rule
-                      </label>
+                      >Show Rule
+                      </label> : <label
+                      onClick={() => handleAssignExamId(exam._id)}
+                      htmlFor="my-modal-3"
+                      className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                    >
+                      Add Exam Rule
+                    </label>  
+                      }
+                       
+                      
                       <label
                         onClick={() => handleAssignExamId(exam._id)}
                         htmlFor="my-modal"
@@ -336,11 +385,25 @@ const ShowExam = () => {
           </table>
         </div>
       )}
+      <div>
+      <input type="checkbox" id="my-modal-4" className="modal-toggle" />
+        <div className="modal">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg text-center">Exam Rules</h3>
+            <img src={process.env.REACT_APP_API_HOST+"/"+ruleImg} alt="exam-rules" />
+            <div className="modal-action">
+                  <label htmlFor="my-modal-4" className="btn bg-[red] ">
+                    Close!
+                  </label>
+                </div>
+          </div>
+        </div>
+      </div>
       <div id="add-modal">
         <input type="checkbox" id="my-modal-3" className="modal-toggle" />
         <div className="modal">
           <div className="modal-box">
-            <h3 className="font-bold text-lg text-center">Update Subject</h3>
+            <h3 className="font-bold text-lg text-center">Add Rule</h3>
             <form className="add-form" onSubmit={handleAddRule}>
             <div className="form-control">
               <label htmlFor="" className=" label">

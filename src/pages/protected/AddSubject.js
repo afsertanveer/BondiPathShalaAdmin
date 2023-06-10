@@ -34,7 +34,7 @@ const AddSubject = () => {
   };
   useEffect(() => {
     setIsLoading(true);
-    axios.get("api/course/getallcourse?status=true").then(({ data }) => {
+    axios.get("api/course/getallcourseadmin").then(({ data }) => {
       setCourses(data.courses);
       setIsLoading(false);
     });

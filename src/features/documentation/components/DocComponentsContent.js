@@ -36,13 +36,13 @@ function DocComponentsContent(){
                       <Title>Title Example</Title>
                        </li>
                       <li><span className='font-bold'>Subtitle</span> - Component that shows text smaller than title 
-                      <Subtitle styleClass="mt-4 mb-6">Subtitle Example</Subtitle>
+                      <Subtitle styleclassName="mt-4 mb-6">Subtitle Example</Subtitle>
                       </li>
                       <li><span className='font-bold'>ErrorText</span> - Used for showing error messages 
-                      <ErrorText styleClass="mt-2">Error Text Example</ErrorText>
+                      <ErrorText styleclassName="mt-2">Error Text Example</ErrorText>
                       </li>
                       <li><span className='font-bold'>HelperText</span> - Used for showing secondary message 
-                      <HelperText styleClass="">Helper Text Example</HelperText></li>
+                      <HelperText styleclassName="">Helper Text Example</HelperText></li>
                     </ul>
                 </div>
 

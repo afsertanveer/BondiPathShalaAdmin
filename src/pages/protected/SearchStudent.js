@@ -62,9 +62,9 @@ const SearchStudent = () => {
   return (
     <div>
       <div className="flex justify-center items-center mb-10" >
-        <form  className="flex flex-row justify-center items-center bg-white w-1/2" >
-          <div className=" flex items-center ">
-            <label className="label-text font-semibold ml-3" htmlFor="">
+        <form  className="flex flex-col-reverse lg:flex-row md:flex-row justify-center items-center bg-white w-full lg:w-1/2" >
+          <div className=" flex items-center justify-center py-3">
+            <label className="label-text font-semibold mt-3" htmlFor="">
               Search
             </label>
             <input
@@ -77,9 +77,9 @@ const SearchStudent = () => {
               required
             />
           </div>
-          <div className="flex items-center">
-            <label className="label-text" htmlFor="">
-              Select Option
+          <div className="flex items-center justify-center">
+            <label className="label-text font-semibold" htmlFor="">
+              Option
             </label>
             <select
               name="opt"
@@ -98,26 +98,32 @@ const SearchStudent = () => {
       </div>
       {isLoading && <Loader></Loader>}
       {students?.length > 0 && (
-        <div className="overflow-x-auto">
-          <table className="table w-full compact customTable">
+        <div className='overflow-x-auto w-full'>
+        <table className='mx-auto   w-full whitespace-nowrap rounded-lg bg-white divide-y  overflow-hidden'>
             <thead>
               <tr>
-                <th className="bg-white">Subject Name</th>
-                <th className="bg-white">Registration Number</th>
-                <th className="bg-white">Mobile Number</th>
-                <th className="bg-white">Action</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4"> Name</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Registration Number</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Mobile Number</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Institution</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">SSC Roll</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">HSC Roll</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Action</th>
               </tr>
             </thead>
-            <tbody>
+                <tbody>
               {students.length > 0 &&
                 students.map((student) => (
-                  <tr key={student._id}>
-                    <td>{student.name}</td>
-                    <td>{student.regNo}</td>
-                    <td>{student.mobileNo}</td>
-                    <td>
+                  <tr key={student._id} className="even:bg-table-row-even odd:bg-table-row-odd text-center">
+                    <td className="px-6 py-4 text-center">{student.name}</td>
+                    <td className="px-6 py-4 text-center">{student.regNo}</td>
+                    <td className="px-6 py-4 text-center">{student.mobileNo}</td>
+                    <td className="px-6 py-4 text-center">{student.institution===null? "N/A" : student.institution }</td>
+                    <td className="px-6 py-4 text-center">{student.hscRoll===null? "N/A" :student.hscRoll}</td>
+                    <td className="px-6 py-4 text-center">{student.sscRoll===null? "N/A" :student.sscRoll }</td>
+                    <td className="px-6 py-4 text-center">
                       <Link
-                        to={`/dashboard/students/${student._id}/history`}
+                        to={`/dashboard/students/${student._id}/history`}  target="_blank"
                         className="btn bg-button text-white"
                       >
                         Exam History
@@ -126,7 +132,7 @@ const SearchStudent = () => {
                   </tr>
                 ))}
             </tbody>
-          </table>
+            </table>
         </div>
       )}
     </div>

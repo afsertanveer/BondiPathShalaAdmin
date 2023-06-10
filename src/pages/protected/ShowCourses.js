@@ -4,25 +4,24 @@ import { useState } from "react";
 import axios from "../../utils/axios";
 import Loader from "./../../Shared/Loader";
 import { toast } from "react-hot-toast";
+import DeactivateButton from "../../features/common/components/DeactivateButton";
+import PopUpModal from "../../features/common/components/PopUpModal";
 
 const ShowCourses = () => {
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [singleCourse, setSingleCourse] = useState({});
-  const [currentPage,setCurrentPage] = useState(1);
-  const [pagiNationData,setPagiNationData] = useState({});
+  const [singleCourseId,setSingleCourseId] = useState("");
 
   const handleSearch = e =>{
     const courseName = e.target.value;
     if(courseName.length>2){      
       setIsLoading(true);
       axios.get(`api/course/getallcoursesearch?courseName=${courseName}`).then(({data})=>{
-        setCourses(data.courses);
-        setPagiNationData({});
+        setCourses(data);
         setIsLoading(false);
       }).catch(e=>{
         console.log(e);
-        setPagiNationData({});
         setCourses([]);
       })
     }
@@ -39,7 +38,6 @@ const ShowCourses = () => {
       .catch((e) => console.log(e));
   };
   const deactiveCourse = (id) => {
-
     axios.put(`api/course/deactivatecourse?id=${id}`).then(({ data }) => {
       toast.success("Course Deactivation Successful");
       window.location.reload(false);
@@ -67,16 +65,15 @@ const ShowCourses = () => {
   }
   useEffect(() => {
     setIsLoading(true);
-    axios.get("api/course/getallcourse?status=true&page="+currentPage).then(({ data }) => {
+    axios.get("api/course/getallcourseadmin").then(({ data }) => {
+      console.log(data);
       setCourses(data.courses);
-      setPagiNationData(data.paginateData);
       setIsLoading(false);
     }).catch(e=>{
       console.log(e);
-      setPagiNationData({});
       setCourses({});
     })
-  }, [currentPage]);
+  }, []);
   return (
     <div className="">
       <div className="flex justify-center items-center mb-10" >
@@ -102,24 +99,24 @@ const ShowCourses = () => {
         </h1>
       </div>
       {isLoading && <Loader></Loader>}
-      <div className="overflow-x-auto">
-        <table className="table w-full">
+      <div className='overflow-x-auto w-full'>
+            <table className=' mx-auto w-full whitespace-nowrap rounded-lg bg-white divide-y  overflow-hidden'>
           <thead>
             <tr>
-              <th className="bg-white">Course Name</th>
-              <th className="bg-white">Description</th>
-              <th className="bg-white">Created Date</th>
-              <th className="bg-white">Action</th>
+              <th className="bg-white font-semibold text-sm uppercase px-6 py-4 ">Course Name</th>
+              <th className="bg-white font-semibold text-sm uppercase px-6 py-4 ">Description</th>
+              <th className="bg-white font-semibold text-sm uppercase px-6 py-4 ">Created Date</th>
+              <th className="bg-white font-semibold text-sm uppercase px-6 py-4 ">Action</th>
             </tr>
           </thead>
           <tbody>
             {courses?.length > 0 &&
               courses.map((course) => (
-                <tr key={course._id}>
-                  <td>{course.name}</td>
-                  <td>{course.descr}</td>
-                  <td>{course.createdAt.split("T")[0]}</td>
-                  <td>
+                <tr key={course._id} className="even:bg-table-row-even odd:bg-table-row-odd text-center ">
+                  <td className=" font-semibold text-sm uppercase px-6 py-4">{course.name}</td>
+                  <td className=" font-semibold text-sm uppercase px-6 py-4">{course.descr}</td>
+                  <td className=" font-semibold text-sm uppercase px-6 py-4">{course.createdAt.split("T")[0]}</td>
+                  <td className=" font-semibold text-sm uppercase px-6 py-4">
                     <label
                       onClick={() => updateCourse(course._id)}
                       htmlFor="my-modal"
@@ -127,33 +124,13 @@ const ShowCourses = () => {
                     >
                       Update
                     </label>
-                    <button
-                      onClick={(e) => deactiveCourse(course._id)}
-                      className="btn"
-                    >
-                      Deactive
-                    </button>
+                    <DeactivateButton setter={setSingleCourseId} value={course._id}></DeactivateButton>
+                   
                   </td>
                 </tr>
               ))}
           </tbody>
         </table>
-      </div>
-      <div className="flex justify-center items-center mt-4 ">
-        <div className="flex justify-center w-full px-4 lg:px-16">
-          {pagiNationData?.totalPages > 1 &&
-            [...Array(pagiNationData.totalPages).keys()].map((i) => {
-              return (
-                <button
-                  key={i}
-                  className="bg-button px-4 py-2 mr-2"
-                  onClick={(e) => setCurrentPage(i + 1)}
-                >
-                  {i + 1}
-                </button>
-              );
-            })}
-        </div>
       </div>
 
       <input type="checkbox" id="my-modal" className="modal-toggle" />
@@ -198,6 +175,7 @@ const ShowCourses = () => {
           </div>
         </div>
       </div>
+      <PopUpModal remove={deactiveCourse} modalData={singleCourseId} ></PopUpModal>
     </div>
   );
 };

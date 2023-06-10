@@ -43,7 +43,7 @@ const ExamDetails = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    axios.get("api/course/getallcourse?status=true").then(({ data }) => {
+    axios.get("api/course/getallcourseadmin").then(({ data }) => {
       setCourses(data.courses);
       setIsLoading(false);
     }).catch(e=>console.log(e))
@@ -53,7 +53,10 @@ const ExamDetails = () => {
         .then(({ data }) => {
           setSubjects(data.data);
           setIsLoading(false);
-        }).catch(e=>console.log(e))
+        }).catch(e=>{
+          console.log(e);
+          setIsLoading(false);
+        })
     } else {
       setSubjects([]);
     }
@@ -63,7 +66,10 @@ const ExamDetails = () => {
         .then(({ data }) => {
           setExams(data);
           setIsLoading(false);
-        }).catch(e=>console.log(e))
+        }).catch(e=>{
+          console.log(e)
+          setIsLoading(false);
+        })
     } else {
       setExams([]);
     }

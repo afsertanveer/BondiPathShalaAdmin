@@ -17,7 +17,7 @@ const ShowStudents = () => {
 
     const handlePageClick = (event) => {
       let clickedPage = parseInt(event.selected) + 1;
-      if (event.selected > 1) {
+      if (event.selected > 0) {
         axios
         .get(
           `/api/coursevsstudent/getstudentbycourse?courseId=${selectedCourse}&page=${clickedPage}`

@@ -50,7 +50,7 @@ const AddExam = () => {
       negativeMarks,
     };
     await axios
-      .post(`api/exam/createexam?exam=${JSON.stringify(exam)}`, formdata, {
+      .post(`/apiexam/createexam?exam=${JSON.stringify(exam)}`, formdata, {
         headers: {
           "Content-Type": "multipart/ form-data",
         },
@@ -63,13 +63,13 @@ const AddExam = () => {
   };
   useEffect(() => {
     setIsLoading(true);
-    axios.get("api/course/getallcourseadmin").then(({ data }) => {
+    axios.get("/apicourse/getallcourseadmin").then(({ data }) => {
       setCourses(data.courses);
       setIsLoading(false);
     });
     if (selectedCourse !== "") {
       axios
-        .get(`api/subject/getsubjectbycourse?courseId=${selectedCourse}`)
+        .get(`/apisubject/getsubjectbycourse?courseId=${selectedCourse}`)
         .then(({ data }) => {
           setSubjects(data.data);
           setIsLoading(false);

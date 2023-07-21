@@ -20,7 +20,7 @@ const ShowUsers = () => {
     setSingleuser(users.filter(us=>us._id===id)[0]);
   };
   const deactiveuser = (_id) => {
-    axios.put(`api/user/deactivateuser`,{_id}).then(({ data }) => {
+    axios.put(`/apiuser/deactivateuser`,{_id}).then(({ data }) => {
       toast.success("user Deactivation Successful");
       window.location.reload(false);
     });
@@ -36,7 +36,7 @@ const ShowUsers = () => {
         userName:singleuser.userName,
         name,mobileNo,address
     }
-    axios.put("api/user/updateofficeuser",updateuser).then(({ data }) => {
+    axios.put("/apiuser/updateofficeuser",updateuser).then(({ data }) => {
         toast.success("user Update Successful");
         window.location.reload(false);
       }).catch(e=>console.log(e))
@@ -45,7 +45,7 @@ const ShowUsers = () => {
   useEffect(() => {
     setIsLoading(true);
     if(getRole!==""){
-        axios.get(`api/user/getuserbyrole?role=${getRole}&page=${currentPage}`).then(({ data }) => {
+        axios.get(`/apiuser/getuserbyrole?role=${getRole}&page=${currentPage}`).then(({ data }) => {
             setUsers(data.user);
             setPagiNationData(data.paginaeData);
             setIsLoading(false);

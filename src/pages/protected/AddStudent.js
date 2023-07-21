@@ -20,7 +20,7 @@ const AddStudent = () => {
     formData.append("excelFile", file);
     try {
       await axios
-        .post("api/student/addstudent", formData, {
+        .post("/apistudent/addstudent", formData, {
           headers: {
             "Content-Type": "multipart/ form-data",
           },

@@ -17,7 +17,7 @@ const ShowCourses = () => {
     const courseName = e.target.value;
     if(courseName.length>2){      
       setIsLoading(true);
-      axios.get(`api/course/getallcoursesearch?courseName=${courseName}`).then(({data})=>{
+      axios.get(`/apicourse/getallcoursesearch?courseName=${courseName}`).then(({data})=>{
         setCourses(data.courses);
         setIsLoading(false);
       }).catch(e=>{
@@ -26,7 +26,7 @@ const ShowCourses = () => {
       })
     }
     if(courseName.length===0){
-      axios.get("api/course/getallcourseadmin").then(({ data }) => {
+      axios.get("/apicourse/getallcourseadmin").then(({ data }) => {
         setCourses(data.courses);
         setIsLoading(false);
       }).catch(e=>{
@@ -39,7 +39,7 @@ const ShowCourses = () => {
   const updateCourse = (id) => {
     console.log(id);
     axios
-      .get(`api/course/getcourse?courseId=${id}`)
+      .get(`/apicourse/getcourse?courseId=${id}`)
       .then(({ data }) => {
         console.log(data);
         setSingleCourse(data);
@@ -47,7 +47,7 @@ const ShowCourses = () => {
       .catch((e) => console.log(e));
   };
   const deactiveCourse = (id) => {
-    axios.put(`api/course/deactivatecourse?id=${id}`).then(({ data }) => {
+    axios.put(`/apicourse/deactivatecourse?id=${id}`).then(({ data }) => {
       toast.success("Course Deactivation Successful");
       window.location.reload(false);
     }).catch(e=>console.log(e))
@@ -65,7 +65,7 @@ const ShowCourses = () => {
         const updateCourse ={
             name,descr
         }
-        axios.put(`api/course/updatesingle?id=${id}`,updateCourse).then(({ data }) => {
+        axios.put(`/apicourse/updatesingle?id=${id}`,updateCourse).then(({ data }) => {
             toast.success("Course Update Successful");
             window.location.reload(false);
           }).catch(e=>console.log(e))
@@ -74,7 +74,7 @@ const ShowCourses = () => {
   }
   useEffect(() => {
     setIsLoading(true);
-    axios.get("api/course/getallcourseadmin").then(({ data }) => {
+    axios.get("/apicourse/getallcourseadmin").then(({ data }) => {
       setCourses(data.courses);
       setIsLoading(false);
     }).catch(e=>{

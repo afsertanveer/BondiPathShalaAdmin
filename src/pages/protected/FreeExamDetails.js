@@ -46,7 +46,7 @@ const FreeExamDetails = () => {
     let clickedPage = parseInt(event.selected) + 1;
     if (event.selected > 0) {
       axios
-        .get(`api/student/gethistorybyexamid?examId=${selectedExam}&page=${clickedPage}`)
+        .get(`/apistudent/gethistorybyexamid?examId=${selectedExam}&page=${clickedPage}`)
         .then(({ data }) => {
           console.log(data);
           setDetailedExam(data?.data);
@@ -59,7 +59,7 @@ const FreeExamDetails = () => {
         })
     } else {
       axios
-      .get(`api/student/gethistorybyexamid?examId=${selectedExam}&page=${1}`)
+      .get(`/apistudent/gethistorybyexamid?examId=${selectedExam}&page=${1}`)
       .then(({ data }) => {
         console.log(data);
         setDetailedExam(data?.data);
@@ -75,11 +75,11 @@ const FreeExamDetails = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    axios.get("api/exam/freecoursesub?course=Free&sub=Free").then(({ data }) => {
+    axios.get("/apiexam/freecoursesub?course=Free&sub=Free").then(({ data }) => {
         setFreeCourseId(data[0]._id);
         setFreeSubjecteId(data[1]._id);
         axios
-        .get(`api/exam/getExamBySub?subjectId=${data[1]._id}`)
+        .get(`/apiexam/getExamBySub?subjectId=${data[1]._id}`)
         .then(({ data }) => {
           setExams(data);
           setIsLoading(false);
@@ -91,7 +91,7 @@ const FreeExamDetails = () => {
     });
     if (selectedExam !== "") {
       axios
-        .get(`api/student/gethistorybyexamid?examId=${selectedExam}&page=${currentPage}`)
+        .get(`/apistudent/gethistorybyexamid?examId=${selectedExam}&page=${currentPage}`)
         .then(({ data }) => {
           console.log(data);
           setDetailedExam(data?.data);

@@ -17,7 +17,7 @@ const CreateCourse = () => {
     console.log(course);
     try {
       await axios
-        .post("api/course/createcourse", course, {
+        .post("/apicourse/createcourse", course, {
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
           withCredentials: true,
         })

@@ -50,14 +50,14 @@ const ShowFreeExam = () => {
     "Z",
   ];
   const generator = (id) =>{
-    axios.put(`/api/freestudent/updatestudentexaminfofree?examId=${id}`).then((data)=>{
-      axios.post(`/api/freestudent/updaterankfree?examId=${id}`).then((data)=>{
+    axios.put(`//apifreestudent/updatestudentexaminfofree?examId=${id}`).then((data)=>{
+      axios.post(`//apifreestudent/updaterankfree?examId=${id}`).then((data)=>{
         toast.success('Rank Generated Successfully');
       }).catch(e=>console.log(e))
     }).catch(e=>console.log(e))
   }
   const handleAssignRule = id =>{
-    axios.get(`api/exam/examruleget?examId=${id}`).then(({data})=>{
+    axios.get(`/apiexam/examruleget?examId=${id}`).then(({data})=>{
       if(data!==null){
         setRuleImg(data.ruleILink);
         return data.ruleILink;
@@ -82,7 +82,7 @@ const ShowFreeExam = () => {
     formData.append("ruleILink", file);
     try {
       await axios
-        .post("api/exam/examruleset", formData, {
+        .post("/apiexam/examruleset", formData, {
           headers: {
             "Content-Type": "multipart/ form-data",
           },
@@ -131,7 +131,7 @@ const ShowFreeExam = () => {
       hscStatus:hsc
     }
     console.log(updatedExam);
-    await axios.put('/api/exam/updateexam',updatedExam).then(({data})=>{
+    await axios.put('//apiexam/updateexam',updatedExam).then(({data})=>{
       toast.success(data);     
       window.location.reload(false);
       form.reset();
@@ -181,7 +181,7 @@ const ShowFreeExam = () => {
 
     console.log(question);
 
-    await axios.post(`api/exam/addquestionmcq`,formdata,{
+    await axios.post(`/apiexam/addquestionmcq`,formdata,{
       headers: {
         "Content-Type": "multipart/ form-data",
       }
@@ -197,7 +197,7 @@ const ShowFreeExam = () => {
     document.getElementById("my-modal-2").checked = false;
   };
   const deactivateExam = async(examId) =>{
-    await axios.put('api/exam/deactivateexam',{examId}).then(({data})=>{
+    await axios.put('/apiexam/deactivateexam',{examId}).then(({data})=>{
       toast.success("Exam Deactivated");
       let allExam = [...exams];
       allExam = allExam.filter(ex=>ex._id!==examId);
@@ -210,7 +210,7 @@ const ShowFreeExam = () => {
   }
   useEffect(() => {
     setIsLoading(true);
-    axios.get(`api/freestudent/getfreeexamall`)
+    axios.get(`/apifreestudent/getfreeexamall`)
     .then(({data} ) => {
       setExams(data);      
       if(data.length===0){
@@ -220,7 +220,7 @@ const ShowFreeExam = () => {
     }).catch(e=>toast.error(e.response.data))
     if (singleExamId !== null) {
       axios
-        .get(`api/exam/getExamById?examId=${singleExamId}`)
+        .get(`/apiexam/getExamById?examId=${singleExamId}`)
         .then(({ data }) => {
           setsingleExam(data);
           setSscChecked(data.sscStatus);

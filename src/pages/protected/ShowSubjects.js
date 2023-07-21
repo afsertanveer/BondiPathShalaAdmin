@@ -18,7 +18,7 @@ const ShowSubjects = () => {
   const updateSubject = (id) => {
     console.log(id);
     axios
-      .get(`api/subject/getsubjectbyid?subjectId=${id}`)
+      .get(`/apisubject/getsubjectbyid?subjectId=${id}`)
       .then(({ data }) => {
         console.log(data);
         setSingleSubject(data);
@@ -44,7 +44,7 @@ const ShowSubjects = () => {
     console.log(updatedSubject);
 
     await axios
-      .put("api/subject/updatesubject", {
+      .put("/apisubject/updatesubject", {
         name,
         descr,
         iLink,
@@ -62,7 +62,7 @@ const ShowSubjects = () => {
   };
   const removeSubject = async (subjectId) => {
     await axios
-      .put("api/subject/deactivatesubject", { subjectId })
+      .put("/apisubject/deactivatesubject", { subjectId })
       .then(({ data }) => {
         toast.success("Subject Deactivated");
         let prevsub = [...subjects];
@@ -74,13 +74,13 @@ const ShowSubjects = () => {
   };
   useEffect(() => {
     setIsLoading(true);
-    axios.get("api/course/getallcourseadmin").then(({ data }) => {
+    axios.get("/apicourse/getallcourseadmin").then(({ data }) => {
       setCourses(data.courses);
       setIsLoading(false);
     });
     if (singleCourse !== "") {
       axios
-        .get(`api/subject/getsubjectbycourse?courseId=${singleCourse}`)
+        .get(`/apisubject/getsubjectbycourse?courseId=${singleCourse}`)
         .then(({ data }) => {
           console.log(data);
           setSubjects(data.data);

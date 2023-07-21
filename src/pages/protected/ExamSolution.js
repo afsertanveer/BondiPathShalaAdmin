@@ -14,14 +14,14 @@ const ExamSolution = () => {
   const [examDetails, setExamDetails] = useState(null);
 
   useEffect(() => {
-    axios.get(`api/student/viewsollutionadmin?studentId=${params.studentId}&examId=${params.examId}`).then(data=>{
+    axios.get(`/apistudent/viewsollutionadmin?studentId=${params.studentId}&examId=${params.examId}`).then(data=>{
         setExamData(data.data)
     }).catch(err => {
         console.log(err);
         window.alert("Something went wrong, please inform us");
       });
 
-    axios.get('api/exam/getExamById?examId=' + params.examId).then(res=>{
+    axios.get('/apiexam/getExamById?examId=' + params.examId).then(res=>{
 
         console.log(res.data);
         setExamDetails(res.data)

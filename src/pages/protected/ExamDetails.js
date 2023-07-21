@@ -44,7 +44,7 @@ const ExamDetails = () => {
     let clickedPage = parseInt(event.selected) + 1;
     if (event.selected > 0) {
       axios
-        .get(`api/student/gethistorybyexamid?examId=${selectedExam}&page=${clickedPage}`)
+        .get(`/apistudent/gethistorybyexamid?examId=${selectedExam}&page=${clickedPage}`)
         .then(({ data }) => {
           console.log(data);
           setDetailedExam(data?.data);
@@ -57,7 +57,7 @@ const ExamDetails = () => {
         })
     } else {
       axios
-      .get(`api/student/gethistorybyexamid?examId=${selectedExam}&page=${1}`)
+      .get(`/apistudent/gethistorybyexamid?examId=${selectedExam}&page=${1}`)
       .then(({ data }) => {
         console.log(data);
         setDetailedExam(data?.data);
@@ -73,13 +73,13 @@ const ExamDetails = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    axios.get("api/course/getallcourseadmin").then(({ data }) => {
+    axios.get("/apicourse/getallcourseadmin").then(({ data }) => {
       setCourses(data.courses);
       setIsLoading(false);
     }).catch(e=>console.log(e))
     if (selectedCourse !== "") {
       axios
-        .get(`api/subject/getsubjectbycourse?courseId=${selectedCourse}`)
+        .get(`/apisubject/getsubjectbycourse?courseId=${selectedCourse}`)
         .then(({ data }) => {
           setSubjects(data.data);
           setIsLoading(false);
@@ -92,7 +92,7 @@ const ExamDetails = () => {
     }
     if (selectedSubject !== "") {
       axios
-        .get(`api/exam/getExamBySub?subjectId=${selectedSubject}`)
+        .get(`/apiexam/getExamBySub?subjectId=${selectedSubject}`)
         .then(({ data }) => {
           setExams(data);
           setIsLoading(false);
@@ -105,7 +105,7 @@ const ExamDetails = () => {
     }
     if (selectedExam !== "") {
       axios
-        .get(`api/student/gethistorybyexamid?examId=${selectedExam}&page=${currentPage}`)
+        .get(`/apistudent/gethistorybyexamid?examId=${selectedExam}&page=${currentPage}`)
         .then(({ data }) => {
           console.log(data);
           setDetailedExam(data?.data);

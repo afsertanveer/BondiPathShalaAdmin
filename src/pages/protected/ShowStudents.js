@@ -20,7 +20,7 @@ const ShowStudents = () => {
       if (event.selected > 0) {
         axios
         .get(
-          `/api/coursevsstudent/getstudentbycourse?courseId=${selectedCourse}&page=${clickedPage}`
+          `api/coursevsstudent/getstudentbycourse?courseId=${selectedCourse}&page=${clickedPage}`
         )
         .then(({ data }) => {
           setStudents(data.data);
@@ -35,7 +35,7 @@ const ShowStudents = () => {
       } else {
         axios
         .get(
-          `/api/coursevsstudent/getstudentbycourse?courseId=${selectedCourse}&page=${1}`
+          `api/coursevsstudent/getstudentbycourse?courseId=${selectedCourse}&page=${1}`
         )
         .then(({ data }) => {
           setStudents(data.data);
@@ -62,7 +62,7 @@ const ShowStudents = () => {
     if (selectedCourse !== "") {
       axios
         .get(
-          `/api/coursevsstudent/getstudentbycourse?courseId=${selectedCourse}&page=${currentPage}`
+          `api/coursevsstudent/getstudentbycourse?courseId=${selectedCourse}&page=${currentPage}`
         )
         .then(({ data }) => {
           setStudents(data.data);

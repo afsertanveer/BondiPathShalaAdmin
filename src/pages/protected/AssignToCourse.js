@@ -19,7 +19,7 @@ const AssignToCourse = () => {
     formdata.append("excelFile", file);
     await axios
       .post(
-        `/api/coursevsstudent/addstudenttocourse?courseId=${selectedCourse}`,
+        `api/coursevsstudent/addstudenttocourse?courseId=${selectedCourse}`,
         formdata,
         {
           headers: {

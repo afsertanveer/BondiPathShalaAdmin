@@ -131,7 +131,7 @@ const ShowQuestions = () => {
       examId,
       questionArray:selectedQuestions
     }
-    await axios.put("/api/exam/addQuestionMcqBulk",questionSet).then(({data})=>{
+    await axios.put("api/exam/addQuestionMcqBulk",questionSet).then(({data})=>{
       toast.success("Successfully added all the questions");
       e.target.reset();      
       document.getElementById("my-modal").checked = false;

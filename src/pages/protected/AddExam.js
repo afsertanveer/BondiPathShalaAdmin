@@ -14,7 +14,6 @@ const AddExam = () => {
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedType, setSelectedType] = useState(-1);
   const [selectedVariation, setSelectedVariation] = useState(-1);
-  const [isFree, setIsFree] = useState(false);
   const [isSSC, setIsSSC] = useState(false);
   const [isHSC, setIsHSC] = useState(false);
   const navigate = useNavigate();
@@ -37,7 +36,7 @@ const AddExam = () => {
       name,
       examType: parseInt(selectedType),
       examVariation: parseInt(selectedVariation),
-      examFreeOrNot: isFree,
+      examFreeOrNot:false,
       startTime,
       endTime,
       duration,
@@ -51,7 +50,7 @@ const AddExam = () => {
       negativeMarks,
     };
     await axios
-      .post(`api/exam//createexam?exam=${JSON.stringify(exam)}`, formdata, {
+      .post(`api/exam/createexam?exam=${JSON.stringify(exam)}`, formdata, {
         headers: {
           "Content-Type": "multipart/ form-data",
         },
@@ -78,8 +77,7 @@ const AddExam = () => {
     } else {
       setSubjects([]);
     }
-    console.log(isFree);
-  }, [selectedCourse,isFree]);
+  }, [selectedCourse]);
   return (
     <div>
       <div className="w-full lg:w-2/3 py-2  bg-white flex flex-col mx-auto  px-4  rounded-lg  shadow-lg ">
@@ -100,8 +98,8 @@ const AddExam = () => {
                 required
               />
             </div>
-            <div className="form-control flex flex-col lg:flex-row justify-between">
-              <div className="w-full lg:w-1/4">
+            <div className="form-control flex flex-col lg:flex-row gap-2 ">
+              <div className="w-full">
                 <label htmlFor="" className="label">
                   Exam Type
                 </label>
@@ -118,7 +116,7 @@ const AddExam = () => {
                   <option value={3}>Monthly</option>
                 </select>
               </div>
-              <div className="w-full lg:w-1/4">
+              <div className="w-full">
                 <label htmlFor="" className="label">
                   Exam Variation
                 </label>
@@ -134,21 +132,6 @@ const AddExam = () => {
                   <option value={2}>Written</option>
                   <option value={3}>Both</option>
                 </select>
-              </div>
-              <div className="w-full lg:w-1/4">
-                <div className="flex items-center mt-0 lg:mt-5 ">
-                  <input
-                    type="checkbox"             
-                    onChange={(e) => setIsFree(!isFree)}
-                    className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  <label
-                    htmlFor="disabled-checked-checkbox"
-                    className="ml-2 text-sm font-medium"
-                  >
-                    Free
-                  </label>
-                </div>
               </div>
             </div>
             <div className="form-control flex flex-col lg:flex-row justify-between  items-start lg:items-center">

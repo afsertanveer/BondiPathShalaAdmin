@@ -15,7 +15,7 @@ const StudentHistory = () => {
     
     useEffect(()=>{
         setIsLoading(true);
-        axios.get('/api/student/historydataadmin?studentId='+studentId).then(({data})=>{
+        axios.get('api/student/historydataadmin?studentId='+studentId).then(({data})=>{
             setHistoryData(data.resultData);
             setIsLoading(false);
         }).catch(e=>{

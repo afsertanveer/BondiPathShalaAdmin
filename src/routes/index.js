@@ -25,17 +25,14 @@ const AssignCourse = lazy(()=>import('../pages/protected/AssignToCourse'));
 const AddSubject = lazy(()=>import('../pages/protected/AddSubject'));
 const ShowSubjects = lazy(()=>import('../pages/protected/ShowSubjects'));
 const AddExam = lazy(()=>import('../pages/protected/AddExam'));
+const AddFreeExam = lazy(()=>import('../pages/protected/AddFreeExam'));
 const ShowExam = lazy(()=>import('../pages/protected/ShowExam'));
+const ShowFreeExam = lazy(()=>import('../pages/protected/ShowFreeExam'));
 const ShowQuestions = lazy(()=>import('../pages/protected/ShowQuestions'));
 const ExamDetails = lazy(()=>import('../pages/protected/ExamDetails'));
 const ExamSolution= lazy(()=>import('../pages/protected/ExamSolution'));
 const StudentHistory = lazy(()=>import('./../pages/protected/StudentHistory'));
 const SearchStudent = lazy(()=>import('./../pages/protected/SearchStudent'));
-
-
-
-
-
 
 const routes = [
   {
@@ -51,6 +48,10 @@ const routes = [
     component: AddExam, // view rendered
   },
   {
+    path: '/exams/create-free-new', // the url
+    component: AddFreeExam, // view rendere
+  },
+  {
     path: '/exams/examdetaisbyexam', // the url
     component: ExamDetails, // view rendered
   },
@@ -61,11 +62,15 @@ const routes = [
   {
     path: '/courses/show', // the url
     component: ShowCourses, // view rendered
-    
   },
   {
     path: '/exam/show', // the url
     component: ShowExam, // view rendered
+    
+  },
+  {
+    path: '/exam/show-free', // the url
+    component: ShowFreeExam, // view rendered
     
   },
   {

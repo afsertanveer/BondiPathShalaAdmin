@@ -23,7 +23,7 @@ const AddSubject = () => {
     formdata.append('descr', descr);
     formdata.append('courseId', selectedCourse);
     // console.log(subject,file);
-    await axios.post(`/api/subject/createsubject`, formdata, {
+    await axios.post(`api/subject/createsubject`, formdata, {
       headers: {
         "Content-Type": "multipart/form-data",
       }

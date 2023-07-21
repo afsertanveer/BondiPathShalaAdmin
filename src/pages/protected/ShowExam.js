@@ -23,6 +23,8 @@ const ShowExam = () => {
   const [correctOption, setCorrectOption] = useState(null);
   const [selectedExamId,setSelectedExamId] = useState("");
   const [ruleImg,setRuleImg] = useState("");
+  const [sscChecked,setSscChecked] = useState(false);
+  const [hscChecked,setHscChecked] = useState(false);
   const optionName = [
     "A",
     "B",
@@ -136,14 +138,8 @@ const ShowExam = () => {
     }
     console.log(updatedExam);
     await axios.put('/api/exam/updateexam',updatedExam).then(({data})=>{
-      toast.success(data);
-      let prevExams = [...exams];
-      for(let i=0 ;i<prevExams.length;i++){
-        if(prevExams[i]._id._id===singleExam._Id){
-          prevExams[i] = updatedExam
-        }
-      }
-      setExams(prevExams);
+      toast.success(data);      
+      window.location.reload(false);
       form.reset();
     })
     form.reset();
@@ -245,7 +241,6 @@ const ShowExam = () => {
       axios
         .get(`api/exam/getExamBySub?subjectId=${selectedSubject}`)
         .then(({ data }) => {
-          console.log(data);
           setExams(data);      
           if(data.length===0){
             toast.error("No Data")
@@ -260,6 +255,8 @@ const ShowExam = () => {
         .get(`api/exam/getExamById?examId=${singleExamId}`)
         .then(({ data }) => {
           setsingleExam(data);
+          setSscChecked(data.sscStatus);
+          setHscChecked(data.hscStatus);
         })
         .catch((e) => console.log(e));
     } else {
@@ -282,8 +279,8 @@ const ShowExam = () => {
               onChange={(e) =>handleChangeCourse(e)}
             >
               <option value=""></option>
-              {courses.length > 0 &&
-                courses.map((course) => (
+              {courses.length > 0 && 
+                courses.map((course) => ( course.name!=="Free" && 
                   <option key={course._id} value={course._id}>
                     {course.name}
                   </option>
@@ -303,7 +300,7 @@ const ShowExam = () => {
             >
               <option value=""></option>
               {subjects.length > 0 &&
-                subjects.map((subject) => (
+                subjects.map((subject) => ( subject.name!=="Free" &&
                   <option key={subject._id} value={subject._id}>
                     {subject.name}
                   </option>

@@ -46,7 +46,7 @@ const AddFreeExam = () => {
       negativeMarks,
     };
     await axios
-    .post(`/apiexam/createexam?exam=${JSON.stringify(exam)}`, formdata, {
+    .post(`/api/exam/createexam?exam=${JSON.stringify(exam)}`, formdata, {
       headers: {
         "Content-Type": "multipart/ form-data",
       },
@@ -58,7 +58,7 @@ const AddFreeExam = () => {
   };
   useEffect(() => {
     setIsLoading(true);
-    axios.get("/apiexam/freecoursesub?course=Free&sub=Free").then(({ data }) => {
+    axios.get("/api/exam/freecoursesub?course=Free&sub=Free").then(({ data }) => {
         setFreeCourseId(data[0]._id);
         setFreeSubjecteId(data[1]._id);
         setIsLoading(false);

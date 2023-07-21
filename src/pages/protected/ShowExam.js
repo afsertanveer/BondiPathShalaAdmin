@@ -54,14 +54,14 @@ const ShowExam = () => {
     "Z",
   ];
   const generator = (id) =>{
-    axios.put(`/apistudent/updatestudentexaminfo?examId=${id}`).then((data)=>{
-      axios.post(`/apistudent/updaterank?examId=${id}`).then((data)=>{
+    axios.put(`/api/student/updatestudentexaminfo?examId=${id}`).then((data)=>{
+      axios.post(`/api/student/updaterank?examId=${id}`).then((data)=>{
         toast.success('Rank Generated Successfully');
       }).catch(e=>console.log(e))
     }).catch(e=>console.log(e))
   }
   const handleAssignRule = id =>{
-    axios.get(`/apiexam/examruleget?examId=${id}`).then(({data})=>{
+    axios.get(`/api/exam/examruleget?examId=${id}`).then(({data})=>{
       if(data!==null){
         setRuleImg(data.ruleILink);
         return data.ruleILink;
@@ -86,7 +86,7 @@ const ShowExam = () => {
     formData.append("ruleILink", file);
     try {
       await axios
-        .post("/apiexam/examruleset", formData, {
+        .post("/api/exam/examruleset", formData, {
           headers: {
             "Content-Type": "multipart/ form-data",
           },
@@ -137,7 +137,7 @@ const ShowExam = () => {
       hscStatus:hsc
     }
     console.log(updatedExam);
-    await axios.put('//apiexam/updateexam',updatedExam).then(({data})=>{
+    await axios.put('//api/exam/updateexam',updatedExam).then(({data})=>{
       toast.success(data);      
       window.location.reload(false);
       form.reset();
@@ -188,7 +188,7 @@ const ShowExam = () => {
 
     console.log(question);
 
-    await axios.post(`//apiexam/addquestionmcq`,formdata,{
+    await axios.post(`//api/exam/addquestionmcq`,formdata,{
       headers: {
         "Content-Type": "multipart/ form-data",
       }
@@ -204,7 +204,7 @@ const ShowExam = () => {
     document.getElementById("my-modal-2").checked = false;
   };
   const deactivateExam = async(examId) =>{
-    await axios.put('/apiexam/deactivateexam',{examId}).then(({data})=>{
+    await axios.put('/api/exam/deactivateexam',{examId}).then(({data})=>{
       toast.success("Exam Deactivated");
       let allExam = [...exams];
       allExam = allExam.filter(ex=>ex._id!==examId);
@@ -223,13 +223,13 @@ const ShowExam = () => {
   }
   useEffect(() => {
     setIsLoading(true);
-    axios.get("/apicourse/getallcourseadmin").then(({ data }) => {
+    axios.get("/api/course/getallcourseadmin").then(({ data }) => {
       setCourses(data.courses);
       setIsLoading(false);
     });
     if (selectedCourse !== "") {
       axios
-        .get(`/apisubject/getsubjectbycourse?courseId=${selectedCourse}`)
+        .get(`/api/subject/getsubjectbycourse?courseId=${selectedCourse}`)
         .then(({ data }) => {
           setSubjects(data.data);
           setIsLoading(false);
@@ -239,7 +239,7 @@ const ShowExam = () => {
     }
     if (selectedSubject !== "") {
       axios
-        .get(`/apiexam/getExamBySub?subjectId=${selectedSubject}`)
+        .get(`/api/exam/getExamBySub?subjectId=${selectedSubject}`)
         .then(({ data }) => {
           setExams(data);      
           if(data.length===0){
@@ -252,7 +252,7 @@ const ShowExam = () => {
     }
     if (singleExamId !== null) {
       axios
-        .get(`/apiexam/getExamById?examId=${singleExamId}`)
+        .get(`/api/exam/getExamById?examId=${singleExamId}`)
         .then(({ data }) => {
           setsingleExam(data);
           setSscChecked(data.sscStatus);

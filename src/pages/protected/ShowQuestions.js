@@ -64,7 +64,7 @@ const ShowQuestions = () => {
     setSecondSubjects([]);
     setSecondExams([]);
     axios
-      .get(`/apisubject/getsubjectbycourse?courseId=${e.target.value}`)
+      .get(`/api/subject/getsubjectbycourse?courseId=${e.target.value}`)
       .then(({ data }) => {
         setSecondSubjects(data.data);
         setIsLoading(false);
@@ -81,7 +81,7 @@ const ShowQuestions = () => {
     setQuestionSubject(e.target.value);
     setSecondExams([]);
     axios
-      .get(`/apiexam/getExamBySub?subjectId=${e.target.value}`)
+      .get(`/api/exam/getExamBySub?subjectId=${e.target.value}`)
       .then(({ data }) => {
         console.log(data);
         setSecondExams(data);
@@ -131,7 +131,7 @@ const ShowQuestions = () => {
       examId,
       questionArray:selectedQuestions
     }
-    await axios.put("/apiexam/addQuestionMcqBulk",questionSet).then(({data})=>{
+    await axios.put("/api/exam/addQuestionMcqBulk",questionSet).then(({data})=>{
       toast.success("Successfully added all the questions");
       e.target.reset();      
       document.getElementById("my-modal").checked = false;
@@ -140,7 +140,7 @@ const ShowQuestions = () => {
   }
 
   const removeQuestion = (questionId)=>{
-     axios.put("/apiexam/updatequestionstatus",{questionId}).then(({data})=>{
+     axios.put("/api/exam/updatequestionstatus",{questionId}).then(({data})=>{
       toast.success("Removed Successfuly");
       let prev = [...questions];
       prev = prev.filter(pr=>pr.questionId!==questionId);
@@ -153,13 +153,13 @@ const ShowQuestions = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    axios.get("/apicourse/getallcourseadmin").then(({ data }) => {
+    axios.get("/api/course/getallcourseadmin").then(({ data }) => {
       setCourses(data.courses);
       setIsLoading(false);
     });
     if (selectedCourse !== "") {
       axios
-        .get(`/apisubject/getsubjectbycourse?courseId=${selectedCourse}`)
+        .get(`/api/subject/getsubjectbycourse?courseId=${selectedCourse}`)
         .then(({ data }) => {
           setSubjects(data.data);
           setIsLoading(false);
@@ -169,7 +169,7 @@ const ShowQuestions = () => {
     }
     if (selectedSubject !== "") {
       axios
-        .get(`/apiexam/getExamBySub?subjectId=${selectedSubject}`)
+        .get(`/api/exam/getExamBySub?subjectId=${selectedSubject}`)
         .then(({ data }) => {
           setExams(data);
           setIsLoading(false);
@@ -179,7 +179,7 @@ const ShowQuestions = () => {
     }
     if (selectedExam !== "") {
       axios
-        .get(`/apiexam/questionbyexamid?examId=${selectedExam}`)
+        .get(`/api/exam/questionbyexamid?examId=${selectedExam}`)
         .then(({ data }) => {
           setQuestions(data);
           setIsLoading(false);

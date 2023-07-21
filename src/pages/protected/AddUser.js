@@ -19,7 +19,7 @@ const AddUser = () => {
     }
     try {
       await axios
-        .post("/apiuser/createofficeuser", user)
+        .post("/api/user/createofficeuser", user)
         .then((data) => {
           toast.success("User Added Successfully");
           form.reset();

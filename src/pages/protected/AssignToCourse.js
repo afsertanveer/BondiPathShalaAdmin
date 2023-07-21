@@ -19,7 +19,7 @@ const AssignToCourse = () => {
     formdata.append("excelFile", file);
     await axios
       .post(
-        `/apicoursevsstudent/addstudenttocourse?courseId=${selectedCourse}`,
+        `/api/coursevsstudent/addstudenttocourse?courseId=${selectedCourse}`,
         formdata,
         {
           headers: {
@@ -36,7 +36,7 @@ const AssignToCourse = () => {
   };
   useEffect(() => {
     setIsLoading(true);
-    axios.get("/apicourse/getallcourseadmin").then(({ data }) => {
+    axios.get("/api/course/getallcourseadmin").then(({ data }) => {
       setCourses(data.courses);
       setIsLoading(false);
     });

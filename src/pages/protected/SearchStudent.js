@@ -21,14 +21,14 @@ const SearchStudent = () => {
       let flag =0;      
       setIsLoading(true);
         if(selectedOption==="1"){
-          axios.get(`/apistudent/getstudentregsearch?regNo=${searched}`).then(({data})=>{
+          axios.get(`/api/student/getstudentregsearch?regNo=${searched}`).then(({data})=>{
             setIsLoading(false)
             setStudents(data);
             flag = 1;
           }).catch(e=>console.log(e))
         }
         if(selectedOption==="2"){
-          axios.get(`/apistudent/getstudentnamesearch?name=${searched}`).then(({data})=>{
+          axios.get(`/api/student/getstudentnamesearch?name=${searched}`).then(({data})=>{
             setIsLoading(false)
             setStudents(data);
             flag = 1;
@@ -41,7 +41,7 @@ const SearchStudent = () => {
     }
     if(searched.length>4){
       if(selectedOption==="3"){
-        axios.get(`/apistudent/getstudentmobilesearch?mobileNo=${searched}`).then(({data})=>{
+        axios.get(`/api/student/getstudentmobilesearch?mobileNo=${searched}`).then(({data})=>{
           setIsLoading(false)
           setStudents(data);
         }).catch(e=>console.log(e))

@@ -20,7 +20,7 @@ const ShowStudents = () => {
       if (event.selected > 0) {
         axios
         .get(
-          `/apicoursevsstudent/getstudentbycourse?courseId=${selectedCourse}&page=${clickedPage}`
+          `/api/coursevsstudent/getstudentbycourse?courseId=${selectedCourse}&page=${clickedPage}`
         )
         .then(({ data }) => {
           setStudents(data.data);
@@ -35,7 +35,7 @@ const ShowStudents = () => {
       } else {
         axios
         .get(
-          `/apicoursevsstudent/getstudentbycourse?courseId=${selectedCourse}&page=${1}`
+          `/api/coursevsstudent/getstudentbycourse?courseId=${selectedCourse}&page=${1}`
         )
         .then(({ data }) => {
           setStudents(data.data);
@@ -55,14 +55,14 @@ const ShowStudents = () => {
   }
   useEffect(() => {
     setIsLoading(true);
-    axios.get("/apicourse/getallcourseadmin").then(({ data }) => {
+    axios.get("/api/course/getallcourseadmin").then(({ data }) => {
       setCourses(data.courses);
       setIsLoading(false);
     }).catch(e=>console.log(e))
     if (selectedCourse !== "") {
       axios
         .get(
-          `/apicoursevsstudent/getstudentbycourse?courseId=${selectedCourse}&page=${currentPage}`
+          `/api/coursevsstudent/getstudentbycourse?courseId=${selectedCourse}&page=${currentPage}`
         )
         .then(({ data }) => {
           setStudents(data.data);

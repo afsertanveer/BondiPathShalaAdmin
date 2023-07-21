@@ -23,7 +23,7 @@ const AddSubject = () => {
     formdata.append('descr', descr);
     formdata.append('courseId', selectedCourse);
     // console.log(subject,file);
-    await axios.post(`/apisubject/createsubject`, formdata, {
+    await axios.post(`/api/subject/createsubject`, formdata, {
       headers: {
         "Content-Type": "multipart/form-data",
       }
@@ -34,7 +34,7 @@ const AddSubject = () => {
   };
   useEffect(() => {
     setIsLoading(true);
-    axios.get("/apicourse/getallcourseadmin").then(({ data }) => {
+    axios.get("/api/course/getallcourseadmin").then(({ data }) => {
       setCourses(data.courses);
       setIsLoading(false);
     });

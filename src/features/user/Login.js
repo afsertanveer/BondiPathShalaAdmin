@@ -25,7 +25,7 @@ function Login(){
         if(loginObj.password.trim() === "")return setErrorMessage("Password is required!")
         else{
             setLoading(true)
-            axios.post('/apiuser/login',{...loginObj},{
+            axios.post('/api/user/login',{...loginObj},{
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 withCredentials: true
             })

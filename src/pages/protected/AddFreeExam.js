@@ -31,7 +31,7 @@ const AddFreeExam = () => {
     const exam = {
       name,
       examType:-1,
-      examVariation: parseInt(selectedVariation),
+      examVariation: 1,
       examFreeOrNot: true,
       startTime,
       endTime,
@@ -89,17 +89,14 @@ const AddFreeExam = () => {
                 <label htmlFor="" className="label">
                   Exam Variation
                 </label>
-                <select
-                  name="variation"
-                  id="variation"
-                  className="input border-black input-bordered w-full "
-                  onChange={(e) => setSelectedVariation(e.target.value)}
-                  required
-                >
-                  <option value={1}>MCQ</option>
-                  <option value={2}>Written</option>
-                  <option value={3}>Both</option>
-                </select>
+                <input 
+                        type="text" 
+                        name="subject" 
+                        id="subject" 
+                        defaultValue={"MCQ"} 
+                        className="input w-full  border-black input-bordered " 
+                        disabled  
+                    />     
               </div>
                 <div className="form-control w-full lg:w-1/2 mr-0 lg:mr-4">
                     <label className="label" htmlFor="">

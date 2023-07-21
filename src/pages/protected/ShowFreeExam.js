@@ -105,7 +105,6 @@ const ShowFreeExam = () => {
     e.preventDefault();
     const form = e.target;
     const name = form.exam.value;
-    const variation = form.variation.value;
     const startTime = form.start_time.value;
     const endTime = form.end_time.value;
     const totalQuestionMcq = form.total_questions.value;
@@ -120,7 +119,7 @@ const ShowFreeExam = () => {
       examType:-1,
       subjectId:singleExam.subjectId._id,
       courseId:singleExam.courseId._id,
-      examVariation:variation,
+      examVariation:1,
       examFreeOrNot:true,
       startTime,endTime,
       totalQuestionMcq,marksPerMcq,
@@ -131,7 +130,7 @@ const ShowFreeExam = () => {
       hscStatus:hsc
     }
     console.log(updatedExam);
-    await axios.put('//api/exam/updateexam',updatedExam).then(({data})=>{
+    await axios.put('/api/exam/updateexam',updatedExam).then(({data})=>{
       toast.success(data);     
       window.location.reload(false);
       form.reset();
@@ -363,8 +362,7 @@ const ShowFreeExam = () => {
           <div className="modal-box">
             <h3 className="font-bold text-lg text-center">Update Subject</h3>
             <form className="add-form" onSubmit={handleUpdateExam}>
-              <div className="form-control flex flex-col lg:flex-row gap-2">
-               <div>
+              <div className="form-control w-full">
                 <label htmlFor="" className=" label">
                     <span className="label-text">Exam Name </span>
                     </label>
@@ -377,29 +375,6 @@ const ShowFreeExam = () => {
                     defaultValue={singleExam.name}
                     required
                     />
-               </div>
-                    <div className="w-full">
-                    <label htmlFor="" className="label">
-                        Variation
-                    </label>
-                    <select
-                        name="variation"
-                        id="variation"
-                        className="input border-black input-bordered w-full "
-                        required
-                    >
-                        <option value={singleExam.examVariation}>
-                        {singleExam.examVariation === 1
-                            ? "MCQ"
-                            : singleExam.examVariation === 2
-                            ? "Written"
-                            : "Both"}
-                        </option>
-                        <option value={1}>MCQ</option>
-                        <option value={2}>Written</option>
-                        <option value={3}>Both</option>
-                    </select>
-                    </div>
               </div>
               <div className="form-control"></div>
               <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-center">

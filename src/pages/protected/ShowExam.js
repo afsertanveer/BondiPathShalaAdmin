@@ -188,7 +188,7 @@ const ShowExam = () => {
 
     console.log(question);
 
-    await axios.post(`//api/exam/addquestionmcq`,formdata,{
+    await axios.post(`/api/exam/addquestionmcq`,formdata,{
       headers: {
         "Content-Type": "multipart/ form-data",
       }

@@ -88,7 +88,7 @@ const AddExam = () => {
           <form className="add-form" onSubmit={handleAddExam}>
             <div className="form-control">
               <label htmlFor="" className=" label">
-                <span className="label-text">Exam Name </span>
+                <span className="label-text">Name </span>
               </label>
               <input
                 className="input input-bordered  border-black"
@@ -102,7 +102,7 @@ const AddExam = () => {
             <div className="form-control flex flex-col lg:flex-row gap-2 ">
               <div className="w-full">
                 <label htmlFor="" className="label">
-                  Exam Type
+                  Type
                 </label>
                 <select
                   name="type"
@@ -119,7 +119,7 @@ const AddExam = () => {
               </div>
               <div className="w-full">
                 <label htmlFor="" className="label">
-                  Exam Variation
+                  Variation
                 </label>
                 <select
                   name="variation"

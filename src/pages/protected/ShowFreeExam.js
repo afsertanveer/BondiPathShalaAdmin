@@ -364,7 +364,7 @@ const ShowFreeExam = () => {
         <input type="checkbox" id="my-modal" className="modal-toggle" />
         <div className="modal">
           <div className="modal-box">
-            <h3 className="font-bold text-lg text-center">Update Subject</h3>
+            <h3 className="font-bold text-lg text-center">Update Exam</h3>
             <form className="add-form" onSubmit={handleUpdateExam}>
               <div className="form-control w-full">
                 <label htmlFor="" className=" label">

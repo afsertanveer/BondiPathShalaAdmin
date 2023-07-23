@@ -87,7 +87,7 @@ const AddFreeExam = () => {
             <div className="flex flex-col lg:flex-row gap-2 w-full">
             <div className="w-full lg:w-1/4">
                 <label htmlFor="" className="label">
-                  Exam Variation
+                  Variation
                 </label>
                 <input 
                         type="text" 

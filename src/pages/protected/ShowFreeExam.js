@@ -51,10 +51,15 @@ const ShowFreeExam = () => {
   const generator = (id) =>{
     axios.put(`/api/freestudent/updatestudentexaminfofree?examId=${id}`).then((data)=>{
       console.log(data);
+      if(data?.response?.data){
+          toast.error(data.response.data)
+      }else{
+        
       axios.post(`/api/freestudent/updaterankfree?examId=${id}`).then((rankData)=>{
         console.log(rankData);
         toast.success('Rank Generated Successfully');
       }).catch(e=>console.log(e))
+      }
     }).catch(e=>console.log(e))
   }
   const handleAssignRule = id =>{

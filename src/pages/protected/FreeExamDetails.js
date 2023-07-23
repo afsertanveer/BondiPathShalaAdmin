@@ -119,13 +119,11 @@ const FreeExamDetails = () => {
             <tr className="text-center">
               <th className="py-5 w-[80px]">Sl No.</th>
               <th className="py-5 w-[180px]">Name</th>
-              <th className="py-5 w-[180px]">Registration Number</th>
               <th className="py-5 w-[180px]">Mobile Number</th>
               <th className="w-[160px]">Start Time</th>
               <th className="w-[160px]">End Time</th>
               <th className="w-[160px]">Title</th>
               <th className="w-[160px]">Subject</th>
-              <th className="w-[160px]">D/W/M</th>
               <th className="w-[160px]">Exam Type</th>
               <th className="w-[90px]">Marks</th>
               <th className="w-[110px]">Merit Postition</th>
@@ -141,7 +139,6 @@ const FreeExamDetails = () => {
                 >
                   <td>{index + 1}</td>
                   <td>{data.examStud.studentId.name}</td>
-                  <td>{data.examStud.studentId.regNo}</td>
                   <td>{data.examStud.studentId.mobileNo}</td>
                   <td>{data.examStartTime}</td>
                   <td>{data.examEndTime}</td>
@@ -153,7 +150,7 @@ const FreeExamDetails = () => {
                    <td>{data.meritPosition==="-1"? "Pending" : data.meritPosition}</td> 
                   <td>
                     <div className="flex px-2 justify-evenly">
-                      <Link to={`/dashboard/exams/${data.studentId}/${examInfo.id}/solution`} className="tooltip bg-color-two rounded-full text-center h-[38px] w-[38px]" data-tip="Get Solution">
+                      <Link to={`/dashboard/exams/${data.studentId}/${examInfo.id}/freesolution`} className="tooltip bg-color-two rounded-full text-center h-[38px] w-[38px]" data-tip="Get Solution">
                         <img className="inline-flex img p-2" src={v2} alt="view-solution" />
                       </Link>
                     </div>

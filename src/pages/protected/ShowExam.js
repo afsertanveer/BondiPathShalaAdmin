@@ -626,35 +626,38 @@ const ShowExam = () => {
                   />
                 </div>
                 <div className="flex items-center mt-0 lg:mt-5 ">
-                  <input
-                    id="ssc"
-                    type="checkbox"
-                    name="ssc"
-                    defaultChecked={singleExam.sscStatus ? "checked" : ""}
-                    className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  <label
-                    htmlFor="disabled-checked-checkbox"
-                    className="ml-2 text-sm font-medium"
-                  >
-                    SSC
-                  </label>
-                </div>
-                <div className="flex items-center mt-0 lg:mt-5 ">
-                  <input
-                    id="hsc"
-                    type="checkbox"
-                    name="hsc"
-                    defaultChecked={singleExam.hscStatus ? "checked" : ""}
-                    className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  <label
-                    htmlFor="disabled-checked-checkbox"
-                    className="ml-2 text-sm font-medium"
-                  >
-                    HSC
-                  </label>
-                </div>
+                
+                <input
+                  id="ssc"
+                  type="checkbox"
+                  name="ssc"
+                  checked={sscChecked}
+                  onChange={()=>setSscChecked(!sscChecked)}
+                  className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                /> 
+                <label
+                  htmlFor="disabled-checked-checkbox"
+                  className="ml-2 text-sm font-medium"
+                >
+                  SSC
+                </label>
+              </div>
+              <div className="flex items-center mt-0 lg:mt-5 ">
+                <input
+                  id="hsc"
+                  type="checkbox"
+                  name="hsc"
+                  checked={hscChecked}
+                  onChange={()=>setHscChecked(!hscChecked)}
+                  className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  htmlFor="disabled-checked-checkbox"
+                  className="ml-2 text-sm font-medium"
+                >
+                  HSC
+                </label>
+              </div>
               </div>
               <div className="form-control mt-2 flex flex-row justify-between">
                 <input

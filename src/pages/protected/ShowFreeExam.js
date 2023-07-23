@@ -6,7 +6,6 @@ import Loader from "./../../Shared/Loader";
 import { toast } from "react-hot-toast";
 import DeactivateButton from './../../features/common/components/DeactivateButton';
 import PopUpModal from './../../features/common/components/PopUpModal';
-import { type, variation } from "../../utils/globalVariables";
 
 const ShowFreeExam = () => {
   
@@ -50,8 +49,10 @@ const ShowFreeExam = () => {
     "Z",
   ];
   const generator = (id) =>{
-    axios.put(`//api/freestudent/updatestudentexaminfofree?examId=${id}`).then((data)=>{
-      axios.post(`//api/freestudent/updaterankfree?examId=${id}`).then((data)=>{
+    axios.put(`/api/freestudent/updatestudentexaminfofree?examId=${id}`).then((data)=>{
+      console.log(data);
+      axios.post(`/api/freestudent/updaterankfree?examId=${id}`).then((rankData)=>{
+        console.log(rankData);
         toast.success('Rank Generated Successfully');
       }).catch(e=>console.log(e))
     }).catch(e=>console.log(e))
@@ -211,6 +212,7 @@ const ShowFreeExam = () => {
     setIsLoading(true);
     axios.get(`/api/freestudent/getfreeexamall`)
     .then(({data} ) => {
+      console.log(data);
       setExams(data);      
       if(data.length===0){
         toast.error("No Data")
@@ -247,7 +249,6 @@ const ShowFreeExam = () => {
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Exam Name</th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Start Time</th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">End Time</th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Variation</th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Duration</th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Free Status</th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">SSC Required?</th>
@@ -266,7 +267,6 @@ const ShowFreeExam = () => {
                     <td className="px-6 py-4 text-center">{exam.name}</td>
                     <td className="px-1 py-4 text-center">{new Date(exam.startTime).toString().split("GMT")[0]}</td>
                     <td className="px-1 py-4 text-center">{new Date(exam.endTime).toString().split("GMT")[0]}</td>
-                    <td className="px-6 py-4 text-center">{variation[exam.examVariation]}</td>
                     <td className="px-6 py-4 text-center">{exam.duration} Minutes</td>
                     <td className="px-6 py-4 text-center">{exam.examFreeOrNot? "Yes" : "No"}</td>
                     <td className="px-6 py-4 text-center">{exam.sscStatus? "Yes" : "No"}</td>

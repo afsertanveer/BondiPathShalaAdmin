@@ -137,7 +137,7 @@ const ShowExam = () => {
       hscStatus:hsc
     }
     console.log(updatedExam);
-    await axios.put('//api/exam/updateexam',updatedExam).then(({data})=>{
+    await axios.put('/api/exam/updateexam',updatedExam).then(({data})=>{
       toast.success(data);      
       window.location.reload(false);
       form.reset();
@@ -241,6 +241,7 @@ const ShowExam = () => {
       axios
         .get(`/api/exam/getExamBySub?subjectId=${selectedSubject}`)
         .then(({ data }) => {
+          console.log(data);
           setExams(data);      
           if(data.length===0){
             toast.error("No Data")
@@ -356,7 +357,9 @@ const ShowExam = () => {
                         htmlFor="my-modal-4"
                         className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                       >Show Rule
-                      </label> : <label
+                      </label> 
+                      : 
+                      <label
                       onClick={() => handleAssignExamId(exam._id)}
                       htmlFor="my-modal-3"
                       className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"

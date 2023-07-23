@@ -56,6 +56,7 @@ const AddExam = () => {
         },
       })
       .then(({ data }) => {
+        console.log(data);
         toast.success("Exam Added Succesfully");
         navigate("/dashboard");
       });

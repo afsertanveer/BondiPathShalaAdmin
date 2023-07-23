@@ -144,7 +144,6 @@ const FreeExamDetails = () => {
                   <td>{data.examEndTime}</td>
                   <td>{examInfo.name}</td>
                   <td>{examInfo.subjectName}</td>
-                  <td>{examInfo.variation}</td>
                   <td>{examInfo.type}</td>
                   <td>{data.totalObtainedMarks ?? 0}/{examInfo.totalMarksMcq}</td>
                    <td>{data.meritPosition==="-1"? "Pending" : data.meritPosition}</td> 

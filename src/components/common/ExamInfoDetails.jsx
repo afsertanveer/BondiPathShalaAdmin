@@ -38,7 +38,7 @@ function ExamInfoDetails({ examInfos }) {
           </div>
           <div>
             <span className="font-bold">Exam Type: </span>
-            <span>{types[examInfos.examType]}</span>
+            <span>{types[examInfos.examType]? types[examInfos.examType] : "FREE" }</span>
           </div>
       </div>
     </div>

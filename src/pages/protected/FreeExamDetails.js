@@ -9,38 +9,15 @@ import v2 from "../../assets/img/icons/eye.svg";
 import { toast } from "react-hot-toast";
 import Pagination from "../../components/common/Pagination";
 const FreeExamDetails = () => {
-  const [courses, setCourses] = useState([]);
-  const [subjects, setSubjects] = useState([]);
   const [exams, setExams] = useState([]);
   const [detailedExam,setDetailedExam] = useState([]);
   const [examInfo,setExamInfo] = useState({});
-  const [selectedCourse, setSelectedCourse] = useState("");
-  const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedExam, setSelectedExam] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage,setCurrentPage] = useState(1);
   const [pagiNationData,setPagiNationData] = useState({});  
   const [freeCourseId,setFreeCourseId] = useState('');
   const [freeSubjecteId,setFreeSubjecteId] = useState('');
-  
- 
-  const handleChangeCourse = (e) => {
-    setSelectedSubject("");
-    setSubjects([]);
-    setExams("");
-    setExams([]);
-    setSelectedCourse(e.target.value);
-    setDetailedExam([]);
-    
-  };
-
-  const handleChangeSubject = (e) => {
-    setSelectedSubject(e.target.value);
-    setSelectedExam("");
-    setExams([]);
-    setDetailedExam([]);
-  };
-
 
   const handlePageClick = (event) => {
     let clickedPage = parseInt(event.selected) + 1;
@@ -106,7 +83,7 @@ const FreeExamDetails = () => {
         setDetailedExam([]);
         setExamInfo({});
     }
-  }, [selectedCourse, selectedSubject, selectedExam,currentPage]);
+  }, [ selectedExam,currentPage]);
   return (
     <div className=" bg-white  min-h-[800px]">
       <div className=" py-4 px-2 my-3 ">

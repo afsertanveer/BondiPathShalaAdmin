@@ -14,7 +14,7 @@ const FreeExamSolution = () => {
   const [examDetails, setExamDetails] = useState(null);
 
   useEffect(() => {
-    axios.get(`/api/student/viewsollutionadmin?studentId=${params.studentId}&examId=${params.examId}`).then(data=>{
+    axios.get(`/api/student/viewsollutionadmin?freeStudentId=${params.studentId}&examId=${params.examId}`).then(data=>{
         setExamData(data.data)
     }).catch(err => {
         console.log(err);

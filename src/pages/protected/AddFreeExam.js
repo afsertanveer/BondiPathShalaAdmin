@@ -7,7 +7,6 @@ import { toast } from "react-hot-toast";
 
 const AddFreeExam = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedVariation, setSelectedVariation] = useState(1);
   const [isSSC, setIsSSC] = useState(false);
   const [isHSC, setIsHSC] = useState(false);
   const [freeCourseId,setFreeCourseId] = useState('');

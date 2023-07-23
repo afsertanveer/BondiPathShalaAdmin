@@ -68,7 +68,7 @@ const FreeExamDetails = () => {
     });
     if (selectedExam !== "") {
       axios
-        .get(`/api/student/gethistorybyexamid?examId=${selectedExam}&page=${currentPage}`)
+        .get(`/api/freestudent/freeGetHistoryByExamId?examId=${selectedExam}&page=${currentPage}`)
         .then(({ data }) => {
           console.log(data);
           setDetailedExam(data?.data);

@@ -207,9 +207,7 @@ const ShowExam = () => {
   const deactivateExam = async(examId) =>{
     await axios.put('/api/exam/deactivateexam',{examId}).then(({data})=>{
       toast.success("Exam Deactivated");
-      let allExam = [...exams];
-      allExam = allExam.filter(ex=>ex._id!==examId);
-      setExams(allExam)
+      window.location.reload(false);
     })
   }
 
@@ -368,8 +366,13 @@ const ShowExam = () => {
                       Add Exam Rule
                     </label>  
                       }
-                       
-                      <button className="btn mr-2" onClick={e=>generator(exam._id)}>Generate MeritList</button>
+                       <label
+                      onClick={() => handleAssignExamId(exam._id)}
+                      htmlFor="my-popup"
+                      className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                    >
+                      Generate Meritlist
+                    </label>
                       <label
                         onClick={() => handleAssignExamId(exam._id)}
                         htmlFor="my-modal"
@@ -394,6 +397,26 @@ const ShowExam = () => {
         </div>
       )}
       <div>
+      <input type="checkbox" id="my-popup" className="modal-toggle" />
+      <div className="modal">
+        <div className="modal-box">
+          <h3 className="font-semibold text-lg text-center">
+            {  `Are you sure?`}
+          </h3>
+
+          <div className="modal-action flex justify-center items-center">
+            <button
+              className="btn mr-2"
+              onClick={() =>generator(singleExamId)}
+            >
+              Yes
+            </button>
+            <label htmlFor="my-popup" className="btn bg-[red]">
+              No!
+            </label>
+          </div>
+        </div>
+      </div>
       <input type="checkbox" id="my-modal-4" className="modal-toggle" />
         <div className="modal">
           <div className="modal-box">

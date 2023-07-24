@@ -8,6 +8,7 @@ import v1 from "../../assets/img/icons/tasksquare.svg";
 import v2 from "../../assets/img/icons/eye.svg";
 import { toast } from "react-hot-toast";
 import Pagination from "../../components/common/Pagination";
+import moment from "moment";
 const ExamDetails = () => {
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -220,8 +221,8 @@ const ExamDetails = () => {
                   <td>{data.examStud.studentId.name}</td>
                   <td>{data.examStud.studentId.regNo}</td>
                   <td>{data.examStud.studentId.mobileNo}</td>
-                  <td>{data.examStartTime}</td>
-                  <td>{data.examEndTime}</td>
+                  <td>{moment(new Date(data.startTime)).subtract(6, 'hours')}</td>
+                  <td>{moment(new Date(data.endTime)).subtract(6, 'hours')}</td>
                   <td>{examInfo.name}</td>
                   <td>{examInfo.subjectName}</td>
                   <td>{examInfo.variation}</td>

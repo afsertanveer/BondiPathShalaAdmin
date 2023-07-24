@@ -55,10 +55,12 @@ const ShowFreeExam = () => {
       
       if(data.length===0){
           toast.error("Exam is running")
+          window.location.reload(false);
       }else{        
       axios.post(`/api/freestudent/updaterankfree?examId=${id}`).then((rankData)=>{
         console.log(rankData);
         toast.success('Rank Generated Successfully');
+        window.location.reload(false);
       }).catch(e=>console.log(e))
       }
     }).catch(e=>console.log(e))

@@ -58,6 +58,7 @@ const ShowExam = () => {
     axios.put(`/api/student/updatestudentexaminfo?examId=${id}`).then((data)=>{
       axios.post(`/api/student/updaterank?examId=${id}`).then((data)=>{
         toast.success('Rank Generated Successfully');
+        window.location.reload(false);
       }).catch(e=>console.log(e))
     }).catch(e=>console.log(e))
   }

@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import DeactivateButton from './../../features/common/components/DeactivateButton';
 import PopUpModal from './../../features/common/components/PopUpModal';
 import moment from "moment/moment";
+import { subtractHours } from "../../utils/globalFunction";
 
 const ShowFreeExam = () => {
   
@@ -213,6 +214,7 @@ const ShowFreeExam = () => {
     setNumberOfOptions(parseInt(e.target.value))
     document.getElementById("num_of_options").disabled = true;
   }
+  const makeLocal = time => time.toLocaleTimeString();
   useEffect(() => {
     setIsLoading(true);
     axios.get(`/api/freestudent/getfreeexamall`)
@@ -270,10 +272,8 @@ const ShowFreeExam = () => {
                   <tr key={exam._id} className="even:bg-table-row-even odd:bg-table-row-odd text-center"> 
                     <td className="px-6 py-4 text-center">{idx+1}</td>
                     <td className="px-6 py-4 text-center">{exam.name}</td>
-                    {/* <td className="px-1 py-4 text-center">{new Date(exam.startTime).toString().split("GMT")[0]}</td> */}
-                    <td className="px-1 py-4 text-center">{moment(exam.startTime).subtract(6, 'hours')}</td>
-                    {/* <td className="px-1 py-4 text-center">{new Date(exam.endTime).toString().split("GMT")[0]}</td> */}
-                    <td className="px-1 py-4 text-center">{moment(exam.endTime).subtract(6, 'hours')}</td>
+                    <td className="px-1 py-4 text-center">{subtractHours(new Date(exam.startTime)).toString().split("GMT")[0]}</td>
+                    <td className="px-1 py-4 text-center">{subtractHours(new Date(exam.endTime)).toString().split("GMT")[0]}</td>
                     <td className="px-6 py-4 text-center">{exam.duration} Minutes</td>
                     <td className="px-6 py-4 text-center">{exam.examFreeOrNot? "Yes" : "No"}</td>
                     <td className="px-6 py-4 text-center">{exam.sscStatus? "Yes" : "No"}</td>

@@ -8,6 +8,7 @@ import v1 from "../../assets/img/icons/tasksquare.svg";
 import v2 from "../../assets/img/icons/eye.svg";
 import { toast } from "react-hot-toast";
 import Pagination from "../../components/common/Pagination";
+import { subtractHours } from "../../utils/globalFunction";
 const FreeExamDetails = () => {
   const [exams, setExams] = useState([]);
   const [detailedExam,setDetailedExam] = useState([]);
@@ -140,8 +141,8 @@ const FreeExamDetails = () => {
                   <td>{index + 1}</td>
                   <td>{data.examStud.studentId.name}</td>
                   <td>{data.examStud.studentId.mobileNo}</td>
-                  <td>{data.examStartTime}</td>
-                  <td>{data.examEndTime}</td>
+                  <td>{subtractHours(new Date(data.startTime)).toString().split("GMT")[0]}</td>
+                  <td>{subtractHours(new Date(data.endTime)).toString().split("GMT")[0]}</td>
                   <td>{examInfo.name}</td>
                   <td>{examInfo.subjectName}</td>
                   <td>{examInfo.type}</td>

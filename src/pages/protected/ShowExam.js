@@ -333,8 +333,8 @@ const ShowExam = () => {
       {isLoading && <Loader></Loader>}
       {exams.length > 0 && (
         <div className="overflow-x-auto w-full">
-          <div id="update-modal flex justify-center items-center">
-            <input type="checkbox" id="my-modal" className="modal-toggle" />
+          <div id="update-modal ">
+            <input type="checkbox" id="my-modal" className="modal-toggle flex justify-center items-center" />
             <div className="modal">
               <div className="modal-box">
                 <h3 className="font-bold text-lg text-center">Update Exam</h3>

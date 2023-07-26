@@ -332,10 +332,223 @@ const ShowExam = () => {
       </div>
       {isLoading && <Loader></Loader>}
       {exams.length > 0 && (
-        <div className="overflow-x-auto w-full">
-          <div id="update-modal w-full ">
+        <div className="overflow-x-auto w-full">        
+          <table className="mx-auto w-full whitespace-nowrap rounded-lg  divide-y  overflow-hidden">
+            <thead>
+              <tr>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
+                  SI No.
+                </th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
+                  Exam Name
+                </th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
+                  Start Time
+                </th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
+                  End Time
+                </th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
+                  Type
+                </th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
+                  Variation
+                </th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
+                  Duration
+                </th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
+                  Free Status
+                </th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
+                  SSC Required?
+                </th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
+                  HSC Required?
+                </th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
+                  Marks/Questions
+                </th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
+                  Total Questions
+                </th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
+                  Total Marks
+                </th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {exams.length > 0 &&
+                exams.map((exam, idx) => (
+                  <tr
+                    key={exam._id}
+                    className="even:bg-table-row-even odd:bg-table-row-odd text-center"
+                  >
+                    <td className="px-6 py-4 text-center">{idx + 1}</td>
+                    <td className="px-6 py-4 text-center">{exam.name}</td>
+                    <td className="px-1 py-4 text-center">
+                      {
+                        subtractHours(new Date(exam.startTime))
+                          .toString()
+                          .split("GMT")[0]
+                      }
+                    </td>
+                    <td className="px-1 py-4 text-center">
+                      {
+                        subtractHours(new Date(exam.endTime))
+                          .toString()
+                          .split("GMT")[0]
+                      }
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      {type[exam.examType]}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      {variation[exam.examVariation]}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      {exam.duration} Minutes
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      {exam.examFreeOrNot ? "Yes" : "No"}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      {exam.sscStatus ? "Yes" : "No"}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      {exam.hscStatus ? "Yes" : "No"}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      {exam.marksPerMcq}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      {exam.totalQuestionMcq}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      {exam.totalMarksMcq}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <div className="flex flex-col lg:flex-row justify-center">
+                        {exam.RuleImage !== "0" ? (
+                          <label
+                            onClick={() => handleAssignRule(exam._id)}
+                            htmlFor="my-modal-4"
+                            className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          >
+                            Show Rule
+                          </label>
+                        ) : (
+                          <label
+                            onClick={() => handleAssignExamId(exam._id)}
+                            htmlFor="my-modal-3"
+                            className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          >
+                            Add Exam Rule
+                          </label>
+                        )}
+                        <label
+                          onClick={() => handleAssignExamId(exam._id)}
+                          htmlFor="my-popup"
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                        >
+                          Generate Meritlist
+                        </label>
+                        <label
+                          onClick={() => handleAssignExamId(exam._id)}
+                          htmlFor="my-modal"
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                        >
+                          Update
+                        </label>
+                        <label
+                          htmlFor="my-modal-2"
+                          onClick={() => setSingleExamId(exam._id)}
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                        >
+                          Add Questions
+                        </label>
+                        <DeactivateButton
+                          setter={setSelectedExamId}
+                          value={exam._id}
+                        ></DeactivateButton>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+      <div>
+        <input type="checkbox" id="my-popup" className="modal-toggle" />
+        <div className="modal">
+          <div className="modal-box">
+            <h3 className="font-semibold text-lg text-center">
+              {`Are you sure?`}
+            </h3>
+
+            <div className="modal-action flex justify-center items-center">
+              <button
+                className="btn mr-2"
+                onClick={() => generator(singleExamId)}
+              >
+                Yes
+              </button>
+              <label htmlFor="my-popup" className="btn bg-[red]">
+                No!
+              </label>
+            </div>
+          </div>
+        </div>
+        <input type="checkbox" id="my-modal-4" className="modal-toggle" />
+        <div className="modal">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg text-center">Exam Rules</h3>
+            <img
+              src={process.env.REACT_APP_API_HOST + "/" + ruleImg}
+              alt="exam-rules"
+            />
+            <div className="modal-action">
+              <label htmlFor="my-modal-4" className="btn bg-[red] ">
+                Close!
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="add-modal">
+        <input type="checkbox" id="my-modal-3" className="modal-toggle" />
+        <div className="modal">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg text-center">Add Rule</h3>
+            <form className="add-form" onSubmit={handleAddRule}>
+              <div className="form-control">
+                <label htmlFor="" className=" label">
+                  <span className="label-text mb-2">Add Rule Image </span>
+                </label>
+                <input
+                  type="file"
+                  name="ruleILink"
+                  id="ruleILink"
+                  className="file-input w-full max-w-xs mb-2 input input-bordered border-black pl-0"
+                />
+              </div>
+              <input type="submit" value="Add" className="btn w-32" />
+            </form>
+            <div className="modal-action">
+              <label htmlFor="my-modal-3" className="btn bg-[red] ">
+                Close!
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="update-modal  ">
             <input type="checkbox" id="my-modal" className="modal-toggle" />
-            <div className="modal flex justify-center items-center">
+            <div className="modal">
               <div className="modal-box">
                 <h3 className="font-bold text-lg text-center">Update Exam</h3>
                 <form className="add-form" onSubmit={handleUpdateExam}>
@@ -578,219 +791,6 @@ const ShowExam = () => {
               </div>
             </div>
           </div>
-          <table className="mx-auto w-full whitespace-nowrap rounded-lg  divide-y  overflow-hidden">
-            <thead>
-              <tr>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
-                  SI No.
-                </th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
-                  Exam Name
-                </th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
-                  Start Time
-                </th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
-                  End Time
-                </th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
-                  Type
-                </th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
-                  Variation
-                </th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
-                  Duration
-                </th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
-                  Free Status
-                </th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
-                  SSC Required?
-                </th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
-                  HSC Required?
-                </th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
-                  Marks/Questions
-                </th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
-                  Total Questions
-                </th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
-                  Total Marks
-                </th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {exams.length > 0 &&
-                exams.map((exam, idx) => (
-                  <tr
-                    key={exam._id}
-                    className="even:bg-table-row-even odd:bg-table-row-odd text-center"
-                  >
-                    <td className="px-6 py-4 text-center">{idx + 1}</td>
-                    <td className="px-6 py-4 text-center">{exam.name}</td>
-                    <td className="px-1 py-4 text-center">
-                      {
-                        subtractHours(new Date(exam.startTime))
-                          .toString()
-                          .split("GMT")[0]
-                      }
-                    </td>
-                    <td className="px-1 py-4 text-center">
-                      {
-                        subtractHours(new Date(exam.endTime))
-                          .toString()
-                          .split("GMT")[0]
-                      }
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      {type[exam.examType]}
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      {variation[exam.examVariation]}
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      {exam.duration} Minutes
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      {exam.examFreeOrNot ? "Yes" : "No"}
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      {exam.sscStatus ? "Yes" : "No"}
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      {exam.hscStatus ? "Yes" : "No"}
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      {exam.marksPerMcq}
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      {exam.totalQuestionMcq}
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      {exam.totalMarksMcq}
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      <div className="flex flex-col lg:flex-row justify-center">
-                        {exam.RuleImage !== "0" ? (
-                          <label
-                            onClick={() => handleAssignRule(exam._id)}
-                            htmlFor="my-modal-4"
-                            className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                          >
-                            Show Rule
-                          </label>
-                        ) : (
-                          <label
-                            onClick={() => handleAssignExamId(exam._id)}
-                            htmlFor="my-modal-3"
-                            className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                          >
-                            Add Exam Rule
-                          </label>
-                        )}
-                        <label
-                          onClick={() => handleAssignExamId(exam._id)}
-                          htmlFor="my-popup"
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                        >
-                          Generate Meritlist
-                        </label>
-                        <label
-                          onClick={() => handleAssignExamId(exam._id)}
-                          htmlFor="my-modal"
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                        >
-                          Update
-                        </label>
-                        <label
-                          htmlFor="my-modal-2"
-                          onClick={() => setSingleExamId(exam._id)}
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                        >
-                          Add Questions
-                        </label>
-                        <DeactivateButton
-                          setter={setSelectedExamId}
-                          value={exam._id}
-                        ></DeactivateButton>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-      <div>
-        <input type="checkbox" id="my-popup" className="modal-toggle" />
-        <div className="modal">
-          <div className="modal-box">
-            <h3 className="font-semibold text-lg text-center">
-              {`Are you sure?`}
-            </h3>
-
-            <div className="modal-action flex justify-center items-center">
-              <button
-                className="btn mr-2"
-                onClick={() => generator(singleExamId)}
-              >
-                Yes
-              </button>
-              <label htmlFor="my-popup" className="btn bg-[red]">
-                No!
-              </label>
-            </div>
-          </div>
-        </div>
-        <input type="checkbox" id="my-modal-4" className="modal-toggle" />
-        <div className="modal">
-          <div className="modal-box">
-            <h3 className="font-bold text-lg text-center">Exam Rules</h3>
-            <img
-              src={process.env.REACT_APP_API_HOST + "/" + ruleImg}
-              alt="exam-rules"
-            />
-            <div className="modal-action">
-              <label htmlFor="my-modal-4" className="btn bg-[red] ">
-                Close!
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="add-modal">
-        <input type="checkbox" id="my-modal-3" className="modal-toggle" />
-        <div className="modal">
-          <div className="modal-box">
-            <h3 className="font-bold text-lg text-center">Add Rule</h3>
-            <form className="add-form" onSubmit={handleAddRule}>
-              <div className="form-control">
-                <label htmlFor="" className=" label">
-                  <span className="label-text mb-2">Add Rule Image </span>
-                </label>
-                <input
-                  type="file"
-                  name="ruleILink"
-                  id="ruleILink"
-                  className="file-input w-full max-w-xs mb-2 input input-bordered border-black pl-0"
-                />
-              </div>
-              <input type="submit" value="Add" className="btn w-32" />
-            </form>
-            <div className="modal-action">
-              <label htmlFor="my-modal-3" className="btn bg-[red] ">
-                Close!
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
       <div id="add-question-modal">
         <input type="checkbox" id="my-modal-2" className="modal-toggle" />
         <div className="modal modal-middle ml:0 lg:ml-56">

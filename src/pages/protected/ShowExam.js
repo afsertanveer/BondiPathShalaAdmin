@@ -334,8 +334,8 @@ const ShowExam = () => {
       {exams.length > 0 && (
         <div className="overflow-x-auto w-full">
           <div id="update-modal ">
-            <input type="checkbox" id="my-modal" className="modal-toggle flex justify-center items-center" />
-            <div className="modal">
+            <input type="checkbox" id="my-modal" className="modal-toggle" />
+            <div className="modal flex justify-center items-center">
               <div className="modal-box">
                 <h3 className="font-bold text-lg text-center">Update Exam</h3>
                 <form className="add-form" onSubmit={handleUpdateExam}>

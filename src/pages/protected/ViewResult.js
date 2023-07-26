@@ -78,7 +78,7 @@ const ViewResult = () => {
                     filename="tablexls"
                     sheet="tablexls"
                     buttonText="Download as XLS"/>
-        <table className="overflow-x-scroll table-fixed w-full customTable">
+        <table className="overflow-x-scroll table-fixed w-full customTable" id="table-to-xls">
           <thead>
             <tr className="text-center">
               <th className="py-5 w-[80px]">Sl No.</th>

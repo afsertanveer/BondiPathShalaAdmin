@@ -4,6 +4,7 @@ import { useState } from "react";
 import axios from "../../utils/axios";
 import Loader from "./../../Shared/Loader";
 import { toast } from "react-hot-toast";
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 const ViewResult = () => {
   const [exams, setExams] = useState([]);
   const [detailedExam,setDetailedExam] = useState([]);
@@ -70,11 +71,17 @@ const ViewResult = () => {
       {isLoading && <Loader></Loader>}
       {detailedExam?.length > 0 && (
         <div className="overflow-x-auto pt-1 pb-8 px-4">
+             <ReactHTMLTableToExcel
+                    id="test-table-xls-button"
+                    className="download-table-xls-button"
+                    table="table-to-xls"
+                    filename="tablexls"
+                    sheet="tablexls"
+                    buttonText="Download as XLS"/>
         <table className="overflow-x-scroll table-fixed w-full customTable">
           <thead>
             <tr className="text-center">
               <th className="py-5 w-[80px]">Sl No.</th>
-              <th className="py-5 w-[180px]">Title</th>
               <th className="w-[160px]">Student Name</th>
               <th className="py-5 w-[180px]">Mobile Number</th>
               <th className="w-[160px]">Institution</th>
@@ -90,7 +97,6 @@ const ViewResult = () => {
                   className="even:bg-table-row-even odd:bg-table-row-odd text-center "
                 >
                   <td>{index + 1}</td>
-                  <td>{data.examName}</td>
                   <td>{data.studentName}</td>
                   <td>{data.mobileNo}</td>
                   <td>{data.institution}</td>

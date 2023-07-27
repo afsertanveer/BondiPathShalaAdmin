@@ -121,8 +121,8 @@ const FreeExamDetails = () => {
               <th className="py-5 w-[80px]">Sl No.</th>
               <th className="py-5 w-[180px]">Name</th>
               <th className="py-5 w-[180px]">Mobile Number</th>
-              <th className="w-[160px]">Start Time</th>
-              <th className="w-[160px]">End Time</th>
+              {/* <th className="w-[160px]">Start Time</th> */}
+              {/* <th className="w-[160px]">End Time</th> */}
               <th className="w-[160px]">Title</th>
               <th className="w-[160px]">Subject</th>
               <th className="w-[160px]">Exam Type</th>
@@ -141,8 +141,8 @@ const FreeExamDetails = () => {
                   <td>{index + 1}</td>
                   <td>{data.examStud.studentId.name}</td>
                   <td>{data.examStud.studentId.mobileNo}</td>
-                  <td>{subtractHours(new Date(examInfo.startTime)).toString().split("GMT")[0]}</td>
-                  <td>{subtractHours(new Date(examInfo.endTime)).toString().split("GMT")[0]}</td>
+                  {/* <td>{subtractHours(new Date(examInfo.startTime)).toString().split("GMT")[0]}</td> */}
+                  {/* <td>{subtractHours(new Date(examInfo.endTime)).toString().split("GMT")[0]}</td> */}
                   <td>{examInfo.name}</td>
                   <td>{examInfo.subjectName}</td>
                   <td>{examInfo.type}</td>

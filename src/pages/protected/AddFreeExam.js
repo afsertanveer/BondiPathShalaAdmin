@@ -27,23 +27,6 @@ const AddFreeExam = () => {
     const iLink = form.iLink.files[0];
     const formdata = new FormData();
     formdata.append("iLink", iLink);
-    const exam = {
-      name,
-      examType:-1,
-      examVariation: 1,
-      examFreeOrNot: true,
-      startTime,
-      endTime,
-      duration,
-      totalQuestionMcq,
-      marksPerMcq,
-      status,
-      subjectId: freeSubjecteId,
-      courseId: freeCourseId,
-      sscStatus: isSSC,
-      hscStatus: isHSC,
-      negativeMarks,
-    };
     formdata.append("name",name);
     formdata.append("examType",-1);
     formdata.append("examVariation",1);

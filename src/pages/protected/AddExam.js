@@ -32,23 +32,6 @@ const AddExam = () => {
     const iLink = form.iLink.files[0];
     const formdata = new FormData();
     formdata.append("iLink", iLink);
-    const exam = {
-      name,
-      examType: parseInt(selectedType),
-      examVariation: parseInt(selectedVariation),
-      examFreeOrNot:false,
-      startTime,
-      endTime,
-      duration,
-      totalQuestionMcq,
-      marksPerMcq,
-      status,
-      subjectId: selectedSubject,
-      courseId: selectedCourse,
-      sscStatus: isSSC,
-      hscStatus: isHSC,
-      negativeMarks,
-    };
     const stype = parseInt(selectedType)
     const svar = parseInt(selectedVariation);
     formdata.append("name",name);
@@ -77,7 +60,6 @@ const AddExam = () => {
         toast.success("Exam Added Succesfully");
         navigate("/dashboard");
       });
-    console.log(exam);
   };
   useEffect(() => {
     setIsLoading(true);

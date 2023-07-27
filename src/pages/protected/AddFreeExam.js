@@ -46,6 +46,7 @@ const AddFreeExam = () => {
     };
     formdata.append("name",name);
     formdata.append("examType",-1);
+    formdata.append("examVariation",1);
     formdata.append("examFreeOrNot",true)
     formdata.append("startTime",startTime)
     formdata.append("endTime",endTime)

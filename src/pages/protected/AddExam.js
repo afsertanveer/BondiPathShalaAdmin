@@ -49,9 +49,11 @@ const AddExam = () => {
       hscStatus: isHSC,
       negativeMarks,
     };
+    const stype = parseInt(selectedType)
+    const svar = parseInt(selectedVariation);
     formdata.append("name",name);
-    formdata.append("examType", parseInt(selectedType));
-    formdata.append("examVariation",parseInt(selectedVariation));
+    formdata.append("examType", stype);
+    formdata.append("examVariation",svar);
     formdata.append("examFreeOrNot",false)
     formdata.append("startTime",startTime)
     formdata.append("endTime",endTime)

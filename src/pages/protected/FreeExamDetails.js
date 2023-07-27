@@ -24,7 +24,7 @@ const FreeExamDetails = () => {
     let clickedPage = parseInt(event.selected) + 1;
     if (event.selected > 0) {
       axios
-        .get(`/api/student/gethistorybyexamid?examId=${selectedExam}&page=${clickedPage}`)
+        .get(`/api/freestudent/freeGetHistoryByExamId?examId=${selectedExam}&page=${clickedPage}`)
         .then(({ data }) => {
           console.log(data);
           setDetailedExam(data?.data);
@@ -37,7 +37,7 @@ const FreeExamDetails = () => {
         })
     } else {
       axios
-      .get(`/api/student/gethistorybyexamid?examId=${selectedExam}&page=${1}`)
+      .get(`/api/freestudent/freeGetHistoryByExamId?examId=${selectedExam}&page=${1}`)
       .then(({ data }) => {
         console.log(data);
         setDetailedExam(data?.data);

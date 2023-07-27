@@ -141,8 +141,8 @@ const FreeExamDetails = () => {
                   <td>{index + 1}</td>
                   <td>{data.examStud.studentId.name}</td>
                   <td>{data.examStud.studentId.mobileNo}</td>
-                  <td>{subtractHours(new Date(data.startTime)).toString().split("GMT")[0]}</td>
-                  <td>{subtractHours(new Date(data.endTime)).toString().split("GMT")[0]}</td>
+                  <td>{subtractHours(new Date(data.examInfo.startTime)).toString().split("GMT")[0]}</td>
+                  <td>{subtractHours(new Date(data.examInfo.endTime)).toString().split("GMT")[0]}</td>
                   <td>{examInfo.name}</td>
                   <td>{examInfo.subjectName}</td>
                   <td>{examInfo.type}</td>

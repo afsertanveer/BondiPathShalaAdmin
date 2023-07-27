@@ -49,8 +49,23 @@ const AddExam = () => {
       hscStatus: isHSC,
       negativeMarks,
     };
+    formdata.append("name",name);
+    formdata.append("examType", parseInt(selectedType));
+    formdata.append("examVariation",parseInt(selectedVariation));
+    formdata.append("examFreeOrNot",false)
+    formdata.append("startTime",startTime)
+    formdata.append("endTime",endTime)
+    formdata.append("duration",duration)
+    formdata.append("totalQuestionMcq",totalQuestionMcq)
+    formdata.append("marksPerMcq",marksPerMcq)
+    formdata.append("status",status)
+    formdata.append("subjectId",selectedSubject)
+    formdata.append("courseId",selectedCourse)
+    formdata.append("sscStatus",isSSC)
+    formdata.append("hscStatus",isHSC)
+    formdata.append("negativeMarks",negativeMarks)
     await axios
-      .post(`/api/exam/createexam?exam=${JSON.stringify(exam)}`, formdata, {
+      .post(`/api/exam/createexam`, formdata, {
         headers: {
           "Content-Type": "multipart/ form-data",
         },

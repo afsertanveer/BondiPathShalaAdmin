@@ -66,7 +66,7 @@ const ViewPaidResult = () => {
     }
     if (selectedExam !== "") {
         axios
-          .get(`/api/freestudent/getallrank?examId=${selectedExam}`)
+          .get(`/api/student/getallrank?examId=${selectedExam}`)
           .then(({ data }) => {
             console.log(data);
             setDetailedExam(data);

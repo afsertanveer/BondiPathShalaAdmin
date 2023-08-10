@@ -86,6 +86,8 @@ const ViewResult = () => {
               <th className="py-5 w-[180px]">Mobile Number</th>
               <th className="py-5 w-[180px]">Full Mobile Number</th>
               <th className="w-[160px]">Institution</th>
+              <th className="w-[160px]">Start Time</th>
+              <th className="w-[160px]">End Time</th>
               <th className="w-[160px]">Marks</th>
               <th className="w-[110px]">Merit Postition</th>
             </tr>
@@ -102,6 +104,8 @@ const ViewResult = () => {
                   <td>{data.mobileNo}</td>
                   <td>{data.mobileNoOrg}</td>
                   <td>{data.institution}</td>
+                  <td>{data.examStartTime}</td>
+                  <td>{data.examEndTime}</td>
                   <td>{data.totalObtainedMarks +'/' + data.totalMarks}</td>
                   <td>{data.rank +'/' + data.totalStudent}</td>
                 </tr>

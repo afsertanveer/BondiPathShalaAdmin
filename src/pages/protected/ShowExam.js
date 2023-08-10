@@ -25,6 +25,7 @@ const ShowExam = () => {
   const [ruleImg, setRuleImg] = useState("");
   const [sscChecked, setSscChecked] = useState(false);
   const [hscChecked, setHscChecked] = useState(false);
+  const [qvmark,setQvmark] = useState([]);
   const optionName = [
     "A",
     "B",
@@ -203,6 +204,46 @@ const ShowExam = () => {
 
     await axios
       .post(`/api/exam/addquestionmcq`, formdata, {
+        headers: {
+          "Content-Type": "multipart/ form-data",
+        },
+      })
+      .then((data) => {
+        toast.success("success");
+        form.reset();
+
+        document.getElementById("num_of_options").disabled = false;
+        setNumberOfOptions(0);
+        setIsText(true);
+      })
+      .catch((e) => console.log(e));
+    document.getElementById("my-modal-2").checked = false;
+  };
+  const fillMarks = (m,id) =>{
+    const prevMarks = [...qvmark];
+    prevMarks[id] = m;
+    setQvmark(prevMarks);
+  }
+  const handleAddWrittenQuestion = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    let options = [];
+      for (let i = 0; i < numberOfOptions; i++) {
+        console.log(document.getElementById(`option${i}`).value + 'aaa');
+        options.push(document.getElementById(`option${i}`).value);
+      }
+    let questionLink = "";
+    const formdata = new FormData();
+    
+    questionLink = form.iLink.files[0];
+    formdata.append("questionILink", questionLink);
+    formdata.append("marksPerQuestion", JSON.stringify(options));
+    formdata.append("totalQuestions", numberOfOptions);
+    formdata.append("status", true);
+    formdata.append("examId", singleExamId);
+
+    await axios
+      .post(`/api/exam/addquestionwritten`, formdata, {
         headers: {
           "Content-Type": "multipart/ form-data",
         },
@@ -944,7 +985,7 @@ const ShowExam = () => {
         <input type="checkbox" id="written-modal" className="modal-toggle" />
         <div className="modal modal-middle ml:0 lg:ml-56">
           <div className="modal-box w-11/12 max-w-5xl h-11/12">
-            <form className="add-form" onSubmit={handleAddQuestion}>
+            <form className="add-form" onSubmit={handleAddWrittenQuestion}>
             <label htmlFor="" className=" label">
                     <span className="label-text">Select Question Image </span>
                   </label>
@@ -963,28 +1004,28 @@ const ShowExam = () => {
                 className="input w-full input-bordered border-black "
                 name="num_of_options"
                 id="num_of_options"
-                min="2"
+                min="1"
                 onInput={(e) =>
                   e.target.value < 0 ? (e.target.value = "") : e.target.value
                 }
-                onBlur={(e) => handleChangeNumberOfInput(e)}
+                onChange={(e) => handleChangeNumberOfInput(e)}
                 required
               />
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-4">
-                {isText === true &&
-                  numberOfOptions > 0 &&
+                { numberOfOptions > 0 &&
                   [...Array(numberOfOptions).keys()].map((id) => {
                     return (
                       <div key={id}>
                         <div>
                           <label htmlFor="" className="label-text">
-                            {optionName[id] + ")"}
+                            {(id+1) + ")"}
                           </label>
                           <input
                             type="text"
                             placeholder="Marks"
                             name={`option${id}`}
                             id={`option${id}`}
+                            onChange={e=>fillMarks(e.target.value,id)}
                             className="input w-full input-bordered border-black "
                             required
                           />
@@ -993,26 +1034,6 @@ const ShowExam = () => {
                     );
                   })}
               </div>
-
-              {numberOfOptions > 0 && (
-                <>
-                  <label className="label-text">Correct Option</label>
-                  <select
-                    name="type"
-                    id="type"
-                    className="input border-black input-bordered w-full "
-                    onChange={(e) => setCorrectOption(e.target.value)}
-                    required
-                  >
-                    <option>---</option>
-                    {[...Array(numberOfOptions).keys()].map((id) => (
-                      <option key={id} value={id}>
-                        {optionName[id]}
-                      </option>
-                    ))}
-                  </select>
-                </>
-              )}
               <div className="form-control my-2">
                 <input
                   type="submit"

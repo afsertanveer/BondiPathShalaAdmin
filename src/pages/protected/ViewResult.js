@@ -107,7 +107,7 @@ const ViewResult = () => {
                   <td>{data.examStartTime}</td>
                   <td>{data.examEndTime}</td>
                   <td>{data.totalObtainedMarks +'/' + data.totalMarks}</td>
-                  <td>{data.rank +'/' + data.totalStudent}</td>
+                  <td>{data.rank}</td>
                 </tr>
               )) : (<tr><td colSpan={9}><p  className="my-2 text-3xl text-center font-bold text-red">No Data Found</p></td></tr>)}
           </tbody>

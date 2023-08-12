@@ -20,13 +20,19 @@ const AddExam = () => {
 
   const handleAddExam = async (e) => {
     e.preventDefault();
+    let totalQuestionMcq =-1,marksPerMcq=-1,totalMarks;
     const form = e.target;
     const name = form.exam.value;
     const startTime = form.start_time.value;
     const endTime = form.end_time.value;
     const duration = parseInt(form.duration.value);
-    const totalQuestionMcq = parseInt(form.total_questions.value);
-    const marksPerMcq = parseInt(form.marks_per_question.value);
+    if(selectedVariation==="1"){
+      totalQuestionMcq = parseInt(form.total_questions.value);
+      marksPerMcq = parseInt(form.marks_per_question.value);
+      totalMarks = totalQuestionMcq*marksPerMcq
+    }else{
+      totalMarks = form.total_marks.value;
+    }
     const status = true;
     const negativeMarks = parseFloat(form.negative_marking.value);
     const iLink = form.iLink.files[0];
@@ -49,6 +55,7 @@ const AddExam = () => {
     formdata.append("sscStatus",isSSC)
     formdata.append("hscStatus",isHSC)
     formdata.append("negativeMarks",negativeMarks)
+    formdata.append("totalMarksMcq",totalMarks);
     await axios
       .post(`/api/exam/createexam`, formdata, {
         headers: {
@@ -222,7 +229,8 @@ const AddExam = () => {
                 <span className="text-red text-sm ml-0 lg:ml-2">(minutes)</span>
               </div>
             </div>
-            <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-start">
+            {
+              selectedVariation==="1" && <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-start">
               <div className="w-full lg:w-1/3">
                 <label htmlFor="" className="label">
                   Total Question
@@ -255,6 +263,24 @@ const AddExam = () => {
               </div>
             
             </div>
+            }
+            {
+              selectedVariation!=="1" && <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-start">
+              <div className="w-full lg:w-1/2">
+                <label htmlFor="" className="label">
+                  Total Marks
+                </label>
+                <input
+                  type="number"
+                  className="input w-full input-bordered  border-black "
+                  name="total_marks"
+                  id="total_marks"
+                  min={1}
+                  required
+                />
+              </div>            
+            </div>
+            }
             <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-center">
               <div className="w-full lg:w-1/3">
                 <label htmlFor="" className="label">

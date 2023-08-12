@@ -118,6 +118,7 @@ const ShowExam = () => {
   };
   const handleUpdateExam = async (e) => {
     e.preventDefault();
+    let totalQuestionMcq= singleExam.totalQuestionMcq, marksPerMcq= singleExam.marksPerMcq,totalMarksMcq=singleExam.totalMarksMcq;
     const form = e.target;
     const name = form.exam.value;
     const type = form.type.value;
@@ -126,8 +127,13 @@ const ShowExam = () => {
       document.getElementById("free").checked === true ? true : false;
     const startTime = form.start_time.value;
     const endTime = form.end_time.value;
-    const totalQuestionMcq = form.total_questions.value;
-    const marksPerMcq = form.marks_per_question.value;
+    if(singleExam.examVariation===1){
+      totalQuestionMcq =parseInt( form.total_questions.value);
+      marksPerMcq = parseInt(form.marks_per_question.value);
+      totalMarksMcq= totalQuestionMcq*marksPerMcq;
+    }else{
+      totalMarksMcq=parseInt(form.total_marks.value);
+    }
     const duration = form.duration.value;
     const negativeMarks = form.negative_marking.value;
     const ssc = document.getElementById("ssc").checked === true ? true : false;
@@ -144,6 +150,7 @@ const ShowExam = () => {
       endTime,
       totalQuestionMcq,
       marksPerMcq,
+      totalMarksMcq,
       status: true,
       duration: duration,
       negativeMarks,
@@ -221,27 +228,29 @@ const ShowExam = () => {
   };
   const fillMarks = (m,id) =>{
     const prevMarks = [...qvmark];
-    prevMarks[id] = m;
+    prevMarks[id] =parseInt(m);
     setQvmark(prevMarks);
   }
   const handleAddWrittenQuestion = async (e) => {
     e.preventDefault();
     const form = e.target;
-    let options = [];
-      for (let i = 0; i < numberOfOptions; i++) {
-        console.log(document.getElementById(`option${i}`).value + 'aaa');
-        options.push(document.getElementById(`option${i}`).value);
-      }
     let questionLink = "";
     const formdata = new FormData();
-    
+    console.log(singleExamId);
     questionLink = form.iLink.files[0];
     formdata.append("questionILink", questionLink);
-    formdata.append("marksPerQuestion", JSON.stringify(options));
     formdata.append("totalQuestions", numberOfOptions);
-    formdata.append("status", true);
+    formdata.append("status", "true");
     formdata.append("examId", singleExamId);
-
+    let newArr = [...qvmark];
+    let totalMarks=0;
+    for(let i =0 ; i<newArr.length;i++){
+      newArr[i] = parseInt(newArr[i]);
+      totalMarks = totalMarks+newArr[i];
+    }
+    
+    formdata.append("marksPerQuestion", newArr);
+    formdata.append("totalMarks", totalMarks);
     await axios
       .post(`/api/exam/addquestionwritten`, formdata, {
         headers: {
@@ -463,10 +472,10 @@ const ShowExam = () => {
                       {exam.hscStatus ? "Yes" : "No"}
                     </td>
                     <td className="px-6 py-4 text-center">
-                      {exam.marksPerMcq}
+                      {exam.examVariation===1? exam.marksPerMcq : "N/A"}
                     </td>
                     <td className="px-6 py-4 text-center">
-                      {exam.totalQuestionMcq}
+                      {exam.examVariation===1? exam.totalQuestionMcq : "N/A"}
                     </td>
                     <td className="px-6 py-4 text-center">
                       {exam.totalMarksMcq}
@@ -510,7 +519,7 @@ const ShowExam = () => {
                           onClick={() => setSingleExamId(exam._id)}
                           className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
-                          Add 1 Question
+                          Add  Question
                         </label>
                         }
                         {
@@ -519,7 +528,7 @@ const ShowExam = () => {
                           onClick={() => setSingleExamId(exam._id)}
                           className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
-                          Add 2 Question
+                          Add  Question
                         </label>
                         }
                         {
@@ -725,7 +734,9 @@ const ShowExam = () => {
                     </div>
                   </div>
                   <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-start">
-                    <div className="w-full lg:w-1/4">
+                    {
+                      singleExam.examVariation===1 && <>
+                      <div className="w-full lg:w-1/4">
                       <label htmlFor="" className="label">
                         Questions
                       </label>
@@ -761,6 +772,28 @@ const ShowExam = () => {
                         required
                       />
                     </div>
+                      </>
+                    }
+                    {
+                      singleExam.examVariation!==1 && <div className="w-full lg:w-1/4">
+                      <label htmlFor="" className="label">
+                        Total Marks
+                      </label>
+                      <input
+                        type="number"
+                        className="input w-full input-bordered  border-black "
+                        name="total_marks"
+                        id="total_marks"
+                        defaultValue={singleExam.totalMarksMcq}
+                        onInput={(e) =>
+                          e.target.value < 0
+                            ? (e.target.value = "")
+                            : e.target.value
+                        }
+                        required
+                      />
+                    </div>
+                    }
                     <div className="w-full lg:w-1/3">
                       <label className="label" htmlFor="">
                         Duration

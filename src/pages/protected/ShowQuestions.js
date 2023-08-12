@@ -171,7 +171,8 @@ const ShowQuestions = () => {
       axios
         .get(`/api/exam/getExamBySub?subjectId=${selectedSubject}`)
         .then(({ data }) => {
-          setExams(data);
+          const newData = data.filter(d=>d.examVariation===1);
+          setExams(newData);
           setIsLoading(false);
         }).catch(e=>console.log(e))
     } else {

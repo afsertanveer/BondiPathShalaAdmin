@@ -26,6 +26,9 @@ const AddFreeExam = () => {
     const negativeMarks = parseFloat(form.negative_marking.value);
     const iLink = form.iLink.files[0];
     const formdata = new FormData();
+    const totalMarksMcq = ((parseInt(totalQuestionMcq))*(parseInt(marksPerMcq)))
+
+    formdata.append("totalMarksMcq", totalMarksMcq);
     formdata.append("iLink", iLink);
     formdata.append("name",name);
     formdata.append("examType",-1);

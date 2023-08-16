@@ -6,7 +6,6 @@ import Loader from "./../../Shared/Loader";
 import { toast } from "react-hot-toast";
 import DeactivateButton from './../../features/common/components/DeactivateButton';
 import PopUpModal from './../../features/common/components/PopUpModal';
-import moment from "moment/moment";
 import { subtractHours } from "../../utils/globalFunction";
 
 const ShowFreeExam = () => {
@@ -122,6 +121,8 @@ const ShowFreeExam = () => {
     const negativeMarks = form.negative_marking.value;
     const ssc = document.getElementById("ssc").checked===true? true : false;
     const hsc = document.getElementById("hsc").checked===true? true : false;
+    const totalMarksMcq = (parseInt(totalQuestionMcq)*parseInt(marksPerMcq))
+    
     const updatedExam = {
       examId:singleExam._id,
       name,
@@ -131,7 +132,7 @@ const ShowFreeExam = () => {
       examVariation:1,
       examFreeOrNot:true,
       startTime,endTime,
-      totalQuestionMcq,marksPerMcq,
+      totalQuestionMcq,marksPerMcq,totalMarksMcq,
       status:true,
       duration:duration,
       negativeMarks,

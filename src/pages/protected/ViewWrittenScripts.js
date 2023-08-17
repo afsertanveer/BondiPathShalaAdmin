@@ -209,7 +209,7 @@ const ViewWrittenScripts = () => {
                         <td>{wd.totalMarks}</td>
                         <td>{wd.totalQuestions}</td>
                         <td>
-                            <Link to={``} className="text-red font-bold">Check </Link>
+                            <Link to={`/dashboard/${selectedExam}/checkanswer/${wd.studentId}`}  target='_blank' className="text-red font-bold">Check </Link>
                         </td>
 
                     </tr>

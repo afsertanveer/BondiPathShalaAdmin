@@ -141,7 +141,7 @@ const ShowStudents = () => {
             </table>
         </div>
     </div>
-    <div className="mb-6">
+        <div className="mb-6">
           {pagiNationData && (<Pagination pageCount={pagiNationData.totalPages} currentPage={pagiNationData.currentPage} handlePageClick={(e) => handlePageClick(e)} />)}
         </div>
     </div>

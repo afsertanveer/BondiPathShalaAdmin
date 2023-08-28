@@ -18,6 +18,7 @@
     "capitalize-the-first-letter": "^1.0.8",
     "chart.js": "^4.0.1",
     "daisyui": "^2.51.6",
+    "filerobot-image-editor": "^4.5.1",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.0.1",

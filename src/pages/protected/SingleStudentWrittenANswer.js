@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "../../utils/axios";
-import { LoaderIcon } from "react-hot-toast";
+import { LoaderIcon, toast } from "react-hot-toast";
 import FilerobotImageEditor, {
   TABS,
   TOOLS,
@@ -12,8 +12,38 @@ const SingleStudentWrittenANswer = () => {
   const [singleResult, setSingleResult] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [source, setSource] = useState([]);
+  const [disabler, setDisabler] = useState([]);
   let prevSource = [];
+  let changer = [];
   // const [answerScript,setAnswerScript] = useState()
+  const sendImage = async(e) => {
+    e.preventDefault();
+    const form = e.target;
+    const idx = parseInt(form.index.value);
+    const obtainedMarks= form.obtMarks.value;
+    console.log(source);
+    changer = [...disabler];
+    for (let i = 0; i < changer.length; i++) {
+      changer[idx] = 0;
+      if (idx + 1 !== changer.length) {
+        changer[idx + 1] = 1;
+      }
+    }
+    const answer ={
+      questionNo:(idx+1),
+      obtainedMarks,
+      studentId:params.studentId,
+    examId:params.examId,
+      uploadImages:source
+    }
+    console.log(answer);
+   await axios.post('/api/teacher/checkscriptsingle',answer).then(data=>{
+    toast.success("Successfully updated")
+   });
+    console.log(answer);
+    console.log(changer);
+    setDisabler(changer);
+  };
   useEffect(() => {
     setIsLoading(true);
     axios
@@ -23,6 +53,15 @@ const SingleStudentWrittenANswer = () => {
       .then(({ data }) => {
         console.log(data);
         setSingleResult(data);
+        let dis = [];
+        for (let i = 0; i < data.totalQuestions; i++) {
+          if (i === 0) {
+            dis[i] = 1;
+          } else {
+            dis[i] = 0;
+          }
+        }
+        setDisabler(dis);
         setIsLoading(false);
         // setAnswerScript(data.answerScript)
       });
@@ -35,46 +74,71 @@ const SingleStudentWrittenANswer = () => {
         singleResult.answerScript.length > 0 &&
         singleResult.answerScript.map((ans, idx) => {
           return (
-            <div key={idx}>
+            <div key={idx} className="mb-10">
               {typeof ans !== "undefined" && ans.length > 0 && <p>{idx + 1}</p>}
-              <div className="grid grid-cols-1">
-                {typeof ans !== "undefined" &&
-                  ans.length > 0 &&
-                  ans.map((photo, index) => {                    
-                    return (
-                        <FilerobotImageEditor
-                        source={process.env.REACT_APP_API_HOST + photo}
-                        defaultSavedImageName="abswerScriots"
-                        defaultSavedImageType="visited"
-                        defaultSavedImageQuality={1}
-                        onSave={(editedImageObject, designState) => {
-                          prevSource = [...source];
-                          prevSource.push(editedImageObject.imageBase64);
-                          setSource(prevSource);
-                        }}
-                        savingPixelRatio={1}
-                        previewPixelRatio={1}
-                        annotationsCommon={{
-                          fill: "#ff0000",
-                        }}
-                        Pen={{ stroke: "#ff0000" }}
-                        tabsIds={TABS.ANNOTATE} // or {['Adjust', 'Annotate', 'Watermark']}
-                        defaultTabId={TABS.ANNOTATE} // or 'Annotate'
-                        defaultToolId={TOOLS.ROTATE} // or 'Text'
-                      />
-                    );
-                  })}
-              </div>
+              {disabler[idx] === 1 && (
+                <>
+                  <div className="grid grid-cols-1">
+                    {typeof ans !== "undefined" &&
+                      ans.length > 0 &&
+                      ans.map((photo, index) => {
+                        return (
+                          <FilerobotImageEditor
+                            source={
+                              process.env.REACT_APP_API_HOST +'/'+ photo
+                            }
+                            defaultSavedImageName="answerscripts"
+                            defaultSavedImageType="visited"
+                            defaultSavedImageQuality={1}
+                            onSave={(editedImageObject, designState) => {
+                              prevSource = [...source];
+                              prevSource.push(editedImageObject.imageBase64);
+                              setSource(prevSource);
+                            }}
+                            savingPixelRatio={1}
+                            previewPixelRatio={1}
+                            annotationsCommon={{
+                              fill: "#ff0000",
+                            }}
+                            Pen={{ stroke: "#ff0000" }}
+                            tabsIds={TABS.ANNOTATE} // or {['Adjust', 'Annotate', 'Watermark']}
+                            defaultTabId={TABS.ANNOTATE} // or 'Annotate'
+                            defaultToolId={TOOLS.PEN} // or 'Text'
+                          />
+                        );
+                      })}
+                  </div>
+                  <form onSubmit={sendImage} className="mt-4">
+                    <input
+                      type="text"
+                      className="input input-bordered  border-black"
+                      name="index"
+                      id=""
+                      defaultValue={idx}
+                    />
+                    <input
+                      type="number"
+                      name="obtMarks"
+                      id="obtMarks"
+                      className="input input-bordered  border-black"
+                      min={0}
+                      required
+                    />
+                    <input
+                      type="submit"
+                      className="ml-4 btn"
+                      value="Save Marks"
+                    />
+                  </form>
+                </>
+              )}
             </div>
           );
         })}
-        
-        <p>Number of Edited Image: {source.length}</p>
-        {
-            source.length>0 && source.map((s,idx)=>(
-                <img key={idx} src={s} alt ="edited" />
-            ))
-        }
+
+      <p>Number of Edited Image: {source.length}</p>
+      {source.length > 0 &&
+        source.map((s, idx) => <img key={idx} src={s} alt="edited" />)}
     </div>
   );
 };

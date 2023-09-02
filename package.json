@@ -24,6 +24,7 @@
     "react-chartjs-2": "^5.0.1",
     "react-csv": "^2.2.2",
     "react-dom": "^18.2.0",
+    "react-filerobot-image-editor": "^4.5.1",
     "react-hot-toast": "^2.4.1",
     "react-html-table-to-excel": "^2.0.0",
     "react-notifications": "^1.7.4",

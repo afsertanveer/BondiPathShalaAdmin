@@ -4,12 +4,10 @@ import { useState } from "react";
 import axios from "../../utils/axios";
 import Loader from "./../../Shared/Loader";
 import { Link } from "react-router-dom";
-import v1 from "../../assets/img/icons/tasksquare.svg";
 import v2 from "../../assets/img/icons/eye.svg";
 import { toast } from "react-hot-toast";
 import Pagination from "../../components/common/Pagination";
-import { subtractHours } from "../../utils/globalFunction";
-const ExamDetails = () => {
+const WrittenExamDetails = () => {
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [exams, setExams] = useState([]);
@@ -93,7 +91,7 @@ const ExamDetails = () => {
     }
     if (selectedSubject !== "") {
       axios
-        .get(`/api/exam/getmcqBySub?subjectId=${selectedSubject}`)
+        .get(`/api/exam/getwrittenBySub?subjectId=${selectedSubject}`)
         .then(({ data }) => {
           setExams(data);
           setIsLoading(false);
@@ -252,4 +250,4 @@ const ExamDetails = () => {
   );
 };
 
-export default ExamDetails;
+export default WrittenExamDetails;

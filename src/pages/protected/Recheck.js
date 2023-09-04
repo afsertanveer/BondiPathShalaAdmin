@@ -178,7 +178,7 @@ const Recheck = () => {
         </div>
       </div>
       {isLoading && <Loader></Loader>}
-      {exams.length > 0 && (
+      {writtenData.length > 0 && (
         <div className="overflow-x-auto w-full">        
           <table className="mx-auto w-full whitespace-nowrap rounded-lg  divide-y  overflow-hidden">
             <thead>

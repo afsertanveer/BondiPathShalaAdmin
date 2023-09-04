@@ -13,6 +13,7 @@ const SingleStudentWrittenANswer = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [source, setSource] = useState([]);
   const [disabler, setDisabler] = useState([]);
+  console.log(useParams.studentId);
   let prevSource = [];
   let changer = [];
   // const [answerScript,setAnswerScript] = useState()
@@ -44,6 +45,23 @@ const SingleStudentWrittenANswer = () => {
     console.log(changer);
     setDisabler(changer);
   };
+  const finalSave = async() =>{
+    const marksCalculation ={
+      studentId:params.studentId,
+      examId:params.examId
+    }
+    const statusUpdate = {
+      studentId:params.studentId,
+      examId:params.examId,
+      status:true
+    }
+    await axios.post('/api/teacher/markscalculation',marksCalculation).then(data=>{
+         axios.post('/api/teacher/checkstatusupdate',statusUpdate).then(data=>{
+            toast.success("successfully updated the result");
+        })
+     });
+
+  }
   useEffect(() => {
     setIsLoading(true);
     axios
@@ -75,9 +93,9 @@ const SingleStudentWrittenANswer = () => {
         singleResult.answerScript.map((ans, idx) => {
           return (
             <div key={idx} className="mb-10">
-              {typeof ans !== "undefined" && ans.length > 0 && <p>{idx + 1}</p>}
               {disabler[idx] === 1 && (
                 <>
+                <p>{idx + 1}</p>
                   <div className="grid grid-cols-1">
                     {typeof ans !== "undefined" &&
                       ans.length > 0 &&
@@ -111,11 +129,12 @@ const SingleStudentWrittenANswer = () => {
                   <form onSubmit={sendImage} className="mt-4">
                     <input
                       type="text"
-                      className="input input-bordered  border-black"
+                      className="input input-bordered  border-black hidden"
                       name="index"
                       id=""
                       defaultValue={idx}
                     />
+                    <p className="ml-4">Marks</p>
                     <input
                       type="number"
                       name="obtMarks"
@@ -135,10 +154,7 @@ const SingleStudentWrittenANswer = () => {
             </div>
           );
         })}
-
-      <p>Number of Edited Image: {source.length}</p>
-      {source.length > 0 &&
-        source.map((s, idx) => <img key={idx} src={s} alt="edited" />)}
+        <button className="btn" onClick={()=>finalSave()}>Save</button>
     </div>
   );
 };

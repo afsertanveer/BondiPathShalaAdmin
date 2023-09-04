@@ -30,6 +30,7 @@ const ViewPaidResult= lazy(()=>import('../pages/protected/ViewPaidResult'));
 const StudentHistory = lazy(()=>import('./../pages/protected/StudentHistory'));
 const SearchStudent = lazy(()=>import('./../pages/protected/SearchStudent'));
 const ViewWrittenScripts = lazy(()=>import('./../pages/protected/ViewWrittenScripts'));
+const Recheck = lazy(()=>import('./../pages/protected/Recheck'));
 const SingleStudentWrittenANswer = lazy(()=>import('./../pages/protected/SingleStudentWrittenANswer'));
 const user =JSON.parse(localStorage.getItem('user')) ;
 const role = user.role;
@@ -43,6 +44,10 @@ if(role===3){
     {
       path: '/scripts/view', // the url
       component: ViewWrittenScripts, // view rendered
+    },
+    {
+      path: '/scripts/recheck', // the url
+      component: Recheck, // view rendered
     },
     
     {
@@ -67,6 +72,10 @@ if(role===3){
     {
       path: '/scripts/view', // the url
       component: ViewWrittenScripts, // view rendered
+    },
+    {
+      path: '/scripts/recheck', // the url
+      component: Recheck, // view rendered
     },
     {
       path: '/courses/create-new', // the url

@@ -6,10 +6,9 @@ import Loader from "./../../Shared/Loader";
 import { toast } from "react-hot-toast";
 import DeactivateButton from "./../../features/common/components/DeactivateButton";
 import PopUpModal from "./../../features/common/components/PopUpModal";
-import { type, variation } from "../../utils/globalVariables";
 import { subtractHours } from "../../utils/globalFunction";
 
-const ShowExam = () => {
+const ShowBothExam = () => {
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [exams, setExams] = useState([]);
@@ -118,47 +117,45 @@ const ShowExam = () => {
   };
   const handleUpdateExam = async (e) => {
     e.preventDefault();
-    let totalQuestionMcq= singleExam.totalQuestionMcq, marksPerMcq= singleExam.marksPerMcq,totalMarksMcq=singleExam.totalMarksMcq;
     const form = e.target;
     const name = form.exam.value;
-    const type = form.type.value;
-    const variation = form.variation.value;
-    const free =
-      document.getElementById("free").checked === true ? true : false;
     const startTime = form.start_time.value;
     const endTime = form.end_time.value;
-    if(singleExam.examVariation===1){
-      totalQuestionMcq =parseInt( form.total_questions.value);
-      marksPerMcq = parseInt(form.marks_per_question.value);
-      totalMarksMcq= totalQuestionMcq*marksPerMcq;
-    }else{
-      totalMarksMcq=parseInt(form.total_marks.value);
-    }
-    const duration = form.duration.value;
+    const totalQuestionMcq =parseInt( form.total_questions.value);
+    const totalQuestionWritten =parseInt( form.total_questions_written.value);
+    const marksPerMcq = parseInt(form.marks_per_question.value);
+    const totalMarksMcq=parseInt(form.total_marks.value);
+    const totalMarks =parseInt(form.full_marks.value);
+    const totalMarksWritten = parseInt(form.tmw.value);
+    const totalDuration = form.duration.value;
+    const mcqDuration = form.mcq_duration.value;
+    const writtenDuration = form.written_duration.value;
     const negativeMarks = form.negative_marking.value;
     const ssc = document.getElementById("ssc").checked === true ? true : false;
     const hsc = document.getElementById("hsc").checked === true ? true : false;
     const updatedExam = {
       examId: singleExam._id,
       name,
-      examType: type,
+      totalQuestionWritten,
+      totalMarksWritten,
+      mcqDuration,
+      writtenDuration,
       subjectId: singleExam.subjectId._id,
       courseId: singleExam.courseId._id,
-      examVariation: variation,
-      examFreeOrNot: free,
       startTime,
       endTime,
       totalQuestionMcq,
       marksPerMcq,
       totalMarksMcq,
       status: true,
-      duration: duration,
+      totalDuration,
+      totalMarks,
       negativeMarks,
       sscStatus: ssc,
       hscStatus: hsc,
     };
     console.log(updatedExam);
-    await axios.put("/api/exam/updateexam", updatedExam).then(({ data }) => {
+    await axios.put("/api/both/updatebothexam", updatedExam).then(({ data }) => {
       toast.success(data);
       window.location.reload(false);
       form.reset();
@@ -302,11 +299,11 @@ const ShowExam = () => {
     }
     if (selectedSubject !== "") {
       axios
-        .get(`/api/exam/getExamBySub?subjectId=${selectedSubject}`)
+        .get(`/api/both/getbothexambysubject?subjectId=${selectedSubject}`)
         .then(({ data }) => {
-          console.log(data);
-          setExams(data);
-          if (data.length === 0) {
+          console.log(data)
+          setExams(data.examPage.exam);
+          if (data.examPage.exam.length === 0) {
             toast.error("No Data");
           }
           setIsLoading(false);
@@ -317,8 +314,9 @@ const ShowExam = () => {
     }
     if (singleExamId !== null) {
       axios
-        .get(`/api/exam/getExamById?examId=${singleExamId}`)
+        .get(`/api/both/getbothexambyid?examId=${singleExamId}`)
         .then(({ data }) => {
+            console.log(data);
           setsingleExam(data);
           setSscChecked(data.sscStatus);
           setHscChecked(data.hscStatus);
@@ -396,16 +394,13 @@ const ShowExam = () => {
                   Start Time - <br></br> End Time
                 </th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-2">
-                  Type/Variation
+                  Type
                 </th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-2">
                   Duration
                 </th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-2">
-                  SSC?/HSC?
-                </th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-2">
-                  Marks/Questions-<br/>Total Questions-<br/>Total Marks
+                Total Marks
                 </th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-2">
                   Action
@@ -416,7 +411,7 @@ const ShowExam = () => {
               {exams.length > 0 &&
                 exams.map((exam, idx) => (
                   <tr
-                    key={exam._id}
+                    key={idx}
                     className="even:bg-table-row-even odd:bg-table-row-odd text-center"
                   >
                     <td className="px-1 py-2 text-center">{idx + 1}</td>
@@ -434,16 +429,13 @@ const ShowExam = () => {
                       }
                     </td>
                     <td className="px-6 py-2 text-center">
-                      {type[exam.examType]+'/'+variation[exam.examVariation]}
+                      {exam.examVariation}
                     </td>
                     <td className="px-6 py-2 text-center">
-                      {exam.duration} Minutes
+                      {exam.totalDuration} Minutes
                     </td>
                     <td className="px-6 py-2 text-center">
-                      {exam.sscStatus ? "Yes" : "No"} / {exam.hscStatus ? "Yes" : "No"}
-                    </td>
-                    <td className="px-6 py-2 text-center">
-                      {exam.examVariation===1? exam.marksPerMcq : "N/A"}-{exam.examVariation===1? exam.totalQuestionMcq : "N/A"}-{exam.totalMarksMcq}
+                    {exam.totalMarks}
                     </td>
                     <td className="px-6 py-2 text-center">
                       <div className="flex flex-col lg:flex-row justify-center">
@@ -478,33 +470,21 @@ const ShowExam = () => {
                         >
                           Update
                         </label>
-                        {
-                          exam.examVariation===1 && <label
+                         <label
                           htmlFor="my-modal-2"
                           onClick={() => setSingleExamId(exam._id)}
                           className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
-                          Add  Question
+                          Add MCQ  Question
                         </label>
-                        }
-                        {
-                          exam.examVariation===2 && <label
+                        <label
                           htmlFor="written-modal"
                           onClick={() => setSingleExamId(exam._id)}
                           className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
-                          Add  Question
+                          Add Written Question
                         </label>
-                        }
-                        {
-                          exam.examVariation===3 && <label
-                          htmlFor="both-modal"
-                          onClick={() => setSingleExamId(exam._id)}
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                        >
-                          Add  Question
-                        </label>
-                        }
+                        
                         
                         <DeactivateButton
                           setter={setSelectedExamId}
@@ -602,72 +582,6 @@ const ShowExam = () => {
                       required
                     />
                   </div>
-                  <div className="form-control flex flex-col lg:flex-row justify-between">
-                    <div className="w-full lg:w-1/4">
-                      <label htmlFor="" className="label">
-                        Type
-                      </label>
-                      <select
-                        name="type"
-                        id="type"
-                        className="input border-black input-bordered w-full "
-                        required
-                      >
-                        <option value={singleExam.examType} defaultChecked>
-                          {singleExam.examType === 1
-                            ? "Daily"
-                            : singleExam.examType === 2
-                            ? "Weekly"
-                            : "Monthly"}
-                        </option>
-                        <option value={1}>Daily</option>
-                        <option value={2}>Weekly</option>
-                        <option value={3}>Monthly</option>
-                      </select>
-                    </div>
-                    <div className="w-full lg:w-1/4">
-                      <label htmlFor="" className="label">
-                        Variation
-                      </label>
-                      <select
-                        name="variation"
-                        id="variation"
-                        className="input border-black input-bordered w-full "
-                        required
-                      >
-                        <option value={singleExam.examVariation}>
-                          {singleExam.examVariation === 1
-                            ? "MCQ"
-                            : singleExam.examVariation === 2
-                            ? "Written"
-                            : "Both"}
-                        </option>
-                        <option value={1}>MCQ</option>
-                        <option value={2}>Written</option>
-                        <option value={3}>Both</option>
-                      </select>
-                    </div>
-                    <div className="w-full lg:w-1/4">
-                      <div className="flex items-center mt-0 lg:mt-5 ">
-                        <input
-                          type="checkbox"
-                          defaultChecked={
-                            singleExam.examFreeOrNot ? "checked" : ""
-                          }
-                          name="free"
-                          id="free"
-                          className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                        />
-                        <label
-                          htmlFor="disabled-checked-checkbox"
-                          className="ml-2 text-sm font-medium"
-                        >
-                          Free
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="form-control"></div>
                   <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-center">
                     <div className="w-full lg:w-1/2 mr-0 lg:mr-4">
                       <label className="label" htmlFor="">
@@ -698,9 +612,10 @@ const ShowExam = () => {
                       />
                     </div>
                   </div>
-                  <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-start">
-                    {
-                      singleExam.examVariation===1 && <>
+                  <div className="form-control mt-1 flex flex-col lg:flex-row justify-between items-start lg:items-center">
+                  <p className="font-bold text-md">MCQ</p>
+                  </div>
+                  <div className="form-control  flex flex-col lg:flex-row justify-between items-start lg:items-start">
                       <div className="w-full lg:w-1/4">
                       <label htmlFor="" className="label">
                         Questions
@@ -737,12 +652,9 @@ const ShowExam = () => {
                         required
                       />
                     </div>
-                      </>
-                    }
-                    {
-                      singleExam.examVariation!==1 && <div className="w-full lg:w-1/4">
+                    <div className="w-full lg:w-1/4">
                       <label htmlFor="" className="label">
-                        Total Marks
+                         Marks
                       </label>
                       <input
                         type="number"
@@ -758,41 +670,147 @@ const ShowExam = () => {
                         required
                       />
                     </div>
+                    
+                  </div>
+                  <div className="form-control mt-1 flex flex-col lg:flex-row justify-between items-start lg:items-center">
+                  <p className="font-bold text-md">Written</p>
+                  </div>
+                  <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-center">
+                  <div className="w-full lg:w-1/2">
+                  <label htmlFor="" className="label">
+                    Questions
+                  </label>
+                  <input
+                    type="number"
+                    className="input w-full input-bordered  border-black "
+                    name="total_questions_written"
+                    id="total_questions_written"
+                    defaultValue={singleExam.totalQuestionWritten}
+                    onInput={(e) =>
+                      e.target.value < 0
+                        ? (e.target.value = "")
+                        : e.target.value
                     }
-                    <div className="w-full lg:w-1/3">
-                      <label className="label" htmlFor="">
-                        Duration
+                    required
+                  />
+                </div>
+                <div className="w-full lg:w-1/2">
+                <label htmlFor="" className="label">
+                 Marks
+                </label>
+                <input
+                  type="number"
+                  className="input w-full input-bordered  border-black "
+                  name="tmw"
+                  id="tmw"
+                  defaultValue={singleExam.totalMarksWritten}
+                  onInput={(e) =>
+                    e.target.value < 0
+                      ? (e.target.value = "")
+                      : e.target.value
+                  }
+                  required
+                />
+              </div>
+                  </div>
+                  <div className="form-control mt-2 flex flex-col lg:flex-row justify-between items-start lg:items-center">
+                  <div className="w-full lg:w-1/4">
+                  <label className="label" htmlFor="">
+                   Total Duration
+                  </label>
+                  <input
+                    type="mumber"
+                    className="input w-full input-bordered border-black "
+                    name="duration"
+                    id="duration"
+                    defaultValue={singleExam.totalDuration}
+                    min="1"
+                    onInput={(e) =>
+                      e.target.value < 0
+                        ? (e.target.value = "")
+                        : e.target.value
+                    }
+                    required
+                  />
+                  <span className="text-red text-sm ml-0 lg:ml-2">
+                    (minutes)
+                  </span>
+                </div>
+                  <div className="w-full lg:w-1/4">
+                  <label className="label" htmlFor="">
+                  MCQ  Duration
+                  </label>
+                  <input
+                    type="mumber"
+                    className="input w-full input-bordered border-black "
+                    name="mcq_duration"
+                    id="mcq_duration"
+                    defaultValue={singleExam.mcqDuration}
+                    min="1"
+                    onInput={(e) =>
+                      e.target.value < 0
+                        ? (e.target.value = "")
+                        : e.target.value
+                    }
+                    required
+                  />
+                  <span className="text-red text-sm ml-0 lg:ml-2">
+                    (minutes)
+                  </span>
+                </div>
+                  <div className="w-full lg:w-1/4">
+                  <label className="label" htmlFor="">
+                   Written Duration
+                  </label>
+                  <input
+                    type="mumber"
+                    className="input w-full input-bordered border-black "
+                    name="written_duration"
+                    id="written_duration"
+                    defaultValue={singleExam.writtenDuration}
+                    min="1"
+                    onInput={(e) =>
+                      e.target.value < 0
+                        ? (e.target.value = "")
+                        : e.target.value
+                    }
+                    required
+                  />
+                  <span className="text-red text-sm ml-0 lg:ml-2">
+                    (minutes)
+                  </span>
+                </div>
+                  </div>
+                  <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-center">
+                    <div className="w-full lg:w-1/4">
+                      <label htmlFor="" className="label">
+                        Total Marks
                       </label>
                       <input
-                        type="mumber"
-                        className="input w-full input-bordered border-black "
-                        name="duration"
-                        id="duration"
-                        defaultValue={singleExam.duration}
-                        min="1"
-                        onInput={(e) =>
+                        type="number"
+                        className="input w-full input-bordered  border-black "
+                        name="full_marks"
+                        id="full_marks"
+                        defaultValue={singleExam.totalMarks}
+                        step="any"
+                        onChange={(e) =>
                           e.target.value < 0
                             ? (e.target.value = "")
                             : e.target.value
                         }
                         required
                       />
-                      <span className="text-red text-sm ml-0 lg:ml-2">
-                        (minutes)
-                      </span>
                     </div>
-                  </div>
-                  <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-center">
-                    <div className="w-full lg:w-1/3">
+                    <div className="w-full lg:w-1/4">
                       <label htmlFor="" className="label">
-                        Negative Marking (%)
+                        Negative 
                       </label>
                       <input
                         type="number"
                         className="input w-full input-bordered  border-black "
                         name="negative_marking"
                         id="negative_marking"
-                        defaultValue={singleExam.negativeMarks}
+                        defaultValue={singleExam.negativeMarksMcq}
                         step="any"
                         onChange={(e) =>
                           e.target.value < 0
@@ -1183,4 +1201,4 @@ const ShowExam = () => {
   );
 };
 
-export default ShowExam;
+export default ShowBothExam;

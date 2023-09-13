@@ -21,15 +21,15 @@ const AddBothExam = () => {
     e.preventDefault();
     const form = e.target;
     const name = form.exam.value;
-    const startTime = form.start_time.value;
-    const endTime = form.end_time.value;
+    const startTime = new Date(form.start_time.value);
+    const endTime = new Date(form.end_time.value);
     const duration = parseInt(form.duration.value);
     const totalQuestionMcq = parseInt(form.mcq_questions.value);
     const marksPerMcq = parseInt(form.mcq_mpq.value);
     const mcqTotalMarks = parseInt(form.mcq_total_marks.value);
     const writtenTotalMarks = parseInt(form.written_total_marks.value);
     const mcqDuration = parseInt(form.mcq_duration.value);
-    const writtenDurartion = parseInt(form.written_duration.value);
+    const writtenDuration = parseInt(form.written_duration.value);
     const totalQuestionWritten = parseInt(form.written_questions.value);
     const totalMarks = form.total_marks.value;
     const status = true;
@@ -44,7 +44,7 @@ const AddBothExam = () => {
     formdata.append("endTime",endTime);
     formdata.append("totalDuration",duration);
     formdata.append("mcqDuration",mcqDuration);
-    formdata.append("writtenDurartion",writtenDurartion);
+    formdata.append("writtenDuration",writtenDuration);
     formdata.append("totalQuestionWritten",totalQuestionWritten);
     formdata.append("totalQuestionMcq",totalQuestionMcq);
     formdata.append("totalMarksMcq",mcqTotalMarks);

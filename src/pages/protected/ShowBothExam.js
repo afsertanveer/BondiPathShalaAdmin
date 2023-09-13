@@ -6,8 +6,6 @@ import Loader from "./../../Shared/Loader";
 import { toast } from "react-hot-toast";
 import DeactivateButton from "./../../features/common/components/DeactivateButton";
 import PopUpModal from "./../../features/common/components/PopUpModal";
-import { subtractHours } from "../../utils/globalFunction";
-
 const ShowBothExam = () => {
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -266,7 +264,7 @@ const ShowBothExam = () => {
     document.getElementById("my-modal-2").checked = false;
   };
   const deactivateExam = async (examId) => {
-    await axios.put("/api/exam/deactivateexam", { examId }).then(({ data }) => {
+    await axios.put("/api/both/deactivatebothexam", { examId }).then(({ data }) => {
       toast.success("Exam Deactivated");
       window.location.reload(false);
     });
@@ -417,15 +415,12 @@ const ShowBothExam = () => {
                     <td className="px-1 py-2 text-center">{idx + 1}</td>
                     <td className="px-2 py-2 text-center">{exam.name}</td>
                     <td className="px-1 py-2 text-center">
+                      
                       {
-                        subtractHours(new Date(exam.startTime))
-                          .toString()
-                          .split("GMT")[0]
-                      } <br/> 
+                        (new Date(exam.startTime)).toString().split("GMT")[0]
+                      }<br/>
                       {
-                        subtractHours(new Date(exam.endTime))
-                          .toString()
-                          .split("GMT")[0]
+                       (new Date(exam.endTime)).toString().split("GMT")[0]
                       }
                     </td>
                     <td className="px-6 py-2 text-center">

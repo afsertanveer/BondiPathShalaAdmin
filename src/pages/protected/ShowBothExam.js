@@ -67,7 +67,7 @@ const ShowBothExam = () => {
   };
   const handleAssignRule = (id) => {
     axios
-      .get(`/api/exam/examruleget?examId=${id}`)
+      .get(`/api/both/bothexamruleget?examId=${id}`)
       .then(({ data }) => {
         if (data !== null) {
           setRuleImg(data.ruleILink);
@@ -94,14 +94,14 @@ const ShowBothExam = () => {
     formData.append("ruleILink", file);
     try {
       await axios
-        .post("/api/exam/examruleset", formData, {
+        .post("/api/both/bothexamruleset", formData, {
           headers: {
             "Content-Type": "multipart/ form-data",
           },
         })
         .then(({ data }) => {
           toast.success("Rules Added Successfully");
-          window.location.reload(false);
+          // window.location.reload(false);
           form.reset();
           setIsLoading(false);
         })

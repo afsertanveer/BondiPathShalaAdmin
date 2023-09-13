@@ -6,6 +6,7 @@ import Loader from "./../../Shared/Loader";
 import { toast } from "react-hot-toast";
 import DeactivateButton from "../../features/common/components/DeactivateButton";
 import PopUpModal from "../../features/common/components/PopUpModal";
+import { optionName } from "../../utils/globalVariables";
 const ShowQuestions = () => {
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -16,40 +17,14 @@ const ShowQuestions = () => {
   const [selectedCourse, setSelectedCourse] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedExam, setSelectedExam] = useState("");
+  const [bothStatus,setBothStatus] = useState(false);
   const [questionCourse, setQuestionCourse] = useState("");
   const [questionSubject, setQuestionSubject] = useState("");
   const [selectedQuestionId,setSelectedQuestionId] = useState("");
   const [questionExam, setQuestionExam] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
-  const optionName = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "U",
-    "V",
-    "W",
-    "X",
-    "Y",
-    "Z",
-  ];
+  
   const handleChangeCourse = (e) => {
     setSelectedSubject("");
     setSubjects([]);
@@ -88,6 +63,30 @@ const ShowQuestions = () => {
         setIsLoading(false);
       }).catch(e=>console.log(e))
   };
+  const handleChangeBothStatus = val =>{
+    if(val==="0"){
+      setBothStatus(false);
+      axios
+      .get(`/api/exam/getExamBySub?subjectId=${questionSubject}`)
+      .then(({ data }) => {
+        console.log(data);
+        setSecondExams(data);
+        setIsLoading(false);
+      }).catch(e=>console.log(e))
+    }else{
+      setBothStatus(true)
+      axios
+        .get(`/api/both/getbothexambysubject?subjectId=${questionSubject}`)
+        .then(({ data }) => {
+          setSecondExams(data.examPage.exam);
+          if (data.examPage.exam.length === 0) {
+            toast.error("No Data");
+          }
+          setIsLoading(false);
+        })
+        .catch((e) => toast.error(e.response.data));
+    }
+  }
   function arrayRemove(arr, value) {
     return arr.filter(function (ele) {
       return ele !== value;
@@ -131,12 +130,22 @@ const ShowQuestions = () => {
       examId,
       questionArray:selectedQuestions
     }
-    await axios.put("/api/exam/addQuestionMcqBulk",questionSet).then(({data})=>{
-      toast.success("Successfully added all the questions");
-      e.target.reset();      
-      document.getElementById("my-modal").checked = false;
-      window.location.reload(false);
-    }).catch(e=>console.log(e))
+    if(bothStatus){
+      await axios.put("/api/both/bothaddquestionmcqbulk",questionSet).then(({data})=>{
+        toast.success("Successfully added all the questions to both Exam");
+        e.target.reset();      
+        document.getElementById("my-modal").checked = false;
+        window.location.reload(false);
+      }).catch(e=>console.log(e))
+    }else{
+      await axios.put("/api/exam/addQuestionMcqBulk",questionSet).then(({data})=>{
+        toast.success("Successfully added all the questions");
+        e.target.reset();      
+        document.getElementById("my-modal").checked = false;
+        window.location.reload(false);
+      }).catch(e=>console.log(e))
+    }
+    
   }
 
   const removeQuestion = (questionId)=>{
@@ -390,7 +399,7 @@ const ShowQuestions = () => {
               <select
                 className="input  border-black input-bordered w-full"
                 required
-                onChange={(e) => handleChangeSecondSubject(e)}
+                onChange={(e) => setQuestionSubject(e.target.value)}
               >
                 <option value=""></option>
                 {secondsubjects.length > 0 &&
@@ -399,6 +408,20 @@ const ShowQuestions = () => {
                       {subject.name}
                     </option>
                   ))}
+              </select>
+            </div>
+            <div className="form-control mr-3">
+              <label className="label-text" htmlFor="">
+                Both Exam?
+              </label>
+              <select
+                className="input  border-black input-bordered w-full"
+                required
+                onChange={(e) => handleChangeBothStatus(e.target.value)}
+              >
+                <option>---Select---</option>
+                <option value="0">No</option>
+                <option value="1">Yes</option>
               </select>
             </div>
             <div className="form-control mr-3">

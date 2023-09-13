@@ -14,6 +14,8 @@ const ShowBothQuestions = () => {
   const [secondsubjects, setSecondSubjects] = useState([]);
   const [secondexams, setSecondExams] = useState([]);
   const [questions, setQuestions] = useState([]);
+  const [writtenQuestion,setWrittenQuestion] = useState({});
+  const [show,setShow] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedExam, setSelectedExam] = useState("");
@@ -56,10 +58,9 @@ const ShowBothQuestions = () => {
     setQuestionSubject(e.target.value);
     setSecondExams([]);
     axios
-      .get(`/api/exam/getExamBySub?subjectId=${e.target.value}`)
+      .get(`/api/both/getbothexambysubject?subjectId=${e.target.value}`)
       .then(({ data }) => {
-        console.log(data);
-        setSecondExams(data);
+        setSecondExams(data.examPage.exam);
         setIsLoading(false);
       }).catch(e=>console.log(e))
   };
@@ -106,7 +107,7 @@ const ShowBothQuestions = () => {
       examId,
       questionArray:selectedQuestions
     }
-    await axios.put("/api/exam/addQuestionMcqBulk",questionSet).then(({data})=>{
+    await axios.put("/api/both/bothaddquestionmcqbulk",questionSet).then(({data})=>{
       toast.success("Successfully added all the questions");
       e.target.reset();      
       document.getElementById("my-modal").checked = false;
@@ -149,8 +150,7 @@ const ShowBothQuestions = () => {
             console.log(data)
             if (data.examPage.exam.length === 0) {
               toast.error("No Data");
-            }else{
-                
+            }else{  
             setExams(data.examPage.exam);
             }
             setIsLoading(false);
@@ -160,13 +160,23 @@ const ShowBothQuestions = () => {
     }
     if (examType !== "") {
       axios
-        .get(`/api/exam/questionbyexamid?examId=${selectedExam}`)
+        .get(`/api/both/bothquestionbyexamid?examId=${selectedExam}&&type=${examType}`)
         .then(({ data }) => {
-          setQuestions(data);
+          if(examType==="1"){            
+            setShow(false)
+            setWrittenQuestion({})
+            setQuestions(data);
+          }else{
+            
+            setShow(true)
+            setQuestions([]);
+            setWrittenQuestion(data)
+          }
           setIsLoading(false);
         }).catch(e=>{
           setQuestions([]);
           setSelectedQuestions([]);
+          setWrittenQuestion({});
           toast.error(e.response.data);
         })
     } else {
@@ -249,8 +259,8 @@ const ShowBothQuestions = () => {
                onChange={(e) => setExamType(e.target.value)}
              >
                <option value=""></option>
-               <option value={0}>MCQ</option>
-               <option value={0}>Written</option>
+               <option value={1}>MCQ</option>
+               <option value={2}>Written</option>
              </select>
           </div>
         </div>
@@ -354,6 +364,37 @@ const ShowBothQuestions = () => {
             </tbody>
           </table>
           }
+          {show && (
+            <>
+              <table className="table w-full my-10 customTable">
+                <thead>
+                  <tr>
+                   
+                    <th className="bg-white">Question </th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    
+                      <td className="w-1/4">
+                        <img
+                          src={
+                            process.env.REACT_APP_API_HOST +
+                            "/" +
+                            writtenQuestion.questionILink
+                          }
+                          alt="question"
+                        ></img>
+                      </td>
+                      <td>
+                        
+                      </td>
+                    </tr>
+                </tbody>
+              </table>
+            </>
+          )}
         </div>
       )}
      

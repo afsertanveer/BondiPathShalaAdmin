@@ -205,7 +205,7 @@ const ShowBothExam = () => {
     console.log(question);
 
     await axios
-      .post(`/api/exam/addquestionmcq`, formdata, {
+      .post(`/api/both/bothaddquestionmcq`, formdata, {
         headers: {
           "Content-Type": "multipart/ form-data",
         },
@@ -247,7 +247,7 @@ const ShowBothExam = () => {
     formdata.append("marksPerQuestion", newArr);
     formdata.append("totalMarks", totalMarks);
     await axios
-      .post(`/api/exam/addquestionwritten`, formdata, {
+      .post(`/api/both/bothAddQuestionWritten`, formdata, {
         headers: {
           "Content-Type": "multipart/ form-data",
         },

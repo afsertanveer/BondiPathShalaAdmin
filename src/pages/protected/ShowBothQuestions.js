@@ -144,16 +144,21 @@ const ShowBothQuestions = () => {
     }
     if (selectedSubject !== "") {
       axios
-        .get(`/api/exam/getExamBySub?subjectId=${selectedSubject}`)
+        .get(`/api/both/getbothexambysubject?subjectId=${selectedSubject}`)
         .then(({ data }) => {
-          const newData = data.filter(d=>d.examVariation===1);
-          setExams(newData);
-          setIsLoading(false);
+            console.log(data)
+            if (data.examPage.exam.length === 0) {
+              toast.error("No Data");
+            }else{
+                
+            setExams(data.examPage.exam);
+            }
+            setIsLoading(false);
         }).catch(e=>console.log(e))
     } else {
       setExams([]);
     }
-    if (selectedExam !== "") {
+    if (examType !== "") {
       axios
         .get(`/api/exam/questionbyexamid?examId=${selectedExam}`)
         .then(({ data }) => {
@@ -167,7 +172,7 @@ const ShowBothQuestions = () => {
     } else {
       setQuestions([]);
     }
-  }, [selectedCourse, selectedSubject, selectedExam]);
+  }, [selectedCourse, selectedSubject, selectedExam,examType]);
   return (
     <div className=" bg-white">
       <div className=" py-4 px-2 my-3 ">

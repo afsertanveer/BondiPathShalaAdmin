@@ -417,10 +417,10 @@ const ShowBothExam = () => {
                     <td className="px-1 py-2 text-center">
                       
                       {
-                        (new Date(exam.startTime)).toString().split("GMT")[0]
+                          (exam.startTime).toString().split("T")[0] 
                       }<br/>
                       {
-                       (new Date(exam.endTime)).toString().split("GMT")[0]
+                       exam.endTime.toString().split("T")[0] 
                       }
                     </td>
                     <td className="px-6 py-2 text-center">

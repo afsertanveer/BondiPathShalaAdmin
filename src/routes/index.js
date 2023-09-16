@@ -31,6 +31,7 @@ const StudentHistory = lazy(()=>import('./../pages/protected/StudentHistory'));
 const SearchStudent = lazy(()=>import('./../pages/protected/SearchStudent'));
 const ViewWrittenScripts = lazy(()=>import('./../pages/protected/ViewWrittenScripts'));
 const AddBothExam = lazy(()=>import('./../pages/protected/AddBothExam'));
+const AddSpecialExam = lazy(()=>import('./../pages/protected/AddSpecialExam'));
 const ShowBothExam = lazy(()=>import('./../pages/protected/ShowBothExam'));
 const ShowBothQuestions = lazy(()=>import('./../pages/protected/ShowBothQuestions'));
 const Recheck = lazy(()=>import('./../pages/protected/Recheck'));
@@ -95,6 +96,10 @@ if(role===3){
     {
       path: '/exams/add-both-exam', // the url
       component: AddBothExam, // view rendered
+    },
+    {
+      path: '/exams/add-special-exam', // the url
+      component: AddSpecialExam, // view rendered
     },
     {
       path: '/exams/create-free-new', // the url

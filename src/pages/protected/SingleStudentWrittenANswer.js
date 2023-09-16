@@ -40,9 +40,8 @@ const SingleStudentWrittenANswer = () => {
     console.log(answer);
    await axios.post('/api/teacher/checkscriptsingle',answer).then(data=>{
     toast.success("Successfully updated")
+    setSource([]);
    });
-    console.log(answer);
-    console.log(changer);
     setDisabler(changer);
   };
   const finalSave = async() =>{
@@ -58,7 +57,7 @@ const SingleStudentWrittenANswer = () => {
     await axios.post('/api/teacher/markscalculation',marksCalculation).then(data=>{
          axios.post('/api/teacher/checkstatusupdate',statusUpdate).then(data=>{
             toast.success("successfully updated the result");
-            setSource([]);
+            
         })
      });
 

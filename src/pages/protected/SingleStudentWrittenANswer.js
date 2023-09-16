@@ -21,7 +21,7 @@ const SingleStudentWrittenANswer = () => {
     e.preventDefault();
     const form = e.target;
     const idx = parseInt(form.index.value);
-    const obtainedMarks= form.obtMarks.value;
+    const obtainedMarks= parseInt(form.obtMarks.value);
     console.log(source);
     changer = [...disabler];
     for (let i = 0; i < changer.length; i++) {
@@ -58,6 +58,7 @@ const SingleStudentWrittenANswer = () => {
     await axios.post('/api/teacher/markscalculation',marksCalculation).then(data=>{
          axios.post('/api/teacher/checkstatusupdate',statusUpdate).then(data=>{
             toast.success("successfully updated the result");
+            setSource([]);
         })
      });
 
@@ -69,7 +70,6 @@ const SingleStudentWrittenANswer = () => {
         `/api/student/getwrittenstudentsinglebyexam?examId=${params.examId}&&studentId=${params.studentId}`
       )
       .then(({ data }) => {
-        console.log(data);
         setSingleResult(data);
         let dis = [];
         for (let i = 0; i < data.totalQuestions; i++) {
@@ -102,6 +102,7 @@ const SingleStudentWrittenANswer = () => {
                       ans.map((photo, index) => {
                         return (
                           <FilerobotImageEditor
+                            key={index}
                             source={
                               process.env.REACT_APP_API_HOST +'/'+ photo
                             }

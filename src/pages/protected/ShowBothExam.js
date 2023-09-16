@@ -101,7 +101,7 @@ const ShowBothExam = () => {
         })
         .then(({ data }) => {
           toast.success("Rules Added Successfully");
-          // window.location.reload(false);
+          window.location.reload(false);
           form.reset();
           setIsLoading(false);
         })

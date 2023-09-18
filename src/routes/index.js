@@ -30,6 +30,7 @@ const ViewPaidResult= lazy(()=>import('../pages/protected/ViewPaidResult'));
 const StudentHistory = lazy(()=>import('./../pages/protected/StudentHistory'));
 const SearchStudent = lazy(()=>import('./../pages/protected/SearchStudent'));
 const ViewWrittenScripts = lazy(()=>import('./../pages/protected/ViewWrittenScripts'));
+const ViewScriptBoth = lazy(()=>import('./../pages/protected/ViewScriptBoth'));
 const AddBothExam = lazy(()=>import('./../pages/protected/AddBothExam'));
 const AddSpecialExam = lazy(()=>import('./../pages/protected/AddSpecialExam'));
 const ShowBothExam = lazy(()=>import('./../pages/protected/ShowBothExam'));
@@ -48,6 +49,10 @@ if(role===3){
     {
       path: '/scripts/view', // the url
       component: ViewWrittenScripts, // view rendered
+    },
+    {
+      path: '/scripts/both/view', // the url
+      component: ViewScriptBoth, // view rendered
     },
     {
       path: '/scripts/recheck', // the url
@@ -72,6 +77,10 @@ if(role===3){
     {
       path: '/', // the url
       component: Dashboard, // view rendered
+    },
+    {
+      path: '/scripts/both/view', // the url
+      component: ViewScriptBoth, // view rendered
     },
     {
       path: '/scripts/view', // the url

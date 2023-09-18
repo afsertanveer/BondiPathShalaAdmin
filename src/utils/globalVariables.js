@@ -1,7 +1,7 @@
 export const type =["","Daily","Weekly","Monthly"];
 export const variation = ["","MCQ","Written","Both"];
 export const itemPerPage = 5;
-export   const optionName = [
+export const optionName = [
     "A",
     "B",
     "C",

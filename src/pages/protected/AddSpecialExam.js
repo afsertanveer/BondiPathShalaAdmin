@@ -14,7 +14,6 @@ const AddSpecialExam = () => {
   const [selectedCourse, setSelectedCourse] = useState("");
   const [selectedSubjects, setSelectedSubjects] = useState([]);
   const [selectedOptionalSubjects, setSelectedOptionalSubjects] = useState([]);
-  const [selectedType, setSelectedType] = useState(-1);
   const [selectedVariation, setSelectedVariation] = useState(-1);
   const [totalSubject, setTotalSubject] = useState(-1);
   const [totalOptionalSubject, setTotalOptionalSubject] = useState(-1);
@@ -23,58 +22,126 @@ const AddSpecialExam = () => {
   const [isHSC, setIsHSC] = useState(false);
   const [allSubjects, setAllSubjects] = useState([]);
   const navigate = useNavigate();
+  
 
   const handleAddExam = async (e) => {
     e.preventDefault();
     let totalQuestionMcq = -1,
       marksPerMcq = -1,
-      totalMarks;
+      totalMarks=0;
     const form = e.target;
     const name = form.exam.value;
     const startTime = form.start_time.value;
     const endTime = form.end_time.value;
-    const duration = parseInt(form.duration.value);
-    if (selectedVariation === "1") {
-      totalQuestionMcq = parseInt(form.total_questions.value);
-      marksPerMcq = parseInt(form.marks_per_question.value);
-      totalMarks = totalQuestionMcq * marksPerMcq;
-    } else {
-      totalMarks = form.total_marks.value;
-    }
     const status = true;
-    const negativeMarks = parseFloat(form.negative_marking.value);
+    let negativeMarks=null,mcqDuration=null,writtenDuration = null,writtenTotalQuestions=null,totalDuration=null,
+    mcqTotalMarks=null,writtenTotalMarks=null;
+    if(selectedVariation!=='2'){
+      mcqDuration = form.mcq_duration.value;
+      negativeMarks = parseInt(form.negative_marking.value);
+      totalQuestionMcq=parseInt(form.mcq_total_questions.value);
+      marksPerMcq=parseInt(form.marks_per_question.value);
+      mcqTotalMarks = totalQuestionMcq*marksPerMcq;
+    }else{
+      writtenDuration = form.written_duration.value;
+      writtenTotalQuestions = form.total_written_questions.value;
+      writtenTotalMarks =form.total_written_marks.value;
+    }
+    if(selectedVariation==='3'){
+      totalDuration= form.total_duration.value;
+      totalMarks=form.total_marks.value;
+    }
     const iLink = form.iLink.files[0];
     const formdata = new FormData();
     formdata.append("iLink", iLink);
-    const stype = parseInt(selectedType);
     const svar = parseInt(selectedVariation);
+    let oSubject = selectedOptionalSubjects;
+    let selectedOsbuject = [];
+    for(let i = 0 ; i<oSubject.length; i++){
+      selectedOsbuject.push(oSubject[i].value);
+      
+    }
+    let allSubjects = selectedSubjects;
+    let selectedAllSubjects = [];
+    let subjectQuestions = [];
+    for(let i = 0 ; i<allSubjects.length; i++){
+      selectedAllSubjects.push(allSubjects[i].value);
+      if(selectedVariation==="1"){
+        let obj ={
+          subjectName:"",
+          subjectId:"",
+          numberOfQuestions:0
+        };
+        obj.subjectName = allSubjects[i].label;
+        obj.subjectId = allSubjects[i].value;
+        obj.numberOfQuestions = parseInt(document.getElementById(`${allSubjects[i].label}mcq`).value);
+        subjectQuestions.push(obj);
+      }if(selectedVariation==="2"){
+        let obj ={
+          subjectName:"",
+          subjectId:"",
+          numberOfQuestions:0
+        };
+        obj.subjectName = allSubjects[i].label;
+        obj.subjectId = allSubjects[i].value;
+        obj.numberOfQuestions = parseInt(document.getElementById(`${allSubjects[i].label}written`).value);
+        subjectQuestions.push(obj);
+      }else{
+        let obj ={
+          subjectName:"",
+          subjectId:"",
+          numberOfMcqQuestions:0,
+          numberOfWrittenQuestions:0
+        };
+        obj.subjectName = allSubjects[i].label;
+        obj.subjectId = allSubjects[i].value;
+        obj.numberOfMcqQuestions = parseInt(document.getElementById(`${allSubjects[i].label}mcq`).value);
+        obj.numberOfWrittenQuestions = parseInt(document.getElementById(`${allSubjects[i].label}written`).value);
+        subjectQuestions.push(obj);
+      }
+    }
+    console.log(subjectQuestions);
     formdata.append("name", name);
-    formdata.append("examType", stype);
+    formdata.append("courseId", selectedCourse);
     formdata.append("examVariation", svar);
-    formdata.append("examFreeOrNot", false);
     formdata.append("startTime", startTime);
     formdata.append("endTime", endTime);
-    formdata.append("duration", duration);
+    formdata.append("totalOptionalSubject",totalOptionalSubject)
+    formdata.append("totalSubject",totalSubject);
+    formdata.append("totalExamSubject",examSubjectNumber);
+    formdata.append("subjects", selectedAllSubjects);
+    formdata.append("optionalSubjects", selectedOsbuject);
+    formdata.append("totalDuration",totalDuration);
+    formdata.append("totalMarks",totalMarks);
+    formdata.append("mcqDuration", mcqDuration);
     formdata.append("totalQuestionMcq", totalQuestionMcq);
-    formdata.append("marksPerMcq", marksPerMcq);
+    formdata.append("subjectQuestions",subjectQuestions);
+    formdata.append("totalQuestionMcq",totalQuestionMcq)
+    formdata.append("marksPerMcq",marksPerMcq)
+    formdata.append("marksPerMcq", marksPerMcq);    
+    formdata.append("negativeMarks", negativeMarks);
+    formdata.append("mcqTotalMarks", mcqTotalMarks);
+    formdata.append("writtenDuration", writtenDuration);
+    formdata.append("writtenTotalQuestions", writtenTotalQuestions);
+    formdata.append("writtenTotalMarks", writtenTotalMarks);
     formdata.append("status", status);
-    formdata.append("subjectId", selectedSubjects);
-    formdata.append("courseId", selectedCourse);
     formdata.append("sscStatus", isSSC);
     formdata.append("hscStatus", isHSC);
-    formdata.append("negativeMarks", negativeMarks);
     formdata.append("totalMarksMcq", totalMarks);
-    await axios
-      .post(`/api/exam/createexam`, formdata, {
-        headers: {
-          "Content-Type": "multipart/ form-data",
-        },
-      })
-      .then(({ data }) => {
-        console.log(data);
-        toast.success("Exam Added Succesfully");
-        navigate("/dashboard");
-      });
+    for (const value of formdata.values()) {
+      console.log(value);
+    }
+    // await axios
+    //   .post(`/api/exam/createexam`, formdata, {
+    //     headers: {
+    //       "Content-Type": "multipart/ form-data",
+    //     },
+    //   })
+    //   .then(({ data }) => {
+    //     console.log(data);
+    //     toast.success("Exam Added Succesfully");
+    //     navigate("/dashboard");
+    //   });
   };
   useEffect(() => {
     setIsLoading(true);
@@ -193,8 +260,8 @@ const AddSpecialExam = () => {
                   Number of Subject (Optional)
                 </label>
                 <select
-                  name="type"
-                  id="type"
+                  name="number_of_optional_subject"
+                  id="number_of_optional_subject"
                   className="input border-black input-bordered w-full "
                   onChange={(e) => setTotalOptionalSubject(e.target.value)}
                   required
@@ -217,7 +284,25 @@ const AddSpecialExam = () => {
                   required
                 >
                   <option value="">--Select---</option>
-                  <option value={1}>1</option>
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                  <option value={4}>4</option>
+                  <option value={5}>5</option>
+                  <option value={6}>6</option>
+                </select>
+              </div>
+              <div className="w-full">
+                <label htmlFor="" className="label">
+                 Number of Exam Subject 
+                </label>
+                <select
+                  name="nes"
+                  id="nes"
+                  className="input border-black input-bordered w-full "
+                  onChange={(e) => setExamSubjectNumber(e.target.value)}
+                  required
+                >
+                  <option value="">--Select---</option>
                   <option value={2}>2</option>
                   <option value={3}>3</option>
                   <option value={4}>4</option>
@@ -263,7 +348,7 @@ const AddSpecialExam = () => {
                 <div className="form-control">
                   <div className="w-full">
                     <label className="label" htmlFor="">
-                      Duration
+                      MCQ Duration
                     </label>
                     <input
                       type="mumber"
@@ -366,7 +451,7 @@ const AddSpecialExam = () => {
             <div className="form-control">
                   <div className="w-full">
                     <label className="label" htmlFor="">
-                      Duration
+                      Written Duration
                     </label>
                     <input
                       type="mumber"

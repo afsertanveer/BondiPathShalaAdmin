@@ -8,6 +8,7 @@ import DeactivateButton from "./../../features/common/components/DeactivateButto
 import PopUpModal from "./../../features/common/components/PopUpModal";
 import { type, variation } from "../../utils/globalVariables";
 import { subtractHours } from "../../utils/globalFunction";
+import { Fragment } from "react";
 
 const ShowExam = () => {
   const [courses, setCourses] = useState([]);
@@ -23,6 +24,7 @@ const ShowExam = () => {
   const [correctOption, setCorrectOption] = useState(null);
   const [selectedExamId, setSelectedExamId] = useState("");
   const [ruleImg, setRuleImg] = useState("");
+  const [examType,setExamType] = useState("");
   const [sscChecked, setSscChecked] = useState(false);
   const [hscChecked, setHscChecked] = useState(false);
   const [qvmark,setQvmark] = useState([]);
@@ -284,6 +286,19 @@ const ShowExam = () => {
     setSelectedSubject("");
     setExams([]);
   };
+  const examStopper = examId =>{
+    axios.post("/api/student/updatedstudentwritteninfo",{examId})
+    .then(data=>{
+      toast.success("This exam is stopped now...")
+      window.location.reload(false);
+    }).catch(err=>toast.error(err));
+  }
+  const generatorWritten = examId =>{
+    axios.post(`/api/teacher/updaterank`,{examId}).then(data=>{
+      toast.success("Rank Updated");
+      window.location.reload(false);
+    })
+  }
   useEffect(() => {
     setIsLoading(true);
     axios.get("/api/course/getallcourseadmin").then(({ data }) => {
@@ -300,9 +315,9 @@ const ShowExam = () => {
     } else {
       setSubjects([]);
     }
-    if (selectedSubject !== "") {
+    if (selectedSubject !== "" && examType!=="") {
       axios
-        .get(`/api/exam/getExamBySub?subjectId=${selectedSubject}`)
+        .get(`/api/exam/getExamBySub?subjectId=${selectedSubject}&examType=${examType}`)
         .then(({ data }) => {
           console.log(data);
           setExams(data);
@@ -327,7 +342,7 @@ const ShowExam = () => {
     } else {
       setsingleExam({});
     }
-  }, [selectedCourse, singleExamId, selectedSubject]);
+  }, [selectedCourse, singleExamId, selectedSubject,examType]);
   return (
     <div className="mx-auto">
       <div className="flex justify-center items-center py-2 px-2 my-3  ">
@@ -378,6 +393,22 @@ const ShowExam = () => {
                 )}
             </select>
           </div>
+          <div className="form-control">
+            <label className="label-text" htmlFor="">
+              Select Type
+            </label>
+            <select
+              name="course_list"
+              id="course_list"
+              className="input w-full border-black input-bordered"
+              required
+              onChange={(e) => setExamType(e.target.value)}
+            >
+              <option value=""></option>
+              <option value="1">MCQ</option>
+              <option value="2">WRITTEN</option>
+            </select>
+          </div>
         </div>
       </div>
       {isLoading && <Loader></Loader>}
@@ -396,7 +427,7 @@ const ShowExam = () => {
                   Start Time - <br></br> End Time
                 </th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-2">
-                  Type/Variation
+                  Type
                 </th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-2">
                   Duration
@@ -434,7 +465,7 @@ const ShowExam = () => {
                       }
                     </td>
                     <td className="px-6 py-2 text-center">
-                      {type[exam.examType]+'/'+variation[exam.examVariation]}
+                      {type[exam.examType]}
                     </td>
                     <td className="px-6 py-2 text-center">
                       {exam.duration} Minutes
@@ -464,13 +495,35 @@ const ShowExam = () => {
                             Add Exam Rule
                           </label>
                         )}
-                        <label
+                        {
+                          examType==="1" && <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="my-popup"
                           className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
                           Generate Meritlist
                         </label>
+                        }
+                        {
+                          examType==="2" && 
+                           <label
+                          onClick={() => handleAssignExamId(exam._id)}
+                          htmlFor="my-popup-written"
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                        >
+                          Submit Exam
+                        </label>
+                        
+                        }
+                        {
+                          examType ==="2" && <label
+                          onClick={() => handleAssignExamId(exam._id)}
+                          htmlFor="written-generator"
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                        >
+                          Generate Meritlist
+                        </label>
+                        }
                         <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="my-modal"
@@ -519,6 +572,26 @@ const ShowExam = () => {
         </div>
       )}
       <div>
+        <input type="checkbox" id="my-popup-written" className="modal-toggle" />
+        <div className="modal">
+          <div className="modal-box">
+            <h3 className="font-semibold text-lg text-center">
+              {`Are you sure?`}
+            </h3>
+
+            <div className="modal-action flex justify-center items-center">
+              <button
+                className="btn mr-2"
+                onClick={() => examStopper(singleExamId)}
+              >
+                Yes
+              </button>
+              <label htmlFor="my-popup-written" className="btn bg-[red]">
+                No!
+              </label>
+            </div>
+          </div>
+        </div>
         <input type="checkbox" id="my-popup" className="modal-toggle" />
         <div className="modal">
           <div className="modal-box">
@@ -534,6 +607,26 @@ const ShowExam = () => {
                 Yes
               </button>
               <label htmlFor="my-popup" className="btn bg-[red]">
+                No!
+              </label>
+            </div>
+          </div>
+        </div>
+        <input type="checkbox" id="written-generator" className="modal-toggle" />
+        <div className="modal">
+          <div className="modal-box">
+            <h3 className="font-semibold text-lg text-center">
+              {`Are you sure?`}
+            </h3>
+
+            <div className="modal-action flex justify-center items-center">
+              <button
+                className="btn mr-2"
+                onClick={() => generatorWritten(singleExamId)}
+              >
+                Yes
+              </button>
+              <label htmlFor="written-generator" className="btn bg-[red]">
                 No!
               </label>
             </div>

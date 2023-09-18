@@ -7,7 +7,7 @@ import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
 import Pagination from "../../components/common/Pagination";
 
-const ViewScriptBoth = () => {
+const RecheckBoth = () => {
     const [courses, setCourses] = useState([]);
     const [subjects, setSubjects] = useState([]);
     const [exams, setExams] = useState([]);
@@ -86,7 +86,7 @@ const ViewScriptBoth = () => {
       }
       if (selectedSubject !== "") {
         axios
-          .get(`api/both/getbothexambysubject?subjectId=${selectedSubject}`)
+          .get(`/api/both/getbothexambysubject?subjectId=${selectedSubject}`)
           .then(({ data }) => {
             setExams(data.examPage.exam);
             setIsLoading(false);
@@ -96,7 +96,7 @@ const ViewScriptBoth = () => {
       }
       if (selectedExam !== "") {
         axios
-          .get(`api/student/bothGetwrittenstudentallbyexam?examId=${selectedExam}`)
+          .get(`api/student/bothgetcheckwrittenstudentallbyexam?examId=${selectedExam}`)
           .then(({ data }) => {
             console.log(data);
             setWrittenData(data.data1)
@@ -177,7 +177,7 @@ const ViewScriptBoth = () => {
         </div>
       </div>
       {isLoading && <Loader></Loader>}
-      {writtenData.length>0 && (
+      {writtenData.length > 0 && (
         <div className="overflow-x-auto w-full">        
           <table className="mx-auto w-full whitespace-nowrap rounded-lg  divide-y  overflow-hidden">
             <thead>
@@ -208,7 +208,7 @@ const ViewScriptBoth = () => {
                         <td>{wd.totalMarks}</td>
                         <td>{wd.totalQuestions}</td>
                         <td>
-                            <Link to={`/dashboard/${selectedExam}/checkanswerboth/${wd.studentId}`}  target='_blank' className="text-red font-bold">Check </Link>
+                            <Link to={`/dashboard/${selectedExam}/checkanswerboth/${wd.studentId}`}  target='_blank' className="text-red font-bold">ReCheck</Link>
                         </td>
 
                     </tr>
@@ -225,4 +225,4 @@ const ViewScriptBoth = () => {
   );
 };
 
-export default ViewScriptBoth;
+export default RecheckBoth;

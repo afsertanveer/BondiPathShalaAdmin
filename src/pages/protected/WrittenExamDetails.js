@@ -43,7 +43,7 @@ const WrittenExamDetails = () => {
     let clickedPage = parseInt(event.selected) + 1;
     if (event.selected > 0) {
       axios
-        .get(`/api/student/gethistorybyexamid?examId=${selectedExam}&page=${clickedPage}`)
+        .get(`/api/student/gethistorybywrittenid?examId=${selectedExam}&page=${clickedPage}`)
         .then(({ data }) => {
           console.log(data);
           setDetailedExam(data?.data);
@@ -56,7 +56,7 @@ const WrittenExamDetails = () => {
         })
     } else {
       axios
-      .get(`/api/student/gethistorybyexamid?examId=${selectedExam}&page=${1}`)
+      .get(`/api/student/gethistorybywrittenid?examId=${selectedExam}&page=${1}`)
       .then(({ data }) => {
         console.log(data);
         setDetailedExam(data?.data);
@@ -104,7 +104,7 @@ const WrittenExamDetails = () => {
     }
     if (selectedExam !== "") {
       axios
-        .get(`/api/student/gethistorybyexamid?examId=${selectedExam}&page=${currentPage}`)
+        .get(`/api/student/gethistorybywrittenid?examId=${selectedExam}&page=${currentPage}`)
         .then(({ data }) => {
           console.log(data);
           setDetailedExam(data?.data);

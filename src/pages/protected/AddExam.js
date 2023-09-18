@@ -137,7 +137,6 @@ const AddExam = () => {
                   <option value="">Select Variation</option>
                   <option value={1}>MCQ</option>
                   <option value={2}>Written</option>
-                  <option value={3}>Both</option>
                 </select>
               </div>
             </div>
@@ -295,6 +294,7 @@ const AddExam = () => {
                   onChange={(e) =>
                     e.target.value < 0 ? (e.target.value = "") : e.target.value
                   }
+                  value={selectedVariation==="2" && 0}
                   required
                 />
               </div>

@@ -97,7 +97,7 @@ const ViewScriptBoth = () => {
       }
       if (selectedExam !== "") {
         axios
-          .get(`api/student/getwrittenstudentallbyexam?examId=${selectedExam}`)
+          .get(`api/student/bothGetwrittenstudentallbyexam?examId=${selectedExam}`)
           .then(({ data }) => {
             console.log(data);
             setWrittenData(data.data1)
@@ -209,7 +209,7 @@ const ViewScriptBoth = () => {
                         <td>{wd.totalMarks}</td>
                         <td>{wd.totalQuestions}</td>
                         <td>
-                            <Link to={`/dashboard/${selectedExam}/checkanswer/${wd.studentId}`}  target='_blank' className="text-red font-bold">Check </Link>
+                            <Link to={`/dashboard/${selectedExam}/checkanswerboth/${wd.studentId}`}  target='_blank' className="text-red font-bold">Check </Link>
                         </td>
 
                     </tr>

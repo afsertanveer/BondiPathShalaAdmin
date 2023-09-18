@@ -37,6 +37,7 @@ const ShowBothExam = lazy(()=>import('./../pages/protected/ShowBothExam'));
 const ShowBothQuestions = lazy(()=>import('./../pages/protected/ShowBothQuestions'));
 const Recheck = lazy(()=>import('./../pages/protected/Recheck'));
 const SingleStudentWrittenANswer = lazy(()=>import('./../pages/protected/SingleStudentWrittenANswer'));
+const SingleStudentBothWrittenAnswer = lazy(()=>import('./../pages/protected/SingleStudentBothWrittenAnswer'));
 const user =JSON.parse(localStorage.getItem('user')) ;
 const role = user.role;
 let routes;
@@ -70,6 +71,10 @@ if(role===3){
     {
       path:'/:examId/checkanswer/:studentId',
       component:SingleStudentWrittenANswer
+    },
+    {
+      path:'/:examId/checkanswerboth/:studentId',
+      component:SingleStudentBothWrittenAnswer
     }
   ]
 }else{
@@ -89,6 +94,10 @@ if(role===3){
     {
       path: '/scripts/recheck', // the url
       component: Recheck, // view rendered
+    },
+    {
+      path:'/:examId/checkanswerboth/:studentId',
+      component:SingleStudentBothWrittenAnswer
     },
     {
       path: '/courses/create-new', // the url

@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "../../utils/axios";
 import { toast } from "react-hot-toast";
+import Loader from "../../Shared/Loader";
 
 const AddUser = () => {
   const [getPassword, setGetPassword] = useState("");
   const [getRole, setGetRole] = useState(-1);
+  const [courses, setCourses] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState(null)
+  const [selectedSubject, setSelectedSubject] = useState(null)
   const addOfficer = async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -15,7 +21,9 @@ const AddUser = () => {
     const mobileNo = form.mobile_number.value;
     const user = {
         name,userName,address,mobileNo,password,
-        role:getRole
+        role:getRole,
+        courseId:selectedCourse,
+        subjectId:selectedSubject
     }
     try {
       await axios
@@ -31,12 +39,30 @@ const AddUser = () => {
       console.log(e);
     }
   };
+  useEffect(()=>{
+    setIsLoading(true);
+    axios.get("/api/course/getallcourseadmin").then(({ data }) => {
+      setCourses(data.courses);
+      setIsLoading(false);
+    });
+    if (selectedCourse !== "") {
+      axios
+        .get(`/api/subject/getsubjectbycourse?courseId=${selectedCourse}`)
+        .then(({ data }) => {
+          setSubjects(data.data);
+          setIsLoading(false);
+        });
+    } else {
+      setSubjects([]);
+    }
+  },[selectedCourse])
 
   return (
     <div className="px-4 lg:px-10 py-10 lg:py-20">
       <div className="w-full lg:w-1/2 py-10 mt-10 bg-white flex flex-col mx-auto  px-4 border border-white rounded-lg  shadow-lg ">
         <h1 className="text-3xl  font-bold text-center">Add User</h1>
-        <div className="px-4 lg:px-20">
+        {
+          isLoading? <Loader></Loader> : <div className="px-4 lg:px-20">
           <form className="add-form" onSubmit={addOfficer}>
             <div className="flex flex-col lg:flex-row gap-4">
               <div className="form-control">
@@ -133,11 +159,58 @@ const AddUser = () => {
                 <option value="3">Teacher</option>
               </select>
             </div>
+            {
+              getRole ==="3" && <div className="form-control">
+              <label htmlFor="" className=" label">
+                <span className="label-text font-semibold mb-2">
+                  Select Course
+                </span>
+              </label>
+              <select
+                name=""
+                id=""
+                className="input  border-black input-bordered mb-3"
+                onChange={e=>setSelectedCourse(e.target.value)}
+                required
+              >
+                <option value="">--Select Course--</option>
+                {
+                  courses.length>0 && courses.map(course=>{
+                    return <option key={course._id} value={course._id}>{course.name}</option>
+                  })
+                }
+              </select>
+            </div>
+            }
+            {
+              getRole==="3" && <div className="form-control">
+              <label htmlFor="" className=" label">
+                <span className="label-text font-semibold mb-2">
+                  Select Subject
+                </span>
+              </label>
+              <select
+                name=""
+                id=""
+                className="input  border-black input-bordered mb-3"
+                onChange={e=>setSelectedSubject(e.target.value)}
+                required
+              >
+                <option value="">--Select Subject--</option>
+                {
+                  subjects.length>0 && subjects.map(subject=>{
+                    return <option key={subject._id} value={subject._id}>{subject.name}</option>
+                  })
+                }
+              </select>
+            </div>
+            }
             <div className="form-control flex justify-center items-center">
               <input type="submit" value="Add User" className="btn w-[100px]" />
             </div>
           </form>
         </div>
+        }
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import Loader from "./../../Shared/Loader";
 import { toast } from "react-hot-toast";
 import DeactivateButton from "./../../features/common/components/DeactivateButton";
 import PopUpModal from "./../../features/common/components/PopUpModal";
+import { optionName } from "../../utils/globalVariables";
 const ShowBothExam = () => {
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -23,34 +24,7 @@ const ShowBothExam = () => {
   const [sscChecked, setSscChecked] = useState(false);
   const [hscChecked, setHscChecked] = useState(false);
   const [qvmark,setQvmark] = useState([]);
-  const optionName = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "U",
-    "V",
-    "W",
-    "X",
-    "Y",
-    "Z",
-  ];
+
   const generator = (id) => {
     axios
       .put(`/api/student/updatestudentexaminfo?examId=${id}`)

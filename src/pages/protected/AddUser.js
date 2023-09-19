@@ -62,7 +62,9 @@ const AddUser = () => {
       <div className="w-full lg:w-1/2 py-10 mt-10 bg-white flex flex-col mx-auto  px-4 border border-white rounded-lg  shadow-lg ">
         <h1 className="text-3xl  font-bold text-center">Add User</h1>
         {
-          isLoading? <Loader></Loader> : <div className="px-4 lg:px-20">
+          isLoading && <Loader></Loader>  
+        }
+        <div className="px-4 lg:px-20">
           <form className="add-form" onSubmit={addOfficer}>
             <div className="flex flex-col lg:flex-row gap-4">
               <div className="form-control">
@@ -210,7 +212,6 @@ const AddUser = () => {
             </div>
           </form>
         </div>
-        }
       </div>
     </div>
   );

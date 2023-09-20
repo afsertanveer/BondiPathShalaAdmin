@@ -205,7 +205,7 @@ const ViewWrittenScripts = () => {
         </div>
       </div>
       {isLoading && <Loader></Loader>}
-      {writtenData.length>0 && (
+      {writtenData && writtenData.length>0 && (
         <div className="overflow-x-auto w-full">        
           <table className="mx-auto w-full whitespace-nowrap rounded-lg  divide-y  overflow-hidden">
             <thead>

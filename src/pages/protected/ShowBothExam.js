@@ -30,9 +30,9 @@ const ShowBothExam = () => {
   const [ selectedTeachers, setSelectedTeachers ] = useState([]);
   console.log(selectedTeachers);
 
-  const generator = (id) => {
+  const generator = (examId) => {
     axios
-      .post(`/api/teacher/bothupdaterank?examId=${id}`)
+      .post(`/api/teacher/bothupdaterank`,{examId})
       .then((data) => {
         toast.success("Rank Generated Successfully");
             window.location.reload(false);

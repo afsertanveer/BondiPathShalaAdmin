@@ -22,6 +22,7 @@ const ShowQuestions = lazy(()=>import('../pages/protected/ShowQuestions'));
 const ShowQuestionsWritten = lazy(()=>import('../pages/protected/ShowQuestionsWritten'));
 const ExamDetails = lazy(()=>import('../pages/protected/ExamDetails'));
 const WrittenExamDetails = lazy(()=>import('../pages/protected/WrittenExamDetails'));
+const BothExamDetails = lazy(()=>import('../pages/protected/BothExamDetails'));
 const FreeExamDetails = lazy(()=>import('../pages/protected/FreeExamDetails'));
 const ExamSolution= lazy(()=>import('../pages/protected/ExamSolution'));
 const FreeExamSolution= lazy(()=>import('../pages/protected/FreeExamSolution'));
@@ -139,6 +140,10 @@ if(role===3){
     {
       path: '/exams/writtenexamdetailsbyexam', // the url
       component: WrittenExamDetails, // view rendered
+    },
+    {
+      path: '/exams/bothexamdetailsbyexam', // the url
+      component: BothExamDetails, // view rendered
     },
     {
       path: '/exams/examdetailsbyfreeexam', // the url

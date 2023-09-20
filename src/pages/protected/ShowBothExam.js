@@ -7,6 +7,9 @@ import { toast } from "react-hot-toast";
 import DeactivateButton from "./../../features/common/components/DeactivateButton";
 import PopUpModal from "./../../features/common/components/PopUpModal";
 import { optionName } from "../../utils/globalVariables";
+import Select from "react-select";
+import moment from "moment";
+
 const ShowBothExam = () => {
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -24,6 +27,9 @@ const ShowBothExam = () => {
   const [sscChecked, setSscChecked] = useState(false);
   const [hscChecked, setHscChecked] = useState(false);
   const [qvmark,setQvmark] = useState([]);
+  const [teachers,setTeachers] = useState([]);
+  const [ selectedTeachers, setSelectedTeachers ] = useState([]);
+  console.log(selectedTeachers);
 
   const generator = (id) => {
     axios
@@ -265,7 +271,14 @@ const ShowBothExam = () => {
         .then(({ data }) => {
           setSubjects(data.data);
           setIsLoading(false);
-        });
+        }).catch(err=>console.log(err));
+        axios
+        .get(`/api/user/teacherlistbycourse?courseId=${selectedCourse}`)
+        .then(({ data }) => {
+          console.log(data);
+          setTeachers(data)
+          setIsLoading(false);
+        }).catch(err=>console.log("teacher fetching error"));
     } else {
       setSubjects([]);
     }
@@ -389,13 +402,12 @@ const ShowBothExam = () => {
                     <td className="px-1 py-2 text-center">{idx + 1}</td>
                     <td className="px-2 py-2 text-center">{exam.name}</td>
                     <td className="px-1 py-2 text-center">
-                      
-                      {
-                          (exam.startTime).toString().split("T")[0] 
-                      }<br/>
-                      {
-                       exam.endTime.toString().split("T")[0] 
-                      }
+                    {
+                      (moment(exam.startTime).format('llll'))
+                    } <br/> 
+                    {
+                      (moment(exam.endTime).format('llll'))
+                    }
                     </td>
                     <td className="px-6 py-2 text-center">
                       {exam.examVariation}
@@ -425,6 +437,13 @@ const ShowBothExam = () => {
                             Add Exam Rule
                           </label>
                         )}
+                        <label
+                          onClick={() => handleAssignExamId(exam._id)}
+                          htmlFor="assign-teacher"
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                        >
+                          Assign Teachers
+                          </label>
                         <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="my-popup"
@@ -488,6 +507,34 @@ const ShowBothExam = () => {
             </div>
           </div>
         </div>
+        <div id="assignTeacher">
+        <input type="checkbox" id="assign-teacher" className="modal-toggle" />
+        <div className="modal">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg text-center">Add Rule</h3>
+            <form className="add-form" onSubmit={handleAddRule}>
+              <div className="form-control">
+                <label htmlFor="" className=" label">
+                  <span className="label-text mb-2">Select Teachers </span>
+                </label>
+                <Select
+                  options={teachers}
+                  onChange={(choice) => setSelectedTeachers(choice)}
+                  isMulti
+                  
+                  labelledBy="Select"
+            />
+              </div>
+              <input type="submit" value="Add" className="btn w-32" />
+            </form>
+            <div className="modal-action">
+              <label htmlFor="assign-teacher" className="btn bg-[red] ">
+                Close!
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
         <input type="checkbox" id="my-modal-4" className="modal-toggle" />
         <div className="modal">
           <div className="modal-box">

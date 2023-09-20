@@ -6,9 +6,10 @@ import Loader from "./../../Shared/Loader";
 import { toast } from "react-hot-toast";
 import DeactivateButton from "./../../features/common/components/DeactivateButton";
 import PopUpModal from "./../../features/common/components/PopUpModal";
-import { type, variation } from "../../utils/globalVariables";
-import { subtractHours } from "../../utils/globalFunction";
+import { optionName, type } from "../../utils/globalVariables";
 import { Fragment } from "react";
+import Select from "react-select";
+import moment from "moment/moment";
 
 const ShowExam = () => {
   const [courses, setCourses] = useState([]);
@@ -28,34 +29,10 @@ const ShowExam = () => {
   const [sscChecked, setSscChecked] = useState(false);
   const [hscChecked, setHscChecked] = useState(false);
   const [qvmark,setQvmark] = useState([]);
-  const optionName = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "U",
-    "V",
-    "W",
-    "X",
-    "Y",
-    "Z",
-  ];
+  const [teachers,setTeachers] = useState([]);
+  const [ selectedTeachers, setSelectedTeachers ] = useState([]);
+  console.log(selectedTeachers);
+ 
   const generator = (id) => {
     axios
       .put(`/api/student/updatestudentexaminfo?examId=${id}`)
@@ -299,6 +276,9 @@ const ShowExam = () => {
       window.location.reload(false);
     })
   }
+  const handleAssignTeacher = () =>{
+      
+  }
   useEffect(() => {
     setIsLoading(true);
     axios.get("/api/course/getallcourseadmin").then(({ data }) => {
@@ -311,7 +291,15 @@ const ShowExam = () => {
         .then(({ data }) => {
           setSubjects(data.data);
           setIsLoading(false);
-        });
+        }).catch(err=>console.log("subject fetching error"));
+
+      axios
+        .get(`/api/user/teacherlistbycourse?courseId=${selectedCourse}`)
+        .then(({ data }) => {
+          console.log(data);
+          setTeachers(data)
+          setIsLoading(false);
+        }).catch(err=>console.log("teacher fetching error"));
     } else {
       setSubjects([]);
     }
@@ -454,14 +442,10 @@ const ShowExam = () => {
                     <td className="px-2 py-2 text-center">{exam.name}</td>
                     <td className="px-1 py-2 text-center">
                       {
-                        subtractHours(new Date(exam.startTime))
-                          .toString()
-                          .split("GMT")[0]
+                        (moment(exam.startTime).format('llll'))
                       } <br/> 
                       {
-                        subtractHours(new Date(exam.endTime))
-                          .toString()
-                          .split("GMT")[0]
+                        (moment(exam.endTime).format('llll'))
                       }
                     </td>
                     <td className="px-6 py-2 text-center">
@@ -503,6 +487,15 @@ const ShowExam = () => {
                         >
                           Generate Meritlist
                         </label>
+                        }
+                        {
+                          examType === "2" && <label
+                          onClick={() => handleAssignExamId(exam._id)}
+                          htmlFor="assign-teacher"
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                        >
+                          Assign Teachers
+                          </label>
                         }
                         {
                           examType==="2" && 
@@ -642,6 +635,34 @@ const ShowExam = () => {
             />
             <div className="modal-action">
               <label htmlFor="my-modal-4" className="btn bg-[red] ">
+                Close!
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="assignTeacher">
+        <input type="checkbox" id="assign-teacher" className="modal-toggle" />
+        <div className="modal">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg text-center">Add Rule</h3>
+            <form className="add-form" onSubmit={handleAssignTeacher}>
+              <div className="form-control">
+                <label htmlFor="" className=" label">
+                  <span className="label-text mb-2">Select Teachers </span>
+                </label>
+                <Select
+                  options={teachers}
+                  onChange={(choice) => setSelectedTeachers(choice)}
+                  isMulti
+                  
+                  labelledBy="Select"
+            />
+              </div>
+              <input type="submit" value="Add" className="btn w-32" />
+            </form>
+            <div className="modal-action">
+              <label htmlFor="assign-teacher" className="btn bg-[red] ">
                 Close!
               </label>
             </div>

@@ -47,6 +47,7 @@ const ShowUsers = () => {
     if(getRole!==""){
         axios.get(`/api/user/getuserbyrole?role=${getRole}&page=${currentPage}`).then(({ data }) => {
             setUsers(data.user);
+            console.log(data.user);
             setPagiNationData(data.paginaeData);
             setIsLoading(false);
           }).catch(e=>{
@@ -79,6 +80,8 @@ const ShowUsers = () => {
               <th className="bg-white">Username</th>
               <th className="bg-white">Address</th>
               {/* <th className="bg-white">Created Date</th> */}
+              {getRole==="3" && <th className="bg-white">Course Name</th>}
+              {getRole==="3" && <th className="bg-white">Subject Name</th>}
               <th className="bg-white">Action</th>
             </tr>
           </thead>
@@ -90,6 +93,8 @@ const ShowUsers = () => {
                   <td>{user.mobileNo}</td>
                   <td>{user.userName}</td>
                   <td>{user.address}</td>
+                  {getRole==="3" && <td>{user.courseId.name}</td>}
+                  {getRole==="3" && <td>{user.subjectId.name}</td>}
                   {/* <td>{user?.createdAt.split("T")[0]}</td> */}
                   <td>
                     <label

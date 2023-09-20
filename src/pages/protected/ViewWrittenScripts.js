@@ -17,6 +17,9 @@ const ViewWrittenScripts = () => {
     const [writtenData,setWrittenData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [pagiNationData, setPagiNationData] = useState({});
+    const user =JSON.parse(localStorage.getItem('user')) ;
+    const role = user.role;
+    console.log(role);
  
     const handleChangeCourse = (e) => {
       setSelectedSubject("");
@@ -96,7 +99,22 @@ const ViewWrittenScripts = () => {
         setExams([]);
       }
       if (selectedExam !== "") {
-        axios
+        if(role===3){
+          console.log("gpooo");
+          axios
+          .get(`/api/teacher/getstudentdata?examId=${selectedExam}`)
+          .then(({ data }) => {
+            console.log(data);
+            setWrittenData(data.data1)
+            setPagiNationData(data.paginateData)
+            setIsLoading(false);
+          }).catch(e=>{
+            setWrittenData([])
+            setPagiNationData({})
+            toast.error(e.response.data);
+          })
+        }else{
+          axios
           .get(`api/student/getwrittenstudentallbyexam?examId=${selectedExam}`)
           .then(({ data }) => {
             console.log(data);
@@ -108,9 +126,13 @@ const ViewWrittenScripts = () => {
             setPagiNationData({})
             toast.error(e.response.data);
           })
+        }
+        
       } else {
+        setWrittenData([])
+            setPagiNationData({})
       }
-    }, [selectedCourse, selectedSubject, selectedExam]);
+    }, [selectedCourse, selectedSubject, selectedExam,role]);
   return (
     <div className="mx-auto">
         <div className=" py-4 px-2 my-3 ">

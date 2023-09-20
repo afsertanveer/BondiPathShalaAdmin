@@ -276,8 +276,22 @@ const ShowExam = () => {
       window.location.reload(false);
     })
   }
-  const handleAssignTeacher = () =>{
-      
+  const handleAssignTeacher = e =>{
+      e.preventDefault();
+      let steachers = [];
+      for(let i = 0 ; i<selectedTeachers.length;i++){
+            steachers.push(selectedTeachers[i].value);
+      }
+      const obj ={
+        examId:singleExamId,
+        teacherId:steachers
+      }
+      console.log("gpp");
+      console.log(obj)
+      axios.post("/api/exam/assignstudenttoteacher",obj).then(({data})=>{
+        console.log(data);
+        toast.success("Assigned and Distributed");
+      }).catch(err=>console.log(err))
   }
   useEffect(() => {
     setIsLoading(true);

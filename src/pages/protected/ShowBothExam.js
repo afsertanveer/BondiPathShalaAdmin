@@ -261,8 +261,9 @@ const ShowBothExam = () => {
   const examStopper = examId =>{
     axios.post("/api/student/bothupdatestudentexaminfo",{examId})
     .then(data=>{
+      console.log(data);
       toast.success("This exam is stopped now...")
-      window.location.reload(false);
+      // window.location.reload(false);
     }).catch(err=>toast.error(err));
   }
   const handleAssignTeacher = e =>{

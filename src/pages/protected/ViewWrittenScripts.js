@@ -38,10 +38,16 @@ const ViewWrittenScripts = () => {
  
     const handlePageClick = (event) => {
         let clickedPage = parseInt(event.selected) + 1;
+        let url;
+        if(role===3){
+          url = "/api/teacher/getstudentdata";
+        }else{
+          url ="api/student/getwrittenstudentallbyexam";
+        }
         if (event.selected > 0) {
           axios
           .get(
-            `api/student/getwrittenstudentallbyexam?examId?examId=${selectedExam}&page=${clickedPage}`
+            `${url}?examId=${selectedExam}&page=${clickedPage}`
           )
           .then(({ data }) => {
             setWrittenData(data.data1);
@@ -56,7 +62,7 @@ const ViewWrittenScripts = () => {
         } else {
           axios
           .get(
-            `/api/coursevsstudent/getstudentbycourse?examId=${selectedExam}&page=${1}`
+            `${url}?examId=${selectedExam}&page=${1}`
           )
           .then(({ data }) => {
             setWrittenData(data.data1);
@@ -100,7 +106,6 @@ const ViewWrittenScripts = () => {
       }
       if (selectedExam !== "") {
         if(role===3){
-          console.log("gpooo");
           axios
           .get(`/api/teacher/getstudentdata?examId=${selectedExam}`)
           .then(({ data }) => {

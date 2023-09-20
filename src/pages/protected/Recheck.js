@@ -17,6 +17,10 @@ const Recheck = () => {
     const [writtenData,setWrittenData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [pagiNationData, setPagiNationData] = useState({});
+    const user =JSON.parse(localStorage.getItem('user')) ;
+    const role = user.role;
+    console.log(role);
+ 
  
     const handleChangeCourse = (e) => {
       setSelectedSubject("");
@@ -35,10 +39,16 @@ const Recheck = () => {
  
     const handlePageClick = (event) => {
         let clickedPage = parseInt(event.selected) + 1;
+        let url;
+        if(role===3){
+          url='api/teacher/getrecheckstudentdata';
+        }else{
+          url='api/student/getcheckwrittenstudentallbyexam';
+        }
         if (event.selected > 0) {
           axios
           .get(
-            `api/student/getwrittenstudentallbyexam?examId?examId=${selectedExam}&page=${clickedPage}`
+            `${url}?examId?examId=${selectedExam}&page=${clickedPage}`
           )
           .then(({ data }) => {
             setWrittenData(data.data1);
@@ -53,7 +63,7 @@ const Recheck = () => {
         } else {
           axios
           .get(
-            `/api/coursevsstudent/getstudentbycourse?examId=${selectedExam}&page=${1}`
+            `${url}?examId=${selectedExam}&page=${1}`
           )
           .then(({ data }) => {
             setWrittenData(data.data1);
@@ -96,7 +106,22 @@ const Recheck = () => {
         setExams([]);
       }
       if (selectedExam !== "") {
-        axios
+        if(role===3){
+          axios
+          .get(`api/teacher/getrecheckstudentdata?examId=${selectedExam}`)
+          .then(({ data }) => {
+            console.log(data);
+            setWrittenData(data.data1)
+            setPagiNationData(data.paginateData)
+            setIsLoading(false);
+          }).catch(e=>{
+            setWrittenData([])
+            setPagiNationData({})
+            toast.error(e.response.data);
+          })
+        }
+        else{
+          axios
           .get(`api/student/getcheckwrittenstudentallbyexam?examId=${selectedExam}`)
           .then(({ data }) => {
             console.log(data);
@@ -108,9 +133,12 @@ const Recheck = () => {
             setPagiNationData({})
             toast.error(e.response.data);
           })
+        }
       } else {
+        setWrittenData([])
+        setPagiNationData({})
       }
-    }, [selectedCourse, selectedSubject, selectedExam]);
+    }, [selectedCourse, selectedSubject, selectedExam,role]);
   return (
     <div className="mx-auto">
         <div className=" py-4 px-2 my-3 ">

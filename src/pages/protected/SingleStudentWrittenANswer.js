@@ -158,13 +158,14 @@ const SingleStudentWrittenANswer = () => {
                 id=""
                 defaultValue={idx}
               />
-              <p className="ml-4">Marks</p>
+              <p className="ml-4">Marks out of {singleResult.marksPerQuestion[idx]}</p>
               <input
                 type="number"
                 name="obtMarks"
                 id="obtMarks"
                 className="input input-bordered  border-black"
                 min={0}
+                max={singleResult.marksPerQuestion[idx]}
                 required
               />
               <input

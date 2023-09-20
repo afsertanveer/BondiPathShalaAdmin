@@ -32,15 +32,10 @@ const ShowBothExam = () => {
 
   const generator = (id) => {
     axios
-      .put(`/api/student/updatestudentexaminfo?examId=${id}`)
+      .post(`/api/teacher/bothupdaterank?examId=${id}`)
       .then((data) => {
-        axios
-          .post(`/api/student/updaterank?examId=${id}`)
-          .then((data) => {
-            toast.success("Rank Generated Successfully");
+        toast.success("Rank Generated Successfully");
             window.location.reload(false);
-          })
-          .catch((e) => console.log(e));
       })
       .catch((e) => console.log(e));
   };
@@ -263,7 +258,7 @@ const ShowBothExam = () => {
     .then(data=>{
       console.log(data);
       toast.success("This exam is stopped now...")
-      // window.location.reload(false);
+      window.location.reload(false);
     }).catch(err=>toast.error(err));
   }
   const handleAssignTeacher = e =>{

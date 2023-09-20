@@ -19,9 +19,7 @@ const Recheck = () => {
     const [pagiNationData, setPagiNationData] = useState({});
     const user =JSON.parse(localStorage.getItem('user')) ;
     const role = user.role;
-    console.log(role);
- 
- 
+     
     const handleChangeCourse = (e) => {
       setSelectedSubject("");
       setSubjects([]);

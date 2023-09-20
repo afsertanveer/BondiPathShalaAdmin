@@ -286,8 +286,6 @@ const ShowExam = () => {
         examId:singleExamId,
         teacherId:steachers
       }
-      console.log("gpp");
-      console.log(obj)
       axios.post("/api/exam/assignstudenttoteacher",obj).then(({data})=>{
         console.log(data);
         toast.success("Assigned and Distributed");

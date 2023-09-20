@@ -8,7 +8,6 @@ import DeactivateButton from "./../../features/common/components/DeactivateButto
 import PopUpModal from "./../../features/common/components/PopUpModal";
 import { optionName } from "../../utils/globalVariables";
 import Select from "react-select";
-import moment from "moment";
 
 const ShowBothExam = () => {
   const [courses, setCourses] = useState([]);
@@ -259,6 +258,28 @@ const ShowBothExam = () => {
     setSelectedSubject("");
     setExams([]);
   };
+  const examStopper = examId =>{
+    axios.post("/api/student/bothupdatestudentexaminfo",{examId})
+    .then(data=>{
+      toast.success("This exam is stopped now...")
+      window.location.reload(false);
+    }).catch(err=>toast.error(err));
+  }
+  const handleAssignTeacher = e =>{
+    e.preventDefault();
+    let steachers = [];
+    for(let i = 0 ; i<selectedTeachers.length;i++){
+          steachers.push(selectedTeachers[i].value);
+    }
+    const obj ={
+      examId:singleExamId,
+      teacherId:steachers
+    }
+    axios.post("/api/exam/bothassignstudenttoteacher",obj).then(({data})=>{
+      console.log(data);
+      toast.success("Assigned and Distributed");
+    }).catch(err=>console.log(err))
+}
   useEffect(() => {
     setIsLoading(true);
     axios.get("/api/course/getallcourseadmin").then(({ data }) => {
@@ -403,10 +424,10 @@ const ShowBothExam = () => {
                     <td className="px-2 py-2 text-center">{exam.name}</td>
                     <td className="px-1 py-2 text-center">
                     {
-                      (moment(exam.startTime).format('llll'))
+                      exam.startTime
                     } <br/> 
                     {
-                      (moment(exam.endTime).format('llll'))
+                      exam.endTime
                     }
                     </td>
                     <td className="px-6 py-2 text-center">
@@ -444,6 +465,13 @@ const ShowBothExam = () => {
                         >
                           Assign Teachers
                           </label>
+                          <label
+                          onClick={() => handleAssignExamId(exam._id)}
+                          htmlFor="my-popup-submit"
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                        >
+                          Submit Exam
+                        </label>
                         <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="my-popup"
@@ -486,6 +514,26 @@ const ShowBothExam = () => {
           </table>
         </div>
       )}
+      <input type="checkbox" id="my-popup-submit" className="modal-toggle" />
+        <div className="modal">
+          <div className="modal-box">
+            <h3 className="font-semibold text-lg text-center">
+              {`Are you sure?`}
+            </h3>
+
+            <div className="modal-action flex justify-center items-center">
+              <button
+                className="btn mr-2"
+                onClick={() => examStopper(singleExamId)}
+              >
+                Yes
+              </button>
+              <label htmlFor="my-popup-submit" className="btn bg-[red]">
+                No!
+              </label>
+            </div>
+          </div>
+        </div>
       <div>
         <input type="checkbox" id="my-popup" className="modal-toggle" />
         <div className="modal">
@@ -512,7 +560,7 @@ const ShowBothExam = () => {
         <div className="modal">
           <div className="modal-box">
             <h3 className="font-bold text-lg text-center">Add Rule</h3>
-            <form className="add-form" onSubmit={handleAddRule}>
+            <form className="add-form" onSubmit={handleAssignTeacher}>
               <div className="form-control">
                 <label htmlFor="" className=" label">
                   <span className="label-text mb-2">Select Teachers </span>

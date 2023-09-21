@@ -43,7 +43,7 @@ const AddSubject = () => {
     <div>
       <div className="w-full lg:w-1/2 py-10 mt-10 bg-white flex flex-col mx-auto  px-4 border border-white rounded-lg  shadow-lg ">
         <h1 className="text-3xl  font-bold text-center">
-          Assing Student To Course
+          Assing Subject To Course
         </h1>
         {isLoading && <Loader></Loader>}
         <div className="px-4 lg:px-20">

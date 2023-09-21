@@ -36,18 +36,22 @@ const AddSpecialExam = () => {
     const status = true;
     let negativeMarks=null,mcqDuration=null,writtenDuration = null,writtenTotalQuestions=null,totalDuration=null,
     mcqTotalMarks=null,writtenTotalMarks=null;
-    if(selectedVariation!=='2'){
+    if(selectedVariation!=="2"){
       mcqDuration = form.mcq_duration.value;
       negativeMarks = parseInt(form.negative_marking.value);
       totalQuestionMcq=parseInt(form.mcq_total_questions.value);
       marksPerMcq=parseInt(form.marks_per_question.value);
       mcqTotalMarks = totalQuestionMcq*marksPerMcq;
-    }else{
+    }
+    if(selectedVariation==="1" || selectedVariation==="3")
+    {
+      console.log("ssboth");
       writtenDuration = form.written_duration.value;
       writtenTotalQuestions = form.total_written_questions.value;
       writtenTotalMarks =form.total_written_marks.value;
     }
-    if(selectedVariation==='3'){
+
+    if(selectedVariation==="3"){
       totalDuration= form.total_duration.value;
       totalMarks=form.total_marks.value;
     }
@@ -100,48 +104,43 @@ const AddSpecialExam = () => {
         subjectQuestions.push(obj);
       }
     }
-    console.log(subjectQuestions);
+    console.log(writtenTotalMarks);
     formdata.append("name", name);
     formdata.append("courseId", selectedCourse);
     formdata.append("examVariation", svar);
     formdata.append("startTime", startTime);
     formdata.append("endTime", endTime);
-    formdata.append("totalOptionalSubject",totalOptionalSubject)
-    formdata.append("totalSubject",totalSubject);
-    formdata.append("totalExamSubject",examSubjectNumber);
-    formdata.append("subjects", selectedAllSubjects);
-    formdata.append("optionalSubjects", selectedOsbuject);
+    formdata.append("noOfOptionalSubject",totalOptionalSubject)
+    formdata.append("noOfTotalSubject",totalSubject);
+    formdata.append("noOfExamSubject",examSubjectNumber);
+    formdata.append("allSubject", JSON.stringify(selectedAllSubjects));
+    formdata.append("optionalSubject", JSON.stringify(selectedOsbuject));
     formdata.append("totalDuration",totalDuration);
     formdata.append("totalMarks",totalMarks);
     formdata.append("mcqDuration", mcqDuration);
     formdata.append("totalQuestionMcq", totalQuestionMcq);
-    formdata.append("subjectQuestions",subjectQuestions);
-    formdata.append("totalQuestionMcq",totalQuestionMcq)
-    formdata.append("marksPerMcq",marksPerMcq)
-    formdata.append("marksPerMcq", marksPerMcq);    
+    formdata.append("subjectInfo",JSON.stringify(subjectQuestions));
+    formdata.append("marksPerMcq",marksPerMcq);  
     formdata.append("negativeMarks", negativeMarks);
-    formdata.append("mcqTotalMarks", mcqTotalMarks);
+    formdata.append("totalMarksMcq", mcqTotalMarks);
     formdata.append("writtenDuration", writtenDuration);
-    formdata.append("writtenTotalQuestions", writtenTotalQuestions);
-    formdata.append("writtenTotalMarks", writtenTotalMarks);
+    formdata.append("totalQuestionWritten", writtenTotalQuestions);
+    formdata.append("totalMarksWritten", writtenTotalMarks);
     formdata.append("status", status);
     formdata.append("sscStatus", isSSC);
     formdata.append("hscStatus", isHSC);
-    formdata.append("totalMarksMcq", totalMarks);
-    for (const value of formdata.values()) {
-      console.log(value);
-    }
-    // await axios
-    //   .post(`/api/exam/createexam`, formdata, {
-    //     headers: {
-    //       "Content-Type": "multipart/ form-data",
-    //     },
-    //   })
-    //   .then(({ data }) => {
-    //     console.log(data);
-    //     toast.success("Exam Added Succesfully");
-    //     navigate("/dashboard");
-    //   });
+   
+    await axios
+      .post(`/api/special/createspecialexam`, formdata, {
+        headers: {
+          "Content-Type": "multipart/ form-data",
+        },
+      })
+      .then(({ data }) => {
+        console.log(data);
+        toast.success("Special Exam Added Succesfully");
+        window.location.reload(false);
+      });
   };
   useEffect(() => {
     setIsLoading(true);

@@ -6,9 +6,9 @@ import Loader from "./../../Shared/Loader";
 import { toast } from "react-hot-toast";
 import DeactivateButton from "./../../features/common/components/DeactivateButton";
 import PopUpModal from "./../../features/common/components/PopUpModal";
-import { type } from "../../utils/globalVariables";
 import Select from "react-select";
 import moment from "moment/moment";
+import { Link } from "react-router-dom";
 
 const ShowSpecialExam = () => {
   const [courses, setCourses] = useState([]);
@@ -22,7 +22,7 @@ const ShowSpecialExam = () => {
   const [teachers,setTeachers] = useState([]);
   const [ selectedTeachers, setSelectedTeachers ] = useState([]);
   const [examType, setExamType] = useState(-1);
- 
+  const [subjects,setSubjects] = useState([]);
   const generator = (id) => {
     axios
       .put(`/api/student/updatestudentexaminfo?examId=${id}`)
@@ -39,7 +39,7 @@ const ShowSpecialExam = () => {
   };
   const handleAssignRule = (id) => {
     axios
-      .get(`/api/exam/examruleget?examId=${id}`)
+      .get(`/api/special/examruleget?examId=${id}`)
       .then(({ data }) => {
         if (data !== null) {
           setRuleImg(data.ruleILink);
@@ -62,11 +62,12 @@ const ShowSpecialExam = () => {
     const form = e.target;
     const file = e.target.ruleILink.files[0];
     const formData = new FormData();
-    formData.append("examId", singleExam._id);
+    formData.append("examId", singleExamId);
     formData.append("ruleILink", file);
+    console.log(singleExamId);
     try {
       await axios
-        .post("/api/exam/examruleset", formData, {
+        .post("/api/special/examruleset", formData, {
           headers: {
             "Content-Type": "multipart/ form-data",
           },
@@ -145,12 +146,18 @@ const ShowSpecialExam = () => {
           setTeachers(data)
           setIsLoading(false);
         }).catch(err=>console.log("teacher fetching error"));
+
+        axios.get(`/api/subject/getsubjectbycourse?courseId=${selectedCourse}`).then(({data})=>{
+          setSubjects(data.data)
+          setIsLoading(false);
+        })
     } else {
       setExams([]);
     }
     if (singleExamId !== null) {
+      console.log("asdasd",singleExamId);
       axios
-        .get(`/api/exam/getExamById?examId=${singleExamId}`)
+        .get(`/api/special/showspecialexambyid?examId=${singleExamId}`)
         .then(({ data }) => {
           setsingleExam(data);
         })
@@ -297,39 +304,11 @@ const ShowSpecialExam = () => {
                         </label>
                         <label
                           onClick={() => handleAssignExamId(exam._id)}
-                          htmlFor="my-modal"
+                          htmlFor="show-modal"
                           className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
-                          Update
-                        </label>
-                        {
-                          exam.examVariation===1 && <label
-                          htmlFor="my-modal-2"
-                          onClick={() => setSingleExamId(exam._id)}
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                        >
-                          Add  Question
-                        </label>
-                        }
-                        {
-                          exam.examVariation===2 && <label
-                          htmlFor="written-modal"
-                          onClick={() => setSingleExamId(exam._id)}
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                        >
-                          Add  Question
-                        </label>
-                        }
-                        {
-                          exam.examVariation===3 && <label
-                          htmlFor="both-modal"
-                          onClick={() => setSingleExamId(exam._id)}
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                        >
-                          Add  Question
-                        </label>
-                        }
-                        
+                          Show
+                        </label>                        
                         <DeactivateButton
                           setter={setSelectedExamId}
                           value={exam._id}
@@ -343,6 +322,90 @@ const ShowSpecialExam = () => {
         </div>
       )}
       <div>
+        <input type="checkbox" id="show-modal" className="modal-toggle" />
+        <div className="modal ">
+          <div className="modal-box w-full max-w-7xl h-11/12">
+            <h3 className="font-extrabold text-2xl text-center mb-4">
+              {singleExam.name}
+            </h3>
+            <div className="grid grid-cols-3 gap-y-2 gap-x-4">
+              <p><span className="font-bold mr-2">Number of Optional Subject:</span> {singleExam.noOfOptionalSubject}</p>
+              <p><span className="font-bold mr-2">Number of Exam Subject:</span>{singleExam.noOfExamSubject}</p>
+              <p>
+                <span className="font-bold mr-2">Optional Subjects</span>
+                {
+                  subjects?.filter(s=> singleExam?.optionalSubject?.includes(s._id)).map(sub=><span key={sub._id} className="mr-2">{sub.name}</span>)
+                }
+              </p>
+              <p className="">
+              <span className="font-bold  mr-2">All Subjects</span>
+                {
+                  subjects?.filter(s=> singleExam?.allSubject?.includes(s._id)).map(sub=><span key={sub._id} className="mr-2">{sub.name}</span>)
+                }
+              </p>
+              <p>  <span className="font-bold  mr-2">Total Duration: </span>{singleExam.totalDuration+' Minutes'}</p>
+              <p><span className="font-bold  mr-2">Total Marks: </span>{singleExam.totalMarks}</p>
+              <p><span className="font-bold  mr-2">Start Time: </span>{(moment(singleExam.startTime).format('llll'))}</p>
+              <p className="col-span-2"><span className="font-bold  mr-2">End Time: </span>{(moment(singleExam.endTime).format('llll'))}</p>
+              
+              <div className="col-span-3">
+              <p className="font-bold  mr-2 text-2xl  text-center">Subjects and Marks Distribution:</p>
+              <div className="grid grid-cols-3 gap-3">
+              {
+                singleExam?.subjectInfo?.map((si,idx)=><p key={idx} className="place-items-end">
+                  <span className="font-bold  mr-2">
+                    {subjects?.filter(s=> si.subjectId.includes(s._id))[0].name}
+                    </span>
+                    {
+                      examType!==2 &&<> <span className="font-bold  mr-2">MCQ Questions:</span>  <span className="mr-2">{si.noOfQuestionsMcq}</span></>
+                    }
+                    {
+                      examType!==1 &&<> <span className="font-bold  mr-2">Written Questions:</span>  <span className="mr-2">{si.noOfQuestionsWritten}</span></>
+                    }
+                    
+                    </p>
+                    
+                    )
+              }
+              </div>
+              </div>
+              <p><span className="font-bold  mr-2">SSC Status: </span><span>{singleExam.sscStatus===true? "True" : "False"}</span></p>
+              <p><span className="font-bold  mr-2">HSC Status: </span><span>{singleExam.hscStatus===true ?"True" :"False"}</span></p>
+              {
+                examType===3 && <p><span className="font-bold  mr-2">MCQ Duration: </span><span>{singleExam.mcqDuration}</span></p>
+              }
+              {
+                examType===3 && <p><span className="font-bold  mr-2">Written Duration: </span><span>{singleExam.writtenDuration}</span></p>
+              }
+              {
+                examType!==2 && <p><span className="font-bold  mr-2">Total MCQ Question: </span><span>{singleExam.totalQuestionsMcq}</span></p>
+              }
+              {
+                examType!==1 && <p><span className="font-bold  mr-2">Total Written Question: </span><span>{singleExam.totalQuestionsWritten}</span></p>
+              }
+              {
+                examType===3 && <p><span className="font-bold  mr-2">Total MCQ Marks: </span><span>{singleExam.totalMarksMcq}</span></p>
+              }
+              {
+                examType===3 && <p><span className="font-bold  mr-2">Total Written Marks: </span><span>{singleExam.totalMarksWritten}</span></p>
+              }
+              {
+                examType!==2 && <p><span className="font-bold  mr-2">Marks/MCQ : </span><span>{singleExam.marksPerMcq}</span></p>
+              }
+              {
+                examType!==2 && <p><span className="font-bold  mr-2">Negative (%) : </span><span>{singleExam.negativeMarks}</span></p>
+              }
+              <Link target="_blank" to={`${process.env.REACT_APP_API_HOST}${singleExam.iLink}`} className="underline text-red font-semibold">Click to see</Link>
+              
+            </div>
+
+            <div className="modal-action flex justify-center items-center">
+              <label htmlFor="show-modal" className="btn bg-[red]">
+                Close!
+              </label>
+            </div>
+          </div>
+        </div>
         <input type="checkbox" id="my-popup-written" className="modal-toggle" />
         <div className="modal">
           <div className="modal-box">

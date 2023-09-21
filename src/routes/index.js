@@ -35,6 +35,7 @@ const ViewScriptBoth = lazy(()=>import('./../pages/protected/ViewScriptBoth'));
 const AddBothExam = lazy(()=>import('./../pages/protected/AddBothExam'));
 const AddSpecialExam = lazy(()=>import('./../pages/protected/AddSpecialExam'));
 const ShowBothExam = lazy(()=>import('./../pages/protected/ShowBothExam'));
+const ShowSpecialExam = lazy(()=>import('./../pages/protected/ShowSpecialExam'));
 const ShowBothQuestions = lazy(()=>import('./../pages/protected/ShowBothQuestions'));
 const Recheck = lazy(()=>import('./../pages/protected/Recheck'));
 const RecheckBoth = lazy(()=>import('./../pages/protected/RecheckBoth'));
@@ -164,6 +165,11 @@ if(role===3){
     {
       path: '/exam/show', // the url
       component: ShowExam, // view rendered
+      
+    },
+    {
+      path: '/exam/special', // the url
+      component: ShowSpecialExam, // view rendered
       
     },
     {

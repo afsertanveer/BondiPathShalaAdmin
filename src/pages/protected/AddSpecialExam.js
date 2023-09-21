@@ -34,24 +34,30 @@ const AddSpecialExam = () => {
     const startTime = form.start_time.value;
     const endTime = form.end_time.value;
     const status = true;
-    let negativeMarks=null,mcqDuration=null,writtenDuration = null,writtenTotalQuestions=null,totalDuration=null,
-    mcqTotalMarks=null,writtenTotalMarks=null;
+    let negativeMarks=0,mcqDuration=0,writtenDuration = 0,writtenTotalQuestions=0,totalDuration=0,
+    mcqTotalMarks=0,writtenTotalMarks=0;
     if(selectedVariation!=="2"){
       mcqDuration = form.mcq_duration.value;
       negativeMarks = parseInt(form.negative_marking.value);
       totalQuestionMcq=parseInt(form.mcq_total_questions.value);
       marksPerMcq=parseInt(form.marks_per_question.value);
       mcqTotalMarks = totalQuestionMcq*marksPerMcq;
+      totalMarks=mcqTotalMarks;
+      totalDuration = mcqDuration;
     }
-    if(selectedVariation==="1" || selectedVariation==="3")
+    if(selectedVariation==="2")
     {
-      console.log("ssboth");
       writtenDuration = form.written_duration.value;
       writtenTotalQuestions = form.total_written_questions.value;
       writtenTotalMarks =form.total_written_marks.value;
-    }
+      totalMarks = writtenTotalMarks;
+      totalDuration = writtenDuration;
+    }    
 
     if(selectedVariation==="3"){
+      writtenDuration = form.written_duration.value;
+      writtenTotalQuestions = form.total_written_questions.value;
+      writtenTotalMarks =form.total_written_marks.value;
       totalDuration= form.total_duration.value;
       totalMarks=form.total_marks.value;
     }
@@ -74,21 +80,23 @@ const AddSpecialExam = () => {
         let obj ={
           subjectName:"",
           subjectId:"",
-          numberOfQuestions:0
+          numberOfMcqQuestions:0,
+          numberOfWrittenQuestions:0
         };
         obj.subjectName = allSubjects[i].label;
         obj.subjectId = allSubjects[i].value;
-        obj.numberOfQuestions = parseInt(document.getElementById(`${allSubjects[i].label}mcq`).value);
+        obj.numberOfMcqQuestions = parseInt(document.getElementById(`${allSubjects[i].label}mcq`).value);
         subjectQuestions.push(obj);
-      }if(selectedVariation==="2"){
+      }else if(selectedVariation==="2"){
         let obj ={
           subjectName:"",
           subjectId:"",
-          numberOfQuestions:0
+          numberOfMcqQuestions:0,
+          numberOfWrittenQuestions:0
         };
         obj.subjectName = allSubjects[i].label;
         obj.subjectId = allSubjects[i].value;
-        obj.numberOfQuestions = parseInt(document.getElementById(`${allSubjects[i].label}written`).value);
+        obj.numberOfWrittenQuestions = parseInt(document.getElementById(`${allSubjects[i].label}written`).value);
         subjectQuestions.push(obj);
       }else{
         let obj ={
@@ -470,7 +478,7 @@ const AddSpecialExam = () => {
                     </span>
                   </div>
                 </div>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-2">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-2">
               {selectedSubjects.map((sd, idx) => {
                 return (
                   <div className="w-full">
@@ -710,7 +718,7 @@ const AddSpecialExam = () => {
                     </span>
                   </div>
                 </div>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-2">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-2">
               {selectedSubjects.map((sd, idx) => {
                 return (
                   <div className="w-full">
@@ -776,7 +784,7 @@ const AddSpecialExam = () => {
                   required
                 />
               </div>
-              <div class="w-full lg:w-1/4 mr-0 lg:mr-2">
+              <div className="w-full lg:w-1/4 mr-0 lg:mr-2">
                 <div className="flex items-center mt-0 lg:mt-5 ">
                   <input
                     id="disabled-checked-checkbox"
@@ -792,7 +800,7 @@ const AddSpecialExam = () => {
                   </label>
                 </div>                
               </div>
-              <div class="w-full lg:w-1/4 mr-0 lg:mr-2">
+              <div className="w-full lg:w-1/4 mr-0 lg:mr-2">
               <div className="flex items-center mt-0 lg:mt-5 ">
               <input
                 id="disabled-checked-checkbox"

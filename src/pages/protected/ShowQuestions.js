@@ -52,22 +52,11 @@ const ShowQuestions = () => {
     setExams([]);
     setQuestions([]);
   };
-  const handleChangeSecondSubject = (e) => {
-    setQuestionSubject(e.target.value);
-    setSecondExams([]);
-    axios
-      .get(`/api/exam/getExamBySub?subjectId=${e.target.value}`)
-      .then(({ data }) => {
-        console.log(data);
-        setSecondExams(data);
-        setIsLoading(false);
-      }).catch(e=>console.log(e))
-  };
   const handleChangeBothStatus = val =>{
     if(val==="0"){
       setBothStatus(false);
       axios
-      .get(`/api/exam/getExamBySub?subjectId=${questionSubject}`)
+      .get(`/api/exam/getexambysubquestion?subjectId=${questionSubject}`)
       .then(({ data }) => {
         console.log(data);
         setSecondExams(data);
@@ -178,7 +167,7 @@ const ShowQuestions = () => {
     }
     if (selectedSubject !== "") {
       axios
-        .get(`/api/exam/getExamBySub?subjectId=${selectedSubject}`)
+        .get(`/api/exam/getexambysubquestion?subjectId=${selectedSubject}`)
         .then(({ data }) => {
           const newData = data.filter(d=>d.examVariation===1);
           setExams(newData);

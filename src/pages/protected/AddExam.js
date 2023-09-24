@@ -88,7 +88,7 @@ const AddExam = () => {
   return (
     <div>
       <div className="w-full lg:w-2/3 py-2  bg-white flex flex-col mx-auto  px-4  rounded-lg  shadow-lg ">
-        <h1 className="text-3xl  font-bold text-center">Add EXAM</h1>
+        <h1 className="text-3xl  font-bold text-center">Add MCQ/Written EXAM</h1>
         {isLoading && <Loader></Loader>}
         <div className="px-4 lg:px-10">
           <form className="add-form" onSubmit={handleAddExam}>

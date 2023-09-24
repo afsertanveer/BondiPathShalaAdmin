@@ -4,12 +4,10 @@ import { useState } from "react";
 import axios from "../../utils/axios";
 import Loader from "../../Shared/Loader";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 
 const AddSpecialExam = () => {
   const [courses, setCourses] = useState([]);
-  const [subjects, setSubjects] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState("");
   const [selectedSubjects, setSelectedSubjects] = useState([]);
@@ -21,7 +19,6 @@ const AddSpecialExam = () => {
   const [isSSC, setIsSSC] = useState(false);
   const [isHSC, setIsHSC] = useState(false);
   const [allSubjects, setAllSubjects] = useState([]);
-  const navigate = useNavigate();
   
 
   const handleAddExam = async (e) => {
@@ -112,7 +109,7 @@ const AddSpecialExam = () => {
         subjectQuestions.push(obj);
       }
     }
-    console.log(writtenTotalMarks);
+  console.log(writtenTotalMarks)
     formdata.append("name", name);
     formdata.append("courseId", selectedCourse);
     formdata.append("examVariation", svar);
@@ -161,7 +158,6 @@ const AddSpecialExam = () => {
         .get(`/api/subject/getsubjectbycourse?courseId=${selectedCourse}`)
         .then(({ data }) => {
           let options = [];
-          setSubjects(data.data);
           for (let i = 0; i < data.data.length; i++) {
             let obj = {
               value: "0",
@@ -175,7 +171,6 @@ const AddSpecialExam = () => {
           setIsLoading(false);
         });
     } else {
-      setSubjects([]);
     }
   }, [selectedCourse]);
   return (

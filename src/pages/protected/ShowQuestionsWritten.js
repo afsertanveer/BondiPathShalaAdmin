@@ -66,7 +66,7 @@ const ShowQuestionsWritten = () => {
     }
     if (selectedSubject !== "") {
       axios
-        .get(`/api/exam/getExamBySub?subjectId=${selectedSubject}`)
+        .get(`/api/exam/getExamBySub?subjectId=${selectedSubject}&examType=2`)
         .then(({ data }) => {
           const newData = data.filter((d) => d.examVariation === 2);
           setExams(newData);

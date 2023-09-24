@@ -32,6 +32,7 @@ const StudentHistory = lazy(()=>import('./../pages/protected/StudentHistory'));
 const SearchStudent = lazy(()=>import('./../pages/protected/SearchStudent'));
 const ViewWrittenScripts = lazy(()=>import('./../pages/protected/ViewWrittenScripts'));
 const ViewScriptBoth = lazy(()=>import('./../pages/protected/ViewScriptBoth'));
+const ViewScriptSpecial = lazy(()=>import('./../pages/protected/ViewScriptSpecial'));
 const AddBothExam = lazy(()=>import('./../pages/protected/AddBothExam'));
 const AddSpecialExam = lazy(()=>import('./../pages/protected/AddSpecialExam'));
 const ShowBothExam = lazy(()=>import('./../pages/protected/ShowBothExam'));
@@ -41,6 +42,7 @@ const ShowQuestionSpecial = lazy(()=>import('./../pages/protected/ShowQuestionSp
 const ShowBothQuestions = lazy(()=>import('./../pages/protected/ShowBothQuestions'));
 const Recheck = lazy(()=>import('./../pages/protected/Recheck'));
 const RecheckBoth = lazy(()=>import('./../pages/protected/RecheckBoth'));
+const RecheckSpecial = lazy(()=>import('./../pages/protected/RecheckSpecial'));
 const SingleStudentWrittenANswer = lazy(()=>import('./../pages/protected/SingleStudentWrittenANswer'));
 const SingleStudentBothWrittenAnswer = lazy(()=>import('./../pages/protected/SingleStudentBothWrittenAnswer'));
 const user =JSON.parse(localStorage.getItem('user')) ;
@@ -61,12 +63,20 @@ if(role===3){
       component: ViewScriptBoth, // view rendered
     },
     {
+      path: '/scripts/special/view', // the url
+      component: ViewScriptSpecial, // view rendered
+    },
+    {
       path: '/scripts/recheck', // the url
       component: Recheck, // view rendered
     },
     {
       path: '/scripts/both/recheck', // the url
       component: RecheckBoth, // view rendered
+    },
+    {
+      path: '/scripts/special/recheck', // the url
+      component: RecheckSpecial, // view rendered
     },
     
     {
@@ -97,8 +107,16 @@ if(role===3){
       component: ViewScriptBoth, // view rendered
     },
     {
+      path: '/scripts/special/view', // the url
+      component: ViewScriptSpecial, // view rendered
+    },
+    {
       path: '/scripts/both/recheck', // the url
       component: RecheckBoth, // view rendered
+    },
+    {
+      path: '/scripts/special/recheck', // the url
+      component: RecheckSpecial, // view rendered
     },
     {
       path: '/scripts/view', // the url

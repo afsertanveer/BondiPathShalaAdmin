@@ -21,7 +21,7 @@ const ShowSpecialExam = () => {
   const [ruleImg, setRuleImg] = useState("");
   const [teachers,setTeachers] = useState([]);
   const [ selectedTeachers, setSelectedTeachers ] = useState([]);
-  const [examType, setExamType] = useState(-1);
+  const [examType, setExamType] = useState(3);
   const [subjects,setSubjects] = useState([]);
   const generator = (id) => {
     axios
@@ -193,24 +193,7 @@ const ShowSpecialExam = () => {
                 )}
             </select>
           </div>
-          <div className="form-control w-2/6">
-            <label className="label-text" htmlFor="">
-              Select Type
-            </label>
-            <select
-              name="exam_type"
-              id="exam_type"
-              className="input w-full border-black input-bordered"
-              required
-              onChange={(e) => setExamType(parseInt(e.target.value))}
-            >
-              <option value="">---Select---Type</option>
-              <option value={1}>MCQ</option>
-              <option value={2}>Written</option>
-              <option value={3}>Both</option>
-              
-            </select>
-          </div>
+          
         </div>
       </div>
       {isLoading && <Loader></Loader>}

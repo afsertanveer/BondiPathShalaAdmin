@@ -14,7 +14,7 @@ const ShowQuestionSpecial = () => {
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [selectedExam, setSelectedExam] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [examType,setExamType] = useState(-1);
+  const [examType,setExamType] = useState(3);
   const [singleExam,setSingleExam] = useState({})
   const [writtenQuestion,setWrittenQuestion] = useState({});
   const [bothStatus,setBothStatus] = useState(-1);
@@ -162,24 +162,6 @@ const examTypeChanger = e =>{
                   </option>
                 )
             )}
-        </select>
-      </div>
-      <div className="form-control mr-2 w-1/5">
-        <label className="label-text text-center font-semibold text-lg" htmlFor="">
-          Select Type
-        </label>
-        <select
-          name="exam_type"
-          id="exam_type"
-          className="input w-full border-black input-bordered"
-          required
-          onChange={(e) => examTypeChanger(e)}
-        >
-          <option value="">---Select Type---</option>
-          <option value={1}>MCQ</option>
-          <option value={2}>Written</option>
-          <option value={3}>Both</option>
-          
         </select>
       </div>
       <div className="form-control mr-2 w-1/5 ">

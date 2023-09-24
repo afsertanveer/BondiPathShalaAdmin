@@ -13,7 +13,7 @@ const AddQuestionSpecial = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [singleExamId, setSingleExamId] = useState(null);
   const [singleExam, setsingleExam] = useState({});
-  const [examType, setExamType] = useState(-1);
+  const [examType, setExamType] = useState(3);
   const [subjects,setSubjects] = useState([]);
   const [selectedSubject,setSelectedSubject] = useState(null)  
   const [isText, setIsText] = useState(true);
@@ -208,24 +208,7 @@ const AddQuestionSpecial = () => {
                 )}
             </select>
           </div>
-          <div className="form-control ">
-            <label className="label-text" htmlFor="">
-              Select Type
-            </label>
-            <select
-              name="exam_type"
-              id="exam_type"
-              className="input w-full border-black input-bordered"
-              required
-              onChange={(e) => setExamType(parseInt(e.target.value))}
-            >
-              <option value="">---Select---Type</option>
-              <option value={1}>MCQ</option>
-              <option value={2}>Written</option>
-              <option value={3}>Both</option>
-              
-            </select>
-          </div>
+          
           <div className="form-control mr-2 ">
             <label className="label-text" htmlFor="">
               Select Exam

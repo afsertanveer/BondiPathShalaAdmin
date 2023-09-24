@@ -18,7 +18,7 @@ const ShowQuestions = () => {
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedExam, setSelectedExam] = useState("");
   const [bothStatus,setBothStatus] = useState(false);
-  const [questionCourse, setQuestionCourse] = useState("");
+  const [specialExams,setSpecialExmas] = useState([]);
   const [questionSubject, setQuestionSubject] = useState("");
   const [selectedQuestionId,setSelectedQuestionId] = useState("");
   const [questionExam, setQuestionExam] = useState("");
@@ -35,7 +35,6 @@ const ShowQuestions = () => {
     
   };
   const handleChangeSecondCourse = (e) => {
-    setQuestionCourse(e.target.value);
     setSecondSubjects([]);
     setSecondExams([]);
     axios
@@ -44,6 +43,17 @@ const ShowQuestions = () => {
         setSecondSubjects(data.data);
         setIsLoading(false);
       }).catch(e=>console.log(e))
+      axios
+      .get(`/api/special/showspecialexambycourse?courseId=${e.target.value}`)
+      .then(({ data }) => {
+        console.log(data);
+        setSpecialExmas(data);
+        if (data.length === 0) {
+          toast.error("No Data");
+        }
+        setIsLoading(false);
+      })
+      .catch((e) => toast.error(e.response.data));
   };
 
   const handleChangeSubject = (e) => {
@@ -58,7 +68,6 @@ const ShowQuestions = () => {
       axios
       .get(`/api/exam/getexambysubquestion?subjectId=${questionSubject}`)
       .then(({ data }) => {
-        console.log(data);
         setSecondExams(data);
         setIsLoading(false);
       }).catch(e=>console.log(e))
@@ -148,7 +157,23 @@ const ShowQuestions = () => {
     document.getElementById("my-modal-1").checked = false;
     
   }
-
+  const sendQuestionSpecial = async(e) =>{
+    e.preventDefault();
+    const examId = questionExam;
+    const questionSet = {
+      subjectId:questionSubject,
+      examId,
+      questionArray:selectedQuestions
+    }
+     
+    await axios.put("/api/special/addquestionmcqbulk",questionSet).then(({data})=>{
+      toast.success("Successfully added all the questions");
+      e.target.reset();      
+      document.getElementById("my-modal-special").checked = false;
+      window.location.reload(false);
+    }).catch(e=>console.log(e))
+    
+  }
   useEffect(() => {
     setIsLoading(true);
     axios.get("/api/course/getallcourseadmin").then(({ data }) => {
@@ -269,6 +294,12 @@ const ShowQuestions = () => {
         >
           Send Questions
         </label>
+        <label
+          htmlFor="my-modal-special"
+          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+        >
+          Send Questions to Special
+        </label>
       </div>
       }
           {
@@ -359,6 +390,76 @@ const ShowQuestions = () => {
         </div>
       )}
      
+      <input type="checkbox" id="my-modal-special" className="modal-toggle" />
+      <div className="modal">
+        <div className="modal-box">
+        <form onSubmit={sendQuestionSpecial} className="mt-4 w-full  mx-auto flex flex-col ">
+            <div className="form-control">
+              <label className="label-text" htmlFor="">
+                Select Course
+              </label>
+              <select
+                className="input border-black input-bordered w-full"
+                required
+                onChange={(e) => handleChangeSecondCourse(e)}
+              >
+                <option value=""></option>
+                {courses.length > 0 &&
+                  courses.map((course) => (
+                    <option key={course._id} value={course._id}>
+                      {course.name}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            <div className="form-control mr-3">
+              <label className="label-text" htmlFor="">
+                Select Exam Name
+              </label>
+              <select
+                className="input  border-black input-bordered w-full"
+                required
+                onChange={(e) => setQuestionExam(e.target.value)}
+              >
+                <option value=""></option>
+                {specialExams.length > 0 &&
+                  specialExams.map((exam) => (
+                    <option key={exam._id} value={exam._id}>
+                      {exam.name}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            <div className="form-control mr-3">
+              <label className="label-text" htmlFor="">
+                Select Subject
+              </label>
+              <select
+                className="input  border-black input-bordered w-full"
+                required
+                onChange={(e) => setQuestionSubject(e.target.value)}
+              >
+                <option value=""></option>
+                {secondsubjects.length > 0 &&
+                  secondsubjects.map((subject) => (
+                    <option key={subject._id} value={subject._id}>
+                      {subject.name}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            
+            <div className="form-control mt-4  flext justify-center items-center">
+              <input type="submit" value="Add Questions" className="btn" />
+            </div>
+          </form>
+          <div className="modal-action">
+            <label htmlFor="my-modal-special" className="btn bg-red w-[80px]">
+              Close!
+            </label>
+          </div>
+        </div>
+      </div>
       <input type="checkbox" id="my-modal" className="modal-toggle" />
       <div className="modal">
         <div className="modal-box">

@@ -13,7 +13,7 @@ const AddSpecialExam = () => {
   const [selectedSubjects, setSelectedSubjects] = useState([]);
   const [selectedOptionalSubjects, setSelectedOptionalSubjects] = useState([]);
   const selectedVariation = "3";
-  const totalSubject = useState(6);
+  const totalSubject = 6;
   const totalOptionalSubject = 2;
   const examSubjectNumber = 4;
   const noOfFixedSubject = 2;
@@ -128,7 +128,7 @@ const AddSpecialExam = () => {
     formdata.append("startTime", startTime);
     formdata.append("endTime", endTime);
     formdata.append("noOfOptionalSubject", totalOptionalSubject);
-    formdata.append("noOfTotalSubject", totalSubject);
+    formdata.append("noOfTotalSubject", 6);
     formdata.append("noOfExamSubject", examSubjectNumber);
     formdata.append("allSubject", JSON.stringify(selectedAllSubjects));
     formdata.append("optionalSubject", JSON.stringify(selectedOsbuject));

@@ -14,7 +14,7 @@ const ShowQuestionSpecial = () => {
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [selectedExam, setSelectedExam] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [examType,setExamType] = useState(4);
+  const [examType,setExamType] = useState(3);
   const [singleExam,setSingleExam] = useState({})
   const [writtenQuestion,setWrittenQuestion] = useState({});
   const [bothStatus,setBothStatus] = useState(-1);
@@ -52,7 +52,7 @@ const examTypeChanger = e =>{
       axios
         .get(`/api/special/showspecialexambycourse?courseId=${selectedCourse}`)
         .then(({ data }) => {
-          const sExams = data.filter(d=>d.examVariation===examType)
+          const sExams = data.filter(d=>d.examVariation===4)
           setExams(sExams);
           if (data.length === 0) {
             toast.error("No Data");

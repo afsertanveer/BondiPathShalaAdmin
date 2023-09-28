@@ -21,7 +21,7 @@ const ShowSpecialExam = () => {
   const [ruleImg, setRuleImg] = useState("");
   const [teachers,setTeachers] = useState([]);
   const [ selectedTeachers, setSelectedTeachers ] = useState([]);
-  const [examType, setExamType] = useState(3);
+  const [examType, setExamType] = useState(4);
   const [subjects,setSubjects] = useState([]);
   const generator = (id) => {
     axios
@@ -130,8 +130,7 @@ const ShowSpecialExam = () => {
       axios
       .get(`/api/special/showspecialexambycourse?courseId=${selectedCourse}`)
       .then(({ data }) => {
-        const sExams = data.filter(d=>d.examVariation===examType)
-        setExams(sExams);
+        setExams(data);
         if (data.length === 0) {
           toast.error("No Data");
         }

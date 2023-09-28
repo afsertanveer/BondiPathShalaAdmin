@@ -13,7 +13,7 @@ const AddQuestionSpecial = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [singleExamId, setSingleExamId] = useState(null);
   const [singleExam, setsingleExam] = useState({});
-  const [examType, setExamType] = useState(3);
+  const [examType, setExamType] = useState(4);
   const [subjects,setSubjects] = useState([]);
   const [selectedSubject,setSelectedSubject] = useState(null)  
   const [isText, setIsText] = useState(true);

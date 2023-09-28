@@ -14,7 +14,7 @@ const ShowQuestionSpecial = () => {
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [selectedExam, setSelectedExam] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [examType,setExamType] = useState(3);
+  const [examType,setExamType] = useState(4);
   const [singleExam,setSingleExam] = useState({})
   const [writtenQuestion,setWrittenQuestion] = useState({});
   const [bothStatus,setBothStatus] = useState(-1);

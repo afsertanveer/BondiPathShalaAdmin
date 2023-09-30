@@ -976,7 +976,7 @@ const ShowExam = () => {
                 </form>
               </div>
             </div>
-          </div>
+      </div>
       <div id="add-question-modal">
         <input type="checkbox" id="my-modal-2" className="modal-toggle" />
         <div className="modal modal-middle ml:0 lg:ml-56">

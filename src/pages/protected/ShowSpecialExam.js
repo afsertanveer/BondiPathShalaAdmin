@@ -19,10 +19,10 @@ const ShowSpecialExam = () => {
   const [singleExam, setsingleExam] = useState({});
   const [selectedExamId, setSelectedExamId] = useState("");
   const [ruleImg, setRuleImg] = useState("");
-  const [teachers,setTeachers] = useState([]);
-  const [ selectedTeachers, setSelectedTeachers ] = useState([]);
-  const [examType, setExamType] = useState(4);
-  const [subjects,setSubjects] = useState([]);
+  const [teachers, setTeachers] = useState([]);
+  const [selectedTeachers, setSelectedTeachers] = useState([]);
+  const examType = 4;
+  const [subjects, setSubjects] = useState([]);
   const generator = (id) => {
     axios
       .put(`/api/student/updatestudentexaminfo?examId=${id}`)
@@ -87,74 +87,120 @@ const ShowSpecialExam = () => {
     document.getElementById("my-modal-3").checked = false;
   };
   const deactivateExam = async (examId) => {
-    await axios.put("/api/special/deactivatespecialexam", { examId }).then(({ data }) => {
-      toast.success("Exam Deactivated");
-      window.location.reload(false);
-    });
+    await axios
+      .put("/api/special/deactivatespecialexam", { examId })
+      .then(({ data }) => {
+        toast.success("Exam Deactivated");
+        window.location.reload(false);
+      });
   };
 
   const handleChangeCourse = (e) => {
     setSelectedCourse(e.target.value);
     setExams([]);
   };
-  const examStopper = examId =>{
-    axios.post("/api/student/updatedstudentwritteninfo",{examId})
-    .then(data=>{
-      toast.success("This exam is stopped now...")
-      window.location.reload(false);
-    }).catch(err=>toast.error(err));
-  }
- 
-  const handleAssignTeacher = e =>{
-      e.preventDefault();
-      let steachers = [];
-      for(let i = 0 ; i<selectedTeachers.length;i++){
-            steachers.push(selectedTeachers[i].value);
-      }
-      const obj ={
-        examId:singleExamId,
-        teacherId:steachers
-      }
-      axios.post("/api/exam/assignstudenttoteacher",obj).then(({data})=>{
+  const examStopper = (examId) => {
+    axios
+      .post("/api/student/updatedstudentwritteninfo", { examId })
+      .then((data) => {
+        toast.success("This exam is stopped now...");
+        window.location.reload(false);
+      })
+      .catch((err) => toast.error(err));
+  };
+
+  const handleAssignTeacher = (e) => {
+    e.preventDefault();
+    let steachers = [];
+    for (let i = 0; i < selectedTeachers.length; i++) {
+      steachers.push(selectedTeachers[i].value);
+    }
+    const obj = {
+      examId: singleExamId,
+      teacherId: steachers,
+    };
+    axios
+      .post("/api/special/assignstudenttoteacher", obj)
+      .then(({ data }) => {
         console.log(data);
         toast.success("Assigned and Distributed");
-      }).catch(err=>console.log(err))
-  }
+      })
+      .catch((err) => console.log(err));
+  };
+  const handleUpdateSpecialExam = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.exam.value;
+    const startTime = form.start_time.value;
+    const endTime = form.end_time.value;
+    const totalMarks = form.total_marks.value;
+    const totalDuration = form.total_duration.value;
+    const marksPerMcq = parseInt(form.marks_per_question.value);
+    const mcqDuration = form.mcq_duration.value;
+    const writtenDuration = form.written_duration.value;
+    const totalMarksMcq = form.mcq_marks.value;
+    const totalMarksWritten = form.written_marks.value;
+    const negativeMarks = form.negative_marking.value;
+    const updatedExam = {
+      examId: singleExam._id,
+      name,
+      startTime,
+      endTime,
+      marksPerMcq,
+      totalMarksMcq,
+      mcqDuration,
+      totalDuration,
+      totalMarks,
+      writtenDuration,
+      totalMarksWritten,
+      negativeMarks,
+    };
+    await axios.put("/api/special/updatespecialexam", updatedExam).then(({ data }) => {
+      toast.success(data);
+      window.location.reload(false);
+      form.reset();
+    });
+    form.reset();
+    document.getElementById("update-modal").checked = false;
+  };
   useEffect(() => {
     setIsLoading(true);
     axios.get("/api/course/getallcourseadmin").then(({ data }) => {
       setCourses(data.courses);
       setIsLoading(false);
     });
-    if (selectedCourse !== "" && examType!==-1) {
+    if (selectedCourse !== "" && examType !== -1) {
       axios
-      .get(`/api/special/showspecialexambycourse?courseId=${selectedCourse}`)
-      .then(({ data }) => {
-        setExams(data);
-        if (data.length === 0) {
-          toast.error("No Data");
-        }
-        setIsLoading(false);
-      })
-      .catch((e) => toast.error(e.response.data));
+        .get(`/api/special/showspecialexambycourse?courseId=${selectedCourse}`)
+        .then(({ data }) => {
+          setExams(data);
+          if (data.length === 0) {
+            toast.error("No Data");
+          }
+          setIsLoading(false);
+        })
+        .catch((e) => toast.error(e.response.data));
 
       axios
         .get(`/api/user/teacherlistbycourse?courseId=${selectedCourse}`)
         .then(({ data }) => {
           console.log(data);
-          setTeachers(data)
-          setIsLoading(false);
-        }).catch(err=>console.log("teacher fetching error"));
-
-        axios.get(`/api/subject/getsubjectbycourse?courseId=${selectedCourse}`).then(({data})=>{
-          setSubjects(data.data)
+          setTeachers(data);
           setIsLoading(false);
         })
+        .catch((err) => console.log("teacher fetching error"));
+
+      axios
+        .get(`/api/subject/getsubjectbycourse?courseId=${selectedCourse}`)
+        .then(({ data }) => {
+          setSubjects(data.data);
+          setIsLoading(false);
+        });
     } else {
       setExams([]);
     }
     if (singleExamId !== null) {
-      console.log("asdasd",singleExamId);
+      console.log("asdasd", singleExamId);
       axios
         .get(`/api/special/showspecialexambyid?examId=${singleExamId}`)
         .then(({ data }) => {
@@ -164,7 +210,7 @@ const ShowSpecialExam = () => {
     } else {
       setsingleExam({});
     }
-  }, [selectedCourse, singleExamId,examType]);
+  }, [selectedCourse, singleExamId, examType]);
   return (
     <div className="mx-auto">
       <div className="flex w-10/12 justify-center items-center py-5 px-2 my-5  ">
@@ -192,12 +238,11 @@ const ShowSpecialExam = () => {
                 )}
             </select>
           </div>
-          
         </div>
       </div>
       {isLoading && <Loader></Loader>}
       {exams.length > 0 && (
-        <div className="overflow-x-auto w-full">        
+        <div className="overflow-x-auto w-full">
           <table className="mx-auto  w-full whitespace-nowrap rounded-lg  divide-y  overflow-hidden">
             <thead>
               <tr>
@@ -231,18 +276,15 @@ const ShowSpecialExam = () => {
                     <td className="px-1 py-2 text-center">{idx + 1}</td>
                     <td className="px-2 py-2 text-center">{exam.name}</td>
                     <td className="px-1 py-2 text-center">
-                      {
-                        (moment(exam.startTime).format('llll'))
-                      } <br/> 
-                      {
-                        (moment(exam.endTime).format('llll'))
-                      }
+                      {moment(exam.startTime).subtract(6,'h').format("llll")} <br />
+                      {moment(exam.endTime).subtract(6,'h').format("llll")}
                     </td>
                     <td className="px-6 py-2 text-center">
                       {exam.totalDuration} Minutes
                     </td>
                     <td className="px-6 py-2 text-center">
-                      {exam.sscStatus ? "Yes" : "No"} / {exam.hscStatus ? "Yes" : "No"}
+                      {exam.sscStatus ? "Yes" : "No"} /{" "}
+                      {exam.hscStatus ? "Yes" : "No"}
                     </td>
                     <td className="px-6 py-2 text-center">
                       <div className="flex flex-col lg:flex-row justify-center">
@@ -276,9 +318,16 @@ const ShowSpecialExam = () => {
                           className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
                           Assign Teachers
-                          </label>
-                          <label
+                        </label>
+                        <label
                           onClick={() => handleAssignExamId(exam._id)}
+                          htmlFor="update-modal"
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                        >
+                          Update
+                        </label>
+                        <label
+                          onClick={() => setsingleExam(exam)}
                           htmlFor="my-popup-written"
                           className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
@@ -290,7 +339,7 @@ const ShowSpecialExam = () => {
                           className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
                           Show
-                        </label>                        
+                        </label>
                         <DeactivateButton
                           setter={setSelectedExamId}
                           value={exam._id}
@@ -311,74 +360,157 @@ const ShowSpecialExam = () => {
               {singleExam.name}
             </h3>
             <div className="grid grid-cols-3 gap-y-2 gap-x-4">
-              <p><span className="font-bold mr-2">Number of Optional Subject:</span> {singleExam.noOfOptionalSubject}</p>
-              <p><span className="font-bold mr-2">Number of Exam Subject:</span>{singleExam.noOfExamSubject}</p>
+              <p>
+                <span className="font-bold mr-2">
+                  Number of Optional Subject:
+                </span>{" "}
+                {singleExam.noOfOptionalSubject}
+              </p>
+              <p>
+                <span className="font-bold mr-2">Number of Exam Subject:</span>
+                {singleExam.noOfExamSubject}
+              </p>
               <p>
                 <span className="font-bold mr-2">Optional Subjects</span>
-                {
-                  subjects?.filter(s=> singleExam?.optionalSubject?.includes(s._id)).map(sub=><span key={sub._id} className="mr-2">{sub.name}</span>)
-                }
+                {subjects
+                  ?.filter((s) => singleExam?.optionalSubject?.includes(s._id))
+                  .map((sub) => (
+                    <span key={sub._id} className="mr-2">
+                      {sub.name}
+                    </span>
+                  ))}
               </p>
               <p className="">
-              <span className="font-bold  mr-2">All Subjects</span>
-                {
-                  subjects?.filter(s=> singleExam?.allSubject?.includes(s._id)).map(sub=><span key={sub._id} className="mr-2">{sub.name}</span>)
-                }
-              </p>
-              <p>  <span className="font-bold  mr-2">Total Duration: </span>{singleExam.totalDuration+' Minutes'}</p>
-              <p><span className="font-bold  mr-2">Total Marks: </span>{singleExam.totalMarks}</p>
-              <p><span className="font-bold  mr-2">Start Time: </span>{(moment(singleExam.startTime).format('llll'))}</p>
-              <p className="col-span-2"><span className="font-bold  mr-2">End Time: </span>{(moment(singleExam.endTime).format('llll'))}</p>
-              
-              <div className="col-span-3">
-              <p className="font-bold  mr-2 text-2xl  text-center">Subjects and Marks Distribution:</p>
-              <div className="grid grid-cols-3 gap-3">
-              {
-                singleExam?.subjectInfo?.map((si,idx)=><p key={idx} className="place-items-end">
-                  <span className="font-bold  mr-2">
-                    {subjects?.filter(s=> si.subjectId.includes(s._id))[0].name}
+                <span className="font-bold  mr-2">All Subjects</span>
+                {subjects
+                  ?.filter((s) => singleExam?.allSubject?.includes(s._id))
+                  .map((sub) => (
+                    <span key={sub._id} className="mr-2">
+                      {sub.name}
                     </span>
-                    {
-                      examType!==2 &&<> <span className="font-bold  mr-2">MCQ Questions:</span>  <span className="mr-2">{si.noOfQuestionsMcq}</span></>
-                    }
-                    {
-                      examType!==1 &&<> <span className="font-bold  mr-2">Written Questions:</span>  <span className="mr-2">{si.noOfQuestionsWritten}</span></>
-                    }
-                    
+                  ))}
+              </p>
+              <p>
+                {" "}
+                <span className="font-bold  mr-2">Total Duration: </span>
+                {singleExam.totalDuration + " Minutes"}
+              </p>
+              <p>
+                <span className="font-bold  mr-2">Total Marks: </span>
+                {singleExam.totalMarks}
+              </p>
+              <p>
+                <span className="font-bold  mr-2">Start Time: </span>
+                {moment(singleExam.startTime).format("llll")}
+              </p>
+              <p className="col-span-2">
+                <span className="font-bold  mr-2">End Time: </span>
+                {moment(singleExam.endTime).format("llll")}
+              </p>
+
+              <div className="col-span-3">
+                <p className="font-bold  mr-2 text-2xl  text-center">
+                  Subjects and Marks Distribution:
+                </p>
+                <div className="grid grid-cols-3 gap-3">
+                  {singleExam?.subjectInfo?.map((si, idx) => (
+                    <p key={idx} className="place-items-end">
+                      <span className="font-bold  mr-2">
+                        {
+                          subjects?.filter((s) =>
+                            si.subjectId.includes(s._id)
+                          )[0].name
+                        }
+                      </span>
+                      {examType !== 2 && (
+                        <>
+                          {" "}
+                          <span className="font-bold  mr-2">
+                            MCQ Questions:
+                          </span>{" "}
+                          <span className="mr-2">{si.noOfQuestionsMcq}</span>
+                        </>
+                      )}
+                      {examType !== 1 && (
+                        <>
+                          {" "}
+                          <span className="font-bold  mr-2">
+                            Written Questions:
+                          </span>{" "}
+                          <span className="mr-2">
+                            {si.noOfQuestionsWritten}
+                          </span>
+                        </>
+                      )}
                     </p>
-                    
-                    )
-              }
+                  ))}
+                </div>
               </div>
-              </div>
-              <p><span className="font-bold  mr-2">SSC Status: </span><span>{singleExam.sscStatus===true? "True" : "False"}</span></p>
-              <p><span className="font-bold  mr-2">HSC Status: </span><span>{singleExam.hscStatus===true ?"True" :"False"}</span></p>
-              {
-                examType===3 && <p><span className="font-bold  mr-2">MCQ Duration: </span><span>{singleExam.mcqDuration}</span></p>
-              }
-              {
-                examType===3 && <p><span className="font-bold  mr-2">Written Duration: </span><span>{singleExam.writtenDuration}</span></p>
-              }
-              {
-                examType!==2 && <p><span className="font-bold  mr-2">Total MCQ Question: </span><span>{singleExam.totalQuestionsMcq}</span></p>
-              }
-              {
-                examType!==1 && <p><span className="font-bold  mr-2">Total Written Question: </span><span>{singleExam.totalQuestionsWritten}</span></p>
-              }
-              {
-                examType===3 && <p><span className="font-bold  mr-2">Total MCQ Marks: </span><span>{singleExam.totalMarksMcq}</span></p>
-              }
-              {
-                examType===3 && <p><span className="font-bold  mr-2">Total Written Marks: </span><span>{singleExam.totalMarksWritten}</span></p>
-              }
-              {
-                examType!==2 && <p><span className="font-bold  mr-2">Marks/MCQ : </span><span>{singleExam.marksPerMcq}</span></p>
-              }
-              {
-                examType!==2 && <p><span className="font-bold  mr-2">Negative (%) : </span><span>{singleExam.negativeMarks}</span></p>
-              }
-              <Link target="_blank" to={`${process.env.REACT_APP_API_HOST}${singleExam.iLink}`} className="underline text-red font-semibold">Click to see</Link>
-              
+              <p>
+                <span className="font-bold  mr-2">SSC Status: </span>
+                <span>{singleExam.sscStatus === true ? "True" : "False"}</span>
+              </p>
+              <p>
+                <span className="font-bold  mr-2">HSC Status: </span>
+                <span>{singleExam.hscStatus === true ? "True" : "False"}</span>
+              </p>
+              {examType === 3 && (
+                <p>
+                  <span className="font-bold  mr-2">MCQ Duration: </span>
+                  <span>{singleExam.mcqDuration}</span>
+                </p>
+              )}
+              {examType === 3 && (
+                <p>
+                  <span className="font-bold  mr-2">Written Duration: </span>
+                  <span>{singleExam.writtenDuration}</span>
+                </p>
+              )}
+              {examType !== 2 && (
+                <p>
+                  <span className="font-bold  mr-2">Total MCQ Question: </span>
+                  <span>{singleExam.totalQuestionsMcq}</span>
+                </p>
+              )}
+              {examType !== 1 && (
+                <p>
+                  <span className="font-bold  mr-2">
+                    Total Written Question:{" "}
+                  </span>
+                  <span>{singleExam.totalQuestionsWritten}</span>
+                </p>
+              )}
+              {examType === 3 && (
+                <p>
+                  <span className="font-bold  mr-2">Total MCQ Marks: </span>
+                  <span>{singleExam.totalMarksMcq}</span>
+                </p>
+              )}
+              {examType === 3 && (
+                <p>
+                  <span className="font-bold  mr-2">Total Written Marks: </span>
+                  <span>{singleExam.totalMarksWritten}</span>
+                </p>
+              )}
+              {examType !== 2 && (
+                <p>
+                  <span className="font-bold  mr-2">Marks/MCQ : </span>
+                  <span>{singleExam.marksPerMcq}</span>
+                </p>
+              )}
+              {examType !== 2 && (
+                <p>
+                  <span className="font-bold  mr-2">Negative (%) : </span>
+                  <span>{singleExam.negativeMarks}</span>
+                </p>
+              )}
+              <Link
+                target="_blank"
+                to={`${process.env.REACT_APP_API_HOST}${singleExam.iLink}`}
+                className="underline text-red font-semibold"
+              >
+                Click to see
+              </Link>
             </div>
 
             <div className="modal-action flex justify-center items-center">
@@ -428,7 +560,7 @@ const ShowSpecialExam = () => {
             </div>
           </div>
         </div>
-        
+
         <input type="checkbox" id="my-modal-4" className="modal-toggle" />
         <div className="modal">
           <div className="modal-box">
@@ -459,9 +591,8 @@ const ShowSpecialExam = () => {
                   options={teachers}
                   onChange={(choice) => setSelectedTeachers(choice)}
                   isMulti
-                  
                   labelledBy="Select"
-            />
+                />
               </div>
               <input type="submit" value="Add" className="btn w-32" />
             </form>
@@ -497,6 +628,229 @@ const ShowSpecialExam = () => {
                 Close!
               </label>
             </div>
+          </div>
+        </div>
+      </div>
+      <div id="update-modal  ">
+        <input type="checkbox" id="update-modal" className="modal-toggle" />
+        <div className="modal">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg text-center">Update Exam</h3>
+            <form className="add-form" onSubmit={handleUpdateSpecialExam}>
+              <div className="form-control">
+                <label htmlFor="" className=" label">
+                  <span className="label-text">Exam Name </span>
+                </label>
+                <input
+                  className="input input-bordered  border-black"
+                  type="text"
+                  name="exam"
+                  id="exam"
+                  placeholder="Subject Name"
+                  defaultValue={singleExam.name}
+                  required
+                />
+              </div>
+              <div className="form-control"></div>
+              <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-center">
+                <div className="w-full lg:w-1/2 mr-0 lg:mr-4">
+                  <label className="label" htmlFor="">
+                    Start Time
+                  </label>
+                  <input
+                    type="datetime-local"
+                    className="input input-bordered w-full  border-black "
+                    name="start_time"
+                    id="start_time"
+                    defaultValue={singleExam?.startTime?.split(":00.000Z")[0]}
+                    required
+                  />
+                </div>
+                <div className="w-full lg:w-1/2">
+                  <label className="label" htmlFor="">
+                    End Time
+                  </label>
+                  <input
+                    type="datetime-local"
+                    className="input input-bordered w-full  border-black "
+                    name="end_time"
+                    id="end_time"
+                    defaultValue={singleExam?.endTime?.split(":00.000Z")[0]}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="form-control grid grid-cols-1 lg:grid-cols-2 gap-x-2 gap-y-3 ">
+                <div className="w-full">
+                  <label htmlFor="" className="label">
+                    Total Marks
+                  </label>
+                  <input
+                    type="number"
+                    className="input w-full input-bordered  border-black "
+                    name="total_marks"
+                    id="total_marks"
+                    defaultValue={singleExam.totalMarks}
+                    step="any"
+                    onChange={(e) =>
+                      e.target.value < 0
+                        ? (e.target.value = "")
+                        : e.target.value
+                    }
+                    required
+                  />
+                </div>
+                <div className="w-full ">
+                  <label htmlFor="" className="label">
+                    Total Duration
+                  </label>
+                  <input
+                    type="number"
+                    className="input w-full input-bordered  border-black "
+                    name="total_duration"
+                    id="total_duration"
+                    defaultValue={singleExam.totalDuration}
+                    step="any"
+                    onChange={(e) =>
+                      e.target.value < 0
+                        ? (e.target.value = "")
+                        : e.target.value
+                    }
+                    required
+                  />
+                </div>
+              </div>
+              <div className="form-control grid grid-cols-1 lg:grid-cols-3 gap-x-2 gap-y-3 ">
+                <div className="w-full">
+                  <label htmlFor="" className="label">
+                    MCQ Duration
+                  </label>
+                  <input
+                    type="number"
+                    className="input w-full input-bordered  border-black "
+                    name="mcq_duration"
+                    id="mcq_duration"
+                    defaultValue={singleExam.mcqDuration}
+                    onInput={(e) =>
+                      e.target.value < 0
+                        ? (e.target.value = "")
+                        : e.target.value
+                    }
+                    required
+                  />
+                </div>
+                <div className="w-full ">
+                  <label htmlFor="" className="label">
+                    Marks/Question
+                  </label>
+                  <input
+                    type="number"
+                    className="input w-full input-bordered  border-black "
+                    name="marks_per_question"
+                    id="marks_per_question"
+                    defaultValue={singleExam.marksPerMcq}
+                    onInput={(e) =>
+                      e.target.value < 0
+                        ? (e.target.value = "")
+                        : e.target.value
+                    }
+                    required
+                  />
+                  
+                </div>
+                <div className="w-full ">
+                  <label htmlFor="" className="label">
+                    MCQ Marks
+                  </label>
+                  <input
+                    type="number"
+                    className="input w-full input-bordered  border-black "
+                    name="mcq_marks"
+                    id="mcq_marks"
+                    defaultValue={singleExam.totalMarksMcq}
+                    onInput={(e) =>
+                      e.target.value < 0
+                        ? (e.target.value = "")
+                        : e.target.value
+                    }
+                    required
+                  />
+                </div>
+                <div className="w-full ">
+                    <label htmlFor="" className="label">
+                      Negative Marking
+                    </label>
+                    <input
+                      type="number"
+                      className="input w-full input-bordered  border-black "
+                      name="negative_marking"
+                      id="negative_marking"
+                      defaultValue={singleExam.negativeMarksMcq}
+                      step="any"
+                      onChange={(e) =>
+                        e.target.value < 0
+                          ? (e.target.value = "")
+                          : e.target.value
+                      }
+                      required
+                    />
+                </div>                
+                <div className="w-full">
+                  <label htmlFor="" className="label">
+                     Written Marks
+                  </label>
+                  <input
+                    type="number"
+                    className="input w-full input-bordered  border-black "
+                    name="written_marks"
+                    id="written_marks"
+                    defaultValue={singleExam.totalMarksWritten}
+                    onInput={(e) =>
+                      e.target.value < 0
+                        ? (e.target.value = "")
+                        : e.target.value
+                    }
+                    required
+                  />
+                </div>
+                <div className="w-full">
+                  <label className="label" htmlFor="">
+                    Written Duration
+                  </label>
+                  <input
+                    type="mumber"
+                    className="input w-full input-bordered border-black "
+                    name="written_duration"
+                    id="written_duration"
+                    defaultValue={singleExam.writtenDuration}
+                    min="1"
+                    onInput={(e) =>
+                      e.target.value < 0
+                        ? (e.target.value = "")
+                        : e.target.value
+                    }
+                    required
+                  />
+                  <span className="text-red text-sm ml-0 lg:ml-2">
+                    (minutes)
+                  </span>
+                </div>
+                <div className="w-full">
+                  <input
+                    type="submit"
+                    value="Update"
+                    className="btn w-[150px] mt-4"
+                  />
+                </div>
+              </div>
+              <div className="form-control mt-2 flex flex-row justify-end">                
+                <div className="modal-action">
+                  <label htmlFor="update-modal" className="btn bg-[red] ">
+                    Close!
+                  </label>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>

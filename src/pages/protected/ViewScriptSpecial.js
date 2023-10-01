@@ -9,7 +9,6 @@ import Pagination from "../../components/common/Pagination";
 
 const ViewScriptSpecial = () => {
     const [courses, setCourses] = useState([]);
-    const [subjects, setSubjects] = useState([]);
     const [exams, setExams] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState("");
     const [selectedSubject, setSelectedSubject] = useState("");
@@ -21,18 +20,13 @@ const ViewScriptSpecial = () => {
     const role = user.role;
     const handleChangeCourse = (e) => {
       setSelectedSubject("");
-      setSubjects([]);
       setExams("");
       setExams([]);
       setSelectedCourse(e.target.value);
       
     };
   
-    const handleChangeSubject = (e) => {
-      setSelectedSubject(e.target.value);
-      setSelectedExam("");
-      setExams([]);
-    };
+   
  
     const handlePageClick = (event) => {
         let clickedPage = parseInt(event.selected) + 1;
@@ -93,29 +87,26 @@ const ViewScriptSpecial = () => {
           setIsLoading(false);
         })
         .catch((e) => toast.error(e.response.data));
-        axios
-          .get(`/api/subject/getsubjectbycourse?courseId=${selectedCourse}`)
-          .then(({ data }) => {
-            setSubjects(data.data);
-            setIsLoading(false);
-          }).catch(e=>console.log(e))
       } else {
-        setSubjects([]);
+        setExams([])
       }
-      if (selectedSubject !== "") {
-        axios
-          .get(`/api/both/getbothexambysubject?subjectId=${selectedSubject}`)
-          .then(({ data }) => {
-            setExams(data.examPage.exam);
-            setIsLoading(false);
-          }).catch(e=>console.log(e))
-      } else {
-        setExams([]);
-      }
+     
       if (selectedExam !== "") {
         if(role===3){
           axios
           .get(`/api/special/getstudentdata?examId=${selectedExam}`)
+          .then(({ data }) => {
+            setWrittenData(data.data1)
+            setPagiNationData(data.paginateData)
+            setIsLoading(false);
+          }).catch(e=>{
+            setWrittenData([])
+            setPagiNationData({})
+            toast.error(e.response.data);
+          })
+        }else{
+          axios
+          .get(`/api/special/getstudentdataadmin?examId=${selectedExam}`)
           .then(({ data }) => {
             console.log(data);
             setWrittenData(data.data1)
@@ -126,7 +117,7 @@ const ViewScriptSpecial = () => {
             setPagiNationData({})
             toast.error(e.response.data);
           })
-        }   
+        }  
       }
     }, [selectedCourse, selectedSubject, selectedExam,role]);
   return (
@@ -173,28 +164,6 @@ const ViewScriptSpecial = () => {
                 ))}
             </select>
           </div>
-          {
-            role!==3 && <div className="form-control">
-            <label className="label-text" htmlFor="">
-              Select Subject
-            </label>
-            <select
-              name="course_list"
-              id="course_list"
-              className="input w-full border-black input-bordered"
-              required
-              onChange={(e) => handleChangeSubject(e)}
-            >
-              <option value=""></option>
-              {subjects?.length > 0 &&
-                subjects.map((subject) => (
-                  <option key={subject._id} value={subject._id}>
-                    {subject.name}
-                  </option>
-                ))}
-            </select>
-          </div>
-          }
           
         </div>
       </div>
@@ -210,12 +179,16 @@ const ViewScriptSpecial = () => {
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
                   Student Name
                 </th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
-                 Total Marks
-                </th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
-                 Total Questions
-                </th>
+                {
+                  role===3 && <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
+                  Total Marks
+                 </th>
+                }
+                {
+                  role===3 && <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
+                  Total Questions
+                 </th>
+                }
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
                   Action
                 </th>
@@ -227,11 +200,26 @@ const ViewScriptSpecial = () => {
                     return <tr key={idx} className="bg-white">
                         <td>{idx+1}</td>
                         <td>{wd.studentName}</td>
-                        <td>{wd.totalMarks}</td>
-                        <td>{wd.totalQuestions}</td>
+                        {role===3 && <td>{wd.totalMarks}</td>}
+                        {
+                          role===3 && <td>{wd.totalQuestions}</td>
+                        }
                         <td>
-                            <Link to={`/dashboard/${selectedExam}/checkanswerspecial/${wd.studentId}`}  target='_blank' className="text-red font-bold">Check </Link>
-                        </td>
+                            {
+                              role===3 && <Link to={`/dashboard/${selectedExam}/checkanswerspecial/${wd.studentId}`}  target='_blank' className="text-red font-bold mr-2">Check </Link>
+                        
+                            }
+                            {
+                              role!==3 && <>
+                                <Link to={`/dashboard/${selectedExam}/check/${wd.studentId}/${wd.subject1.id}`}  target='_blank' className="text-red font-bold mr-2">{wd.subject1.name} </Link>
+                                <Link to={`/dashboard/${selectedExam}/check/${wd.studentId}/${wd.subject2.id}`}  target='_blank' className="text-red font-bold mr-2">{wd.subject2.name} </Link>
+                                <Link to={`/dashboard/${selectedExam}/check/${wd.studentId}/${wd.subject3.id}`}  target='_blank' className="text-red font-bold mr-2">{wd.subject3.name} </Link>
+                                <Link to={`/dashboard/${selectedExam}/check/${wd.studentId}/${wd.subject4.id}`}  target='_blank' className="text-red font-bold mr-2">{wd.subject4.name} </Link>
+                        
+                              </>
+                            }
+
+                       </td>
 
                     </tr>
                 })

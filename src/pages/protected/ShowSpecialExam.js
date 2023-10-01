@@ -101,7 +101,7 @@ const ShowSpecialExam = () => {
   };
   const examStopper = (examId) => {
     axios
-      .post("/api/student/updatedstudentwritteninfo", { examId })
+      .post("/api/special/updatestudentexaminfo", { examId })
       .then((data) => {
         toast.success("This exam is stopped now...");
         window.location.reload(false);
@@ -124,6 +124,7 @@ const ShowSpecialExam = () => {
       .then(({ data }) => {
         console.log(data);
         toast.success("Assigned and Distributed");
+        window.location.reload(false);
       })
       .catch((err) => console.log(err));
   };
@@ -327,7 +328,7 @@ const ShowSpecialExam = () => {
                           Update
                         </label>
                         <label
-                          onClick={() => setsingleExam(exam)}
+                          onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="my-popup-written"
                           className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >

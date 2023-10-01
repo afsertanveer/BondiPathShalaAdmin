@@ -38,7 +38,7 @@ const ViewScriptSpecial = () => {
         let clickedPage = parseInt(event.selected) + 1;
         let url;
         if(role===3){
-          url ='/api/teacher/bothgetstudentdata';
+          url ='/api/special/getstudentdata';
 
         }else{
           url ='/api/student/bothGetwrittenstudentallbyexam'
@@ -230,7 +230,7 @@ const ViewScriptSpecial = () => {
                         <td>{wd.totalMarks}</td>
                         <td>{wd.totalQuestions}</td>
                         <td>
-                            <Link to={`/dashboard/${selectedExam}/checkanswerboth/${wd.studentId}`}  target='_blank' className="text-red font-bold">Check </Link>
+                            <Link to={`/dashboard/${selectedExam}/checkanswerspecial/${wd.studentId}`}  target='_blank' className="text-red font-bold">Check </Link>
                         </td>
 
                     </tr>

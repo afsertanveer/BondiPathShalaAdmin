@@ -132,7 +132,6 @@ const RecheckBoth = () => {
             })
         }
       } else {
-         window.location.reload(false);
       }
     }, [selectedCourse, selectedSubject, selectedExam,role]);
   return (

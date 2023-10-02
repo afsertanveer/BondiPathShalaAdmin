@@ -211,7 +211,10 @@ const ViewScriptSpecial = () => {
                             }
                             {
                               role!==3 && <>
-                                <Link to={`/dashboard/${selectedExam}/check/${wd.studentId}/${wd.subject1.id}`}  target='_blank' className="text-red font-bold mr-2">{wd.subject1.name} </Link>
+                                {
+                                  wd.subject1.status===true? <span className="mr-2 font-semibold">{wd.subject1.name}</span> : <Link to={`/dashboard/${selectedExam}/check/${wd.studentId}/${wd.subject1.id}`}  target='_blank' className="text-red font-bold mr-2">{wd.subject1.name} </Link>
+                                
+                                }
                                 <Link to={`/dashboard/${selectedExam}/check/${wd.studentId}/${wd.subject2.id}`}  target='_blank' className="text-red font-bold mr-2">{wd.subject2.name} </Link>
                                 <Link to={`/dashboard/${selectedExam}/check/${wd.studentId}/${wd.subject3.id}`}  target='_blank' className="text-red font-bold mr-2">{wd.subject3.name} </Link>
                                 <Link to={`/dashboard/${selectedExam}/check/${wd.studentId}/${wd.subject4.id}`}  target='_blank' className="text-red font-bold mr-2">{wd.subject4.name} </Link>

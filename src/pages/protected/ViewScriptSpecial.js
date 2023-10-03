@@ -212,21 +212,26 @@ const ViewScriptSpecial = () => {
                             {
                               role!==3 && <>
                                 {
-                                  wd.subject1.status===true? <span className="mr-2 font-semibold">{wd.subject1.name}</span> : <Link to={`/dashboard/${selectedExam}/check/${wd.studentId}/${wd.subject1.id}`}  target='_blank' className="text-red font-bold mr-2">{wd.subject1.name} </Link>
+                                  wd.subject1.status===true? <span className="mr-2 font-semibold text-color-eleven">{wd.subject1.name}</span> : 
+                                  <span className="mr-2 font-semibold text-red">{wd.subject1.name}</span>
                                 
                                 }
                                 {
-                                  wd.subject1.status===true? <span className="mr-2 font-semibold">{wd.subject2.name}</span> : <Link to={`/dashboard/${selectedExam}/check/${wd.studentId}/${wd.subject2.id}`}  target='_blank' className="text-red font-bold mr-2">{wd.subject1.name} </Link>
+                                  wd.subject2.status===true? <span className="mr-2 font-semibold text-color-eleven">{wd.subject2.name}</span> : 
+                                  <span className="mr-2 font-semibold text-red">{wd.subject2.name}</span>
                                 
                                 }
                                 {
-                                  wd.subject1.status===true? <span className="mr-2 font-semibold">{wd.subject3.name}</span> : <Link to={`/dashboard/${selectedExam}/check/${wd.studentId}/${wd.subject3.id}`}  target='_blank' className="text-red font-bold mr-2">{wd.subject1.name} </Link>
+                                  wd.subject3.status===true? <span className="mr-2 font-semibold text-color-eleven">{wd.subject3.name}</span> : 
+                                  <span className="mr-2 font-semibold text-red">{wd.subject3.name}</span>
                                 
                                 }
                                 {
-                                  wd.subject1.status===true? <span className="mr-2 font-semibold">{wd.subject4.name}</span> : <Link to={`/dashboard/${selectedExam}/check/${wd.studentId}/${wd.subject4.id}`}  target='_blank' className="text-red font-bold mr-2">{wd.subject1.name} </Link>
+                                  wd.subject4.status===true? <span className="mr-2 font-semibold text-color-eleven">{wd.subject4.name}</span> : 
+                                  <span className="mr-2 font-semibold text-red">{wd.subject4.name}</span>
                                 
                                 }
+                               
                         
                               </>
                             }

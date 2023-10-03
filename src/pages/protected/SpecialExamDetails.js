@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import v2 from "../../assets/img/icons/eye.svg";
 import { toast } from "react-hot-toast";
 import Pagination from "../../components/common/Pagination";
-const ExamDetails = () => {
+const SpecialExamDetails = () => {
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [exams, setExams] = useState([]);
@@ -250,4 +250,4 @@ const ExamDetails = () => {
   );
 };
 
-export default ExamDetails;
+export default SpecialExamDetails;

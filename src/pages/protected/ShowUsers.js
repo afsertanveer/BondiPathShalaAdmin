@@ -14,6 +14,7 @@ const ShowUsers = () => {
   const [singleuser, setSingleuser] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [pagiNationData, setPagiNationData] = useState({});
+  const [courses,setCourses] = useState([]);
   const [deactivateUser,setDeactivateUser] = useState("");
 
   const updateuser = (id) => {
@@ -42,32 +43,99 @@ const ShowUsers = () => {
       }).catch(e=>console.log(e))
     document.getElementById('my-modal').checked = false;
   }
+  const changeUsers = courseId=>{
+    if(courseId===""){
+      setIsLoading(true);
+      axios.get(`/api/user/getuserbyrole?role=${getRole}&page=${currentPage}`).then(({ data }) => {
+        setUsers(data.user);
+        setPagiNationData({});
+        setIsLoading(false);
+      }).catch(e=>{
+        toast.error(e.response.data);
+        setIsLoading(false);
+      })
+    }else{
+      axios.get(`/api/user/getuserbyrole?role=${getRole}&page=${currentPage}`).then(({ data }) => {
+        setUsers(data.user.filter(u=>u.courseId._id===courseId))
+        setPagiNationData({});
+        setIsLoading(false);
+      }).catch(e=>{
+        toast.error(e.response.data);
+        setIsLoading(false);
+      })
+      
+    }
+  }
   useEffect(() => {
     setIsLoading(true);
-    if(getRole!==""){
-        axios.get(`/api/user/getuserbyrole?role=${getRole}&page=${currentPage}`).then(({ data }) => {
+    if(getRole){
+      if(getRole==="3"){
+        setUsers([]);
+        axios.get("/api/course/getallcourseadmin").then(({ data }) => {
+          setCourses(data.courses);
+          axios.get(`/api/user/getuserbyrole?role=${getRole}&page=${currentPage}`).then(({ data }) => {
             setUsers(data.user);
-            console.log(data.user);
             setPagiNationData(data.paginaeData);
             setIsLoading(false);
           }).catch(e=>{
             toast.error(e.response.data);
             setIsLoading(false);
           })
+          setIsLoading(false);
+        });
+      }else{
+        axios.get(`/api/user/getuserbyrole?role=${getRole}&page=${currentPage}`).then(({ data }) => {
+          setUsers(data.user);
+          setPagiNationData(data.paginaeData);
+          setIsLoading(false);
+        }).catch(e=>{
+          toast.error(e.response.data);
+          setIsLoading(false);
+        })
+      }
+        
     }else{
         setIsLoading(false)
     }
+    
     setIsLoading(false)
   }, [getRole,currentPage]);
   return (
     <div className="">
-      <div className=" py-4 px-2 my-3 flex justify-center items-center bg-white">
-        <label htmlFor="" className="label-text text-3xl font-semibold">Select Role</label>
-        <select name="" id="" onChange={e=>setGetRole(e.target.value)} className="input  border-black input-bordered mb-3 ml-5">
+      <div className=" py-4 px-2 my-3 grid grid-cols-2 gap-x-8 gap-y-4 bg-white">
+        <div className="form-control">
+        <label htmlFor="" className="label-text text-3xl font-semibold text-center">Select Role</label>
+        <select name="" id="" onChange={e=>setGetRole(e.target.value)} className="input  border-black input-bordered mb-3">
             <option value=""></option>
             <option value="2">Moderators</option>
             <option value="3">Teachers</option>
         </select>
+        </div>
+        {
+          courses.length>0 && getRole==="3" && <div className="form-control">
+          <label className="label-text text-3xl font-semibold text-center" htmlFor="">
+            Select Course
+          </label>
+          <select
+            name="course_list"
+            id="course_list"
+            className="input w-full border-black input-bordered"
+            required
+            onChange={(e) =>changeUsers(e.target.value)}
+          >
+            <option value=""></option>
+            {courses.length > 0 &&
+              courses.map(
+                (course) =>
+                  course.name !== "Free" && (
+                    <option key={course._id} value={course._id}>
+                      {course.name}
+                    </option>
+                  )
+              )}
+          </select>
+        </div>
+        }
       </div>
       {isLoading && <Loader></Loader>}
       <div className="overflow-x-auto">

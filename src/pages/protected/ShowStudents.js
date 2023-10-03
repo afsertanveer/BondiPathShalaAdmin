@@ -114,7 +114,6 @@ const ShowStudents = () => {
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Institution</th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">SSC Roll</th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">HSC Roll</th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Action</th>
               </tr>
             </thead>
                 <tbody>
@@ -127,14 +126,7 @@ const ShowStudents = () => {
                     <td className="px-6 py-4 text-center">{student.studentId.institution===null? "N/A" : student.studentId.institution }</td>
                     <td className="px-6 py-4 text-center">{student.studentId.hscRoll===null? "N/A" :student.studentId.hscRoll}</td>
                     <td className="px-6 py-4 text-center">{student.studentId.sscRoll===null? "N/A" :student.studentId.sscRoll }</td>
-                    <td className="px-6 py-4 text-center">
-                      <Link
-                        to={`/dashboard/students/${student.studentId._id}/history`}  target="_blank"
-                        className="btn bg-button text-white"
-                      >
-                        Exam History
-                      </Link>
-                    </td>
+                    
                   </tr>
                 ))}
             </tbody>

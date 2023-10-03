@@ -24,11 +24,12 @@ const ShowSpecialExam = () => {
   const examType = 4;
   const [subjects, setSubjects] = useState([]);
   const generator = (id) => {
+    console.log(id);
     axios
-      .put(`/api/student/updatestudentexaminfo?examId=${id}`)
+      .post(`/api/special/publishexam`,{examId:id})
       .then((data) => {
         axios
-          .post(`/api/student/updaterank?examId=${id}`)
+          .post(`/api/special/updaterank`,{examId:id})
           .then((data) => {
             toast.success("Rank Generated Successfully");
             window.location.reload(false);
@@ -326,12 +327,6 @@ const ShowSpecialExam = () => {
                           className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
                           Update
-                        </label>
-                        <label
-                          onClick={() => handleAssignExamId(exam._id)}
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                        >
-                          Publish Exam
                         </label>
                         <label
                           onClick={() => handleAssignExamId(exam._id)}

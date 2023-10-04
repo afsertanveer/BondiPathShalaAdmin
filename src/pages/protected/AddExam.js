@@ -4,7 +4,6 @@ import { useState } from "react";
 import axios from "../../utils/axios";
 import Loader from "../../Shared/Loader";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 
 const AddExam = () => {
   const [courses, setCourses] = useState([]);
@@ -16,11 +15,10 @@ const AddExam = () => {
   const [selectedVariation, setSelectedVariation] = useState(-1);
   const [isSSC, setIsSSC] = useState(false);
   const [isHSC, setIsHSC] = useState(false);
-  const navigate = useNavigate();
 
   const handleAddExam = async (e) => {
     e.preventDefault();
-    let totalQuestionMcq =-1,marksPerMcq=-1,totalMarks;
+    let totalQuestionMcq =-1,marksPerMcq=-1,totalMarks,negativeMarks=-1;
     const form = e.target;
     const name = form.exam.value;
     const startTime = form.start_time.value;
@@ -34,7 +32,9 @@ const AddExam = () => {
       totalMarks = form.total_marks.value;
     }
     const status = true;
-    const negativeMarks = parseFloat(form.negative_marking.value);
+    if(selectedVariation==="1"){
+      negativeMarks = parseFloat(form.negative_marking.value);
+    }
     const iLink = form.iLink.files[0];
     const formdata = new FormData();
     formdata.append("iLink", iLink);
@@ -63,9 +63,8 @@ const AddExam = () => {
         },
       })
       .then(({ data }) => {
-        console.log(data);
         toast.success("Exam Added Succesfully");
-        navigate("/dashboard");
+        window.location.reload(false);
       });
   };
   useEffect(() => {
@@ -294,7 +293,7 @@ const AddExam = () => {
                   onChange={(e) =>
                     e.target.value < 0 ? (e.target.value = "") : e.target.value
                   }
-                  value={selectedVariation==="2" && 0}
+                  disabled={selectedVariation==="2"}
                   required
                 />
               </div>

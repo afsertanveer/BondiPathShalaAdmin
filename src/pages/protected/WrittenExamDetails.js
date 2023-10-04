@@ -69,6 +69,45 @@ const WrittenExamDetails = () => {
       })
     }
   };
+  const handleRegNo = regNo =>{
+    if(regNo.length>=6){
+      axios
+        .get(`/api/student/gethistorybywrittenidfilter?examId=${selectedExam}&regNo=${regNo}`)
+        .then(({ data }) => {
+          console.log(data);
+          setDetailedExam(data?.data);
+          setExamInfo(data.examInfo)
+          setPagiNationData({});
+          setIsLoading(false);
+        }).catch(e=>{
+          toast.error(e.response.data);
+          axios
+        .get(`/api/student/gethistorybywrittenid?examId=${selectedExam}&page=${currentPage}`)
+        .then(({ data }) => {
+          setDetailedExam(data?.data);
+          setExamInfo(data.examInfo)
+          setPagiNationData(data.paginateData);
+          setIsLoading(false);
+        }).catch(e=>{
+          toast.error(e.response.data);
+          setDetailedExam([]);
+        })
+        })
+
+    }else{
+      axios
+        .get(`/api/student/gethistorybywrittenid?examId=${selectedExam}&page=${currentPage}`)
+        .then(({ data }) => {
+          setDetailedExam(data?.data);
+          setExamInfo(data.examInfo)
+          setPagiNationData(data.paginateData);
+          setIsLoading(false);
+        }).catch(e=>{
+          toast.error(e.response.data);
+          setDetailedExam([]);
+        })
+    }
+  }
 
   useEffect(() => {
     setIsLoading(true);
@@ -185,6 +224,22 @@ const WrittenExamDetails = () => {
             </select>
           </div>
         </div>        
+      </div>
+      <div class="py-4 px-2 my-3">
+         {
+          selectedExam!=="" && <div className="flex justify-center items-center">
+          <div className="form-control w-1/3 ">
+            <input
+            className="input input-bordered  border-black font-bold" 
+            type="text" 
+            placeholder="Type Reg Number"
+            onChange={(e)=>handleRegNo(e.target.value)}
+            name="" 
+            id="" 
+            />
+          </div>
+          </div>
+         } 
       </div>
       {isLoading && <Loader></Loader>}
       {detailedExam?.length > 0 && (

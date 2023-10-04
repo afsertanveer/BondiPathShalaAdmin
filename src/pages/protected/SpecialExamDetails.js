@@ -43,7 +43,7 @@ const SpecialExamDetails = () => {
     let clickedPage = parseInt(event.selected) + 1;
     if (event.selected > 0) {
       axios
-        .get(`/api/student/gethistorybyexamid?examId=${selectedExam}&page=${clickedPage}`)
+        .get(`/api/special/specialgethistory?examId=${selectedExam}&page=${clickedPage}`)
         .then(({ data }) => {
           console.log(data);
           setDetailedExam(data?.data);
@@ -56,7 +56,7 @@ const SpecialExamDetails = () => {
         })
     } else {
       axios
-      .get(`/api/student/gethistorybyexamid?examId=${selectedExam}&page=${1}`)
+      .get(`/api/special/specialgethistory?examId=${selectedExam}&page=${1}`)
       .then(({ data }) => {
         console.log(data);
         setDetailedExam(data?.data);
@@ -78,33 +78,22 @@ const SpecialExamDetails = () => {
     }).catch(e=>console.log(e))
     if (selectedCourse !== "") {
       axios
-        .get(`/api/subject/getsubjectbycourse?courseId=${selectedCourse}`)
-        .then(({ data }) => {
-          setSubjects(data.data);
-          setIsLoading(false);
-        }).catch(e=>{
-          console.log(e);
-          setIsLoading(false);
-        })
-    } else {
-      setSubjects([]);
-    }
-    if (selectedSubject !== "") {
-      axios
-        .get(`/api/exam/getmcqBySub?subjectId=${selectedSubject}`)
-        .then(({ data }) => {
-          setExams(data);
-          setIsLoading(false);
-        }).catch(e=>{
-          console.log(e)
-          setIsLoading(false);
-        })
+      .get(`/api/special/showspecialexambycourse?courseId=${selectedCourse}`)
+      .then(({ data }) => {
+        setExams(data);
+        if (data.length === 0) {
+          toast.error("No Data");
+        }
+        setIsLoading(false);
+      })
+      .catch((e) => toast.error(e.response.data));
     } else {
       setExams([]);
     }
+    
     if (selectedExam !== "") {
       axios
-        .get(`/api/student/gethistorybyexamid?examId=${selectedExam}&page=${currentPage}`)
+        .get(`/api/special/specialgethistory?examId=${selectedExam}&page=${currentPage}`)
         .then(({ data }) => {
           console.log(data);
           setDetailedExam(data?.data);
@@ -146,26 +135,6 @@ const SpecialExamDetails = () => {
           </div>
           <div className="form-control">
             <label className="label-text" htmlFor="">
-              Select Subject
-            </label>
-            <select
-              name="course_list"
-              id="course_list"
-              className="input w-full border-black input-bordered"
-              required
-              onChange={(e) => handleChangeSubject(e)}
-            >
-              <option value=""></option>
-              {subjects?.length > 0 &&
-                subjects.map((subject) => (
-                  <option key={subject._id} value={subject._id}>
-                    {subject.name}
-                  </option>
-                ))}
-            </select>
-          </div>
-          <div className="form-control">
-            <label className="label-text" htmlFor="">
               Select Exam Name
             </label>
             <select
@@ -200,9 +169,6 @@ const SpecialExamDetails = () => {
               {/* <th className="w-[160px]">Start Time</th> */}
               {/* <th className="w-[160px]">End Time</th> */}
               <th className="w-[160px]">Title</th>
-              <th className="w-[160px]">Subject</th>
-              <th className="w-[160px]">D/W/M</th>
-              <th className="w-[160px]">Exam Type</th>
               <th className="w-[90px]">Marks</th>
               <th className="w-[110px]">Merit Postition</th>
               <th className="w-[200px]">Action</th>
@@ -222,10 +188,7 @@ const SpecialExamDetails = () => {
                   {/* <td>{subtractHours(new Date(examInfo.startTime)).toString().split("GMT")[0]}</td> */}
                   {/* <td>{subtractHours(new Date(examInfo.endTime)).toString().split("GMT")[0]}</td> */}
                   <td>{examInfo.name}</td>
-                  <td>{examInfo.subjectName}</td>
-                  <td>{examInfo.variation}</td>
-                  <td>{examInfo.type}</td>
-                  <td>{data.totalObtainedMarks ?? 0}/{examInfo.totalMarksMcq}</td>
+                  <td>{data.totalObtainedMarks ?? 0}/{examInfo.totalMarks}</td>
                    <td>{data.meritPosition==="-1"? "Pending" : data.meritPosition}</td> 
                   <td>
                     <div className="flex px-2 justify-evenly">

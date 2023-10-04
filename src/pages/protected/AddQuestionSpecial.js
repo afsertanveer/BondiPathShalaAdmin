@@ -156,8 +156,7 @@ const AddQuestionSpecial = () => {
       axios
       .get(`/api/special/showspecialexambycourse?courseId=${selectedCourse}`)
       .then(({ data }) => {
-        const sExams = data.filter(d=>d.examVariation===examType)
-        setExams(sExams);
+        setExams(data);
         if (data.length === 0) {
           toast.error("No Data");
         }
@@ -183,10 +182,10 @@ const AddQuestionSpecial = () => {
   }, [selectedCourse, singleExamId,examType]);
   return (
     <div className="mx-auto">
-      <div className="flex w-10/12 justify-center items-center py-5 px-2 my-5  ">
-        <div className="bg-white  lg:w-1/2 py-2 flex flex-row justify-evenly items-center">
+      <div className="flex w-full justify-center items-center py-5 px-2 my-5  ">
+        <div className="bg-white w-full px-4 py-2 flex flex-row justify-evenly items-center">
           <div className="form-control mr-2 ">
-            <label className="label-text" htmlFor="">
+            <label className="label-text text-lg text-center" htmlFor="">
               Select Course
             </label>
             <select
@@ -210,7 +209,7 @@ const AddQuestionSpecial = () => {
           </div>
           
           <div className="form-control mr-2 ">
-            <label className="label-text" htmlFor="">
+            <label className="label-text text-lg text-center" htmlFor="">
               Select Exam
             </label>
             <select
@@ -231,7 +230,7 @@ const AddQuestionSpecial = () => {
           </div>
           
           <div className="form-control mr-2 ">
-            <label className="label-text" htmlFor="">
+            <label className="label-text text-lg text-center" htmlFor="">
               Select Subject
             </label>
             <select
@@ -307,7 +306,7 @@ const AddQuestionSpecial = () => {
       <div className="modal modal-middle ml:0 lg:ml-56">
         <div className="modal-box w-11/12 max-w-5xl h-11/12">
           <form className="add-form" onSubmit={handleAddQuestion}>
-            <label htmlFor="" className="label-text">
+            <label htmlFor="" className="label-text text-lg text-center">
               Question Type
             </label>
             <select
@@ -323,7 +322,7 @@ const AddQuestionSpecial = () => {
             {isText === true ? (
               <>
                 <label htmlFor="" className=" label">
-                  <span className="label-text">Write Down the question </span>
+                  <span className="label-text text-lg text-center">Write Down the question </span>
                 </label>
                 <textarea
                   className="textarea textarea-info   border-black"
@@ -336,7 +335,7 @@ const AddQuestionSpecial = () => {
             ) : (
               <>
                 <label htmlFor="" className=" label">
-                  <span className="label-text">Select Question Image </span>
+                  <span className="label-text text-lg text-center">Select Question Image </span>
                 </label>
                 <input
                   type="file"
@@ -369,7 +368,7 @@ const AddQuestionSpecial = () => {
                   return (
                     <div key={id}>
                       <div>
-                        <label htmlFor="" className="label-text">
+                        <label htmlFor="" className="label-text text-lg text-center">
                           {optionName[id] + ")"}
                         </label>
                         <input
@@ -388,7 +387,7 @@ const AddQuestionSpecial = () => {
 
             {numberOfOptions > 0 && (
               <>
-                <label className="label-text">Correct Option</label>
+                <label className="label-text text-lg text-center">Correct Option</label>
                 <select
                   name="type"
                   id="type"
@@ -406,7 +405,7 @@ const AddQuestionSpecial = () => {
               </>
             )}
             <label htmlFor="" className=" label">
-              <span className="label-text">Explanation Link </span>
+              <span className="label-text text-lg text-center">Explanation Link </span>
             </label>
             <input
               type="file"
@@ -435,7 +434,7 @@ const AddQuestionSpecial = () => {
         <div className="modal-box w-11/12 max-w-5xl h-11/12">
           <form className="add-form" onSubmit={handleAddWrittenQuestion}>
           <label htmlFor="" className=" label">
-                  <span className="label-text">Select Question Image </span>
+                  <span className="label-text text-lg text-center">Select Question Image </span>
                 </label>
                 <input
                   type="file"
@@ -465,7 +464,7 @@ const AddQuestionSpecial = () => {
                   return (
                     <div key={id}>
                       <div>
-                        <label htmlFor="" className="label-text">
+                        <label htmlFor="" className="label-text text-lg text-center">
                           {(id+1) + ")"}
                         </label>
                         <input

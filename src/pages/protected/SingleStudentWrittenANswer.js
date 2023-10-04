@@ -13,6 +13,7 @@ const SingleStudentWrittenANswer = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [source, setSource] = useState([]);
   const [disabler, setDisabler] = useState([]);
+  const [buttonDisabler,setButtonDisabler] = useState(true);
   console.log(useParams.studentId);
   let prevSource = [];
   let changer = [];
@@ -51,6 +52,7 @@ const SingleStudentWrittenANswer = () => {
     console.log(answer);
     await axios.post("/api/teacher/checkscriptsingle", answer).then((data) => {
       toast.success("Successfully updated");
+      setButtonDisabler(true);
       setSource([]);
     });
     console.log(answer);
@@ -76,6 +78,13 @@ const SingleStudentWrittenANswer = () => {
           });
       });
   };
+  const checkNumber = (marks,id)=>{
+    if(isNaN(marks)===false && (parseFloat(marks))<=singleResult.marksPerQuestion[id]){
+      setButtonDisabler(false)
+    }else{
+      setButtonDisabler(true);
+    }
+  }
   useEffect(() => {
     setIsLoading(true);
     axios
@@ -160,18 +169,18 @@ const SingleStudentWrittenANswer = () => {
               />
               <p className="ml-4">Marks out of {singleResult.marksPerQuestion[idx]}</p>
               <input
-                type="number"
+                type="text"
                 name="obtMarks"
                 id="obtMarks"
                 className="input input-bordered  border-black"
-                min={0}
-                max={singleResult.marksPerQuestion[idx]}
+                onChange={e=>checkNumber(e.target.value,idx)}
                 required
               />
               <input
                 type="submit"
                 className="ml-4 btn"
                 value="Save Marks"
+                disabled={buttonDisabler}
               />
             </form>
                   </div>

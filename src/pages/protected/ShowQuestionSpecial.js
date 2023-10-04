@@ -52,8 +52,7 @@ const examTypeChanger = e =>{
       axios
         .get(`/api/special/showspecialexambycourse?courseId=${selectedCourse}`)
         .then(({ data }) => {
-          const sExams = data.filter(d=>d.examVariation===4)
-          setExams(sExams);
+          setExams(data);
           if (data.length === 0) {
             toast.error("No Data");
           }
@@ -85,7 +84,6 @@ const examTypeChanger = e =>{
         axios
         .get(`/api/special/questionbyexamsub?examId=${selectedExam}&subjectId=${selectedSubject}`)
         .then(({ data }) => {
-          console.log(data);
           setQuestions(data);
           setIsLoading(false);
         }).catch(e=>{
@@ -98,7 +96,6 @@ const examTypeChanger = e =>{
         axios
         .get(`api/special/getwrittenquestionbyexamsub?examId=${selectedExam}&subjectId=${selectedSubject}`)
         .then(({ data }) => {
-          console.log(data);
           setWrittenQuestion(data);
           setIsLoading(false);
         }).catch(e=>{
@@ -111,7 +108,6 @@ const examTypeChanger = e =>{
           axios
         .get(`/api/special/questionbyexamsub?examId=${selectedExam}&subjectId=${selectedSubject}`)
         .then(({ data }) => {
-          console.log(data);
           setQuestions(data);
           setIsLoading(false);
         }).catch(e=>{
@@ -122,7 +118,6 @@ const examTypeChanger = e =>{
           axios
         .get(`api/special/getwrittenquestionbyexamsub?examId=${selectedExam}&subjectId=${selectedSubject}`)
         .then(({ data }) => {
-          console.log(data);
           setWrittenQuestion(data);
           setIsLoading(false);
         }).catch(e=>{

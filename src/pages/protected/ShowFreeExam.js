@@ -241,13 +241,15 @@ const ShowFreeExam = () => {
     axios.post(`/api/freestudent/addpublishfree`,{examId})
     .then(({data} ) => {
       toast.success("Successfully publishied the exam");
+      window.location.reload(false);
       setIsLoading(false);
     }).catch(e=>toast.error(e.response.data))
   }
   const changeStatus = (examId,status)=>{
     axios.post(`/api/freestudent/statusupdatepublishfree`,{examId,status:(status).toString()})
     .then(({data} ) => {
-      toast.success(`Successfully changed the status to ${status} `);
+      toast.success(`Successfully changed the status to ${status} `);      
+      window.location.reload(false);
       setIsLoading(false);
     }).catch(e=>toast.error(e.response.data))
   }

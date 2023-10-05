@@ -43,6 +43,7 @@ const ExamSolutionWritten = () => {
                 axios.get('/api/special/showspecialexambyidstudent?examId=' + params.examId)
             ]).then(res => {
                 setExamData(res[0].data);
+                console.log(res[0].data);
                 setExamDetails(res[1].data);
             }).catch(err => {
                 console.log(err);
@@ -73,15 +74,26 @@ const ExamSolutionWritten = () => {
                                     </div>
                                 </div>
                                 {examData.sollutionScript.map((value, index) => (
-                                    <div className="mb-6 shadow-[0px_0px_6px_2px_rgba(0,0,0,0.5)] rounded-lg">
+                                    <div key={index} className="mb-6 shadow-[0px_0px_6px_2px_rgba(0,0,0,0.5)] rounded-lg">
                                         <div className="flex p-2 justify-between border-b-2 border-border-color-4">
                                             <h5 className="text-color-one">Marks: <strong>{examData.marksPerQuestion[index] ?? 0}</strong></h5>
                                             <div className="mx-auto">|</div>
                                             <h5 className="text-color-one">Obtained Marks: <strong>{examData.obtainedMarks[index] ?? 0}</strong></h5>
                                         </div>
-                                        <div className="flex p-2 justify-center">
+                                        {
+                                            typeof(value)==='string'? (<div className="flex p-2 justify-center">
                                             <img src={`${process.env.REACT_APP_FILES_HOST}/${value}`}   alt={value} />
-                                        </div>
+                                        </div> 
+                                        ): (
+                                            
+                                               value.map((v,idx)=>(
+                                                <div key={idx} className="flex p-2 justify-center">
+                                                <img src={`${process.env.REACT_APP_FILES_HOST}/${v}`}   alt={value} />
+                                                 </div>
+                                               ))
+                                        
+                                        )
+                                        }
                                     </div>
                                 ))}
                             </>)}

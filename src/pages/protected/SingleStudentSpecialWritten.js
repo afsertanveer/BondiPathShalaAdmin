@@ -66,6 +66,7 @@ const SingleStudentSpecialWritten = () => {
     console.log(answer);
     await axios.post("/api/special/checkscriptsingle", answer).then((data) => {
       toast.success("Successfully updated");
+      setButtonDisabler(true);
       setSource([]);
     });
     console.log(answer);
@@ -157,7 +158,7 @@ const SingleStudentSpecialWritten = () => {
                               usageStatistics={true}
                               ref={imageEditor}
                               />}
-                              <button class="btn mt-4 justify-center" onClick={logImageContent}>Save Image</button>
+                              <button className="btn mt-4 justify-center" onClick={logImageContent}>Save Image</button>
                           </Fragment>
                         );
                       })}

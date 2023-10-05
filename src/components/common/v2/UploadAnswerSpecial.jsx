@@ -23,7 +23,7 @@ function UploadAnswerSpecial({ index, token, exam_code, subjectId ,marksPerQuest
         const names = [];
         for (let index = 0; index < files.length; index++) {
             var url = URL.createObjectURL(files[index]);
-            names.push(`<img class="inline h-12 w-12 pr-1" src="${url}" />`);
+            names.push(`<img className="inline h-12 w-12 pr-1" src="${url}" />`);
         }
         setPlaceholderImg(names);
     }

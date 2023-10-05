@@ -215,6 +215,42 @@ const ShowFreeExam = () => {
     setNumberOfOptions(parseInt(e.target.value))
     document.getElementById("num_of_options").disabled = true;
   }
+  const handleExam = examName =>{
+    if(examName.length>4){
+      axios.get(`/api/freestudent/getfreeexamall`)
+    .then(({data} ) => {
+      const curExam = data.filter(d=>d.name.includes(examName))
+      setExams(curExam);      
+      if(data.length===0){
+        toast.error("No Data")
+      }
+      setIsLoading(false);
+    }).catch(e=>toast.error(e.response.data))
+    }else{
+      axios.get(`/api/freestudent/getfreeexamall`)
+    .then(({data} ) => {
+      setExams(data);      
+      if(data.length===0){
+        toast.error("No Data")
+      }
+      setIsLoading(false);
+    }).catch(e=>toast.error(e.response.data))
+    }
+  }
+  const addPublish = examId=>{
+    axios.post(`/api/freestudent/addpublishfree`,{examId})
+    .then(({data} ) => {
+      toast.success("Successfully publishied the exam");
+      setIsLoading(false);
+    }).catch(e=>toast.error(e.response.data))
+  }
+  const changeStatus = (examId,status)=>{
+    axios.post(`/api/freestudent/statusupdatepublishfree`,{examId,status:(status).toString()})
+    .then(({data} ) => {
+      toast.success(`Successfully changed the status to ${status} `);
+      setIsLoading(false);
+    }).catch(e=>toast.error(e.response.data))
+  }
   useEffect(() => {
     setIsLoading(true);
     axios.get(`/api/freestudent/getfreeexamall`)
@@ -246,6 +282,22 @@ const ShowFreeExam = () => {
           <h2 className="text-center font-bold">Free Exams</h2>
         </div>
       </div>
+      <div className="py-4 px-2 my-3">
+      
+       <div className="flex justify-center items-center">
+       <div className="form-control w-1/3 ">
+         <input
+         className="input input-bordered  border-black font-bold" 
+         type="text" 
+         placeholder="Type Exam Name"
+         onChange={(e)=>handleExam(e.target.value)}
+         name="" 
+         id="" 
+         />
+       </div>
+       </div>
+      
+   </div>
       {isLoading && <Loader></Loader>}
       {exams.length > 0 && (
         <div className='overflow-x-auto w-full'>
@@ -297,7 +349,22 @@ const ShowFreeExam = () => {
                       Add Exam Rule
                     </label>  
                       }
-                       
+                      {
+                        (exam.publishStatus===null || exam.publishStatus==false) && <label
+                        onClick={() => addPublish(exam._id)}
+                        htmlFor="publish-popup"
+                        className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                      >
+                        Publish Exam
+                      </label>
+                      } 
+                    <label
+                    onClick={() => changeStatus(exam._id,!exam.publishStatus)}
+                    htmlFor="status-popup"
+                    className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                  >
+                    Change Status
+                  </label> 
                        <label
                       onClick={() => handleAssignExamId(exam._id)}
                       htmlFor="my-popup"

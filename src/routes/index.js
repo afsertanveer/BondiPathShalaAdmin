@@ -48,6 +48,7 @@ const SingleStudentWrittenANswer = lazy(()=>import('./../pages/protected/SingleS
 const SingleStudentBothWrittenAnswer = lazy(()=>import('./../pages/protected/SingleStudentBothWrittenAnswer'));
 const SingleStudentSpecialWritten = lazy(()=>import('./../pages/protected/SingleStudentSpecialWritten'));
 const ViewSingleScriptAdmin = lazy(()=>import('./../pages/protected/ViewSingleScriptAdmin'));
+const ExamSolutionWritten = lazy(()=>import('./../pages/protected/ExamSolutionWritten'));
 const user =JSON.parse(localStorage.getItem('user')) ;
 const role = user.role;
 let routes;
@@ -192,6 +193,10 @@ if(role===3){
     {
       path: '/exams/:studentId/:examId/solution', // the url
       component: ExamSolution, // view rendered
+    },
+    {
+      path: '/exams/:studentId/:examId/solutionwritten', // the url
+      component: ExamSolutionWritten, // view rendered
     },
     {
       path: '/exams/:studentId/:examId/freesolution', // the url

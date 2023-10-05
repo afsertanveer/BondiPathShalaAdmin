@@ -192,7 +192,7 @@ const ShowQuestions = () => {
     }
     if (selectedSubject !== "") {
       axios
-        .get(`/api/exam/getexambysubquestion?subjectId=${selectedSubject}`)
+        .get(`/api/exam/getexambysubadmin?subjectId=${selectedSubject}&examType=1`)
         .then(({ data }) => {
           const newData = data.filter(d=>d.examVariation===1);
           setExams(newData);

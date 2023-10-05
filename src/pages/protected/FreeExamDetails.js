@@ -149,7 +149,7 @@ const FreeExamDetails = () => {
           </div>
         </div>        
       </div>
-      <div class="py-4 px-2 my-3">
+      <div className="py-4 px-2 my-3">
          {
           selectedExam!=="" && <div className="flex justify-center items-center">
           <div className="form-control w-1/3 ">

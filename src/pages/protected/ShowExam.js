@@ -31,7 +31,6 @@ const ShowExam = () => {
   const [qvmark,setQvmark] = useState([]);
   const [teachers,setTeachers] = useState([]);
   const [ selectedTeachers, setSelectedTeachers ] = useState([]);
-  console.log(selectedTeachers);
  
   const generator = (id) => {
     axios
@@ -55,14 +54,12 @@ const ShowExam = () => {
           setRuleImg(data.ruleILink);
           return data.ruleILink;
         }
-        console.log(data);
       })
       .catch((e) => {
         console.log(e);
       });
   };
   const handleAssignExamId = (id) => {
-    console.log(id);
     setSingleExamId(id);
   };
   const handleAddRule = async (e) => {
@@ -136,7 +133,6 @@ const ShowExam = () => {
       sscStatus: ssc,
       hscStatus: hsc,
     };
-    console.log(updatedExam);
     await axios.put("/api/exam/updateexam", updatedExam).then(({ data }) => {
       toast.success(data);
       window.location.reload(false);
@@ -168,7 +164,7 @@ const ShowExam = () => {
       formdata.append("iLink", questionLink);
     }
     formdata.append("explanationILink", explanationILink);
-    console.log(explanationILink);
+   
     const question = {
       questionText: questionText,
       type: isText,
@@ -186,7 +182,6 @@ const ShowExam = () => {
     formdata.append("status", true);
     formdata.append("examId", singleExamId);
 
-    console.log(question);
 
     await axios
       .post(`/api/exam/addquestionmcq`, formdata, {
@@ -215,7 +210,6 @@ const ShowExam = () => {
     const form = e.target;
     let questionLink = "";
     const formdata = new FormData();
-    console.log(singleExamId);
     questionLink = form.iLink.files[0];
     formdata.append("questionILink", questionLink);
     formdata.append("totalQuestions", numberOfOptions);
@@ -267,7 +261,7 @@ const ShowExam = () => {
     axios.post("/api/student/updatedstudentwritteninfo",{examId})
     .then(data=>{
       toast.success("This exam is stopped now...")
-      window.location.reload(false);
+      document.getElementById("my-popup-written").checked = false;
     }).catch(err=>toast.error(err));
   }
   const generatorWritten = examId =>{
@@ -287,7 +281,7 @@ const ShowExam = () => {
         teacherId:steachers
       }
       axios.post("/api/exam/assignstudenttoteacher",obj).then(({data})=>{
-        console.log(data);
+      
         toast.success("Assigned and Distributed");
       }).catch(err=>console.log(err))
   }
@@ -308,7 +302,6 @@ const ShowExam = () => {
       axios
         .get(`/api/user/teacherlistbycourse?courseId=${selectedCourse}`)
         .then(({ data }) => {
-          console.log(data);
           setTeachers(data)
           setIsLoading(false);
         }).catch(err=>console.log("teacher fetching error"));
@@ -317,9 +310,8 @@ const ShowExam = () => {
     }
     if (selectedSubject !== "" && examType!=="") {
       axios
-        .get(`/api/exam/getExamBySub?subjectId=${selectedSubject}&examType=${examType}`)
+        .get(`/api/exam/getexambysubadmin?subjectId=${selectedSubject}&examType=${examType}`)
         .then(({ data }) => {
-          console.log(data);
           setExams(data);
           if (data.length === 0) {
             toast.error("No Data");

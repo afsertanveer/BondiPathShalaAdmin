@@ -1,5 +1,6 @@
 import React, { lazy, useEffect } from 'react'
 import './App.css';
+import './custom.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 import { themeChange } from 'theme-change'
 import checkAuth from './app/auth';

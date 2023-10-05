@@ -225,7 +225,7 @@ const WrittenExamDetails = () => {
           </div>
         </div>        
       </div>
-      <div class="py-4 px-2 my-3">
+      <div className="py-4 px-2 my-3">
          {
           selectedExam!=="" && <div className="flex justify-center items-center">
           <div className="form-control w-1/3 ">
@@ -252,8 +252,6 @@ const WrittenExamDetails = () => {
               <th className="py-5 w-[180px]">Name</th>
               <th className="py-5 w-[180px]">Registration Number</th>
               <th className="py-5 w-[180px]">Mobile Number</th>
-              {/* <th className="w-[160px]">Start Time</th> */}
-              {/* <th className="w-[160px]">End Time</th> */}
               <th className="w-[160px]">Title</th>
               <th className="w-[160px]">Subject</th>
               <th className="w-[160px]">D/W/M</th>
@@ -274,8 +272,6 @@ const WrittenExamDetails = () => {
                   <td>{data.examStud.studentId.name}</td>
                   <td>{data.examStud.studentId.regNo}</td>
                   <td>{data.examStud.studentId.mobileNo}</td>
-                  {/* <td>{subtractHours(new Date(examInfo.startTime)).toString().split("GMT")[0]}</td> */}
-                  {/* <td>{subtractHours(new Date(examInfo.endTime)).toString().split("GMT")[0]}</td> */}
                   <td>{examInfo.name}</td>
                   <td>{examInfo.subjectName}</td>
                   <td>{examInfo.variation}</td>
@@ -284,7 +280,7 @@ const WrittenExamDetails = () => {
                    <td>{data.meritPosition==="-1"? "Pending" : data.meritPosition}</td> 
                   <td>
                     <div className="flex px-2 justify-evenly">
-                      <Link to={`/dashboard/exams/${data.studentId}/${examInfo.id}/solution`} className="tooltip bg-color-two rounded-full text-center h-[38px] w-[38px]" data-tip="Get Solution">
+                      <Link to={`/dashboard/exams/${data.studentId}/${examInfo.id}/solutionwritten?type=written`} target="_blank" className="tooltip bg-color-two rounded-full text-center h-[38px] w-[38px]" data-tip="Get Solution">
                         <img className="inline-flex img p-2" src={v2} alt="view-solution" />
                       </Link>
                     </div>

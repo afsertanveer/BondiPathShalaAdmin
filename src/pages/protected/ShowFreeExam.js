@@ -19,6 +19,7 @@ const ShowFreeExam = () => {
   const [correctOption, setCorrectOption] = useState(null);
   const [selectedExamId,setSelectedExamId] = useState("");
   const [ruleImg,setRuleImg] = useState("");
+  const [pStatus,setPStatus] = useState("");
   const [sscChecked,setSscChecked] = useState(false);
   const [hscChecked,setHscChecked] = useState(false);
   const optionName = [
@@ -49,6 +50,10 @@ const ShowFreeExam = () => {
     "Y",
     "Z",
   ];
+  const assignIdstatus = (examId,status)=>{
+    setSingleExamId(examId);
+    setPStatus(status);
+  }
   const generator = (id) =>{
     axios.put(`/api/freestudent/updatestudentexaminfofree?examId=${id}`).then(({data})=>{
       
@@ -352,8 +357,8 @@ const ShowFreeExam = () => {
                     </label>  
                       }
                       {
-                        (exam.publishStatus===null || exam.publishStatus==false) && <label
-                        onClick={() => addPublish(exam._id)}
+                        (exam.publishStatus===null || exam.publishStatus===false) && <label
+                        onClick={() =>handleAssignExamId(exam._id)}
                         htmlFor="publish-popup"
                         className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                       >
@@ -361,7 +366,7 @@ const ShowFreeExam = () => {
                       </label>
                       } 
                     <label
-                    onClick={() => changeStatus(exam._id,!exam.publishStatus)}
+                    onClick={() => assignIdstatus(exam._id,!exam.publishStatus)}
                     htmlFor="status-popup"
                     className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                   >
@@ -398,6 +403,46 @@ const ShowFreeExam = () => {
         </div>
       )}
       <div>
+      <input type="checkbox" id="publish-popup" className="modal-toggle" />
+      <div className="modal">
+        <div className="modal-box">
+          <h3 className="font-semibold text-lg text-center">
+            {  `Are you sure?`}
+          </h3>
+
+          <div className="modal-action flex justify-center items-center">
+            <button
+              className="btn mr-2"
+              onClick={() =>addPublish(singleExamId)}
+            >
+              Yes
+            </button>
+            <label htmlFor="publish-popup" className="btn bg-[red]">
+              No!
+            </label>
+          </div>
+        </div>
+      </div>
+      <input type="checkbox" id="status-popup" className="modal-toggle" />
+      <div className="modal">
+        <div className="modal-box">
+          <h3 className="font-semibold text-lg text-center">
+            {  `Are you sure?`}
+          </h3>
+
+          <div className="modal-action flex justify-center items-center">
+            <button
+              className="btn mr-2"
+              onClick={() =>changeStatus(singleExamId,pStatus)}
+            >
+              Yes
+            </button>
+            <label htmlFor="status-popup" className="btn bg-[red]">
+              No!
+            </label>
+          </div>
+        </div>
+      </div>
       <input type="checkbox" id="my-popup" className="modal-toggle" />
       <div className="modal">
         <div className="modal-box">

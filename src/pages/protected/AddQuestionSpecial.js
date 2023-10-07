@@ -85,7 +85,7 @@ const AddQuestionSpecial = () => {
   };
   const fillMarks = (m,id) =>{
     const prevMarks = [...qvmark];
-    prevMarks[id] =parseInt(m);
+    prevMarks[id] =parseFloat(m).toFixed(2);
     setQvmark(prevMarks);
   }
   const handleAddWrittenQuestion = async (e) => {

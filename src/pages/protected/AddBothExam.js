@@ -21,8 +21,8 @@ const AddBothExam = () => {
     e.preventDefault();
     const form = e.target;
     const name = form.exam.value;
-    const startTime = new Date(form.start_time.value);
-    const endTime = new Date(form.end_time.value);
+    const startTime = form.start_time.value;
+    const endTime = form.end_time.value;
     const duration = parseInt(form.duration.value);
     const totalQuestionMcq = parseInt(form.mcq_questions.value);
     const marksPerMcq = parseInt(form.mcq_mpq.value);

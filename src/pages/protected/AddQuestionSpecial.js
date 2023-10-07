@@ -101,7 +101,7 @@ const AddQuestionSpecial = () => {
     let newArr = [...qvmark];
     let totalMarks=0;
     for(let i =0 ; i<newArr.length;i++){
-      newArr[i] = parseInt(newArr[i]);
+      newArr[i] = parseFloat(newArr[i]).toFixed(2) ;
       totalMarks = totalMarks+newArr[i];
     }
     

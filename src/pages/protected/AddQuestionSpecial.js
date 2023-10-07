@@ -116,8 +116,6 @@ const AddQuestionSpecial = () => {
       })
       .then((data) => {
         toast.success("success");
-        form.reset();
-        window.location.reload(false)
         document.getElementById("num_of_options").disabled = false;
         setNumberOfOptions(0);
         setIsText(true);

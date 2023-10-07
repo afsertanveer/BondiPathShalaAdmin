@@ -12,7 +12,7 @@ const AddSpecialExam = () => {
   const [selectedCourse, setSelectedCourse] = useState("");
   const [selectedSubjects, setSelectedSubjects] = useState([]);
   const [selectedOptionalSubjects, setSelectedOptionalSubjects] = useState([]);
-  const selectedVariation = "3";
+  const selectedVariation = "4";
   const totalSubject = 6;
   const totalOptionalSubject = 2;
   const examSubjectNumber = 4;

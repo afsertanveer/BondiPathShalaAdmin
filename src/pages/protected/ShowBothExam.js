@@ -212,12 +212,12 @@ const ShowBothExam = () => {
     formdata.append("status", "true");
     formdata.append("examId", singleExamId);
     let newArr = [...qvmark];
-    let totalMarks=0;
+    let totalMarks=0.0;
     for(let i =0 ; i<newArr.length;i++){
       newArr[i] = parseFloat(newArr[i]).toFixed(2);
-      totalMarks = totalMarks+newArr[i];
+      totalMarks = parseFloat(totalMarks+parseFloat(newArr[i]));
     }
-    
+    totalMarks=totalMarks.toFixed(2);
     formdata.append("marksPerQuestion", newArr);
     formdata.append("totalMarks", totalMarks);
     await axios

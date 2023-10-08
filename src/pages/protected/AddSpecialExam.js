@@ -56,7 +56,7 @@ const AddSpecialExam = () => {
       totalDuration = writtenDuration;
     }
 
-    if (selectedVariation === "3") {
+    if (selectedVariation === "4") {
       writtenDuration = form.written_duration.value;
       writtenTotalQuestions = form.total_written_questions.value;
       writtenTotalMarks = form.total_written_marks.value;
@@ -356,7 +356,7 @@ const AddSpecialExam = () => {
                 />
               </div>
             </div>
-            {selectedVariation === "3" && (
+            {selectedVariation === "4" && (
               <Fragment>
                 <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-start">
                   <div className="w-full lg:w-1/2 mr-0 lg:mr-2">

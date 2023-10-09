@@ -20,14 +20,14 @@ const QuestionWithSolutionMcq = ({ question, counter = 1, type="mcq" }) => {
       <div className="mb-1">
         {question.type == false ? (
           <div className='p-4'>
-            <img className="rounded-lg w-full" src={`${process.env.REACT_APP_FILES_HOST}/${type==="mcq-only"? question.question:question.iLink}`} alt='' />
+            <img className="rounded-lg w-full" src={`${process.env.REACT_APP_FILES_HOST}/${type==="mcq-only"? question.question:question.iLink}`} />
           </div>
         ):(
           <div className="rounded-lg text-[1.5rem] font-bold p-4">{question.question}</div>
           )}
       </div>
       {(parseInt(question.answeredOption) === -1) && (
-          <div className='text-center text-red  font-extrabold text-lg leading-6'>Not Answered</div>
+          <div className='text-center text-red-500 font-bold text-lg leading-6'>Not Answered</div>
         )}
       {question.type === false ? (<ul className="my-3 flex space-x-4 justify-center">
         {
@@ -35,17 +35,17 @@ const QuestionWithSolutionMcq = ({ question, counter = 1, type="mcq" }) => {
             let defaultTextColor = "text-black";
             if (parseInt(question.answeredOption) !== -1) {
               if (parseInt(question.correctOptions) === idx) {
-                defaultTextColor = "border-8 border-color-fifty ";
+                defaultTextColor = "border-green-500";
               }
               if (parseInt(question.answeredOption) === idx) {
-                defaultTextColor = "border-8 border-color-fifty ";
+                defaultTextColor = "border-green-500";
               }
               if (parseInt(question.answeredOption) !== parseInt(question.correctOptions) && parseInt(question.answeredOption) === idx) {
-                defaultTextColor = "border-red";
+                defaultTextColor = "border-red-500";
               }
             }else{
               if(parseInt(question.correctOptions) === idx){
-                defaultTextColor = "border-8 border-color-fifty ";
+                defaultTextColor = "border-green-500";
               }
             }
             return (<li className={`mb-0 px-5 md:px-2 py-2 md:py-1 border-4 md:border-3 bg-[#262626] rounded-lg ${defaultTextColor}`} key={`soln.${idx}`}>

@@ -17,6 +17,7 @@ const ExamSolution = () => {
 
 
   useEffect(() => {
+    console.log(params);
     if (queryParams.get('type') === "mcq") {
       Promise.all([
         axios.get(`/api/student/viewsollutionadmin?examId=${params.examId}&studentId=${params.studentId}`),
@@ -50,7 +51,7 @@ const ExamSolution = () => {
     } else if (queryParams.get('type') === "mcq-special") {
       Promise.all([
         axios.get(`/api/special/viewsollutionmcqadmin?examId=${params.examId}&studentId=${params.studentId}`),
-        axios.get('/api/special/showspecialexambyidstudent?examId=' + params.examId)
+        axios.get(`/api/special/showspecialexambyidstudentadmin?examId=${params.examId}&studentId=${params.studentId}`)
       ]).then(res => {
         setExamData(res[0].data);
         if (!res[1].data) {
@@ -63,7 +64,7 @@ const ExamSolution = () => {
         window.alert("Something went wrong, please inform us");
       });
     }
-  }, [params.examId,queryParams]);
+  }, [params.examId,queryParams,params]);
 
   return (<>
     <div className="pb-8 px-4 min-h-[90vh]">
@@ -118,7 +119,7 @@ const ExamSolution = () => {
 
               {examData ? examData.map((subject, index) => (
                 <div className="rounded-lg bg-white my-8 border-2 border-orange-600" key={index}>
-                  {index < 4 && (<><h2 className="bg-orange-600 text-2xl font-bold text-center pt-1 text-white mb-8 uppercase">{subject.subjectName ?? ""}</h2>
+                  {index < 4 && (<><h2 className="bg-orange-600 text-2xl font-bold text-center pt-1 text-color-one mb-8 uppercase">{subject.subjectName ?? ""}</h2>
                     <div className="px-6 md:px-2 py-6 md:py-4">
                       {
                         subject.questions.map((question, idx) => (

@@ -516,6 +516,17 @@
     width: 20px;
     position: relative;
 }
+.custom-radio2{
+
+    height: 24px !important;
+    width: 24px !important;
+    margin-right: 14px;
+}
+.custom-radio2:before{    
+    height: 24px !important;
+    width: 24px !important;
+    border: 2px solid #F54B03 !important;
+}
 
 .custom-radio:before {
     position: absolute;
@@ -530,7 +541,6 @@
     background-color: #fff;
     border-radius: 50%;
 }
-
 
 .resultSummery_col {
     border-radius: 0.4rem;
@@ -818,3 +828,4 @@
     font-weight: 600;
     border-radius: 50%;
 }
+

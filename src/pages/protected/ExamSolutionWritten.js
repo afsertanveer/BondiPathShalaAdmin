@@ -40,7 +40,7 @@ const ExamSolutionWritten = () => {
         else if (queryParams.get('type') === "written-special") {
             Promise.all([
                 axios.get(`/api/special/viewsollutionwrittenadmin?examId=${params.examId}&studentId=${params.studentId}` ),
-                axios.get('/api/special/showspecialexambyidstudent?examId=' + params.examId)
+                axios.get(`/api/special/showspecialexambyidstudentadmin?examId=${params.examId}&studentId=${params.studentId}`)
             ]).then(res => {
                 setExamData(res[0].data);
                 console.log(res[0].data);
@@ -149,7 +149,7 @@ const ExamSolutionWritten = () => {
                             {examData &&
                                 <>
                                     {examData.map((value, index) => (<div className="mt-6 rounded-lg bg-white border-2 border-orange-600" key={index}>
-                                        <h2 className="bg-orange-600 text-2xl font-bold text-center text-white mb-0 uppercase">{value.name ?? ""}</h2>
+                                        <h2 className="bg-orange-600 text-2xl font-bold text-center text-color-one mb-0 uppercase">{value.name ?? ""}</h2>
                                         <div className="p-4 rounded-b-lg ">
                                             <div className="mb-3">
                                                 <img className="w-full rounded-lg shadow-[0px_0px_6px_2px_rgba(0,0,0,0.25)]" src={`${process.env.REACT_APP_FILES_HOST}/${value.iLink}`} />

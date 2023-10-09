@@ -33,6 +33,7 @@ module.exports = {
       "color-ten": "#F1FBFF",
       "color-eleven": "#1FB875",
       "border-one": "#F1F1F1",
+      "color-fifty":"#008000"
     },
     extend: {},
   },

@@ -175,31 +175,31 @@ const SingleStudentSpecialWritten  = () => {
                               {
                                 ansTracker[idx][index]===1 &&<Fragment>
                                 <ImageEditor
-                                includeUI={{
-                                  loadImage: {
-                                    path:
-                                      process.env.REACT_APP_API_HOST +
-                                      "/" +
-                                      photo,
-                                    name: "SampleImage",
-                                  },
-                                  menu: ["draw"],
-                                  initMenu: "draw",
-                                  theme: whiteTheme,
-                                  uiSize: {
-                                    width: "100%",
-                                    height: "800px",
-                                  },
-                                  menuBarPosition: "top",
-                                }}
-                                cssMaxHeight={700}
-                                cssMaxWidth={1500}
-                                selectionStyle={{
-                                  cornerSize: 20,
-                                  rotatingPointOffset: 70,
-                                }}
-                                usageStatistics={true}
-                                ref={imageEditor}
+                               includeUI={{
+                                      loadImage: {
+                                        path:
+                                          process.env.REACT_APP_API_HOST +
+                                          "/" +
+                                          photo,
+                                        name: "SampleImage",
+                                      },
+                                      menu: ["draw"],
+                                      initMenu: "draw",
+                                      theme: whiteTheme,
+                                      uiSize: {
+                                        width: "100%",
+                                        height: "942px",
+                                      },
+                                      menuBarPosition: "bottom",
+                                    }}
+                                    cssMaxHeight={942}
+                                    cssMaxWidth={414}
+                                    selectionStyle={{
+                                      cornerSize: 50,
+                                      rotatingPointOffset: 100,
+                                    }}
+                                    usageStatistics={true}
+                                    ref={imageEditor}
                               />
                               {
                                 ansTracker[idx][ans.length-1]===1? <button

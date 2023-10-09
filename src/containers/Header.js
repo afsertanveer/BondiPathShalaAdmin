@@ -3,16 +3,10 @@ import React, {  useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 // import BellIcon  from '@heroicons/react/24/outline/BellIcon'
 import Bars3Icon  from '@heroicons/react/24/outline/Bars3Icon'
-import MoonIcon from '@heroicons/react/24/outline/MoonIcon'
-import SunIcon from '@heroicons/react/24/outline/SunIcon'
-import { openRightDrawer } from '../features/common/rightDrawerSlice';
-import { RIGHT_DRAWER_TYPES } from '../utils/globalConstantUtil'
-import { Link } from 'react-router-dom'
 
 
 function Header(){
 
-    const dispatch = useDispatch()
     const {pageTitle} = useSelector(state => state.header)
     const [currentTheme, setCurrentTheme] = useState(localStorage.getItem("theme"))
 

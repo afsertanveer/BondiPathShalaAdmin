@@ -4,8 +4,6 @@ import './custom.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 import { themeChange } from 'theme-change'
 import checkAuth from './app/auth';
-import axios from './utils/axios';
-import CreateCourse from './pages/protected/CreateCourse';
 // import initializeApp from './app/init';
 
 // Importing pages

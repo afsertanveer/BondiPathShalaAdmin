@@ -28,7 +28,7 @@ const SingleStudentWrittenANswer = () => {
     setSource(prevSource);
     toast.success("Image Saved");
   };
-  const checkNext = (i,j)=>{
+  const checkNext = (i, j) => {
     const imageEditorInst = imageEditor.current.imageEditorInst;
     const data = imageEditorInst.toDataURL();
     prevSource = [...source];
@@ -36,11 +36,11 @@ const SingleStudentWrittenANswer = () => {
     setSource(prevSource);
     toast.success("Image Saved");
     let prevTracker = ansTracker;
-    prevTracker[i][j]=0;
-    prevTracker[i][j+1]=1;
-    console.log(prevTracker,"Checking");
-    setAnsTracker(prevTracker)
-  }
+    prevTracker[i][j] = 0;
+    prevTracker[i][j + 1] = 1;
+    console.log(prevTracker, "Checking");
+    setAnsTracker(prevTracker);
+  };
   const sendImage = async (e) => {
     // e.preventDefault();
     // setCounter((prev) => prev + 1);
@@ -195,118 +195,123 @@ const SingleStudentWrittenANswer = () => {
     <LoaderIcon></LoaderIcon>
   ) : (
     <div>
-      {
-        typeof singleResult.answerScript !== "undefined" &&
-          singleResult.answerScript.length > 0 &&
-          singleResult.answerScript.map((ans, idx) => {
-            return (
-              <div key={idx} className="my-1">
-                {disabler[idx] === 1 && (
-                  <>
-                    <p className="text-4xl font-extrabold  border-4  border-color-one   w-10 h-10 flex justify-center items-center rounded-full">{idx + 1}</p>
-                    <div className="grid grid-cols-1">
-                      {typeof ans !== "undefined" &&
-                        ans !== null &&
-                        ans.length > 0 &&
-                        ans.map((photo, index) => {
-                          return (
-                            <Fragment key={index}>
-                              {
-                                ansTracker[idx][index]===1 &&<Fragment>
-                                <ImageEditor
-                                includeUI={{
-                                  loadImage: {
-                                    path:
-                                      process.env.REACT_APP_API_HOST +
-                                      "/" +
-                                      photo,
-                                    name: "SampleImage",
-                                  },
-                                  menu: ["draw"],
-                                  initMenu: "draw",
-                                  theme: whiteTheme,
-                                  uiSize: {
-                                    width: "100%",
-                                    height: "800px",
-                                  },
-                                  menuBarPosition: "top",
-                                }}
-                                cssMaxHeight={700}
-                                cssMaxWidth={1500}
-                                selectionStyle={{
-                                  cornerSize: 20,
-                                  rotatingPointOffset: 70,
-                                }}
-                                usageStatistics={true}
-                                ref={imageEditor}
-                              />
-                              {
-                                ansTracker[idx][ans.length-1]===1? <button
-                                className="btn mt-4 justify-center"
-                                onClick={logImageContent}
-                              >
-                                Save Image
-                              </button> : <button
-                              className="btn mt-4 justify-center"
-                              onClick={()=>checkNext(idx,index)}
-                            >
-                              Next Image
-                            </button>
-                              }
-                                
-                                </Fragment>
-                              }
-                            </Fragment>
-                          );
-                        })}
-                      {typeof ans !== "undefined" && ans === null && (
-                        <p className="text-red-500 font-bold text-center mt-5">
-                          No answer for this question
-                        </p>
-                      )}
+      {typeof singleResult.answerScript !== "undefined" &&
+        singleResult.answerScript.length > 0 &&
+        singleResult.answerScript.map((ans, idx) => {
+          return (
+            <div key={idx} className="my-1">
+              {disabler[idx] === 1 && (
+                <>
+                  <p className="text-4xl font-extrabold  border-4  border-color-one   w-10 h-10 flex justify-center items-center rounded-full">
+                    {idx + 1}
+                  </p>
+                  <div className="grid grid-cols-1 gap-x-0 sm:gap-x-4">
+                    {typeof ans !== "undefined" &&
+                      ans !== null &&
+                      ans.length > 0 &&
+                      ans.map((photo, index) => {
+                        return (
+                          <div key={index}>
+                            {ansTracker[idx][index] === 1 && (
+                              <div>
+                                <div className="flex justify-center items-center">
+                                  <ImageEditor
+                                    includeUI={{
+                                      loadImage: {
+                                        path:
+                                          process.env.REACT_APP_API_HOST +
+                                          "/" +
+                                          photo,
+                                        name: "SampleImage",
+                                      },
+                                      menu: ["draw"],
+                                      initMenu: "draw",
+                                      theme: whiteTheme,
+                                      uiSize: {
+                                        width: "100%",
+                                        height: "942px",
+                                      },
+                                      menuBarPosition: "bottom",
+                                    }}
+                                    cssMaxHeight={942}
+                                    cssMaxWidth={414}
+                                    selectionStyle={{
+                                      cornerSize: 50,
+                                      rotatingPointOffset: 100,
+                                    }}
+                                    usageStatistics={true}
+                                    ref={imageEditor}
+                                  />
+                                </div>
 
-                      <form onSubmit={sendImage} className="mt-4 ">
+                                <div>
+                                  {ansTracker[idx][ans.length - 1] === 1 ? (
+                                    <button
+                                      className="btn mt-4 justify-center"
+                                      onClick={logImageContent}
+                                    >
+                                      Save Image
+                                    </button>
+                                  ) : (
+                                    <button
+                                      className="btn mt-4 justify-center"
+                                      onClick={() => checkNext(idx, index)}
+                                    >
+                                      Next Image
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    {typeof ans !== "undefined" && ans === null && (
+                      <p className="text-red-500 font-bold text-center mt-5">
+                        No answer for this question
+                      </p>
+                    )}
+
+                    <form onSubmit={sendImage} className="mt-4 ">
+                      <input
+                        type="text"
+                        className="input input-bordered  border-black hidden"
+                        name="index"
+                        id=""
+                        defaultValue={idx}
+                      />
+                      <p className="ml-4 text-lg font-bold text-red">
+                        Marks out of {singleResult.marksPerQuestion[idx]}
+                      </p>
+                      <div className="flex ">
                         <input
                           type="text"
-                          className="input input-bordered  border-black hidden"
-                          name="index"
-                          id=""
-                          defaultValue={idx}
+                          name="obtMarks"
+                          id="obtMarks"
+                          autoComplete="off"
+                          className="input input-bordered  border-black"
+                          onChange={(e) => checkNumber(e.target.value, idx)}
+                          required
                         />
-                        <p className="ml-4 text-lg font-bold text-red">
-                          Marks out of {singleResult.marksPerQuestion[idx]}
-                        </p>
-                        <div className="flex ">
-                          <input
-                            type="text"
-                            name="obtMarks"
-                            id="obtMarks"
-                            autoComplete="off"
-                            className="input input-bordered  border-black"
-                            onChange={(e) => checkNumber(e.target.value, idx)}
-                            required
-                          />
-                          <input
-                            type="submit"
-                            className="ml-4 btn "
-                            value="Save Marks"
-                            disabled={buttonDisabler}
-                          />
-                        </div>
-                      </form>
-                    </div>
-                  </>
-                )}
-              </div>
-            );
-          })
-
-      }
+                        <input
+                          type="submit"
+                          className="ml-4 btn "
+                          value="Save Marks"
+                          disabled={buttonDisabler}
+                        />
+                      </div>
+                    </form>
+                  </div>
+                </>
+              )}
+            </div>
+          );
+        })}
 
       <div className="flex justify-center items-center">
         {finalbuttonDisabler && (
           <button className="btn" onClick={() => finalSave()}>
-           Finish The Process
+            Finish The Process
           </button>
         )}
       </div>

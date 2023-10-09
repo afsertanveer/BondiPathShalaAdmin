@@ -99,8 +99,6 @@ const ShowExam = () => {
     const name = form.exam.value;
     const type = form.type.value;
     const variation = form.variation.value;
-    const free =
-      document.getElementById("free").checked === true ? true : false;
     const startTime = form.start_time.value;
     const endTime = form.end_time.value;
     if(singleExam.examVariation===1){

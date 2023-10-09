@@ -1,5 +1,5 @@
 import routes from '../routes/sidebar'
-import { NavLink,  Routes, Link , useLocation} from 'react-router-dom'
+import { NavLink, Link , useLocation} from 'react-router-dom'
 import SidebarSubmenu from './SidebarSubmenu';
 
 function LeftSidebar(){

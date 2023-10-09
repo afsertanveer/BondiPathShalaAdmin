@@ -66,6 +66,10 @@ const ShowUsers = () => {
       
     }
   }
+  const changeRole = roleId=>{
+    setUsers([]);
+    setGetRole(roleId)
+  }
   useEffect(() => {
     setIsLoading(true);
     if(getRole){
@@ -105,7 +109,7 @@ const ShowUsers = () => {
       <div className=" py-4 px-2 my-3 grid grid-cols-2 gap-x-8 gap-y-4 bg-white">
         <div className="form-control">
         <label htmlFor="" className="label-text text-3xl font-semibold text-center">Select Role</label>
-        <select name="" id="" onChange={e=>setGetRole(e.target.value)} className="input  border-black input-bordered mb-3">
+        <select name="" id="" onChange={e=>changeRole(e.target.value)} className="input  border-black input-bordered mb-3">
             <option value=""></option>
             <option value="2">Moderators</option>
             <option value="3">Teachers</option>

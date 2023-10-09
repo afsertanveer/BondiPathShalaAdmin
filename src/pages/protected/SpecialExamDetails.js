@@ -192,8 +192,11 @@ const SpecialExamDetails = () => {
                    <td>{data.meritPosition==="-1"? "Pending" : data.meritPosition}</td> 
                   <td>
                     <div className="flex px-2 justify-evenly">
-                      <Link to={`/dashboard/exams/${data.studentId}/${examInfo.id}/solution`} className="tooltip bg-color-two rounded-full text-center h-[38px] w-[38px]" data-tip="Get Solution">
-                        <img className="inline-flex img p-2" src={v2} alt="view-solution" />
+                    <Link to={`/dashboard/exams/${data.studentId}/${examInfo.id}/solution?type=mcq-special`} target="_blank" className="tooltip text-red font-bold  text-center h-[38px] w-[38px]" data-tip="Get Solution">
+                      MCQ 
+                  </Link>
+                  <Link to={`/dashboard/exams/${data.studentId}/${examInfo.id}/solutionwritten?type=written-special`} target="_blank" className="tooltip text-red font-bold  text-center h-[38px] w-[38px]" data-tip="Get Solution">
+                        Written
                       </Link>
                     </div>
                   </td>

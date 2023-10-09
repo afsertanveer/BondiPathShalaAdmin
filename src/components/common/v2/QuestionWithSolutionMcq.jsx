@@ -88,7 +88,7 @@ const QuestionWithSolutionMcq = ({ question, counter = 1, type="mcq" }) => {
       )}
       {question.explanationILink && (<div className="mx-4 mt-6 mb-2 text-center">        
         <div className='p-2 relative rounded-md border-2 border-orange-500'>
-          <div className="explanationTitle bg-orange-600 text-white absolute rounded-md px-2 -top-[12px] left-[50%] -translate-x-[50%]">Explanation</div>
+          <div className="explanationTitle bg-color-one text-white font-bold  absolute rounded-md px-2 -top-[12px] left-[50%] -translate-x-[50%]">Explanation</div>
           <p className="p-2">
             <img className=' rounded-md' src={`${process.env.REACT_APP_FILES_HOST}/${question.explanationILink}`} />
           </p>

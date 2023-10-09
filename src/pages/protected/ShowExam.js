@@ -121,7 +121,7 @@ const ShowExam = () => {
       subjectId: singleExam.subjectId._id,
       courseId: singleExam.courseId._id,
       examVariation: variation,
-      examFreeOrNot: free,
+      examFreeOrNot: false,
       startTime,
       endTime,
       totalQuestionMcq,
@@ -721,7 +721,7 @@ const ShowExam = () => {
                     />
                   </div>
                   <div className="form-control flex flex-col lg:flex-row justify-between">
-                    <div className="w-full lg:w-1/4">
+                    <div className="w-full lg:w-1/2">
                       <label htmlFor="" className="label">
                         Type
                       </label>
@@ -743,7 +743,7 @@ const ShowExam = () => {
                         <option value={3}>Monthly</option>
                       </select>
                     </div>
-                    <div className="w-full lg:w-1/4">
+                    <div className="w-full lg:w-1/2 ml-0 lg:ml-1">
                       <label htmlFor="" className="label">
                         Variation
                       </label>
@@ -762,27 +762,7 @@ const ShowExam = () => {
                         </option>
                         <option value={1}>MCQ</option>
                         <option value={2}>Written</option>
-                        <option value={3}>Both</option>
                       </select>
-                    </div>
-                    <div className="w-full lg:w-1/4">
-                      <div className="flex items-center mt-0 lg:mt-5 ">
-                        <input
-                          type="checkbox"
-                          defaultChecked={
-                            singleExam.examFreeOrNot ? "checked" : ""
-                          }
-                          name="free"
-                          id="free"
-                          className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                        />
-                        <label
-                          htmlFor="disabled-checked-checkbox"
-                          className="ml-2 text-sm font-medium"
-                        >
-                          Free
-                        </label>
-                      </div>
                     </div>
                   </div>
                   <div className="form-control"></div>

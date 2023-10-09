@@ -204,7 +204,7 @@ const SingleStudentWrittenANswer = () => {
                 {disabler[idx] === 1 && (
                   <>
                     <p className="text-4xl font-extrabold  border-4  border-color-one   w-10 h-10 flex justify-center items-center rounded-full">{idx + 1}</p>
-                    {/* <div className="grid grid-cols-1">
+                    <div className="grid grid-cols-1">
                       {typeof ans !== "undefined" &&
                         ans !== null &&
                         ans.length > 0 &&
@@ -294,7 +294,7 @@ const SingleStudentWrittenANswer = () => {
                           />
                         </div>
                       </form>
-                    </div> */}
+                    </div>
                   </>
                 )}
               </div>

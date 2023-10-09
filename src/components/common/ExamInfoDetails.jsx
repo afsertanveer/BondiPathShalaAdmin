@@ -6,7 +6,7 @@ const types = {
 };
 function ExamInfoDetails({ examInfos }) {
   return (
-    <div className="bg-color-seven px-0 md:px-4 lg:px-8 py-8 md:py-4">
+    <div className="bg-color-one px-0 md:px-4 lg:px-8 py-8 md:py-4">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">        
           <div>
             <span className="font-bold">Exam name & Code: </span>

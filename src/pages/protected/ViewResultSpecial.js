@@ -5,47 +5,82 @@ import axios from "../../utils/axios";
 import Loader from "./../../Shared/Loader";
 import { toast } from "react-hot-toast";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
-const ViewResult = () => {
+const ViewResultSpecial = () => {
   const [exams, setExams] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [detailedExam,setDetailedExam] = useState([]);
   const [selectedExam, setSelectedExam] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState("");
 
+  const handleChangeCourse = (e) => {
+    setSelectedCourse(e.target.value);
+    setDetailedExam([]);
+    
+  };
 
+ 
 
   useEffect(() => {
     setIsLoading(true);
-    axios.get("/api/exam/freecoursesub?course=Free&sub=Free").then(({ data }) => {
-        axios
-        .get(`/api/exam/getExamBySub?subjectId=${data[1]._id}`)
-        .then(({ data }) => {
-          setExams(data);
-          setIsLoading(false);
-        }).catch(e=>{
-          console.log(e)
-          setIsLoading(false);
-        })
-        setIsLoading(false);
-    });
-    if (selectedExam !== "") {
+    axios.get("/api/course/getallcourseadmin").then(({ data }) => {
+      setCourses(data.courses);
+      setIsLoading(false);
+    }).catch(e=>console.log(e))
+    if (selectedCourse !== "") {
       axios
-        .get(`/api/freestudent/getallrankfree?examId=${selectedExam}`)
-        .then(({ data }) => {
-          console.log(data);
-          setDetailedExam(data);
-          setIsLoading(false);
-        }).catch(e=>{
-          toast.error(e.response.data);
-          setDetailedExam([]);
-        })
+      .get(`/api/special/showspecialexambycourse?courseId=${selectedCourse}`)
+      .then(({ data }) => {
+        setExams(data);
+        if (data.length === 0) {
+          toast.error("No Data");
+        }
+        setIsLoading(false);
+      })
+      .catch((e) => toast.error(e.response.data));
     } else {
-        setDetailedExam([]);
+      setExams([]);
     }
-  }, [ selectedExam,]);
+ 
+    if (selectedExam !== "") {
+        axios
+          .get(`/api/special/getallrank?examId=${selectedExam}`)
+          .then(({ data }) => {
+            console.log(data);
+            setDetailedExam(data);
+            setIsLoading(false);
+          }).catch(e=>{
+            toast.error(e.response.data);
+            setDetailedExam([]);
+          })
+      } else {
+          setDetailedExam([]);
+      }
+  }, [selectedCourse, selectedExam]);
   return (
     <div className=" bg-white  min-h-[800px]">
-      <div className=" py-4 px-2 my-3 ">
+       <div className=" py-4 px-2 my-3 ">
         <div className=" w-full lg:w-2/3 mx-auto flex flex-row justify-evenly items-center">
+          <div className="form-control">
+            <label className="label-text" htmlFor="">
+              Select Course
+            </label>
+            <select
+              name="course_list"
+              id="course_list"
+              className="input w-full border-black input-bordered"
+              required
+              onChange={(e) => handleChangeCourse(e)}
+            >
+              <option value=""></option>
+              {courses.length > 0 &&
+                courses.map((course) => (
+                  <option key={course._id} value={course._id}>
+                    {course.name}
+                  </option>
+                ))}
+            </select>
+          </div>
           <div className="form-control">
             <label className="label-text" htmlFor="">
               Select Exam Name
@@ -86,8 +121,6 @@ const ViewResult = () => {
               <th className="py-5 w-[180px]">Mobile Number</th>
               <th className="py-5 w-[180px]">Full Mobile Number</th>
               <th className="w-[160px]">Institution</th>
-              <th className="w-[160px]">Start Time</th>
-              <th className="w-[160px]">End Time</th>
               <th className="w-[160px]">Marks</th>
               <th className="w-[110px]">Merit Postition</th>
             </tr>
@@ -104,10 +137,8 @@ const ViewResult = () => {
                   <td>{data.mobileNo}</td>
                   <td>{data.mobileNoOrg}</td>
                   <td>{data.institution}</td>
-                  <td>{data.examStartTime}</td>
-                  <td>{data.examEndTime}</td>
-                  <td>{data.totalObtainedMarks +'|' + data.totalMarks}</td>
-                  <td>{data.rank}</td>
+                  <td>{data.totalObtainedMarks +' | ' + data.totalMarks}</td>
+                  <td>{data.rank +' | ' + data.totalStudent}</td>
                 </tr>
               )) : (<tr><td colSpan={9}><p  className="my-2 text-3xl text-center font-bold text-red">No Data Found</p></td></tr>)}
           </tbody>
@@ -119,4 +150,4 @@ const ViewResult = () => {
   );
 };
 
-export default ViewResult;
+export default ViewResultSpecial;

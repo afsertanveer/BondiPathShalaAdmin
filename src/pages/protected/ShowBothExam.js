@@ -303,7 +303,6 @@ const ShowBothExam = () => {
       axios
         .get(`/api/both/getbothexambysubject?subjectId=${selectedSubject}`)
         .then(({ data }) => {
-          console.log(data)
           setExams(data.examPage.exam);
           if (data.examPage.exam.length === 0) {
             toast.error("No Data");

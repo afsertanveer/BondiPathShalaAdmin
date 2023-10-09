@@ -28,6 +28,8 @@ const SpecialExamDetails = lazy(()=>import('../pages/protected/SpecialExamDetail
 const ExamSolution= lazy(()=>import('../pages/protected/ExamSolution'));
 const FreeExamSolution= lazy(()=>import('../pages/protected/FreeExamSolution'));
 const ViewResult= lazy(()=>import('../pages/protected/ViewResult'));
+const ViewResultBoth= lazy(()=>import('../pages/protected/ViewResultBoth'));
+const ViewResultSpecial= lazy(()=>import('../pages/protected/ViewResultSpecial'));
 const ViewPaidResult= lazy(()=>import('../pages/protected/ViewPaidResult'));
 const StudentHistory = lazy(()=>import('./../pages/protected/StudentHistory'));
 const SearchStudent = lazy(()=>import('./../pages/protected/SearchStudent'));
@@ -239,6 +241,16 @@ if(role===3){
     {
       path: '/exam/view-paid-result', // the url
       component: ViewPaidResult, // view rendered
+      
+    },
+    {
+      path: '/exam/view-both-result', // the url
+      component: ViewResultBoth, // view rendered
+      
+    },
+    {
+      path: '/exam/view-special-result', // the url
+      component: ViewResultSpecial, // view rendered
       
     },
     {

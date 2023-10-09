@@ -202,7 +202,6 @@ const ShowSpecialExam = () => {
       setExams([]);
     }
     if (singleExamId !== null) {
-      console.log("asdasd", singleExamId);
       axios
         .get(`/api/special/showspecialexambyid?examId=${singleExamId}`)
         .then(({ data }) => {

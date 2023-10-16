@@ -31,7 +31,7 @@ const ViewScriptSpecial = () => {
     if (role === 3) {
       url = "/api/special/getstudentdata";
     } else {
-      url = `/api/special/getstudentdata`;
+      url = `/api/special/getstudentdataadmin`;
     }
     if (event.selected > 0) {
       axios

@@ -227,6 +227,9 @@ const SingleStudentWrittenANswer = () => {
                                       menu: ["draw"],
                                       initMenu: "draw",
                                       theme: whiteTheme,
+                                      draw:{
+                                        color:"red"
+                                      },                                      
                                       uiSize: {
                                         width: "100%",
                                         height: "942px",

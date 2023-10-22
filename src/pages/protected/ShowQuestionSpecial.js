@@ -5,12 +5,15 @@ import axios from "../../utils/axios";
 import Loader from "./../../Shared/Loader";
 import { toast } from "react-hot-toast";
 import { optionName } from "../../utils/globalVariables";
+import DeactivateButton from "../../features/common/components/DeactivateButton";
+import PopUpModal from "../../features/common/components/PopUpModal";
 const ShowQuestionSpecial = () => {
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [exams, setExams] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState("");
+  const [selectedQuestionId,setSelectedQuestionId] = useState("");
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [selectedExam, setSelectedExam] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -19,6 +22,17 @@ const ShowQuestionSpecial = () => {
   const [writtenQuestion,setWrittenQuestion] = useState({});
   const [bothStatus,setBothStatus] = useState(-1);
   
+  const removeQuestion = (questionId)=>{
+    axios.put("/api/exam/updatequestionstatus",{questionId}).then(({data})=>{
+     toast.success("Removed Successfuly");
+     let prev = [...questions];
+     prev = prev.filter(pr=>pr.questionId!==questionId);
+     setQuestions(prev);
+   }).catch(e=>console.log(e))
+   
+   document.getElementById("my-modal-1").checked = false;
+   
+ }
   const handleChangeCourse = (e) => {
     setSelectedSubject("");
     setSubjects([]);
@@ -36,11 +50,7 @@ const bothStatusChanger = e =>{
   setBothStatus(parseInt(e.target.value));
 }
 
-const examTypeChanger = e =>{
-  setQuestions([]);
-  setWrittenQuestion({});
-  setExamType(parseInt(e.target.value));
-}
+
 
   useEffect(() => {
     setIsLoading(true);
@@ -244,6 +254,7 @@ const examTypeChanger = e =>{
               {
                ( examType===2 || (bothStatus===2 && examType===3)) && <th className="bg-white">Marks By Questions</th>
               }
+              <th className="bg-white">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -318,6 +329,9 @@ const examTypeChanger = e =>{
                       />
                     </td>
                     }
+                    <td>                      
+                      <DeactivateButton setter={setSelectedQuestionId} value={question.questionId}></DeactivateButton>
+                    </td>
                   </tr>
                 ))}
             </tbody>
@@ -325,7 +339,7 @@ const examTypeChanger = e =>{
           }
         </div>
       )}
-     
+         <PopUpModal modalData={selectedQuestionId} remove={removeQuestion}></PopUpModal>
     </div>
   );
 };

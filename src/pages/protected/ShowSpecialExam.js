@@ -133,6 +133,7 @@ const ShowSpecialExam = () => {
     e.preventDefault();
     const form = e.target;
     const name = form.exam.value;
+    console.log(name)
     const startTime = form.start_time.value;
     const endTime = form.end_time.value;
     const totalMarks = form.total_marks.value;
@@ -186,7 +187,6 @@ const ShowSpecialExam = () => {
       axios
         .get(`/api/user/teacherlistbycourse?courseId=${selectedCourse}`)
         .then(({ data }) => {
-          console.log(data);
           setTeachers(data);
           setIsLoading(false);
         })
@@ -334,13 +334,13 @@ const ShowSpecialExam = () => {
                         >
                           Submit Exam
                         </label>
-                        <label
+                        {/* <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="show-modal"
                           className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
                           Show
-                        </label>
+                        </label> */}
                         <DeactivateButton
                           setter={setSelectedExamId}
                           value={exam._id}
@@ -354,7 +354,7 @@ const ShowSpecialExam = () => {
         </div>
       )}
       <div>
-        <input type="checkbox" id="show-modal" className="modal-toggle" />
+        {/* <input type="checkbox" id="show-modal" className="modal-toggle" />
         <div className="modal ">
           <div className="modal-box w-full max-w-7xl h-11/12">
             <h3 className="font-extrabold text-2xl text-center mb-4">
@@ -419,7 +419,7 @@ const ShowSpecialExam = () => {
                       <span className="font-bold  mr-2">
                         {
                           subjects?.filter((s) =>
-                            si.subjectId.includes(s._id)
+                            si.subjectId?.includes(s._id)
                           )[0].name
                         }
                       </span>
@@ -520,7 +520,7 @@ const ShowSpecialExam = () => {
               </label>
             </div>
           </div>
-        </div>
+        </div> */}
         <input type="checkbox" id="my-popup-written" className="modal-toggle" />
         <div className="modal">
           <div className="modal-box">
@@ -648,7 +648,7 @@ const ShowSpecialExam = () => {
                   name="exam"
                   id="exam"
                   placeholder="Subject Name"
-                  defaultValue={singleExam.name}
+                  defaultValue={singleExam?.name}
                   required
                 />
               </div>

@@ -8,7 +8,7 @@ function ExamInfoDetails({ examInfos, variationType = "single", hide = "", page 
   {
     return variationType !== "special" ? (
       <div className={`py-2 mx-6 text-color-one`}>
-        <div className="btn-theme rounded-xl grid grid-rows-1 md:grid-rows-2 md:grid-rows-none grid-flow-col md:grid-flow-col divide-x">
+        <div className="btn-theme rounded-xl grid grid-rows-1 md:grid-rows-2 grid-flow-col md:grid-flow-col divide-x">
           <div className="px-2 py-1">
             <span>Exam name & Code: </span>
             <span className="font-bold">{examInfos.name}</span>

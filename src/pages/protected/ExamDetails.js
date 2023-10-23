@@ -74,7 +74,6 @@ const ExamDetails = () => {
       axios
         .get(`/api/student/gethistorybyexamidfilter?examId=${selectedExam}&regNo=${regNo}`)
         .then(({ data }) => {
-          console.log(data);
           setDetailedExam(data?.data);
           setExamInfo(data.examInfo)
           setPagiNationData({});

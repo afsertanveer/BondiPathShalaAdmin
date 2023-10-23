@@ -200,7 +200,6 @@ const ViewScriptSpecial = () => {
                         {role === 3 && (
                           <Link
                             to={`/dashboard/${selectedExam}/checkanswerspecial/${wd.studentId}`}
-                            target="_blank"
                             className="text-red font-bold mr-2"
                           >
                             Check{" "}

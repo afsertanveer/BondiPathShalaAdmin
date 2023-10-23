@@ -55,8 +55,8 @@ const ShowUsers = () => {
         setIsLoading(false);
       })
     }else{
-      axios.get(`/api/user/getuserbyrole?role=${getRole}&page=${currentPage}`).then(({ data }) => {
-        setUsers(data.user.filter(u=>u.courseId._id===courseId))
+      axios.get(`/api/user/getuserbycourse?role=${getRole}&courseId=${courseId}`).then(({ data }) => {
+        setUsers(data.user)
         setPagiNationData({});
         setIsLoading(false);
       }).catch(e=>{

@@ -50,7 +50,9 @@ const bothStatusChanger = e =>{
   setBothStatus(parseInt(e.target.value));
 }
 
-
+const onChangeExam = id=>{
+  setSelectedExam(id);
+}
 
   useEffect(() => {
     setIsLoading(true);
@@ -71,6 +73,7 @@ const bothStatusChanger = e =>{
         axios
         .get(`/api/subject/getsubjectbycourse?courseId=${selectedCourse}`)
         .then(({ data }) => {
+          console.log(data.data);
           setSubjects(data.data);
           setIsLoading(false);
         }).catch(err=>console.log("subject fetching error"));
@@ -81,6 +84,18 @@ const bothStatusChanger = e =>{
       axios
         .get(`/api/special/showspecialexambyid?examId=${selectedExam}`)
         .then(({ data }) => {
+          // console.log(data);
+          // let allSub = subjects;
+          // let newSub = [];
+          // for(let i = 0 ; i<data.allsubject.length;i++){
+          //   for(let j =0 ; j<allSub.length;j++){
+          //     if(allSub[j]===data.allSubject[i]){
+          //       newSub.push(data.allSubject[i])
+          //     }
+          //   }
+
+          // }
+          // setSubjects(newSub)
           setSingleExam(data);
           
         })
@@ -178,7 +193,7 @@ const bothStatusChanger = e =>{
           id="exams"
           className="input w-full border-black input-bordered"
           required
-          onChange={(e) => setSelectedExam(e.target.value)}
+          onChange={(e) => onChangeExam(e.target.value)}
         >
           <option value="">---Select Exam---</option>
           {
@@ -203,7 +218,7 @@ const bothStatusChanger = e =>{
         >
           <option value="">---Select Subject---</option>
           {
-            subjects?.filter(s=> singleExam?.allSubject?.includes(s._id)).map(sub=><option key={sub._id} value={sub._id}>{sub.name}</option>)
+            subjects.map(sub=><option key={sub._id} value={sub._id}>{sub.name}</option>)
             
             }
           

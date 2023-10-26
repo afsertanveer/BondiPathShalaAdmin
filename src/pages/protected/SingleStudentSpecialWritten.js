@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "../../utils/axios";
 import { LoaderIcon, toast } from "react-hot-toast";
 import "tui-color-picker/dist/tui-color-picker.css";
@@ -17,6 +17,7 @@ const SingleStudentSpecialWritten  = () => {
   const [finalbuttonDisabler, setFinalButtonDisabler] = useState(false);
   const [ansTracker, setAnsTracker] = useState([]);
   const [counter, setCounter] = useState(1);
+  const navigator = useNavigate();
   let prevSource = [];
   let changer = [];
   const imageEditor = React.createRef();
@@ -95,6 +96,7 @@ const SingleStudentSpecialWritten  = () => {
       .post("/api/special/markscalculation", marksCalculation)
       .then((data) => {
         toast.success("successfully updated the result");
+        navigator('/dashboard/scripts/special/view')
       });
   };
   const checkNumber = (marks, id) => {

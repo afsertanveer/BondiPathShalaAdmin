@@ -121,8 +121,8 @@ const ViewResultSpecial = () => {
               <th className="py-5 w-[180px]">Mobile Number</th>
               <th className="py-5 w-[180px]">Full Mobile Number</th>
               <th className="w-[160px]">Institution</th>
-              <th className="w-[160px">MCQ</th>
-              <th className="w-[160px">Written</th>
+              <th className="w-[100px]">MCQ</th>
+              <th className="w-[100px]">Written</th>
               <th className="w-[160px]">Marks</th>
               <th className="w-[110px]">Merit Postition</th>
             </tr>

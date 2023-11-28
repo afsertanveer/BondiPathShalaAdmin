@@ -186,7 +186,18 @@ const SingleStudentSpecialWritten  = () => {
                                         name: "SampleImage",
                                       },
                                       menu: ["draw"],
+                                      // menu: ["draw","rotate"],
                                       initMenu: "draw",
+                                      drawColorPicker:{
+                                        defaultcolor:"#ff4040"
+                                      },
+                                      draw: {
+                                        defaultcolor: '#ff4040',
+                                        opacity: 1.0,
+                                        range: {
+                                            value: 8
+                                        }
+                                    },
                                       theme: whiteTheme,
                                       uiSize: {
                                         width: "100%",

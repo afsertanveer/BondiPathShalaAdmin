@@ -1,12 +1,11 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { setPageTitle } from '../../features/common/headerSlice'
 import Dashboard from '../../features/dashboard/index'
 import axios from '../../utils/axios'
 
 function InternalPage(){
     const dispatch = useDispatch()
-    const [courses,setCourses] = useSelector([])
 
     useEffect(() => {
         dispatch(setPageTitle({ title : "Dashboard"}))
@@ -15,7 +14,6 @@ function InternalPage(){
             
               }).catch(e=>{
                 console.log(e);
-                setCourses([]);
               })
         }
       }, [dispatch])

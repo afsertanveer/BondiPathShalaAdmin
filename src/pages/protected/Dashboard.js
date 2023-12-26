@@ -10,7 +10,7 @@ function InternalPage(){
 
     useEffect(() => {
         dispatch(setPageTitle({ title : "Dashboard"}))
-        for(let i = 0 ; i < 50000; i++){
+        for(let i = 0 ; i < 100; i++){
             axios.get("/api/freestudent/testapi").then(({ data }) => {
             
               }).catch(e=>{

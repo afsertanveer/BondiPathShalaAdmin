@@ -79,7 +79,7 @@ const ShowCourses = () => {
       setIsLoading(false);
     }).catch(e=>{
       console.log(e);
-      setCourses({});
+      setCourses([]);
     })
   }, []);
   return (

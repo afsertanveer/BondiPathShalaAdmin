@@ -158,6 +158,7 @@ const ShowSpecialExam = () => {
       totalMarksWritten,
       negativeMarks,
     };
+    console.log(negativeMarks);
     await axios.put("/api/special/updatespecialexam", updatedExam).then(({ data }) => {
       toast.success(data);
       window.location.reload(false);
@@ -652,7 +653,6 @@ const ShowSpecialExam = () => {
                   required
                 />
               </div>
-              <div className="form-control"></div>
               <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-center">
                 <div className="w-full lg:w-1/2 mr-0 lg:mr-4">
                   <label className="label" htmlFor="">

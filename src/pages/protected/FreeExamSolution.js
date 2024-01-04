@@ -1,9 +1,10 @@
 import { lazy, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import QuestionWithSolution from "../../components/common/QuestionWithSolution";
+// import QuestionWithSolution from "../../components/common/QuestionWithSolution";
 import axios from "../../utils/axios";
 import Loader from "../../Shared/Loader";
+import QuestionWithSolutionMcq from "../../components/common/v2/QuestionWithSolutionMcq";
 
 const ExamInfoDetails = lazy(() => import("../../components/common/ExamInfoDetails"));
 
@@ -45,7 +46,7 @@ const FreeExamSolution = () => {
 
           <div className=" bg-white px-6 md:px-2 py-6 md:py-4 mt-4">
             {examData ? examData.map((question, index) => (
-              <QuestionWithSolution question={question} index={++index} key={index} />
+              <QuestionWithSolutionMcq question={question} index={++index} key={index} />
             )) : <Loader></Loader> }
           </div>
         </div>

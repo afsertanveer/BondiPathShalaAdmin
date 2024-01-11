@@ -52,7 +52,7 @@ const ExamReset = () => {
     }
   }
   const handleSearch = (value) => {
-    if (value.length > 5) {
+    if (value.length > 3) {
       if (value.length === 13) {
         document.getElementById('rgn_number').disabled = true
         setRgn(value)
@@ -65,10 +65,10 @@ const ExamReset = () => {
   const restartExam = () => {
     console.log(rgn, examType, selectedExam)
     axios.post('/api/exam/resetexam',{regNo:rgn,examId:selectedExam,type:parseInt(examType)}).then(({ data }) => {
-        isLoading(true);
+        setIsLoading(true);
         toast.success(data);
-        isLoading(false);
-      })
+        setIsLoading(false);
+      }).catch((e)=>toast.error(e))
   }
 
   useEffect(() => {

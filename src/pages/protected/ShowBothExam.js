@@ -330,7 +330,7 @@ const ShowBothExam = () => {
   return (
     <div className="mx-auto">
       <div className="flex justify-center items-center py-2 px-2 my-3  ">
-        <div className="bg-white w-full lg:w-1/2 py-2 flex flex-row justify-evenly items-center">
+        <div className="bg-white w-full lg:w-1/2 px-4  py-4 flex flex-row justify-between items-center">
           <div className="form-control">
             <label className="label-text" htmlFor="">
               Select Course

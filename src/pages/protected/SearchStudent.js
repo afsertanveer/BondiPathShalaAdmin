@@ -108,7 +108,7 @@ const SearchStudent = () => {
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Institution</th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">SSC Roll</th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">HSC Roll</th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Action</th>
+                {/* <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Action</th> */}
               </tr>
             </thead>
                 <tbody>
@@ -121,14 +121,14 @@ const SearchStudent = () => {
                     <td className="px-6 py-4 text-center">{student.institution===null? "N/A" : student.institution }</td>
                     <td className="px-6 py-4 text-center">{student.hscRoll===null? "N/A" :student.hscRoll}</td>
                     <td className="px-6 py-4 text-center">{student.sscRoll===null? "N/A" :student.sscRoll }</td>
-                    <td className="px-6 py-4 text-center">
+                    {/* <td className="px-6 py-4 text-center">
                       <Link
                         to={`/dashboard/students/${student._id}/history`}  target="_blank"
                         className="btn bg-button text-white"
                       >
                         Exam History
                       </Link>
-                    </td>
+                    </td> */}
                   </tr>
                 ))}
             </tbody>

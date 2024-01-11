@@ -139,7 +139,7 @@ const ViewScriptBoth = () => {
   return (
     <div className="mx-auto">
         <div className=" py-4 px-2 my-3 ">
-        <div className=" w-full lg:w-2/3 mx-auto flex flex-row justify-evenly items-center">
+        <div className="w-full  mx-auto flex flex-row justify-between items-center">
           <div className="form-control">
             <label className="label-text" htmlFor="">
               Select Course

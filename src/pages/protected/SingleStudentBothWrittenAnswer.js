@@ -22,14 +22,18 @@ const SingleStudentBothWrittenAnswer = () => {
   let changer = [];
   const imageEditor = React.createRef();
   const logImageContent = () => {
+    
+    document.getElementById("save_button").disabled=true;
     const imageEditorInst = imageEditor.current.imageEditorInst;
     const data = imageEditorInst.toDataURL();
     prevSource = [...source];
     prevSource.push(data);
     setSource(prevSource);
     toast.success("Image Saved");
+    document.getElementById("save_button").disabled=true;
   };
   const checkNext = (i,j)=>{
+    document.getElementById("next_button").disabled=true;
     const imageEditorInst = imageEditor.current.imageEditorInst;
     const data = imageEditorInst.toDataURL();
     prevSource = [...source];
@@ -41,9 +45,16 @@ const SingleStudentBothWrittenAnswer = () => {
     prevTracker[i][j+1]=1;
     console.log(prevTracker,"Checking");
     setAnsTracker(prevTracker)
+    document.getElementById("next_button").disabled=true;
   }
   const sendImage = async (e) => {
-    
+    document.getElementById("save_marks").disabled=true;
+    toast.custom((t)=>(
+      <div className=" flex justify-center items-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+        <span className="text-red text-xl text-center">Please Wait!!</span>
+      </div>
+    ));
     e.preventDefault();
     setCounter((prev) => prev + 1);
     if (counter === singleResult.totalQuestions) {
@@ -81,12 +92,13 @@ const SingleStudentBothWrittenAnswer = () => {
     console.log(answer);
     await axios.post("/api/teacher/bothcheckscriptsingle", answer).then((data) => {
       toast.success("Successfully updated");
-      setButtonDisabler(true);
+      document.getElementById("save_marks").disabled=false;
       setSource([]);
     });
     setDisabler(changer);
   };
   const finalSave = async () => {
+    document.getElementById("proceed_button").disabled= true;
     const marksCalculation = {
       studentId: params.studentId,
       examId: params.examId,
@@ -96,6 +108,9 @@ const SingleStudentBothWrittenAnswer = () => {
       .post("/api/teacher/bothmarkscalculation", marksCalculation)
       .then((data) => {
         toast.success("successfully updated the result");
+        
+    document.getElementById("proceed_button").disabled= false;
+        
       navigator("/dashboard/scripts/both/view")
       });
   };
@@ -205,11 +220,12 @@ const SingleStudentBothWrittenAnswer = () => {
                               />
                               {
                                 ansTracker[idx][ans.length-1]===1? <button
+                                id="save_button"
                                 className="btn mt-4 justify-center"
                                 onClick={logImageContent}
                               >
                                 Save Image
-                              </button> : <button
+                              </button> : <button id="next_button"
                               className="btn mt-4 justify-center"
                               onClick={()=>checkNext(idx,index)}
                             >
@@ -250,6 +266,7 @@ const SingleStudentBothWrittenAnswer = () => {
                             required
                           />
                           <input
+                            id="save_marks"
                             type="submit"
                             className="ml-4 btn "
                             value="Save Marks"
@@ -269,7 +286,7 @@ const SingleStudentBothWrittenAnswer = () => {
 
       <div className="flex justify-center items-center">
         {finalbuttonDisabler && (
-          <button className="btn" onClick={() => finalSave()}>
+          <button id="proceed_button" className="btn" onClick={() => finalSave()}>
            Finish The Process
           </button>
         )}

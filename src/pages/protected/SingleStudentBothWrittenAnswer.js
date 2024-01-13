@@ -49,12 +49,7 @@ const SingleStudentBothWrittenAnswer = () => {
   }
   const sendImage = async (e) => {
     document.getElementById("save_marks").disabled=true;
-    toast.custom((t)=>(
-      <div className=" flex justify-center items-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
-        <span className="text-red text-xl text-center">Please Wait!!</span>
-      </div>
-    ));
+    
     e.preventDefault();
     setCounter((prev) => prev + 1);
     if (counter === singleResult.totalQuestions) {

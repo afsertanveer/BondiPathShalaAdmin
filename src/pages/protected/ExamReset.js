@@ -51,17 +51,17 @@ const ExamReset = () => {
       }
     }
   }
-  const handleSearch = (value) => {
-    if (value.length > 3) {
-      if (value.length === 13) {
-        document.getElementById('rgn_number').disabled = true
-        setRgn(value)
-      }
-      setRgn(value)
-    } else {
-      setRgn('')
-    }
-  }
+  // const handleSearch = (value) => {
+  //   if (value.length > 3) {
+  //     if (value.length === 13) {
+  //       document.getElementById('rgn_number').disabled = true
+  //       setRgn(value)
+  //     }
+  //     setRgn(value)
+  //   } else {
+  //     setRgn('')
+  //   }
+  // }
   const restartExam = () => {
     console.log(rgn, examType, selectedExam)
     axios.post('/api/exam/resetexam',{regNo:rgn,examId:selectedExam,type:parseInt(examType)}).then(({ data }) => {

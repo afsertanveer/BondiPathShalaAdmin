@@ -278,7 +278,7 @@ const ExamDetails = () => {
                   <td>{examInfo.subjectName}</td>
                   <td>{examInfo.variation}</td>
                   <td>{examInfo.type}</td>
-                  <td>{data.totalObtainedMarks ?? 0}/{examInfo.totalMarksMcq}</td>
+                  <td>{data.totalObtainedMarks===-5000?"Late" :data.totalObtainedMarks+'/'+examInfo.totalMarksMcq}</td>
                    <td>{data.meritPosition==="-1"? "Pending" : data.meritPosition}</td> 
                   <td>
                     <div className="flex px-2 justify-evenly">

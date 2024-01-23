@@ -48,9 +48,8 @@ const SingleStudentBothWrittenAnswer = () => {
     document.getElementById("next_button").disabled=true;
   }
   const sendImage = async (e) => {
-    document.getElementById("save_marks").disabled=true;
-    
     e.preventDefault();
+    document.getElementById("save_marks").disabled=true;
     setCounter((prev) => prev + 1);
     if (counter === singleResult.totalQuestions) {
       setFinalButtonDisabler(true);
@@ -199,8 +198,8 @@ const SingleStudentBothWrittenAnswer = () => {
                                       initMenu: "draw",
                                       theme: whiteTheme,
                                       uiSize: {
-                                        width: "100%",
-                                        height: "942px",
+                                        width: "600px",
+                                        height: "600px",
                                       },
                                       menuBarPosition: "bottom",
                                     }}

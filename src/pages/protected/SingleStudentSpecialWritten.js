@@ -200,8 +200,8 @@ const SingleStudentSpecialWritten  = () => {
                                     },
                                       theme: whiteTheme,
                                       uiSize: {
-                                        width: "100%",
-                                        height: "942px",
+                                        width: "600px",
+                                        height: "600px",
                                       },
                                       menuBarPosition: "bottom",
                                     }}

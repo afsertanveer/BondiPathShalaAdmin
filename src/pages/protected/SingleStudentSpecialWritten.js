@@ -198,6 +198,12 @@ const SingleStudentSpecialWritten  = () => {
                                             value: 8
                                         }
                                     },
+                                    imageSize: {
+                                      oldWidth: "0",
+                                      oldHeight: "0",
+                                      newWidth: "600px",
+                                      newHeight: "600px"
+                                    },
                                       theme: whiteTheme,
                                       uiSize: {
                                         width: "600px",

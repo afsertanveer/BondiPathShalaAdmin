@@ -250,18 +250,21 @@ const SingleStudentWrittenANswer = () => {
                                       loadImage: {
                                         path:
                                           process.env.REACT_APP_API_HOST +
-                                          '/' +
+                                          "/" +
                                           photo,
-                                        name: 'SampleImage',
+                                        name: "SampleImage",
                                       },
-                                      menu: ['draw'],
-                                      initMenu: 'draw',
+                                      menu: ["draw"],
+                                      initMenu: "draw",
                                       theme: whiteTheme,
+                                      draw:{
+                                        color:"red"
+                                      },                                      
                                       uiSize: {
-                                        width: '100%',
-                                        height: '942px',
+                                        width: "100%",
+                                        height: "942px",
                                       },
-                                      menuBarPosition: 'bottom',
+                                      menuBarPosition: "bottom",
                                     }}
                                     cssMaxHeight={942}
                                     cssMaxWidth={414}

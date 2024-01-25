@@ -1,47 +1,75 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import axios from "../../utils/axios";
-import { LoaderIcon, toast } from "react-hot-toast";
-import "tui-color-picker/dist/tui-color-picker.css";
-import "tui-image-editor/dist/tui-image-editor.css";
-import ImageEditor from "@toast-ui/react-image-editor";
-import { whiteTheme } from "../../utils/globalVariables";
+import React, { Fragment, useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import axios from '../../utils/axios'
+import { LoaderIcon, toast } from 'react-hot-toast'
+import 'tui-color-picker/dist/tui-color-picker.css'
+import 'tui-image-editor/dist/tui-image-editor.css'
+import ImageEditor from '@toast-ui/react-image-editor'
+import { imageResizer, whiteTheme } from '../../utils/globalVariables'
 
 const SingleStudentWrittenANswer = () => {
-  const params = useParams();
-  const [singleResult, setSingleResult] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [source, setSource] = useState([]);
-  const [disabler, setDisabler] = useState([]);
-  const [buttonDisabler, setButtonDisabler] = useState(true);
-  const [finalbuttonDisabler, setFinalButtonDisabler] = useState(false);
-  const [ansTracker, setAnsTracker] = useState([]);
-  const [counter, setCounter] = useState(1);
-  const navigate = useNavigate();
-  let prevSource = [];
-  let changer = [];
-  const imageEditor = React.createRef();
+  const params = useParams()
+  const [singleResult, setSingleResult] = useState({})
+  const [isLoading, setIsLoading] = useState(false)
+  const [source, setSource] = useState([])
+  const [disabler, setDisabler] = useState([])
+  const [buttonDisabler, setButtonDisabler] = useState(true)
+  const [finalbuttonDisabler, setFinalButtonDisabler] = useState(false)
+  const [ansTracker, setAnsTracker] = useState([])
+  const [counter, setCounter] = useState(1)
+  const navigate = useNavigate()
+  let prevSource = []
+  let changer = []
+  const imageEditor = React.createRef()
   const logImageContent = () => {
-    const imageEditorInst = imageEditor.current.imageEditorInst;
-    const data = imageEditorInst.toDataURL();
-    prevSource = [...source];
-    prevSource.push(data);
-    setSource(prevSource);
-    toast.success("Image Saved");
-  };
+    const imageEditorInst = imageEditor.current.imageEditorInst
+    const data = imageEditorInst.toDataURL()
+    let bigImage = document.createElement('img')
+    bigImage.src = data
+    bigImage.onload = (e2) => {
+      let canvas = document.createElement('canvas')
+      let ratio = 400 / e2.target.width
+      canvas.width = 400
+      canvas.height = e2.target.height * ratio
+
+      const context = canvas.getContext('2d')
+      context.drawImage(bigImage, 0, 0, canvas.width, canvas.height)
+      let newImageUrl = context.canvas.toDataURL('image/jpeg', 80)
+      prevSource = [...source]
+      prevSource.push(newImageUrl)
+      setSource(prevSource)
+    }
+    toast.success('Image Saved')
+  }
   const checkNext = (i, j) => {
-    const imageEditorInst = imageEditor.current.imageEditorInst;
-    const data = imageEditorInst.toDataURL();
-    prevSource = [...source];
-    prevSource.push(data);
-    setSource(prevSource);
-    toast.success("Image Saved");
-    let prevTracker = ansTracker;
-    prevTracker[i][j] = 0;
-    prevTracker[i][j + 1] = 1;
-    console.log(prevTracker, "Checking");
-    setAnsTracker(prevTracker);
-  };
+    console.log(source)
+    const imageEditorInst = imageEditor.current.imageEditorInst
+    const data = imageEditorInst.toDataURL()
+    // console.log('imageData: ', data)
+
+    let bigImage = document.createElement('img')
+    bigImage.src = data
+    bigImage.onload = (e2) => {
+      let canvas = document.createElement('canvas')
+      let ratio = 400 / e2.target.width
+      canvas.width = 400
+      canvas.height = e2.target.height * ratio
+
+      const context = canvas.getContext('2d')
+      context.drawImage(bigImage, 0, 0, canvas.width, canvas.height)
+      let newImageUrl = context.canvas.toDataURL('image/jpeg', 80)
+      prevSource = [...source]
+      prevSource.push(newImageUrl)
+      setSource(prevSource)
+    }
+
+    toast.success('Image Saved')
+    let prevTracker = ansTracker
+    prevTracker[i][j] = 0
+    prevTracker[i][j + 1] = 1
+    console.log(prevTracker, 'Checking')
+    setAnsTracker(prevTracker)
+  }
   const sendImage = async (e) => {
     // e.preventDefault();
     // setCounter((prev) => prev + 1);
@@ -75,23 +103,23 @@ const SingleStudentWrittenANswer = () => {
     //   };
     // }
     // console.log(answer);
-    e.preventDefault();
-    setCounter((prev) => prev + 1);
+    e.preventDefault()
+    setCounter((prev) => prev + 1)
     if (counter === singleResult.totalQuestions) {
-      setFinalButtonDisabler(true);
+      setFinalButtonDisabler(true)
     }
-    const form = e.target;
-    const idx = parseInt(form.index.value);
-    const obtainedMarks = parseInt(form.obtMarks.value);
-    console.log(source);
-    changer = [...disabler];
+    const form = e.target
+    const idx = parseInt(form.index.value)
+    const obtainedMarks = parseInt(form.obtMarks.value)
+    console.log(source)
+    changer = [...disabler]
     for (let i = 0; i < changer.length; i++) {
-      changer[idx] = 0;
+      changer[idx] = 0
       if (idx + 1 !== changer.length) {
-        changer[idx + 1] = 1;
+        changer[idx + 1] = 1
       }
     }
-    let answer;
+    let answer
     if (source.length === 0) {
       answer = {
         questionNo: idx + 1,
@@ -99,7 +127,7 @@ const SingleStudentWrittenANswer = () => {
         studentId: params.studentId,
         examId: params.examId,
         uploadImages: [],
-      };
+      }
     } else {
       answer = {
         questionNo: idx + 1,
@@ -107,97 +135,97 @@ const SingleStudentWrittenANswer = () => {
         studentId: params.studentId,
         examId: params.examId,
         uploadImages: source,
-      };
+      }
     }
-    console.log(answer);
-    await axios.post("/api/teacher/checkscriptsingle", answer).then((data) => {
-      toast.success("Successfully updated");
-      setButtonDisabler(true);
-      setSource([]);
-    });
-    setDisabler(changer);
-  };
+    console.log(answer)
+    await axios.post('/api/teacher/checkscriptsingle', answer).then((data) => {
+      toast.success('Successfully updated')
+      setButtonDisabler(true)
+      setSource([])
+    })
+    setDisabler(changer)
+  }
   const finalSave = async () => {
     const marksCalculation = {
       studentId: params.studentId,
       examId: params.examId,
-    };
+    }
     const statusUpdate = {
       studentId: params.studentId,
       examId: params.examId,
       status: true,
-    };
+    }
     await axios
-      .post("/api/teacher/markscalculation", marksCalculation)
+      .post('/api/teacher/markscalculation', marksCalculation)
       .then((data) => {
         axios
-          .post("/api/teacher/checkstatusupdate", statusUpdate)
+          .post('/api/teacher/checkstatusupdate', statusUpdate)
           .then((data) => {
-            toast.success("successfully updated the result");
-            navigate("/dashboard/scripts/view");
-          });
-      });
-  };
+            toast.success('successfully updated the result')
+            navigate('/dashboard/scripts/view')
+          })
+      })
+  }
   const checkNumber = (marks, id) => {
-    console.log(id);
+    console.log(id)
     if (
       isNaN(marks) === false &&
       parseFloat(marks) <= singleResult.marksPerQuestion[id]
     ) {
-      setButtonDisabler(false);
+      setButtonDisabler(false)
     } else {
-      console.log("jhere");
-      setButtonDisabler(true);
+      console.log('jhere')
+      setButtonDisabler(true)
     }
-  };
+  }
   useEffect(() => {
-    setIsLoading(true);
+    setIsLoading(true)
+    // document.getElementsByClassName("color-picker-value").style.backgroundColor="red";
+
     axios
       .get(
         `/api/student/getwrittenstudentsinglebyexam?examId=${params.examId}&&studentId=${params.studentId}`
       )
       .then(({ data }) => {
-        console.log(data);
-        setSingleResult(data);
-        let dis = [];
+        setSingleResult(data)
+        let dis = []
         for (let i = 0; i < data.totalQuestions; i++) {
           if (i === 0) {
-            dis[i] = 1;
+            dis[i] = 1
           } else {
-            dis[i] = 0;
+            dis[i] = 0
           }
         }
 
-        setDisabler(dis);
-        let tracker = [];
+        setDisabler(dis)
+        let tracker = []
         for (let i = 0; i < data.answerScript.length; i++) {
-          tracker[i] = [];
+          tracker[i] = []
           if (data.answerScript[i] === null) {
-            tracker[i] = [1];
+            tracker[i] = [1]
           } else {
             if (data.answerScript[i].length > 1) {
               for (let j = 0; j < data?.answerScript[i]?.length; j++) {
                 if (j === 0) {
-                  tracker[i][j] = 1;
+                  tracker[i][j] = 1
                 } else {
-                  tracker[i][j] = 0;
+                  tracker[i][j] = 0
                 }
               }
             } else {
-              tracker[i] = [1];
+              tracker[i] = [1]
             }
           }
         }
-        console.log(tracker);
-        setAnsTracker(tracker);
-        setIsLoading(false);
-      });
-  }, [params]);
+        setAnsTracker(tracker)
+        setIsLoading(false)
+      })
+  }, [params])
   return isLoading ? (
     <LoaderIcon></LoaderIcon>
   ) : (
-    <div>
-      {typeof singleResult.answerScript !== "undefined" &&
+    <div className="min-h-full">
+      {typeof singleResult.answerScript !== 'undefined' &&
         singleResult.answerScript.length > 0 &&
         singleResult.answerScript.map((ans, idx) => {
           return (
@@ -208,7 +236,7 @@ const SingleStudentWrittenANswer = () => {
                     {idx + 1}
                   </p>
                   <div className="grid grid-cols-1 gap-x-0 sm:gap-x-4">
-                    {typeof ans !== "undefined" &&
+                    {typeof ans !== 'undefined' &&
                       ans !== null &&
                       ans.length > 0 &&
                       ans.map((photo, index) => {
@@ -222,21 +250,18 @@ const SingleStudentWrittenANswer = () => {
                                       loadImage: {
                                         path:
                                           process.env.REACT_APP_API_HOST +
-                                          "/" +
+                                          '/' +
                                           photo,
-                                        name: "SampleImage",
+                                        name: 'SampleImage',
                                       },
-                                      menu: ["draw"],
-                                      initMenu: "draw",
+                                      menu: ['draw'],
+                                      initMenu: 'draw',
                                       theme: whiteTheme,
-                                      draw:{
-                                        color:"red"
-                                      },                                      
                                       uiSize: {
-                                        width: "100%",
-                                        height: "942px",
+                                        width: '100%',
+                                        height: '942px',
                                       },
-                                      menuBarPosition: "bottom",
+                                      menuBarPosition: 'bottom',
                                     }}
                                     cssMaxHeight={942}
                                     cssMaxWidth={414}
@@ -269,9 +294,9 @@ const SingleStudentWrittenANswer = () => {
                               </div>
                             )}
                           </div>
-                        );
+                        )
                       })}
-                    {typeof ans !== "undefined" && ans === null && (
+                    {typeof ans !== 'undefined' && ans === null && (
                       <p className="text-red-500 font-bold text-center mt-5">
                         No answer for this question
                       </p>
@@ -310,7 +335,7 @@ const SingleStudentWrittenANswer = () => {
                 </>
               )}
             </div>
-          );
+          )
         })}
 
       <div className="flex justify-center items-center">
@@ -321,7 +346,7 @@ const SingleStudentWrittenANswer = () => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SingleStudentWrittenANswer;
+export default SingleStudentWrittenANswer

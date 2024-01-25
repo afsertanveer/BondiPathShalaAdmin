@@ -31,7 +31,8 @@ const SingleStudentSpecialWritten  = () => {
   };
   const checkNext = (i,j)=>{
     const imageEditorInst = imageEditor.current.imageEditorInst;
-    const data = imageEditorInst.toDataURL();
+    const data = imageEditorInst.toDataURL("image/jpeg", 0.5);
+    console.log(data);
     prevSource = [...source];
     prevSource.push(data);
     setSource(prevSource);

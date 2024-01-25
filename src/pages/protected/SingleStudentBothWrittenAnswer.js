@@ -22,30 +22,53 @@ const SingleStudentBothWrittenAnswer = () => {
   let changer = [];
   const imageEditor = React.createRef();
   const logImageContent = () => {
-    
-    document.getElementById("save_button").disabled=true;
-    const imageEditorInst = imageEditor.current.imageEditorInst;
-    const data = imageEditorInst.toDataURL();
-    prevSource = [...source];
-    prevSource.push(data);
-    setSource(prevSource);
-    toast.success("Image Saved");
-    document.getElementById("save_button").disabled=true;
-  };
-  const checkNext = (i,j)=>{
-    document.getElementById("next_button").disabled=true;
-    const imageEditorInst = imageEditor.current.imageEditorInst;
-    const data = imageEditorInst.toDataURL();
-    prevSource = [...source];
-    prevSource.push(data);
-    setSource(prevSource);
-    toast.success("Image Saved");
-    let prevTracker = ansTracker;
-    prevTracker[i][j]=0;
-    prevTracker[i][j+1]=1;
-    console.log(prevTracker,"Checking");
+    const imageEditorInst = imageEditor.current.imageEditorInst
+    const data = imageEditorInst.toDataURL()
+    let bigImage = document.createElement('img')
+    bigImage.src = data
+    bigImage.onload = (e2) => {
+      let canvas = document.createElement('canvas')
+      let ratio = 400 / e2.target.width
+      canvas.width = 400
+      canvas.height = e2.target.height * ratio
+
+      const context = canvas.getContext('2d')
+      context.drawImage(bigImage, 0, 0, canvas.width, canvas.height)
+      let newImageUrl = context.canvas.toDataURL('image/jpeg', 80)
+      prevSource = [...source]
+      prevSource.push(newImageUrl)
+      setSource(prevSource)
+    }
+    toast.success('Image Saved')
+  }
+  const checkNext = (i, j) => {
+    console.log(source)
+    const imageEditorInst = imageEditor.current.imageEditorInst
+    const data = imageEditorInst.toDataURL()
+    // console.log('imageData: ', data)
+
+    let bigImage = document.createElement('img')
+    bigImage.src = data
+    bigImage.onload = (e2) => {
+      let canvas = document.createElement('canvas')
+      let ratio = 400 / e2.target.width
+      canvas.width = 400
+      canvas.height = e2.target.height * ratio
+
+      const context = canvas.getContext('2d')
+      context.drawImage(bigImage, 0, 0, canvas.width, canvas.height)
+      let newImageUrl = context.canvas.toDataURL('image/jpeg', 80)
+      prevSource = [...source]
+      prevSource.push(newImageUrl)
+      setSource(prevSource)
+    }
+
+    toast.success('Image Saved')
+    let prevTracker = ansTracker
+    prevTracker[i][j] = 0
+    prevTracker[i][j + 1] = 1
+    console.log(prevTracker, 'Checking')
     setAnsTracker(prevTracker)
-    document.getElementById("next_button").disabled=true;
   }
   const sendImage = async (e) => {
     e.preventDefault();
@@ -172,7 +195,7 @@ const SingleStudentBothWrittenAnswer = () => {
           singleResult.answerScript.length > 0 &&
           singleResult.answerScript.map((ans, idx) => {
             return (
-              <div key={idx} className="my-1">
+              <div key={idx} className="my-1 px-4">
                 {disabler[idx] === 1 && (
                   <>
                      <p className="text-4xl font-extrabold  border-4  border-color-one   w-10 h-10 flex justify-center items-center rounded-full">{idx + 1}</p>
@@ -198,8 +221,8 @@ const SingleStudentBothWrittenAnswer = () => {
                                       initMenu: "draw",
                                       theme: whiteTheme,
                                       uiSize: {
-                                        width: "600px",
-                                        height: "600px",
+                                        width: "100%",
+                                        height: "750px",
                                       },
                                       menuBarPosition: "bottom",
                                     }}

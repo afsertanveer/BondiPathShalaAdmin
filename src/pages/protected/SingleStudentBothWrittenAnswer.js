@@ -195,7 +195,7 @@ const SingleStudentBothWrittenAnswer = () => {
           singleResult.answerScript.length > 0 &&
           singleResult.answerScript.map((ans, idx) => {
             return (
-              <div key={idx} className="my-1 px-4">
+              <div key={idx} className="my-1">
                 {disabler[idx] === 1 && (
                   <>
                      <p className="text-4xl font-extrabold  border-4  border-color-one   w-10 h-10 flex justify-center items-center rounded-full">{idx + 1}</p>

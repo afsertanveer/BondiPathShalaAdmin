@@ -215,6 +215,9 @@ const ViewScriptBoth = () => {
                   Student Name
                 </th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
+                  Registration Number
+                </th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
                  Total Marks
                 </th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">
@@ -231,6 +234,7 @@ const ViewScriptBoth = () => {
                     return <tr key={idx} className="bg-white">
                         <td>{idx+1}</td>
                         <td>{wd.studentName}</td>
+                        <td>{wd.regNo}</td>
                         <td>{wd.totalMarks}</td>
                         <td>{wd.totalQuestions}</td>
                         <td>

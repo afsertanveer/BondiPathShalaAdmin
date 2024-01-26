@@ -163,6 +163,7 @@ const ViewResultBoth = () => {
             <tr className="text-center">
               <th className="py-5 w-[80px]">Sl No.</th>
               <th className="w-[160px]">Student Name</th>
+              <th className="w-[160px]">Registration Number</th>
               <th className="py-5 w-[180px]">Mobile Number</th>
               <th className="py-5 w-[180px]">Full Mobile Number</th>
               <th className="w-[160px]">Institution</th>
@@ -179,6 +180,7 @@ const ViewResultBoth = () => {
                 >
                   <td>{index + 1}</td>
                   <td>{data.studentName}</td>
+                  <td>{data.regNo}</td>
                   <td>{data.mobileNo}</td>
                   <td>{data.mobileNoOrg}</td>
                   <td>{data.institution}</td>

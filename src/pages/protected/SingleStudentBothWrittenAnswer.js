@@ -199,7 +199,7 @@ const SingleStudentBothWrittenAnswer = () => {
                 {disabler[idx] === 1 && (
                   <>
                      <p className="text-4xl font-extrabold  border-4  border-color-one   w-10 h-10 flex justify-center items-center rounded-full">{idx + 1}</p>
-                    <div className="grid grid-cols-1">
+                    <div className="">
                       {typeof ans !== "undefined" &&
                         ans !== null &&
                         ans.length > 0 &&
@@ -230,7 +230,6 @@ const SingleStudentBothWrittenAnswer = () => {
                                 menuBarPosition: "bottom",
                               }}
                               cssMaxHeight={942}
-                              cssMaxWidth={414}
                               selectionStyle={{
                                 cornerSize: 50,
                                 rotatingPointOffset: 100,

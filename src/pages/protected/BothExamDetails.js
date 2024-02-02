@@ -158,11 +158,11 @@ const BothExamDetails = () => {
     }
   }, [selectedCourse, selectedSubject, selectedExam,currentPage]);
   return (
-    <div className=" bg-white  min-h-[800px]">
-      <div className=" py-4 px-2 my-3 ">
-        <div className="w-full  mx-auto flex flex-row justify-between items-center">
+    <div className="min-h-[800px]">
+      <div className=" bg-white py-4 px-2 my-3 ">
+        <div className="w-full  mx-auto grid grid-cols-1 lg:grid-cols-3 gap-4">
           <div className="form-control">
-            <label className="label-text" htmlFor="">
+            <label className="label-text text-center" htmlFor="">
               Select Course
             </label>
             <select
@@ -175,14 +175,14 @@ const BothExamDetails = () => {
               <option value=""></option>
               {courses.length > 0 &&
                 courses.map((course) => (
-                  <option key={course._id} value={course._id}>
+                  <option className="text-center" key={course._id} value={course._id}>
                     {course.name}
                   </option>
                 ))}
             </select>
           </div>
           <div className="form-control">
-            <label className="label-text" htmlFor="">
+            <label className="label-text text-center" htmlFor="">
               Select Subject
             </label>
             <select
@@ -195,14 +195,14 @@ const BothExamDetails = () => {
               <option value=""></option>
               {subjects?.length > 0 &&
                 subjects.map((subject) => (
-                  <option key={subject._id} value={subject._id}>
+                  <option className="text-center" key={subject._id} value={subject._id}>
                     {subject.name}
                   </option>
                 ))}
             </select>
           </div>
           <div className="form-control">
-            <label className="label-text" htmlFor="">
+            <label className="label-text text-center" htmlFor="">
               Select Exam Name
             </label>
             <select
@@ -215,7 +215,7 @@ const BothExamDetails = () => {
               <option value=""></option>
               {exams.length > 0 &&
                 exams.map((exam) => (
-                  <option key={exam._id} value={exam._id}>
+                  <option className="text-center" key={exam._id} value={exam._id}>
                     {exam.name}
                   </option>
                 ))}
@@ -226,7 +226,7 @@ const BothExamDetails = () => {
       <div className="py-4 px-2 my-3">
          {
           selectedExam!=="" && <div className="flex justify-center items-center">
-          <div className="form-control w-1/3 ">
+          <div className="form-control w-full lg:w-1/3 ">
             <input
             className="input input-bordered  border-black font-bold" 
             type="text" 
@@ -278,7 +278,7 @@ const BothExamDetails = () => {
                   <td>{examInfo.subjectName}</td>
                   <td>{examInfo.variation}</td>
                   <td>{examInfo.type}</td>
-                  <td>{data.totalObtainedMarks ?? 0}/{examInfo.totalMarks}</td>
+                  <td>{(parseFloat(data.totalObtainedMarksMcq)+parseFloat(data.totalObtainedMarksWritten)).toFixed(2) ?? 0}/{examInfo.totalMarks}</td>
                    <td>{data.meritPosition==="-1"? "Pending" : data.meritPosition}</td> 
                   <td>
                     <div className="flex px-2 justify-evenly">

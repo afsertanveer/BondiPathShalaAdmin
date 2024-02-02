@@ -336,9 +336,9 @@ const ShowExam = () => {
   return (
     <div className="mx-auto">
       <div className="flex justify-center items-center py-2 px-2 my-3  ">
-        <div className="bg-white w-full  py-2 flex flex-row justify-between items-center">
+        <div className="bg-white w-full px-2 lg:px-6 py-2 grid grid-cols-1 lg:grid-cols-3 gap-0 lg:gap-4 ">
           <div className="form-control">
-            <label className="label-text" htmlFor="">
+            <label className="label-text text-center " htmlFor="">
               Select Course
             </label>
             <select
@@ -353,7 +353,7 @@ const ShowExam = () => {
                 courses.map(
                   (course) =>
                     course.name !== "Free" && (
-                      <option key={course._id} value={course._id}>
+                      <option className="text-center" key={course._id} value={course._id}>
                         {course.name}
                       </option>
                     )
@@ -361,7 +361,7 @@ const ShowExam = () => {
             </select>
           </div>
           <div className="form-control">
-            <label className="label-text" htmlFor="">
+            <label className="label-text text-center" htmlFor="">
               Select Subject
             </label>
             <select
@@ -376,7 +376,7 @@ const ShowExam = () => {
                 subjects.map(
                   (subject) =>
                     subject.name !== "Free" && (
-                      <option key={subject._id} value={subject._id}>
+                      <option className="text-center" key={subject._id} value={subject._id}>
                         {subject.name}
                       </option>
                     )
@@ -384,7 +384,7 @@ const ShowExam = () => {
             </select>
           </div>
           <div className="form-control">
-            <label className="label-text" htmlFor="">
+            <label className="label-text text-center" htmlFor="">
               Select Type
             </label>
             <select
@@ -394,9 +394,9 @@ const ShowExam = () => {
               required
               onChange={(e) => setExamType(e.target.value)}
             >
-              <option value=""></option>
-              <option value="1">MCQ</option>
-              <option value="2">WRITTEN</option>
+              <option className="text-center" value=""></option>
+              <option className="text-center"  value="1">MCQ</option>
+              <option className="text-center"  value="2">WRITTEN</option>
             </select>
           </div>
         </div>
@@ -462,8 +462,8 @@ const ShowExam = () => {
                     <td className="px-6 py-2 text-center">
                       {exam.examVariation===1? exam.marksPerMcq : "N/A"}-{exam.examVariation===1? exam.totalQuestionMcq : "N/A"}-{exam.totalMarksMcq}
                     </td>
-                    <td className="px-6 py-2 text-center">
-                      <div className="flex flex-col lg:flex-row justify-center">
+                    <td className="px-2 py-3 ">
+                      <div className="grid  lg:grid-cols-3 gap-1 lg:gap-2">
                         {exam.RuleImage !== "0" ? (
                           <label
                             onClick={() => handleAssignRule(exam._id)}

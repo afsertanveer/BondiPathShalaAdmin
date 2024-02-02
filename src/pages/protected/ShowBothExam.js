@@ -309,7 +309,10 @@ const ShowBothExam = () => {
           }
           setIsLoading(false);
         })
-        .catch((e) => toast.error(e.response.data));
+        .catch((e) =>{
+          toast.error(e.response.data)
+          setExams([]);
+        });
     } else {
       setExams([]);
     }
@@ -330,9 +333,9 @@ const ShowBothExam = () => {
   return (
     <div className="mx-auto">
       <div className="flex justify-center items-center py-2 px-2 my-3  ">
-        <div className="bg-white w-full lg:w-1/2 px-4  py-4 flex flex-row justify-between items-center">
+        <div className="bg-white w-full lg:w-1/2 px-4  py-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div className="form-control">
-            <label className="label-text" htmlFor="">
+            <label className="label-text text-center" htmlFor="">
               Select Course
             </label>
             <select
@@ -347,7 +350,7 @@ const ShowBothExam = () => {
                 courses.map(
                   (course) =>
                     course.name !== "Free" && (
-                      <option key={course._id} value={course._id}>
+                      <option className="text-center" key={course._id} value={course._id}>
                         {course.name}
                       </option>
                     )
@@ -355,7 +358,7 @@ const ShowBothExam = () => {
             </select>
           </div>
           <div className="form-control">
-            <label className="label-text" htmlFor="">
+            <label className="label-text text-center" htmlFor="">
               Select Subject
             </label>
             <select
@@ -370,7 +373,7 @@ const ShowBothExam = () => {
                 subjects.map(
                   (subject) =>
                     subject.name !== "Free" && (
-                      <option key={subject._id} value={subject._id}>
+                      <option className="text-center" key={subject._id} value={subject._id}>
                         {subject.name}
                       </option>
                     )
@@ -435,7 +438,7 @@ const ShowBothExam = () => {
                     {exam.totalMarks}
                     </td>
                     <td className="px-6 py-2 text-center">
-                      <div className="flex flex-col lg:flex-row justify-center">
+                      <div className="grid  lg:grid-cols-3 gap-1 lg:gap-2">
                         {exam.RuleImage !== "0" ? (
                           <label
                             onClick={() => handleAssignRule(exam._id)}

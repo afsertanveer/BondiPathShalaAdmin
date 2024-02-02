@@ -165,8 +165,8 @@ const ShowUsers = () => {
                   <td>{user.mobileNo}</td>
                   <td>{user.userName}</td>
                   <td>{user.address}</td>
-                  {getRole==="3" && <td>{user.courseId.name}</td>}
-                  {getRole==="3" && <td>{user.subjectId.name}</td>}
+                  {getRole==="3" && <td>{user.courseId?.name? user.courseId.name: ""}</td>}
+                  {getRole==="3" && <td>{user.subjectId?.name? user.subjectId.name:""}</td>}
                   {/* <td>{user?.createdAt.split("T")[0]}</td> */}
                   <td>
                     <label

@@ -5,7 +5,7 @@ import { LoaderIcon, toast } from 'react-hot-toast'
 import 'tui-color-picker/dist/tui-color-picker.css'
 import 'tui-image-editor/dist/tui-image-editor.css'
 import ImageEditor from '@toast-ui/react-image-editor'
-import { imageResizer, whiteTheme } from '../../utils/globalVariables'
+import {  whiteTheme } from '../../utils/globalVariables'
 
 const SingleStudentWrittenANswer = () => {
   const params = useParams()
@@ -71,38 +71,7 @@ const SingleStudentWrittenANswer = () => {
     setAnsTracker(prevTracker)
   }
   const sendImage = async (e) => {
-    // e.preventDefault();
-    // setCounter((prev) => prev + 1);
-    // if (counter === singleResult.totalQuestions) {
-    //   setFinalButtonDisabler(true);
-    // }
-    // const form = e.target;
-
-    // const obtainedMarks = parseInt(form.obtMarks.value);
-    // changer = [...disabler];
-    // changer[counter] = 0;
-    // if (counter + 1 !== changer.length) {
-    //   changer[counter ] = 1;
-    // }
-    // let answer;
-    // if (source.length === 0) {
-    //   answer = {
-    //     questionNo: counter ,
-    //     obtainedMarks,
-    //     studentId: params.studentId,
-    //     examId: params.examId,
-    //     uploadImages: [],
-    //   };
-    // } else {
-    //   answer = {
-    //     questionNo: counter ,
-    //     obtainedMarks,
-    //     studentId: params.studentId,
-    //     examId: params.examId,
-    //     uploadImages: source,
-    //   };
-    // }
-    // console.log(answer);
+   
     e.preventDefault()
     setCounter((prev) => prev + 1)
     if (counter === singleResult.totalQuestions) {

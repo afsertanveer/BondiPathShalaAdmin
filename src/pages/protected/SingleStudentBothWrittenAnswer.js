@@ -139,7 +139,6 @@ const SingleStudentBothWrittenAnswer = () => {
     ) {
       setButtonDisabler(false);
     } else {
-      console.log("jhere");
       setButtonDisabler(true);
     }
   };

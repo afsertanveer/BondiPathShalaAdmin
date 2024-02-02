@@ -24,18 +24,41 @@ const SingleStudentSpecialWritten = () => {
   const logImageContent = () => {
     const imageEditorInst = imageEditor.current.imageEditorInst
     const data = imageEditorInst.toDataURL()
-    prevSource = [...source]
-    prevSource.push(data)
-    setSource(prevSource)
+    let bigImage = document.createElement('img')
+    bigImage.src = data
+    bigImage.onload = (e2) => {
+      let canvas = document.createElement('canvas')
+      let ratio = 400 / e2.target.width
+      canvas.width = 400
+      canvas.height = e2.target.height * ratio
+
+      const context = canvas.getContext('2d')
+      context.drawImage(bigImage, 0, 0, canvas.width, canvas.height)
+      let newImageUrl = context.canvas.toDataURL('image/jpeg', 80)
+      prevSource = [...source]
+      prevSource.push(newImageUrl)
+      setSource(prevSource)
+    }
     toast.success('Image Saved')
   }
   const checkNext = (i, j) => {
     const imageEditorInst = imageEditor.current.imageEditorInst
     const data = imageEditorInst.toDataURL('image/jpeg', 0.5)
-    console.log(data)
-    prevSource = [...source]
-    prevSource.push(data)
-    setSource(prevSource)
+    let bigImage = document.createElement('img')
+    bigImage.src = data
+    bigImage.onload = (e2) => {
+      let canvas = document.createElement('canvas')
+      let ratio = 400 / e2.target.width
+      canvas.width = 400
+      canvas.height = e2.target.height * ratio
+
+      const context = canvas.getContext('2d')
+      context.drawImage(bigImage, 0, 0, canvas.width, canvas.height)
+      let newImageUrl = context.canvas.toDataURL('image/jpeg', 80)
+      prevSource = [...source]
+      prevSource.push(newImageUrl)
+      setSource(prevSource)
+    }
     toast.success('Image Saved')
     let prevTracker = ansTracker
     prevTracker[i][j] = 0

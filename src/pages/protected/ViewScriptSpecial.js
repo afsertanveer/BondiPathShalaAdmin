@@ -116,10 +116,10 @@ const ViewScriptSpecial = () => {
   }, [selectedCourse, selectedSubject, selectedExam, role]);
   return (
     <div className="mx-auto">
-      <div className=" py-4 px-2 my-3 ">
-        <div className="w-full  mx-auto flex flex-row justify-between items-center">
+      <div className="bg-white py-4 px-2 my-3 ">
+        <div className="w-full  mx-auto grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div className="form-control">
-            <label className="label-text" htmlFor="">
+            <label className="label-text text-center" htmlFor="">
               Select Course
             </label>
             <select
@@ -132,14 +132,14 @@ const ViewScriptSpecial = () => {
               <option value=""></option>
               {courses.length > 0 &&
                 courses.map((course) => (
-                  <option key={course._id} value={course._id}>
+                  <option className="text-center" key={course._id} value={course._id}>
                     {course.name}
                   </option>
                 ))}
             </select>
           </div>
           <div className="form-control">
-            <label className="label-text" htmlFor="">
+            <label className="label-text text-center" htmlFor="">
               Select Exam Name
             </label>
             <select
@@ -152,7 +152,7 @@ const ViewScriptSpecial = () => {
               <option value=""></option>
               {exams.length > 0 &&
                 exams.map((exam) => (
-                  <option key={exam._id} value={exam._id}>
+                  <option className="text-center" key={exam._id} value={exam._id}>
                     {exam.name}
                   </option>
                 ))}

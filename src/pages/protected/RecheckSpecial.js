@@ -146,10 +146,10 @@ const RecheckSpecial = () => {
     }, [selectedCourse, selectedSubject, selectedExam,role]);
   return (
     <div className="mx-auto">
-        <div className=" py-4 px-2 my-3 ">
-        <div className="w-full  mx-auto flex flex-row justify-between items-center">
+        <div className="bg-white py-4 px-2 my-3 ">
+        <div className="w-full  mx-auto grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div className="form-control">
-            <label className="label-text" htmlFor="">
+            <label className="label-text text-center" htmlFor="">
               Select Course
             </label>
             <select
@@ -162,7 +162,7 @@ const RecheckSpecial = () => {
               <option value=""></option>
               {courses.length > 0 &&
                 courses.map((course) => (
-                  <option key={course._id} value={course._id}>
+                  <option className="text-center" key={course._id} value={course._id}>
                     {course.name}
                   </option>
                 ))}
@@ -170,7 +170,7 @@ const RecheckSpecial = () => {
           </div>
           {
             role!==3 && <div className="form-control">
-            <label className="label-text" htmlFor="">
+            <label className="label-text text-center" htmlFor="">
               Select Subject
             </label>
             <select
@@ -183,7 +183,7 @@ const RecheckSpecial = () => {
               <option value=""></option>
               {subjects?.length > 0 &&
                 subjects.map((subject) => (
-                  <option key={subject._id} value={subject._id}>
+                  <option className="text-center" key={subject._id} value={subject._id}>
                     {subject.name}
                   </option>
                 ))}

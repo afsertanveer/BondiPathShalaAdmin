@@ -17,7 +17,8 @@ const SingleStudentWrittenANswer = () => {
   const [finalbuttonDisabler, setFinalButtonDisabler] = useState(false)
   const [ansTracker, setAnsTracker] = useState([])
   const [counter, setCounter] = useState(1)
-  const navigate = useNavigate()
+  // //console.log(params);
+const navigate = useNavigate()
   let prevSource = []
   let changer = []
   const imageEditor = React.createRef()
@@ -42,10 +43,10 @@ const SingleStudentWrittenANswer = () => {
     toast.success('Image Saved')
   }
   const checkNext = (i, j) => {
-    console.log(source)
+    // //console.log(source)
     const imageEditorInst = imageEditor.current.imageEditorInst
     const data = imageEditorInst.toDataURL()
-    // console.log('imageData: ', data)
+    // //console.log('imageData: ', data)
 
     let bigImage = document.createElement('img')
     bigImage.src = data
@@ -67,7 +68,7 @@ const SingleStudentWrittenANswer = () => {
     let prevTracker = ansTracker
     prevTracker[i][j] = 0
     prevTracker[i][j + 1] = 1
-    console.log(prevTracker, 'Checking')
+    //console.log(prevTracker, 'Checking')
     setAnsTracker(prevTracker)
   }
   const sendImage = async (e) => {
@@ -79,8 +80,8 @@ const SingleStudentWrittenANswer = () => {
     }
     const form = e.target
     const idx = parseInt(form.index.value)
-    const obtainedMarks = parseInt(form.obtMarks.value)
-    console.log(source)
+    const obtainedMarks =(parseFloat(form.obtMarks.value)).toFixed(2);
+    // //console.log(source)
     changer = [...disabler]
     for (let i = 0; i < changer.length; i++) {
       changer[idx] = 0
@@ -106,7 +107,7 @@ const SingleStudentWrittenANswer = () => {
         uploadImages: source,
       }
     }
-    console.log(answer)
+    //console.log(answer)
     await axios.post('/api/teacher/checkscriptsingle', answer).then((data) => {
       toast.success('Successfully updated')
       setButtonDisabler(true)
@@ -136,21 +137,19 @@ const SingleStudentWrittenANswer = () => {
       })
   }
   const checkNumber = (marks, id) => {
-    console.log(id)
+    //console.log(id)
     if (
       isNaN(marks) === false &&
       parseFloat(marks) <= singleResult.marksPerQuestion[id]
     ) {
       setButtonDisabler(false)
     } else {
-      console.log('jhere')
+      //console.log('jhere')
       setButtonDisabler(true)
     }
   }
   useEffect(() => {
     setIsLoading(true)
-    // document.getElementsByClassName("color-picker-value").style.backgroundColor="red";
-
     axios
       .get(
         `/api/student/getwrittenstudentsinglebyexam?examId=${params.examId}&&studentId=${params.studentId}`

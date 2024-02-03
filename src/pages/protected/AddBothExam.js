@@ -68,7 +68,10 @@ const AddBothExam = () => {
         console.log(data);
         toast.success("Full Exam Added Succesfully");
         navigate("/dashboard");
-      });
+      }).catch(err=>{
+        toast.error(err.response.data);
+        console.log(err);
+      })
   };
   useEffect(() => {
     setIsLoading(true);

@@ -438,7 +438,7 @@ const ShowBothExam = () => {
                     {exam.totalMarks}
                     </td>
                     <td className="px-6 py-2 text-center">
-                      <div className="grid  lg:grid-cols-3 gap-1 lg:gap-2">
+                      <div className="grid grid-cols-1  lg:grid-cols-2 gap-1 lg:gap-2">
                         {exam.RuleImage !== "0" ? (
                           <label
                             onClick={() => handleAssignRule(exam._id)}

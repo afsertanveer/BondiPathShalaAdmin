@@ -79,7 +79,7 @@ const SingleStudentBothWrittenAnswer = () => {
     }
     const form = e.target;
     const idx = parseInt(form.index.value);
-    const obtainedMarks = parseInt(form.obtMarks.value);
+    const obtainedMarks =( parseFloat(form.obtMarks.value)).toFixed(2);
     console.log(source);
     changer = [...disabler];
     for (let i = 0; i < changer.length; i++) {

@@ -80,11 +80,11 @@ const ViewPaidResult = () => {
       }
   }, [selectedCourse, selectedSubject, selectedExam]);
   return (
-    <div className=" bg-white  min-h-[800px]">
-       <div className=" py-4 px-2 my-3 ">
-        <div className="w-full  mx-auto flex flex-row justify-between items-center">
+    <div className="  min-h-[800px]">
+       <div className="bg-white  py-4 px-2 my-3 ">
+        <div className="w-full  mx-auto grid grid-cols-1 lg:grid-cols-3 gap-4">
           <div className="form-control">
-            <label className="label-text" htmlFor="">
+            <label className="label-text text-center" htmlFor="">
               Select Course
             </label>
             <select
@@ -104,7 +104,7 @@ const ViewPaidResult = () => {
             </select>
           </div>
           <div className="form-control">
-            <label className="label-text" htmlFor="">
+            <label className="label-text  text-center" htmlFor="">
               Select Subject
             </label>
             <select
@@ -124,7 +124,7 @@ const ViewPaidResult = () => {
             </select>
           </div>
           <div className="form-control">
-            <label className="label-text" htmlFor="">
+            <label className="label-text text-center" htmlFor="">
               Select Exam Name
             </label>
             <select

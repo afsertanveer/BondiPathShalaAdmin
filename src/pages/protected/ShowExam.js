@@ -428,7 +428,7 @@ const ShowExam = () => {
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-2">
                   Marks/Questions-<br/>Total Questions-<br/>Total Marks
                 </th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-2">
+                <th className="width-setter bg-white font-semibold text-sm uppercase px-6 py-2">
                   Action
                 </th>
               </tr>
@@ -463,7 +463,7 @@ const ShowExam = () => {
                       {exam.examVariation===1? exam.marksPerMcq : "N/A"}-{exam.examVariation===1? exam.totalQuestionMcq : "N/A"}-{exam.totalMarksMcq}
                     </td>
                     <td className="px-2 py-3 ">
-                      <div className="grid  lg:grid-cols-3 gap-1 lg:gap-2">
+                      <div className="grid  lg:grid-cols-2 gap-1 lg:gap-2">
                         {exam.RuleImage !== "0" ? (
                           <label
                             onClick={() => handleAssignRule(exam._id)}

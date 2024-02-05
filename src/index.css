@@ -37,6 +37,9 @@
   }
  
 }
+.width-setter{
+  min-width: 200px;
+}
 label{
   font-weight: 500;
 }

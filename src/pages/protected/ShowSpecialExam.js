@@ -263,7 +263,7 @@ const ShowSpecialExam = () => {
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-2">
                   SSC?/HSC?
                 </th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-2">
+                <th className="width-setter bg-white font-semibold text-sm uppercase px-6 py-2">
                   Action
                 </th>
               </tr>

@@ -333,7 +333,7 @@ const ShowBothExam = () => {
   return (
     <div className="mx-auto">
       <div className="flex justify-center items-center py-2 px-2 my-3  ">
-        <div className="bg-white w-full lg:w-1/2 px-4  py-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="bg-white w-full  lg:w-1/2 px-4  py-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div className="form-control">
             <label className="label-text text-center" htmlFor="">
               Select Course
@@ -341,7 +341,7 @@ const ShowBothExam = () => {
             <select
               name="course_list"
               id="course_list"
-              className="input w-full border-black input-bordered"
+              className="input w-full  border-black input-bordered"
               required
               onChange={(e) => handleChangeCourse(e)}
             >
@@ -364,7 +364,7 @@ const ShowBothExam = () => {
             <select
               name="course_list"
               id="course_list"
-              className="input w-full border-black input-bordered"
+              className="input w-full  border-black input-bordered"
               required
               onChange={(e) => setSelectedSubject(e.target.value)}
             >
@@ -384,8 +384,8 @@ const ShowBothExam = () => {
       </div>
       {isLoading && <Loader></Loader>}
       {exams.length > 0 && (
-        <div className="overflow-x-auto w-full">        
-          <table className="mx-auto  w-full whitespace-nowrap rounded-lg  divide-y  overflow-hidden">
+        <div className="overflow-x-auto w-full ">        
+          <table className="mx-auto  w-full  whitespace-nowrap rounded-lg  divide-y  overflow-hidden">
             <thead>
               <tr>
                 <th className="bg-white font-semibold text-sm uppercase px-1 py-2">
@@ -406,7 +406,7 @@ const ShowBothExam = () => {
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-2">
                 Total Marks
                 </th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-2">
+                <th className="width-setter bg-white font-semibold text-sm uppercase px-6 py-2">
                   Action
                 </th>
               </tr>
@@ -443,7 +443,7 @@ const ShowBothExam = () => {
                           <label
                             onClick={() => handleAssignRule(exam._id)}
                             htmlFor="my-modal-4"
-                            className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                            className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% w-full mr-2 mb-3 lg:mb-0 text-white"
                           >
                             Show Rule
                           </label>
@@ -451,7 +451,7 @@ const ShowBothExam = () => {
                           <label
                             onClick={() => handleAssignExamId(exam._id)}
                             htmlFor="my-modal-3"
-                            className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                            className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% w-full mr-2 mb-3 lg:mb-0 text-white"
                           >
                             Add Exam Rule
                           </label>
@@ -459,42 +459,42 @@ const ShowBothExam = () => {
                         <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="assign-teacher"
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% w-full mr-2 mb-3 lg:mb-0 text-white"
                         >
                           Assign Teachers
                           </label>
                           <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="my-popup-submit"
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% w-full mr-2 mb-3 lg:mb-0 text-white"
                         >
                           Submit Exam
                         </label>
                         <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="my-popup"
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% w-full mr-2 mb-3 lg:mb-0 text-white"
                         >
                           Generate Meritlist
                         </label>
                         <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="my-modal"
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% w-full mr-2 mb-3 lg:mb-0 text-white"
                         >
                           Update
                         </label>
                          <label
                           htmlFor="my-modal-2"
                           onClick={() => setSingleExamId(exam._id)}
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% w-full mr-2 mb-3 lg:mb-0 text-white"
                         >
                           Add MCQ  Question
                         </label>
                         <label
                           htmlFor="written-modal"
                           onClick={() => setSingleExamId(exam._id)}
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% w-full mr-2 mb-3 lg:mb-0 text-white"
                         >
                           Add Written Question
                         </label>
@@ -611,7 +611,7 @@ const ShowBothExam = () => {
                   type="file"
                   name="ruleILink"
                   id="ruleILink"
-                  className="file-input w-full max-w-xs mb-2 input input-bordered border-black pl-0"
+                  className="file-input w-full  max-w-xs mb-2 input input-bordered border-black pl-0"
                 />
               </div>
               <input type="submit" value="Add" className="btn w-32" />
@@ -645,13 +645,13 @@ const ShowBothExam = () => {
                     />
                   </div>
                   <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-center">
-                    <div className="w-full lg:w-1/2 mr-0 lg:mr-4">
+                    <div className="w-full  lg:w-1/2 mr-0 lg:mr-4">
                       <label className="label" htmlFor="">
                         Start Time
                       </label>
                       <input
                         type="datetime-local"
-                        className="input input-bordered w-full  border-black "
+                        className="input input-bordered w-full   border-black "
                         name="start_time"
                         id="start_time"
                         defaultValue={
@@ -660,13 +660,13 @@ const ShowBothExam = () => {
                         required
                       />
                     </div>
-                    <div className="w-full lg:w-1/2">
+                    <div className="w-full  lg:w-1/2">
                       <label className="label" htmlFor="">
                         End Time
                       </label>
                       <input
                         type="datetime-local"
-                        className="input input-bordered w-full  border-black "
+                        className="input input-bordered w-full   border-black "
                         name="end_time"
                         id="end_time"
                         defaultValue={singleExam?.endTime?.split(":00.000Z")[0]}
@@ -678,13 +678,13 @@ const ShowBothExam = () => {
                   <p className="font-bold text-md">MCQ</p>
                   </div>
                   <div className="form-control  flex flex-col lg:flex-row justify-between items-start lg:items-start">
-                      <div className="w-full lg:w-1/4">
+                      <div className="w-full  lg:w-1/4">
                       <label htmlFor="" className="label">
                         Questions
                       </label>
                       <input
                         type="number"
-                        className="input w-full input-bordered  border-black "
+                        className="input w-full  input-bordered  border-black "
                         name="total_questions"
                         id="total_questions"
                         defaultValue={singleExam.totalQuestionMcq}
@@ -696,13 +696,13 @@ const ShowBothExam = () => {
                         required
                       />
                     </div>
-                    <div className="w-full lg:w-1/4">
+                    <div className="w-full  lg:w-1/4">
                       <label htmlFor="" className="label">
                         Marks/Question
                       </label>
                       <input
                         type="number"
-                        className="input w-full input-bordered  border-black "
+                        className="input w-full  input-bordered  border-black "
                         name="marks_per_question"
                         id="marks_per_question"
                         defaultValue={singleExam.marksPerMcq}
@@ -714,13 +714,13 @@ const ShowBothExam = () => {
                         required
                       />
                     </div>
-                    <div className="w-full lg:w-1/4">
+                    <div className="w-full  lg:w-1/4">
                       <label htmlFor="" className="label">
                          Marks
                       </label>
                       <input
                         type="number"
-                        className="input w-full input-bordered  border-black "
+                        className="input w-full  input-bordered  border-black "
                         name="total_marks"
                         id="total_marks"
                         defaultValue={singleExam.totalMarksMcq}
@@ -738,13 +738,13 @@ const ShowBothExam = () => {
                   <p className="font-bold text-md">Written</p>
                   </div>
                   <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-center">
-                  <div className="w-full lg:w-1/2">
+                  <div className="w-full  lg:w-1/2">
                   <label htmlFor="" className="label">
                     Questions
                   </label>
                   <input
                     type="number"
-                    className="input w-full input-bordered  border-black "
+                    className="input w-full  input-bordered  border-black "
                     name="total_questions_written"
                     id="total_questions_written"
                     defaultValue={singleExam.totalQuestionWritten}
@@ -756,13 +756,13 @@ const ShowBothExam = () => {
                     required
                   />
                 </div>
-                <div className="w-full lg:w-1/2">
+                <div className="w-full  lg:w-1/2">
                 <label htmlFor="" className="label">
                  Marks
                 </label>
                 <input
                   type="number"
-                  className="input w-full input-bordered  border-black "
+                  className="input w-full  input-bordered  border-black "
                   name="tmw"
                   id="tmw"
                   defaultValue={singleExam.totalMarksWritten}
@@ -776,13 +776,13 @@ const ShowBothExam = () => {
               </div>
                   </div>
                   <div className="form-control mt-2 flex flex-col lg:flex-row justify-between items-start lg:items-center">
-                  <div className="w-full lg:w-1/4">
+                  <div className="w-full  lg:w-1/4">
                   <label className="label" htmlFor="">
                    Total Duration
                   </label>
                   <input
                     type="mumber"
-                    className="input w-full input-bordered border-black "
+                    className="input w-full  input-bordered border-black "
                     name="duration"
                     id="duration"
                     defaultValue={singleExam.totalDuration}
@@ -798,13 +798,13 @@ const ShowBothExam = () => {
                     (minutes)
                   </span>
                 </div>
-                  <div className="w-full lg:w-1/4">
+                  <div className="w-full  lg:w-1/4">
                   <label className="label" htmlFor="">
                   MCQ  Duration
                   </label>
                   <input
                     type="mumber"
-                    className="input w-full input-bordered border-black "
+                    className="input w-full  input-bordered border-black "
                     name="mcq_duration"
                     id="mcq_duration"
                     defaultValue={singleExam.mcqDuration}
@@ -820,13 +820,13 @@ const ShowBothExam = () => {
                     (minutes)
                   </span>
                 </div>
-                  <div className="w-full lg:w-1/4">
+                  <div className="w-full  lg:w-1/4">
                   <label className="label" htmlFor="">
                    Written Duration
                   </label>
                   <input
                     type="mumber"
-                    className="input w-full input-bordered border-black "
+                    className="input w-full  input-bordered border-black "
                     name="written_duration"
                     id="written_duration"
                     defaultValue={singleExam.writtenDuration}
@@ -844,13 +844,13 @@ const ShowBothExam = () => {
                 </div>
                   </div>
                   <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-center">
-                    <div className="w-full lg:w-1/4">
+                    <div className="w-full  lg:w-1/4">
                       <label htmlFor="" className="label">
                         Total Marks
                       </label>
                       <input
                         type="number"
-                        className="input w-full input-bordered  border-black "
+                        className="input w-full  input-bordered  border-black "
                         name="full_marks"
                         id="full_marks"
                         defaultValue={singleExam.totalMarks}
@@ -863,13 +863,13 @@ const ShowBothExam = () => {
                         required
                       />
                     </div>
-                    <div className="w-full lg:w-1/4">
+                    <div className="w-full  lg:w-1/4">
                       <label htmlFor="" className="label">
                         Negative 
                       </label>
                       <input
                         type="number"
-                        className="input w-full input-bordered  border-black "
+                        className="input w-full  input-bordered  border-black "
                         name="negative_marking"
                         id="negative_marking"
                         defaultValue={singleExam.negativeMarksMcq}
@@ -942,7 +942,7 @@ const ShowBothExam = () => {
               <select
                 name="type"
                 id="type"
-                className="input border-black input-bordered w-full "
+                className="input border-black input-bordered w-full  "
                 onChange={(e) => setIsText(!isText)}
                 required
               >
@@ -971,7 +971,7 @@ const ShowBothExam = () => {
                     type="file"
                     name="iLink"
                     id="iLink"
-                    className="file-input w-full input-bordered  border-black "
+                    className="file-input w-full  input-bordered  border-black "
                     required
                   />
                 </>
@@ -981,7 +981,7 @@ const ShowBothExam = () => {
               </label>
               <input
                 type="number"
-                className="input w-full input-bordered border-black "
+                className="input w-full  input-bordered border-black "
                 name="num_of_options"
                 id="num_of_options"
                 min="2"
@@ -1006,7 +1006,7 @@ const ShowBothExam = () => {
                             placeholder={`Option ${id + 1}`}
                             name={`option${id}`}
                             id={`option${id}`}
-                            className="input w-full input-bordered border-black "
+                            className="input w-full  input-bordered border-black "
                             required
                           />
                         </div>
@@ -1021,7 +1021,7 @@ const ShowBothExam = () => {
                   <select
                     name="type"
                     id="type"
-                    className="input border-black input-bordered w-full "
+                    className="input border-black input-bordered w-full  "
                     onChange={(e) => setCorrectOption(e.target.value)}
                     required
                   >
@@ -1041,7 +1041,7 @@ const ShowBothExam = () => {
                 type="file"
                 name="explanationILink"
                 id="explanationILink"
-                className="file-input w-full input-bordered  border-black "
+                className="file-input w-full  input-bordered  border-black "
                 required
               />
               <div className="form-control my-2">
@@ -1071,7 +1071,7 @@ const ShowBothExam = () => {
                     type="file"
                     name="iLink"
                     id="iLink"
-                    className="file-input w-full input-bordered  border-black "
+                    className="file-input w-full  input-bordered  border-black "
                     required
                   />
               <label htmlFor="" className="label">
@@ -1079,7 +1079,7 @@ const ShowBothExam = () => {
               </label>
               <input
                 type="number"
-                className="input w-full input-bordered border-black "
+                className="input w-full  input-bordered border-black "
                 name="num_of_options"
                 id="num_of_options"
                 min="1"
@@ -1104,7 +1104,7 @@ const ShowBothExam = () => {
                             name={`option${id}`}
                             id={`option${id}`}
                             onChange={e=>fillMarks(e.target.value,id)}
-                            className="input w-full input-bordered border-black "
+                            className="input w-full  input-bordered border-black "
                             required
                           />
                         </div>
@@ -1137,7 +1137,7 @@ const ShowBothExam = () => {
               <select
                 name="type"
                 id="type"
-                className="input border-black input-bordered w-full "
+                className="input border-black input-bordered w-full  "
                 onChange={(e) => setIsText(!isText)}
                 required
               >
@@ -1166,7 +1166,7 @@ const ShowBothExam = () => {
                     type="file"
                     name="iLink"
                     id="iLink"
-                    className="file-input w-full input-bordered  border-black "
+                    className="file-input w-full  input-bordered  border-black "
                     required
                   />
                 </>
@@ -1176,7 +1176,7 @@ const ShowBothExam = () => {
               </label>
               <input
                 type="number"
-                className="input w-full input-bordered border-black "
+                className="input w-full  input-bordered border-black "
                 name="num_of_options"
                 id="num_of_options"
                 min="2"
@@ -1201,7 +1201,7 @@ const ShowBothExam = () => {
                             placeholder={`Option ${id + 1}`}
                             name={`option${id}`}
                             id={`option${id}`}
-                            className="input w-full input-bordered border-black "
+                            className="input w-full  input-bordered border-black "
                             required
                           />
                         </div>
@@ -1216,7 +1216,7 @@ const ShowBothExam = () => {
                   <select
                     name="type"
                     id="type"
-                    className="input border-black input-bordered w-full "
+                    className="input border-black input-bordered w-full  "
                     onChange={(e) => setCorrectOption(e.target.value)}
                     required
                   >
@@ -1236,7 +1236,7 @@ const ShowBothExam = () => {
                 type="file"
                 name="explanationILink"
                 id="explanationILink"
-                className="file-input w-full input-bordered  border-black "
+                className="file-input w-full  input-bordered  border-black "
                 required
               />
               <div className="form-control my-2">

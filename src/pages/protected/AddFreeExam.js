@@ -9,6 +9,9 @@ const AddFreeExam = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSSC, setIsSSC] = useState(false);
   const [isHSC, setIsHSC] = useState(false);
+  const [isMedical, setIsMedical] = useState(false);
+  const [isBuet, setIsBuet] = useState(false);
+  const [isUniversity, setIsUniversity] = useState(false);
   const [freeCourseId,setFreeCourseId] = useState('');
   const [freeSubjecteId,setFreeSubjecteId] = useState('');
 
@@ -44,6 +47,9 @@ const AddFreeExam = () => {
     formdata.append("courseId",freeCourseId)
     formdata.append("sscStatus",isSSC)
     formdata.append("hscStatus",isHSC)
+    formdata.append("buetStatus",isBuet)
+    formdata.append("medicalStatus",isMedical)
+    formdata.append("universityStatus",isUniversity)
     formdata.append("negativeMarks",negativeMarks)
  
     await axios
@@ -172,8 +178,8 @@ const AddFreeExam = () => {
                 <span className="text-red text-sm ml-0 lg:ml-2">(minutes)</span>
               </div>
             </div>
-            <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-start">
-              <div className="w-full lg:w-1/3">
+            <div className="form-control grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <div className="">
                 <label htmlFor="" className="label">
                   Total Question
                 </label>
@@ -188,7 +194,7 @@ const AddFreeExam = () => {
                   required
                 />
               </div>
-              <div className="w-full lg:w-1/3">
+              <div className="">
                 <label htmlFor="" className="label">
                   Marks Per Question
                 </label>
@@ -202,13 +208,11 @@ const AddFreeExam = () => {
                   }
                   required
                 />
+                
               </div>
-            
-            </div>
-            <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-center">
-              <div className="w-full lg:w-1/3">
+              <div className="">
                 <label htmlFor="" className="label">
-                  Negative Marking (%) (Per Question)
+                  Negative Marking (%) 
                 </label>
                 <input
                   type="number"
@@ -222,6 +226,8 @@ const AddFreeExam = () => {
                   required
                 />
               </div>
+            </div>
+            <div className="form-control grid grid-cols-1 lg:grid-cols-5 gap-4"> 
               <div className="flex items-center mt-0 lg:mt-5 ">
                   <input
                     id="disabled-checked-checkbox"
@@ -248,6 +254,48 @@ const AddFreeExam = () => {
                     className="ml-2 text-sm font-medium"
                   >
                     HSC
+                  </label>
+                </div>
+                <div className="flex items-center mt-0 lg:mt-5 ">
+                  <input
+                    id="disabled-checked-checkbox"
+                    type="checkbox"             
+                    onChange={(e) => setIsBuet(!isBuet)}
+                    className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                  <label
+                    htmlFor="disabled-checked-checkbox"
+                    className="ml-2 text-sm font-medium"
+                  >
+                    BUET
+                  </label>
+                </div>
+                <div className="flex items-center mt-0 lg:mt-5 ">
+                  <input
+                    id="disabled-checked-checkbox"
+                    type="checkbox"             
+                    onChange={(e) => setIsMedical(!isMedical)}
+                    className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                  <label
+                    htmlFor="disabled-checked-checkbox"
+                    className="ml-2 text-sm font-medium"
+                  >
+                    Medical
+                  </label>
+                </div>
+                <div className="flex items-center mt-0 lg:mt-5 ">
+                  <input
+                    id="disabled-checked-checkbox"
+                    type="checkbox"             
+                    onChange={(e) => setIsUniversity(!isUniversity)}
+                    className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                  <label
+                    htmlFor="disabled-checked-checkbox"
+                    className="ml-2 text-sm font-medium"
+                  >
+                    University
                   </label>
                 </div>
             </div>

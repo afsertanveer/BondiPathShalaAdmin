@@ -142,7 +142,10 @@ const ShowFreeExam = () => {
       duration:duration,
       negativeMarks,
       sscStatus:ssc,
-      hscStatus:hsc
+      hscStatus:hsc,
+      buetStatus:singleExam.buetStatus,
+      medicalStatus:singleExam.medicalStatus,
+      universityStatus:singleExam.universityStatus
     }
     console.log(updatedExam);
     await axios.put('/api/exam/updateexam',updatedExam).then(({data})=>{
@@ -317,8 +320,7 @@ const ShowFreeExam = () => {
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">End Time</th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Duration</th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Free Status</th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">SSC Required?</th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">HSC Required?</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Curriculam</th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Marks/Questions</th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Total Questions</th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Total Marks</th>
@@ -335,8 +337,7 @@ const ShowFreeExam = () => {
                     <td className="px-1 py-4 text-center">{subtractHours(new Date(exam.endTime)).toString().split("GMT")[0]}</td>
                     <td className="px-6 py-4 text-center">{exam.duration} Minutes</td>
                     <td className="px-6 py-4 text-center">{exam.examFreeOrNot? "Yes" : "No"}</td>
-                    <td className="px-6 py-4 text-center">{exam.sscStatus? "Yes" : "No"}</td>
-                    <td className="px-6 py-4 text-center">{exam.hscStatus? "Yes" : "No"}</td>
+                    <td className="px-6 py-4 text-center">{exam.sscStatus? "SSC" : exam.hscStatus? "HSC": exam.buetStatus? "BUET":exam.medicalStatus? "Medical":exam.universityStatus?"University":"none"}</td>
                     <td className="px-6 py-4 text-center">{exam.marksPerMcq}</td>
                     <td className="px-6 py-4 text-center">{exam.totalQuestionMcq}</td>
                     <td className="px-6 py-4 text-center">{exam.totalMarksMcq}</td>

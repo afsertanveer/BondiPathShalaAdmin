@@ -51,7 +51,7 @@ const AddFreeExam = () => {
     formdata.append("medicalStatus",isMedical)
     formdata.append("universityStatus",isUniversity)
     formdata.append("negativeMarks",negativeMarks)
- 
+    console.log(formdata);
     await axios
     .post(`/api/exam/createexam`, formdata, {
       headers: {

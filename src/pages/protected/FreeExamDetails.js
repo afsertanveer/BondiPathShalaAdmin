@@ -124,11 +124,11 @@ const FreeExamDetails = () => {
     }
   }, [ selectedExam,currentPage]);
   return (
-    <div className=" bg-white  min-h-[800px]">
-      <div className=" py-4 px-2 my-3 ">
-        <div className="w-full  mx-auto flex flex-row justify-between items-center">
+    <div className="  min-h-[800px]">
+      <div className="bg-white  py-4 px-2 my-3 ">
+        <div className="grid grid-cols-1 gap-2">
           <div className="form-control">
-            <label className="label-text" htmlFor="">
+            <label className="label-text text-center" htmlFor="">
               Select Exam Name
             </label>
             <select
@@ -141,7 +141,7 @@ const FreeExamDetails = () => {
               <option value=""></option>
               {exams.length > 0 &&
                 exams.map((exam) => (
-                  <option key={exam._id} value={exam._id}>
+                  <option className="text-center" key={exam._id} value={exam._id}>
                     {exam.name}
                   </option>
                 ))}

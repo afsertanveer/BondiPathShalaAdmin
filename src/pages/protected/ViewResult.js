@@ -85,6 +85,11 @@ const ViewResult = () => {
               <th className="w-[160px]">Student Name</th>
               <th className="py-5 w-[180px]">Mobile Number</th>
               <th className="py-5 w-[180px]">Full Mobile Number</th>
+              <th className="py-5 w-[180px]">SSC  Roll</th>
+              <th className="py-5 w-[180px]">HSC  Roll</th>
+              <th className="py-5 w-[180px]">BUET Admission Roll</th>
+              <th className="py-5 w-[180px]">Medical Admission Roll</th>
+              <th className="py-5 w-[180px]">University<br/> Admission Roll</th>
               <th className="w-[160px]">Institution</th>
               <th className="w-[160px]">Start Time</th>
               <th className="w-[160px]">End Time</th>
@@ -103,6 +108,12 @@ const ViewResult = () => {
                   <td>{data.studentName}</td>
                   <td>{data.mobileNo}</td>
                   <td>{data.mobileNoOrg}</td>
+                  <td>{data.sscRoll===null? 'N/A' : data.sscRoll}</td>
+                  <td>{data.hscRoll===null? 'N/A' : data.hscRoll}</td>
+                  <td>{data.buetRoll===null? 'N/A' : data.buetRoll}</td>
+                  <td>{data.medicalRoll===null? 'N/A' : data.medicalRoll}</td>
+                  <td>{data.universityRoll===null? 'N/A' : data.universityRoll}</td>
+                  {/* <td>{data.mobileNoOrg}</td> */}
                   <td>{data.institution}</td>
                   <td>{data.examStartTime}</td>
                   <td>{data.examEndTime}</td>

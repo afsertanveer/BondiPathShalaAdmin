@@ -15,6 +15,9 @@ const AddExam = () => {
   const [selectedVariation, setSelectedVariation] = useState(-1);
   const [isSSC, setIsSSC] = useState(false);
   const [isHSC, setIsHSC] = useState(false);
+  const [isMedical, setIsMedical] = useState(false);
+  const [isBuet, setIsBuet] = useState(false);
+  const [isUniversity, setIsUniversity] = useState(false);
 
   const handleAddExam = async (e) => {
     e.preventDefault();
@@ -54,6 +57,9 @@ const AddExam = () => {
     formdata.append("courseId",selectedCourse)
     formdata.append("sscStatus",isSSC)
     formdata.append("hscStatus",isHSC)
+    formdata.append("buetStatus",isBuet)
+    formdata.append("medicalStatus",isMedical)
+    formdata.append("universityStatus",isUniversity)
     formdata.append("negativeMarks",negativeMarks)
     formdata.append("totalMarksMcq",totalMarks);
     await axios

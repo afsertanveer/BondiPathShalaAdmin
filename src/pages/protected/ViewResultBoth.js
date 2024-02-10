@@ -186,7 +186,7 @@ const ViewResultBoth = () => {
                   <td>{data.institution}</td>
                   <td>{data.totalObtainedMarksMcq}</td>
                   <td>{data.totalObtainedMarksWritten}</td>
-                  <td>{data.totalObtainedMarks +' | ' + data.totalMarks}</td>
+                  <td>{((parseFloat(data.totalObtainedMarksMcq)+(parseFloat(data.totalObtainedMarksWritten)).toFixed(2))) +' | ' + data.totalMarks}</td>
                   <td>{data.rank +' | ' + data.totalStudent}</td>
                 </tr>
               )) : (<tr><td colSpan={9}><p  className="my-2 text-3xl text-center font-bold text-red">No Data Found</p></td></tr>)}

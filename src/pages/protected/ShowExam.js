@@ -130,6 +130,9 @@ const ShowExam = () => {
       negativeMarks,
       sscStatus: ssc,
       hscStatus: hsc,
+      buetStatus: singleExam.buetStatus,
+      medicalStatus: singleExam.medicalStatus,
+      universityStatus: singleExam.universityStatus
     };
     await axios.put("/api/exam/updateexam", updatedExam).then(({ data }) => {
       toast.success(data);

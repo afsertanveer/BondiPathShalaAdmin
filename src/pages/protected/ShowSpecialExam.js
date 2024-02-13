@@ -328,13 +328,13 @@ const ShowSpecialExam = () => {
                         >
                           Update
                         </label>
-                        {/*<label
+                        <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="my-popup-written"
                           className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
                           Submit Exam
-                        </label> */}
+                        </label> 
                         {/* <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="show-modal"

@@ -29,13 +29,13 @@ const navigate = useNavigate()
     bigImage.src = data
     bigImage.onload = (e2) => {
       let canvas = document.createElement('canvas')
-      let ratio = 400 / e2.target.width
-      canvas.width = 400
+      let ratio = 800 / e2.target.width
+      canvas.width = 800
       canvas.height = e2.target.height * ratio
 
       const context = canvas.getContext('2d')
       context.drawImage(bigImage, 0, 0, canvas.width, canvas.height)
-      let newImageUrl = context.canvas.toDataURL('image/jpeg', 80)
+      let newImageUrl = context.canvas.toDataURL('image/jpeg', 100)
       prevSource = [...source]
       prevSource.push(newImageUrl)
       setSource(prevSource)
@@ -52,13 +52,13 @@ const navigate = useNavigate()
     bigImage.src = data
     bigImage.onload = (e2) => {
       let canvas = document.createElement('canvas')
-      let ratio = 400 / e2.target.width
-      canvas.width = 400
+      let ratio = 800 / e2.target.width
+      canvas.width = 800
       canvas.height = e2.target.height * ratio
 
       const context = canvas.getContext('2d')
       context.drawImage(bigImage, 0, 0, canvas.width, canvas.height)
-      let newImageUrl = context.canvas.toDataURL('image/jpeg', 80)
+      let newImageUrl = context.canvas.toDataURL('image/jpeg', 100)
       prevSource = [...source]
       prevSource.push(newImageUrl)
       setSource(prevSource)

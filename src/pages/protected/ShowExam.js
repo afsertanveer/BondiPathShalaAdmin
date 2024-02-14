@@ -239,7 +239,21 @@ const ShowExam = () => {
         setNumberOfOptions(0);
         setIsText(true);
       })
-      .catch((e) => toast.error(e.response.data));
+      .catch((e) => toast.error(e.response.data, {
+        style: {
+          border: '1px solid #713200',
+          padding: '16px',
+          backgroundColor:'red',
+          color: 'white',
+          fontWeight:'800',
+          fontSize:'24px'
+        },
+        iconTheme: {
+          primary: 'white',
+          secondary: 'red',
+          fontSize:'20px',
+        },
+      }));
     document.getElementById("my-modal-2").checked = false;
   };
   const deactivateExam = async (examId) => {

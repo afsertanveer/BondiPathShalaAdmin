@@ -239,7 +239,7 @@ const ShowExam = () => {
         setNumberOfOptions(0);
         setIsText(true);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => toast.error(e.response.data));
     document.getElementById("my-modal-2").checked = false;
   };
   const deactivateExam = async (examId) => {
@@ -753,6 +753,7 @@ const ShowExam = () => {
                         id="variation"
                         className="input border-black input-bordered w-full "
                         required
+                        disabled
                       >
                         <option value={singleExam.examVariation}>
                           {singleExam.examVariation === 1

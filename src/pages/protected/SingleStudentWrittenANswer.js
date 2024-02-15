@@ -192,7 +192,7 @@ const navigate = useNavigate()
   return isLoading ? (
     <LoaderIcon></LoaderIcon>
   ) : (
-    <div className="min-h-full">
+    <div className="min-h-full mb-80  px-0 lg:px-8 pe-8 lg:pe-0">
       {typeof singleResult.answerScript !== 'undefined' &&
         singleResult.answerScript.length > 0 &&
         singleResult.answerScript.map((ans, idx) => {

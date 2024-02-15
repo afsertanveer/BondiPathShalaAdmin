@@ -177,10 +177,11 @@ const SingleStudentSpecialWritten = () => {
         setIsLoading(false)
       })
   }, [params])
+
   return isLoading ? (
     <LoaderIcon></LoaderIcon>
   ) : (
-    <div>
+    <div className="px-1 lg:px-8 pe-7 lg:pe-0">
       {typeof singleResult.answerScript !== 'undefined' &&
         singleResult.answerScript.length > 0 &&
         singleResult.answerScript.map((ans, idx) => {

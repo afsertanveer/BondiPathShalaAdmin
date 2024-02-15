@@ -5,25 +5,22 @@ import { LoaderIcon, toast } from 'react-hot-toast'
 import 'tui-color-picker/dist/tui-color-picker.css'
 import 'tui-image-editor/dist/tui-image-editor.css'
 import ImageEditor from '@toast-ui/react-image-editor'
-import { whiteTheme } from '../../utils/globalVariables'
-import Loader from '../../Shared/Loader'
+import {  whiteTheme } from '../../utils/globalVariables'
 
 const SingleStudentWrittenANswer = () => {
   const params = useParams()
   const [singleResult, setSingleResult] = useState({})
   const [isLoading, setIsLoading] = useState(false)
   const [source, setSource] = useState([])
-  const [sendButtonEnabler, setSendButtonEnabler] = useState(true)
-  const [ansTracker, setAnsTracker] = useState(0)
-  const [answerScripts, setAnswerScripts] = useState([])
-  const [vacantAnswerSubmitter, setVacantAnswerSubmitter] = useState([])
-  const [numberOfAnsweredQuestions, setNumberOfAnsweredQuestions] = useState(-1)
-  const [enabler,setEnabler] = useState([]);
-  const [tracker,setTracker] = useState([]);
-  const [saveId,setSaveId] = useState(-1);
-
-  const navigate = useNavigate()
+  const [disabler, setDisabler] = useState([])
+  const [buttonDisabler, setButtonDisabler] = useState(true)
+  const [finalbuttonDisabler, setFinalButtonDisabler] = useState(false)
+  const [ansTracker, setAnsTracker] = useState([])
+  const [counter, setCounter] = useState(1)
+  // //console.log(params);
+const navigate = useNavigate()
   let prevSource = []
+  let changer = []
   const imageEditor = React.createRef()
   const logImageContent = () => {
     const imageEditorInst = imageEditor.current.imageEditorInst
@@ -32,8 +29,8 @@ const SingleStudentWrittenANswer = () => {
     bigImage.src = data
     bigImage.onload = (e2) => {
       let canvas = document.createElement('canvas')
-      let ratio = 600 / e2.target.width
-      canvas.width = 600
+      let ratio = 800 / e2.target.width
+      canvas.width = 800
       canvas.height = e2.target.height * ratio
 
       const context = canvas.getContext('2d')
@@ -42,7 +39,6 @@ const SingleStudentWrittenANswer = () => {
       prevSource = [...source]
       prevSource.push(newImageUrl)
       setSource(prevSource)
-      setSendButtonEnabler(false)
     }
     toast.success('Image Saved')
   }
@@ -56,8 +52,8 @@ const SingleStudentWrittenANswer = () => {
     bigImage.src = data
     bigImage.onload = (e2) => {
       let canvas = document.createElement('canvas')
-      let ratio = 600 / e2.target.width
-      canvas.width = 600
+      let ratio = 800 / e2.target.width
+      canvas.width = 800
       canvas.height = e2.target.height * ratio
 
       const context = canvas.getContext('2d')
@@ -69,35 +65,30 @@ const SingleStudentWrittenANswer = () => {
     }
 
     toast.success('Image Saved')
+    let prevTracker = ansTracker
+    prevTracker[i][j] = 0
+    prevTracker[i][j + 1] = 1
+    //console.log(prevTracker, 'Checking')
+    setAnsTracker(prevTracker)
   }
   const sendImage = async (e) => {
-    let lastTracker = tracker;
-    lastTracker[saveId] = -1 ;
-    let lastEnabler = enabler;
-    for( let i = 0 ; i<lastEnabler.length; i++){
-      if(lastEnabler[i]===saveId){
-        lastEnabler[i] = -1;
-      }
-    }
-    const id = saveId;
-    // console.log(id)
-    for( let i = 0 ; i<lastEnabler.length ; i++ ){
-      if(lastTracker[lastEnabler[i]]===-1 && enabler[i]!==saveId){
-          lastTracker[lastEnabler[i]] = 1 ;
-          break;
-      }
-    }
-    // console.log("check",lastTracker)
-    // console.log("enabler",lastEnabler)
-    setTracker(lastTracker);
-    setEnabler(lastEnabler);
+   
     e.preventDefault()
-    setIsLoading(true)
-
+    setCounter((prev) => prev + 1)
+    if (counter === singleResult.totalQuestions) {
+      setFinalButtonDisabler(true)
+    }
     const form = e.target
     const idx = parseInt(form.index.value)
-    const obtainedMarks = parseFloat(form.obtMarks.value).toFixed(2)
-
+    const obtainedMarks =(parseFloat(form.obtMarks.value)).toFixed(2);
+    // //console.log(source)
+    changer = [...disabler]
+    for (let i = 0; i < changer.length; i++) {
+      changer[idx] = 0
+      if (idx + 1 !== changer.length) {
+        changer[idx + 1] = 1
+      }
+    }
     let answer
     if (source.length === 0) {
       answer = {
@@ -117,19 +108,14 @@ const SingleStudentWrittenANswer = () => {
       }
     }
     //console.log(answer)
-    await axios
-      .post('/api/teacher/checkscriptsingle', answer)
-      .then((data) => {
-        setAnsTracker((prev) => prev + 1)
-        setSendButtonEnabler(true);
-        toast.success('Successfully updated')
-        setSource([])
-        setIsLoading(false)
-      })
-      .catch((e) => console.log(e))
+    await axios.post('/api/teacher/checkscriptsingle', answer).then((data) => {
+      toast.success('Successfully updated')
+      setButtonDisabler(true)
+      setSource([])
+    })
+    setDisabler(changer)
   }
   const finalSave = async () => {
-    setIsLoading(true)
     const marksCalculation = {
       studentId: params.studentId,
       examId: params.examId,
@@ -139,64 +125,27 @@ const SingleStudentWrittenANswer = () => {
       examId: params.examId,
       status: true,
     }
-    let answer
-    for (let k = 0; k < vacantAnswerSubmitter.length; k++) {
-      answer = {
-        questionNo: vacantAnswerSubmitter[k],
-        obtainedMarks: 0.0,
-        studentId: params.studentId,
-        examId: params.examId,
-        uploadImages: [],
-      }
-      await axios
-        .post('/api/teacher/checkscriptsingle', answer)
-        .then((data) => {
-          if (k + 1 === vacantAnswerSubmitter.length) {
-            toast.success('Vacant Script checked')
-            axios
-              .post('/api/teacher/markscalculation', marksCalculation)
-              .then((data) => {
-                axios
-                  .post('/api/teacher/checkstatusupdate', statusUpdate)
-                  .then((data) => {
-                    toast.success('successfully updated the result')
-                    setIsLoading(false)
-                    navigate('/dashboard/scripts/view')
-                  })
-                  .catch((e) => console.log(e))
-              })
-              .catch((e) => console.log(e))
-          }
-          setSource([])
-        })
-        .catch((e) => console.log(e))
-    }
-    if (vacantAnswerSubmitter.length < 1) {
-      axios
-        .post('/api/teacher/markscalculation', marksCalculation)
-        .then((data) => {
-          axios
-            .post('/api/teacher/checkstatusupdate', statusUpdate)
-            .then((data) => {
-              toast.success('successfully updated the result')
-              setIsLoading(false)
-              navigate('/dashboard/scripts/view')
-            })
-            .catch((e) => console.log(e))
-        })
-        .catch((e) => console.log(e))
-    }
+    await axios
+      .post('/api/teacher/markscalculation', marksCalculation)
+      .then((data) => {
+        axios
+          .post('/api/teacher/checkstatusupdate', statusUpdate)
+          .then((data) => {
+            toast.success('successfully updated the result')
+            navigate('/dashboard/scripts/view')
+          })
+      })
   }
   const checkNumber = (marks, id) => {
     //console.log(id)
     if (
       isNaN(marks) === false &&
-      parseFloat(marks) <= singleResult.marksPerQuestion[id] && source.length === answerScripts[id].length
+      parseFloat(marks) <= singleResult.marksPerQuestion[id]
     ) {
-      // setButtonDisabler(false)
-      setSendButtonEnabler(false);
+      setButtonDisabler(false)
     } else {
-      setSendButtonEnabler(true);
+      //console.log('jhere')
+      setButtonDisabler(true)
     }
   }
   useEffect(() => {
@@ -207,149 +156,161 @@ const SingleStudentWrittenANswer = () => {
       )
       .then(({ data }) => {
         setSingleResult(data)
-        // console.log('result', data)
-        setAnswerScripts(data.answerScript)
-        let answered = 0
-        let vacantAnswer = []
-        let checker =[];
-        let flag = 0;
-        let tr=[]
-        for (let i = 0; i < data.answerScript.length; i++) {
-          if (data.answerScript[i] === null) {
-            vacantAnswer.push(i + 1)
-            tr.push(-1);
+        let dis = []
+        for (let i = 0; i < data.totalQuestions; i++) {
+          if (i === 0) {
+            dis[i] = 1
           } else {
-            if(flag === 0){
-              tr.push(1);
-              flag=1;
-            }else{
-              tr.push(-1);
-            }
-            checker.push(i);
-            answered++
+            dis[i] = 0
           }
         }
-        // console.log(tr)
-        // console.log(checker)
-        setTracker(tr);
-        setEnabler(checker)
-        setNumberOfAnsweredQuestions(answered)
-        setVacantAnswerSubmitter(vacantAnswer)
+
+        setDisabler(dis)
+        let tracker = []
+        for (let i = 0; i < data.answerScript.length; i++) {
+          tracker[i] = []
+          if (data.answerScript[i] === null) {
+            tracker[i] = [1]
+          } else {
+            if (data.answerScript[i].length > 1) {
+              for (let j = 0; j < data?.answerScript[i]?.length; j++) {
+                if (j === 0) {
+                  tracker[i][j] = 1
+                } else {
+                  tracker[i][j] = 0
+                }
+              }
+            } else {
+              tracker[i] = [1]
+            }
+          }
+        }
+        setAnsTracker(tracker)
         setIsLoading(false)
       })
   }, [params])
   return isLoading ? (
-    <Loader />
+    <LoaderIcon></LoaderIcon>
   ) : (
-    <div className="min-h-full mb-80 mx-0 px-0 lg:px-8 pe-8 lg:pe-0 ">
-      {ansTracker !== numberOfAnsweredQuestions &&
-        answerScripts.map((answer, idx) => (
-          <div key={idx} >
-            {answer !== null && tracker[idx]===1 && (
-              <>
-                <p className=" my-4 text-4xl font-extrabold  border-4  border-color-one   w-10 h-10 flex justify-center items-center rounded-full">
-                  {idx + 1}
-                </p>
-                <div className='grid grid-cols-1 px-2 py-1 border-4 border-color-one rounded-lg '>
-                  {Array.isArray(answer) === true &&
-                    answer.map((photo, index) => (
-                      <div key={index}>
-                        <div >
-                          <div className="grid grid-cols-1 mt-4">
-                            <ImageEditor
-                              includeUI={{
-                                loadImage: {
-                                  path:
-                                    process.env.REACT_APP_API_HOST +
-                                    '/' +
-                                    photo,
-                                  name: 'SampleImage',
-                                },
-                                menu: ['draw', 'rotate'],
-                                initMenu: 'draw',
-                                theme: whiteTheme,
-                                draw: {
-                                  color: '#ff0000',
-                                },
-                                uiSize: {
-                                  width: '100%',
-                                  height: '942px',
-                                },
-                                menuBarPosition: 'bottom',
-                              }}
-                              cssMaxHeight={942}
-                              cssMaxWidth={414}
-                              selectionStyle={{
-                                cornerSize: 50,
-                                rotatingPointOffset: 100,
-                              }}
-                              usageStatistics={true}
-                              ref={imageEditor}
-                            />
-                          </div>
+    <div className="min-h-full">
+      {typeof singleResult.answerScript !== 'undefined' &&
+        singleResult.answerScript.length > 0 &&
+        singleResult.answerScript.map((ans, idx) => {
+          return (
+            <div key={idx} className="my-1">
+              {disabler[idx] === 1 && (
+                <>
+                  <p className="text-4xl font-extrabold  border-4  border-color-one   w-10 h-10 flex justify-center items-center rounded-full">
+                    {idx + 1}
+                  </p>
+                  <div className="grid grid-cols-1 gap-x-0 sm:gap-x-4">
+                    {typeof ans !== 'undefined' &&
+                      ans !== null &&
+                      ans.length > 0 &&
+                      ans.map((photo, index) => {
+                        return (
+                          <div key={index}>
+                            {ansTracker[idx][index] === 1 && (
+                              <div>
+                                <div className="flex justify-center items-center">
+                                  <ImageEditor
+                                    includeUI={{
+                                      loadImage: {
+                                        path:
+                                          process.env.REACT_APP_API_HOST +
+                                          "/" +
+                                          photo,
+                                        name: "SampleImage",
+                                      },
+                                      menu: ["draw"],
+                                      initMenu: "draw",
+                                      theme: whiteTheme,
+                                      draw:{
+                                        color:"red"
+                                      },                                      
+                                      uiSize: {
+                                        width: "100%",
+                                        height: "942px",
+                                      },
+                                      menuBarPosition: "bottom",
+                                    }}
+                                    cssMaxHeight={942}
+                                    cssMaxWidth={414}
+                                    selectionStyle={{
+                                      cornerSize: 50,
+                                      rotatingPointOffset: 100,
+                                    }}
+                                    usageStatistics={true}
+                                    ref={imageEditor}
+                                  />
+                                </div>
 
-                          <div>
-                            {index + 1 === answer.length ? (
-                              <button
-                                className="btn mt-4 justify-center"
-                                onClick={logImageContent}
-                              >
-                                Final Save
-                              </button>
-                            ) : (
-                              <button
-                                className="btn my-2 justify-center"
-                                onClick={() => checkNext(idx, index)}
-                              >
-                                Save This Image
-                              </button>
+                                <div>
+                                  {ansTracker[idx][ans.length - 1] === 1 ? (
+                                    <button
+                                      className="btn mt-4 justify-center"
+                                      onClick={logImageContent}
+                                    >
+                                      Save Image
+                                    </button>
+                                  ) : (
+                                    <button
+                                      className="btn mt-4 justify-center"
+                                      onClick={() => checkNext(idx, index)}
+                                    >
+                                      Next Image
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
                             )}
                           </div>
-                        </div>
-                        {
-                          index + 1 === answer.length &&
-                        
-                        <form onSubmit={sendImage} className="my-4 ">
-                          <input
-                            type="text"
-                            className="input input-bordered  border-black hidden"
-                            name="index"
-                            id=""
-                            defaultValue={idx}
-                          />
-                          <p className="ml-4 text-lg font-bold text-red">
-                            Marks out of {singleResult.marksPerQuestion[idx]}
-                          </p>
-                          <div className="flex flex-col lg:flex-row ">
-                            <input
-                              type="text"
-                              name="obtMarks"
-                              id="obtMarks"
-                              autoComplete="off"
-                              className="input input-bordered  border-black"
-                              onChange={(e) => checkNumber(e.target.value, idx)}
-                              required
-                            />
-                            <input
-                              type="submit"
-                              className="ml-0 lg:ml-4 mt-2 lg:mt-0 btn"
-                              onClick={()=>setSaveId(idx)}
-                              value="Save Marks"
-                              disabled={sendButtonEnabler}
-                            />
-                          </div>
-                        </form>
-                        }
+                        )
+                      })}
+                    {typeof ans !== 'undefined' && ans === null && (
+                      <p className="text-red-500 font-bold text-center mt-5">
+                        No answer for this question
+                      </p>
+                    )}
+
+                    <form onSubmit={sendImage} className="mt-4 ">
+                      <input
+                        type="text"
+                        className="input input-bordered  border-black hidden"
+                        name="index"
+                        id=""
+                        defaultValue={idx}
+                      />
+                      <p className="ml-4 text-lg font-bold text-red">
+                        Marks out of {singleResult.marksPerQuestion[idx]}
+                      </p>
+                      <div className="flex ">
+                        <input
+                          type="text"
+                          name="obtMarks"
+                          id="obtMarks"
+                          autoComplete="off"
+                          className="input input-bordered  border-black"
+                          onChange={(e) => checkNumber(e.target.value, idx)}
+                          required
+                        />
+                        <input
+                          type="submit"
+                          className="ml-4 btn "
+                          value="Save Marks"
+                          disabled={buttonDisabler}
+                        />
                       </div>
-                    ))}
-                </div>
-              </>
-            )}
-          </div>
-        ))}
+                    </form>
+                  </div>
+                </>
+              )}
+            </div>
+          )
+        })}
 
       <div className="flex justify-center items-center">
-        {ansTracker === numberOfAnsweredQuestions && (
+        {finalbuttonDisabler && (
           <button className="btn" onClick={() => finalSave()}>
             Finish The Process
           </button>

@@ -74,13 +74,21 @@ const SingleStudentWrittenANswer = () => {
     let lastTracker = tracker;
     lastTracker[saveId] = -1 ;
     let lastEnabler = enabler;
-    lastEnabler[saveId] = -1;
+    for( let i = 0 ; i<lastEnabler.length; i++){
+      if(lastEnabler[i]===saveId){
+        lastEnabler[i] = -1;
+      }
+    }
+    const id = saveId;
+    // console.log(id)
     for( let i = 0 ; i<lastEnabler.length ; i++ ){
       if(lastTracker[lastEnabler[i]]===-1 && enabler[i]!==saveId){
           lastTracker[lastEnabler[i]] = 1 ;
           break;
       }
     }
+    // console.log("check",lastTracker)
+    // console.log("enabler",lastEnabler)
     setTracker(lastTracker);
     setEnabler(lastEnabler);
     e.preventDefault()
@@ -199,7 +207,7 @@ const SingleStudentWrittenANswer = () => {
       )
       .then(({ data }) => {
         setSingleResult(data)
-        console.log('result', data)
+        // console.log('result', data)
         setAnswerScripts(data.answerScript)
         let answered = 0
         let vacantAnswer = []
@@ -221,8 +229,8 @@ const SingleStudentWrittenANswer = () => {
             answered++
           }
         }
-        console.log(tr)
-        console.log(checker)
+        // console.log(tr)
+        // console.log(checker)
         setTracker(tr);
         setEnabler(checker)
         setNumberOfAnsweredQuestions(answered)

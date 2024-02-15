@@ -445,7 +445,7 @@ const ShowExam = () => {
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-2">
                   Marks/Questions-<br/>Total Questions-<br/>Total Marks
                 </th>
-                <th className="width-setter bg-white font-semibold text-sm uppercase px-6 py-2">
+                <th className=" bg-white font-semibold text-sm uppercase px-6 py-2">
                   Action
                 </th>
               </tr>
@@ -480,12 +480,12 @@ const ShowExam = () => {
                       {exam.examVariation===1? exam.marksPerMcq : "N/A"}-{exam.examVariation===1? exam.totalQuestionMcq : "N/A"}-{exam.totalMarksMcq}
                     </td>
                     <td className="px-2 py-3 ">
-                      <div className="grid  lg:grid-cols-2 gap-1 lg:gap-2">
+                      <div className="grid  lg:grid-cols-1 gap-1 lg:gap-2">
                         {exam.RuleImage !== "0" ? (
                           <label
                             onClick={() => handleAssignRule(exam._id)}
                             htmlFor="my-modal-4"
-                            className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                            className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                           >
                             Show Rule
                           </label>
@@ -493,7 +493,7 @@ const ShowExam = () => {
                           <label
                             onClick={() => handleAssignExamId(exam._id)}
                             htmlFor="my-modal-3"
-                            className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                            className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                           >
                             Add Exam Rule
                           </label>
@@ -502,7 +502,7 @@ const ShowExam = () => {
                           examType==="1" && <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="my-popup"
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
                           Generate Meritlist
                         </label>
@@ -511,7 +511,7 @@ const ShowExam = () => {
                           examType === "2" && <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="assign-teacher"
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
                           Assign Teachers
                           </label>
@@ -521,7 +521,7 @@ const ShowExam = () => {
                            <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="my-popup-written"
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
                           Submit Exam
                         </label>
@@ -531,7 +531,7 @@ const ShowExam = () => {
                           examType ==="2" && <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="written-generator"
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
                           Generate Meritlist
                         </label>
@@ -539,7 +539,7 @@ const ShowExam = () => {
                         <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="my-modal"
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
                           Update
                         </label>
@@ -547,7 +547,7 @@ const ShowExam = () => {
                           exam.examVariation===1 && <label
                           htmlFor="my-modal-2"
                           onClick={() => setSingleExamId(exam._id)}
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
                           Add  Question
                         </label>
@@ -556,7 +556,7 @@ const ShowExam = () => {
                           exam.examVariation===2 && <label
                           htmlFor="written-modal"
                           onClick={() => setSingleExamId(exam._id)}
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
                           Add  Question
                         </label>
@@ -565,7 +565,7 @@ const ShowExam = () => {
                           exam.examVariation===3 && <label
                           htmlFor="both-modal"
                           onClick={() => setSingleExamId(exam._id)}
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
                           Add  Question
                         </label>

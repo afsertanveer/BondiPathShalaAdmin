@@ -103,7 +103,8 @@ export const  whiteTheme = {
 
   // colorpicker style
   'colorpicker.button.border': '0px',
-  'colorpicker.title.color': '#000',
+  'colorpicker.title.color': 'black',
+  
 };
 
 export const imageResizer = imageUrl=>{

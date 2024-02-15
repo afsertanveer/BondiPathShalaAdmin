@@ -233,20 +233,20 @@ const SingleStudentWrittenANswer = () => {
   return isLoading ? (
     <Loader />
   ) : (
-    <div className="min-h-full mb-80 mx-0">
+    <div className="min-h-full mb-80 mx-0 px-0 lg:px-8 pe-8 lg:pe-0 ">
       {ansTracker !== numberOfAnsweredQuestions &&
         answerScripts.map((answer, idx) => (
-          <div key={idx}>
+          <div key={idx} >
             {answer !== null && tracker[idx]===1 && (
               <>
                 <p className=" my-4 text-4xl font-extrabold  border-4  border-color-one   w-10 h-10 flex justify-center items-center rounded-full">
                   {idx + 1}
                 </p>
-                <div className='p-1 px-3 border-4 border-color-one rounded-lg '>
+                <div className='grid grid-cols-1 px-2 py-1 border-4 border-color-one rounded-lg '>
                   {Array.isArray(answer) === true &&
                     answer.map((photo, index) => (
                       <div key={index}>
-                        <div>
+                        <div >
                           <div className="grid grid-cols-1 mt-4">
                             <ImageEditor
                               includeUI={{
@@ -312,7 +312,7 @@ const SingleStudentWrittenANswer = () => {
                           <p className="ml-4 text-lg font-bold text-red">
                             Marks out of {singleResult.marksPerQuestion[idx]}
                           </p>
-                          <div className="flex ">
+                          <div className="flex flex-col lg:flex-row ">
                             <input
                               type="text"
                               name="obtMarks"
@@ -324,7 +324,7 @@ const SingleStudentWrittenANswer = () => {
                             />
                             <input
                               type="submit"
-                              className="ml-4 btn"
+                              className="ml-0 lg:ml-4 mt-2 lg:mt-0 btn"
                               onClick={()=>setSaveId(idx)}
                               value="Save Marks"
                               disabled={sendButtonEnabler}

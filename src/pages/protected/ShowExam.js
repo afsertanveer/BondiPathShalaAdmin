@@ -664,7 +664,7 @@ const ShowExam = () => {
         <input type="checkbox" id="assign-teacher" className="modal-toggle" />
         <div className="modal">
           <div className="modal-box">
-            <h3 className="font-bold text-lg text-center">Add Rule</h3>
+            <h3 className="font-bold text-lg text-center">Add Teachers</h3>
             <form className="add-form" onSubmit={handleAssignTeacher}>
               <div className="form-control">
                 <label htmlFor="" className=" label">

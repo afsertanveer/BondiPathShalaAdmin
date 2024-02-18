@@ -15,6 +15,10 @@ const AddBothExam = () => {
   const [selectedType, setSelectedType] = useState(-1);
   const [isSSC, setIsSSC] = useState(false);
   const [isHSC, setIsHSC] = useState(false);
+  const [questionType,setQuestionType] = useState(0);
+  const [numberOfOptions,setNumberOfOptions] = useState(4);
+  const [numberOfRetakes,setNumberOfRetakes] = useState(4);
+  const [numberOfSet,setNumberOfSet] = useState(4);
   const navigate = useNavigate();
 
   const handleAddExam = async (e) => {
@@ -57,6 +61,10 @@ const AddBothExam = () => {
     formdata.append("hscStatus",isHSC);
     formdata.append("negativeMarks",negativeMarks);
     formdata.append("totalMarks",totalMarks);
+    formdata.append("numberOfRetakes",numberOfRetakes)
+    formdata.append("numberOfOptions",numberOfOptions)
+    formdata.append("questionType",questionType)
+    formdata.append("numberOfSet",numberOfSet)
     console.log(formdata);
     await axios
       .post(`/api/both/createbothexam`, formdata, {
@@ -269,7 +277,7 @@ const AddBothExam = () => {
               </div>
               <div className="w-full lg:w-1/4 mr-0 lg:mr-4">
                 <label htmlFor="" className="label">
-                  Marks Per Question
+                  Marks/Question
                 </label>
                 <input
                   type="number"
@@ -284,7 +292,7 @@ const AddBothExam = () => {
               </div>        
               <div className="w-full lg:w-1/4 mr-0 lg:mr-4">
                 <label htmlFor="" className="label">
-                  Marks
+                 Total Marks
                 </label>
                 <input
                   type="number"
@@ -300,7 +308,7 @@ const AddBothExam = () => {
               </div>    
               <div className="w-full lg:w-1/4 mr-0 lg:mr-4">
                 <label htmlFor="" className="label">
-                  Negative Marking
+                  (-) Marking %
                 </label>
                 <input
                   type="number"
@@ -314,6 +322,83 @@ const AddBothExam = () => {
                   required
                 />
               </div>    
+            </div>
+            <div className="form-control grid grid-cols-1 lg:grid-cols-4 gap-3 ">
+              <div >
+                <label htmlFor="" className="label">
+                  Question Type
+                </label>
+                <select
+                  name="questionType"
+                  id="questionType"
+                  className="input border-black input-bordered w-full "
+                  onChange={(e) => setQuestionType(parseInt(e.target.value))}
+                  required
+                >
+                  <option value={0}>Image</option>
+                  <option value={1}>Text</option>
+                  <option value={0}>Image</option>
+                </select>
+              </div>
+              <div >
+                <label htmlFor="" className="label">
+                  Options
+                </label>
+                <select
+                  name="numberOfOptions"
+                  id="numberOfOptions"
+                  className="input border-black input-bordered w-full "
+                  onChange={(e) => setNumberOfOptions(parseInt(e.target.value))}
+                  required
+                >
+                <option value={4}>4</option>
+                <option value={0}>0</option>
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+                <option value={4}>4</option>
+                <option value={4}>5</option>
+                <option value={4}>6</option>
+                </select>
+              </div>
+              <div >
+                <label htmlFor="" className="label">
+                  Sets
+                </label>
+                <select
+                  name="numberOfSets"
+                  id="numberOfSets"
+                  className="input border-black input-bordered w-full "
+                  onChange={(e) => setNumberOfSet(parseInt(e.target.value))}
+                  required
+                >
+                  <option value={4}>4</option>
+                  <option value={0}>0</option>
+                  <option value={1}>1</option>
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                  <option value={4}>4</option>
+                </select>
+              </div>
+              <div >
+                <label htmlFor="" className="label">
+               Repeats
+                </label>
+                <select
+                  name="numberOfRetakes"
+                  id="numberOfRetakes"
+                  className="input border-black input-bordered w-full "
+                  onChange={(e) => setNumberOfRetakes(parseInt(e.target.value))}
+                  required
+                >
+                  <option value={4}>4</option>
+                  <option value={0}>0</option>
+                  <option value={1}>1</option>
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                  <option value={4}>4</option>
+                </select>
+              </div>
             </div>
             <div className="w-full flex">
             <p className="text-lg font-bold">Written:</p> 
@@ -336,7 +421,7 @@ const AddBothExam = () => {
               </div>
               <div className="w-full lg:w-1/4 mr-0 lg:mr-4">
                 <label htmlFor="" className="label">
-                 Written Total Marks
+                  Total Marks
                 </label>
                 <input
                   type="number"
@@ -395,10 +480,7 @@ const AddBothExam = () => {
                 />
               </div>            
             </div>
-            <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-center">
-              
-              
-            </div>
+            
             <div className="form-control">
               <label htmlFor="" className="label">
                 Exam Image
@@ -408,7 +490,6 @@ const AddBothExam = () => {
                 name="iLink"
                 id="iLink"
                 className="file-input w-full input-bordered  border-black "
-                required
               />
             </div>
             <div className="form-control mt-2">

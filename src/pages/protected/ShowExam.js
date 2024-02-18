@@ -365,7 +365,7 @@ const ShowExam = () => {
     }
   }, [selectedCourse, singleExamId, selectedSubject,examType]);
   return (
-    <div className="mx-auto">
+    <div className="mx-auto px-1 lg:px-4">
       <div className="flex justify-center items-center py-2 px-2 my-3  ">
         <div className="bg-white w-full px-2 lg:px-6 py-2 grid grid-cols-1 lg:grid-cols-3 gap-0 lg:gap-4 ">
           <div className="form-control">

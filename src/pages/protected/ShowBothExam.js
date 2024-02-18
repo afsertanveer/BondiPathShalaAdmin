@@ -331,7 +331,7 @@ const ShowBothExam = () => {
     }
   }, [selectedCourse, singleExamId, selectedSubject]);
   return (
-    <div className="mx-auto">
+    <div className="mx-auto px-1 lg:px-4">
       <div className="flex justify-center items-center py-2 px-2 my-3  ">
         <div className="bg-white w-full  lg:w-1/2 px-4  py-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div className="form-control">
@@ -443,9 +443,9 @@ const ShowBothExam = () => {
                           <label
                             onClick={() => handleAssignRule(exam._id)}
                             htmlFor="my-modal-4"
-                            className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% w-full mr-2 mb-3 lg:mb-0 text-white"
+                            className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% w-full mr-2 mb-3 lg:mb-0 text-white text-sm"
                           >
-                            Show Rule
+                            <small>Show Rule</small>
                           </label>
                         ) : (
                           <label
@@ -453,50 +453,50 @@ const ShowBothExam = () => {
                             htmlFor="my-modal-3"
                             className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% w-full mr-2 mb-3 lg:mb-0 text-white"
                           >
-                            Add Exam Rule
+                            <small>Add Exam Rule</small>
                           </label>
                         )}
                         <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="assign-teacher"
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% w-full mr-2 mb-3 lg:mb-0 text-white"
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% w-full mr-2 mb-3 lg:mb-0 text-white text-sm"
                         >
-                          Assign Teachers
+                          <small>Assign Teachers</small>
                           </label>
                           <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="my-popup-submit"
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% w-full mr-2 mb-3 lg:mb-0 text-white"
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% w-full mr-2 mb-3 lg:mb-0 text-white text-sm"
                         >
-                          Submit Exam
+                          <small>Submit Exam</small>
                         </label>
                         <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="my-popup"
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% w-full mr-2 mb-3 lg:mb-0 text-white"
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% w-full mr-2 mb-3 lg:mb-0 text-white text-sm"
                         >
-                          Generate Meritlist
+                          <small>Generate Meritlist</small>
                         </label>
                         <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="my-modal"
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% w-full mr-2 mb-3 lg:mb-0 text-white"
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% w-full mr-2 mb-3 lg:mb-0 text-white text-sm"
                         >
-                          Update
+                          <small>Update</small>
                         </label>
                          <label
                           htmlFor="my-modal-2"
                           onClick={() => setSingleExamId(exam._id)}
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% w-full mr-2 mb-3 lg:mb-0 text-white"
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% w-full mr-2 mb-3 lg:mb-0 text-white text-sm"
                         >
-                          Add MCQ  Question
+                          <small>Add MCQ  Question</small>
                         </label>
                         <label
                           htmlFor="written-modal"
                           onClick={() => setSingleExamId(exam._id)}
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% w-full mr-2 mb-3 lg:mb-0 text-white"
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% w-full mr-2 mb-3 lg:mb-0 text-white text-sm"
                         >
-                          Add Written Question
+                          <small>Add Written Question</small>
                         </label>
                         
                         

@@ -42,6 +42,7 @@
 }
 label{
   font-weight: 500;
+  font-size: smaller I !important;
 }
 .customTable{
   margin-top: 20px;

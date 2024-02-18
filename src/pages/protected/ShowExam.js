@@ -138,7 +138,11 @@ const ShowExam = () => {
       hscStatus: hsc,
       buetStatus: singleExam.buetStatus,
       medicalStatus: singleExam.medicalStatus,
-      universityStatus: singleExam.universityStatus
+      universityStatus: singleExam.universityStatus,
+      numberOfRetakes,
+      numberOfSet,
+      questionType: questionType,
+      numberOfOptions:updatenumberOfOptions
     };
     await axios.put("/api/exam/updateexam", updatedExam).then(({ data }) => {
       toast.success(data);

@@ -10,6 +10,8 @@ import { optionName, type } from "../../utils/globalVariables";
 import { Fragment } from "react";
 import Select from "react-select";
 import moment from "moment/moment";
+import ImageAdder from "../../components/ImageAdder/ImageAdder";
+import SolutionSheetAdder from "../../components/common/SolutionSheetAdder";
 
 const ShowExam = () => {
   const [courses, setCourses] = useState([]);
@@ -31,6 +33,10 @@ const ShowExam = () => {
   const [qvmark,setQvmark] = useState([]);
   const [teachers,setTeachers] = useState([]);
   const [ selectedTeachers, setSelectedTeachers ] = useState([]);
+  const [questionType,setQuestionType] = useState(0);
+  const [updatenumberOfOptions,setUpdateNumberOfOptions] = useState(4);
+  const [numberOfRetakes,setNumberOfRetakes] = useState(4);
+  const [numberOfSet,setNumberOfSet] = useState(4);
  
   const generator = (id) => {
     axios
@@ -342,6 +348,10 @@ const ShowExam = () => {
         .get(`/api/exam/getExamById?examId=${singleExamId}`)
         .then(({ data }) => {
           setsingleExam(data);
+          setNumberOfRetakes(data.numberOfRetakes);
+          setUpdateNumberOfOptions(data.numberOfOptions);
+          setNumberOfSet(data.numberOfSet);
+          setQuestionType(data.questionType);
           setSscChecked(data.sscStatus);
           setHscChecked(data.hscStatus);
         })
@@ -498,6 +508,22 @@ const ShowExam = () => {
                             Add Exam Rule
                           </label>
                         )}
+                        <label
+                            onClick={() => handleAssignExamId(exam._id)}
+                            htmlFor="imageAdder"
+                            className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          >
+                            {exam.iLink===null? 'Add Image' : 'Update Image'}
+                          </label>
+                        <label
+                            onClick={() => handleAssignExamId(exam._id)}
+                            htmlFor="solutionSheet"
+                            className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          >
+                            {/* {exam.solutionSheet===true? 'Add SolutionSheet' : 'Update SolutionSheet'}
+                             */}
+                             Add
+                          </label>
                         {
                           examType==="1" && <label
                           onClick={() => handleAssignExamId(exam._id)}
@@ -949,6 +975,83 @@ const ShowExam = () => {
                       </label>
                     </div>
                   </div>
+             <div className="form-control grid grid-cols-1 lg:grid-cols-2 gap-3 ">
+              <div >
+                <label htmlFor="" className="label">
+                  Question Type
+                </label>
+                <select
+                  name="questionType"
+                  id="questionType"
+                  className="input border-black input-bordered w-full "
+                  onChange={(e) => setQuestionType(parseInt(e.target.value))}
+                  required
+                >
+                  <option value={parseInt(questionType)}>{questionType===0? 'Image' : 'Text'}</option>
+                  <option value={1}>Text</option>
+                  <option value={0}>Image</option>
+                </select>
+              </div>
+              <div >
+                <label htmlFor="" className="label">
+                  Options
+                </label>
+                <select
+                  name="numberOfOptions"
+                  id="numberOfOptions"
+                  className="input border-black input-bordered w-full "
+                  onChange={(e) => setUpdateNumberOfOptions(parseInt(e.target.value))}
+                  required
+                >
+                <option value={parseInt(updatenumberOfOptions)}>{updatenumberOfOptions}</option>
+                <option value={0}>0</option>
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+                <option value={4}>4</option>
+                <option value={4}>5</option>
+                <option value={4}>6</option>
+                </select>
+              </div>
+              <div >
+                <label htmlFor="" className="label">
+                  Sets
+                </label>
+                <select
+                  name="numberOfSets"
+                  id="numberOfSets"
+                  className="input border-black input-bordered w-full "
+                  onChange={(e) => setNumberOfSet(parseInt(e.target.value))}
+                  required
+                >
+                  <option value={parseInt(numberOfSet)}>{numberOfSet}</option>
+                  <option value={0}>0</option>
+                  <option value={1}>1</option>
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                  <option value={4}>4</option>
+                </select>
+              </div>
+              <div >
+                <label htmlFor="" className="label">
+               Repeats
+                </label>
+                <select
+                  name="numberOfRetakes"
+                  id="numberOfRetakes"
+                  className="input border-black input-bordered w-full "
+                  onChange={(e) => setNumberOfRetakes(parseInt(e.target.value))}
+                  required
+                >
+                  <option value={parseInt(numberOfRetakes)}>{numberOfRetakes}</option>
+                  <option value={0}>0</option>
+                  <option value={1}>1</option>
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                  <option value={4}>4</option>
+                </select>
+              </div>
+            </div>
                   <div className="form-control mt-2 flex flex-row justify-between">
                     <input
                       type="submit"
@@ -1293,6 +1396,8 @@ const ShowExam = () => {
         modalData={selectedExamId}
         remove={deactivateExam}
       ></PopUpModal>
+        <ImageAdder title={`${singleExam.iLink===null?"Add Image" :"Update Image"}`} apiEndPoint="/" examId={singleExamId} setIsLoading={setIsLoading} />
+        <SolutionSheetAdder  apiEndPoint="/" examId={singleExamId} setIsLoading={setIsLoading} type={0} />
     </div>
   );
 };

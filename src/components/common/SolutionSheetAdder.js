@@ -6,12 +6,15 @@ const SolutionSheetAdder = ({examId,apiEndPoint,setIsLoading,type}) => {
     const solutionSheetAdd =async(e) =>{
         e.preventDefault();
         setIsLoading(true);
+        console.log(e);
         const form = e.target;
-        const solveSheet = e.target.solveSheet;
+        const solveSheet = e.target.solveSheet.value;
         const solve ={
             examId:examId,
+            type,
             sollution:solveSheet
         }
+        console.log(solve);
         try {
           await axios
             .post(apiEndPoint, solve, {
@@ -23,6 +26,7 @@ const SolutionSheetAdder = ({examId,apiEndPoint,setIsLoading,type}) => {
                 toast.success("Solution Sheet Added Successfully");
                 setIsLoading(false);
                 form.reset();
+                window.location.reload(false);
             })
             .catch((e) => console.log(e));
         } catch (e) {
@@ -30,7 +34,7 @@ const SolutionSheetAdder = ({examId,apiEndPoint,setIsLoading,type}) => {
           console.log(e);
         }
     
-        document.getElementById("imageAdder").checked = false;
+        document.getElementById("solutionSheet").checked = false;
     }
     return (
         <div >
@@ -41,7 +45,7 @@ const SolutionSheetAdder = ({examId,apiEndPoint,setIsLoading,type}) => {
             <form className="add-form" onSubmit={solutionSheetAdd}>
               <div className="form-control">
                 <label htmlFor="" className=" label">
-                  <span className="label-text mb-2">Select Image </span>
+                  <span className="label-text mb-2">Link </span>
                 </label>
                 <input
                   type="text"

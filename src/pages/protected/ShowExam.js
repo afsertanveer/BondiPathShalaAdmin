@@ -524,9 +524,8 @@ const ShowExam = () => {
                             htmlFor="solutionSheet"
                             className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                           >
-                            {/* {exam.solutionSheet===true? 'Add SolutionSheet' : 'Update SolutionSheet'}
-                             */}
-                             Add
+                            {exam.sollutionSheet===null? 'Add SolutionSheet' : 'Update SolutionSheet'}
+                            
                           </label>
                         {
                           examType==="1" && <label
@@ -1400,8 +1399,8 @@ const ShowExam = () => {
         modalData={selectedExamId}
         remove={deactivateExam}
       ></PopUpModal>
-        <ImageAdder title={`${singleExam.iLink===null?"Add Image" :"Update Image"}`} apiEndPoint="/" examId={singleExamId} setIsLoading={setIsLoading} />
-        <SolutionSheetAdder  apiEndPoint="/" examId={singleExamId} setIsLoading={setIsLoading} type={0} />
+        <ImageAdder title={`${singleExam.iLink===null?"Add Image" :"Update Image"}`} apiEndPoint="/api/exam/updateExamPhoto" examId={singleExamId} setIsLoading={setIsLoading} />
+        <SolutionSheetAdder  apiEndPoint="/api/exam/uploadsollution" examId={singleExamId} setIsLoading={setIsLoading} type={0} />
     </div>
   );
 };

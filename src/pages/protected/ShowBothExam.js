@@ -8,6 +8,8 @@ import DeactivateButton from "./../../features/common/components/DeactivateButto
 import PopUpModal from "./../../features/common/components/PopUpModal";
 import { optionName } from "../../utils/globalVariables";
 import Select from "react-select";
+import ImageAdder from "../../components/ImageAdder/ImageAdder";
+import SolutionSheetAdder from "../../components/common/SolutionSheetAdder";
 
 const ShowBothExam = () => {
   const [courses, setCourses] = useState([]);
@@ -28,6 +30,10 @@ const ShowBothExam = () => {
   const [qvmark,setQvmark] = useState([]);
   const [teachers,setTeachers] = useState([]);
   const [ selectedTeachers, setSelectedTeachers ] = useState([]);
+  const [questionType,setQuestionType] = useState(0);
+  const [updatenumberOfOptions,setUpdateNumberOfOptions] = useState(4);
+  const [numberOfRetakes,setNumberOfRetakes] = useState(4);
+  const [numberOfSet,setNumberOfSet] = useState(4);
   console.log(selectedTeachers);
 
   const generator = (examId) => {
@@ -47,14 +53,14 @@ const ShowBothExam = () => {
           setRuleImg(data.ruleILink);
           return data.ruleILink;
         }
-        console.log(data);
+        // console.log(data);
       })
       .catch((e) => {
         console.log(e);
       });
   };
   const handleAssignExamId = (id) => {
-    console.log(id);
+    // console.log(id);
     setSingleExamId(id);
   };
   const handleAddRule = async (e) => {
@@ -125,6 +131,10 @@ const ShowBothExam = () => {
       negativeMarks,
       sscStatus: ssc,
       hscStatus: hsc,
+      numberOfRetakes,
+      numberOfSet,
+      questionType: questionType,
+      numberOfOptions:updatenumberOfOptions
     };
     console.log(updatedExam);
     await axios.put("/api/both/updatebothexam", updatedExam).then(({ data }) => {
@@ -322,6 +332,10 @@ const ShowBothExam = () => {
         .then(({ data }) => {
             console.log(data);
           setsingleExam(data);
+          setNumberOfRetakes(data.numberOfRetakes);
+          setUpdateNumberOfOptions(data.numberOfOptions);
+          setNumberOfSet(data.numberOfSet);
+          setQuestionType(data.questionType);
           setSscChecked(data.sscStatus);
           setHscChecked(data.hscStatus);
         })
@@ -456,6 +470,22 @@ const ShowBothExam = () => {
                             <small>Add Exam Rule</small>
                           </label>
                         )}
+                        <label
+                            onClick={() => handleAssignExamId(exam._id)}
+                            htmlFor="imageAdder"
+                            className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 w-full lg:mb-0 text-white"
+                          >
+                            <small>{exam.iLink===null? 'Add Image' : 'Update Image'}</small>
+                          </label>
+                        <label
+                            onClick={() => handleAssignExamId(exam._id)}
+                            htmlFor="solutionSheet"
+                            className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 w-full lg:mb-0 text-white"
+                          >
+                            <small>{/* {exam.solutionSheet===true? 'Add SolutionSheet' : 'Update SolutionSheet'}
+                             */}
+                             Add</small>
+                          </label>
                         <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="assign-teacher"
@@ -734,6 +764,83 @@ const ShowBothExam = () => {
                     </div>
                     
                   </div>
+                  <div className="form-control grid grid-cols-1 lg:grid-cols-2 gap-3 ">
+              <div >
+                <label htmlFor="" className="label">
+                  Question Type
+                </label>
+                <select
+                  name="questionType"
+                  id="questionType"
+                  className="input border-black input-bordered w-full "
+                  onChange={(e) => setQuestionType(parseInt(e.target.value))}
+                  required
+                >
+                  <option value={parseInt(questionType)}>{questionType===0? 'Image' : 'Text'}</option>
+                  <option value={1}>Text</option>
+                  <option value={0}>Image</option>
+                </select>
+              </div>
+              <div >
+                <label htmlFor="" className="label">
+                  Options
+                </label>
+                <select
+                  name="numberOfOptions"
+                  id="numberOfOptions"
+                  className="input border-black input-bordered w-full "
+                  onChange={(e) => setUpdateNumberOfOptions(parseInt(e.target.value))}
+                  required
+                >
+                <option value={parseInt(updatenumberOfOptions)}>{updatenumberOfOptions}</option>
+                <option value={0}>0</option>
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+                <option value={4}>4</option>
+                <option value={4}>5</option>
+                <option value={4}>6</option>
+                </select>
+              </div>
+              <div >
+                <label htmlFor="" className="label">
+                  Sets
+                </label>
+                <select
+                  name="numberOfSets"
+                  id="numberOfSets"
+                  className="input border-black input-bordered w-full "
+                  onChange={(e) => setNumberOfSet(parseInt(e.target.value))}
+                  required
+                >
+                  <option value={parseInt(numberOfSet)}>{numberOfSet}</option>
+                  <option value={0}>0</option>
+                  <option value={1}>1</option>
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                  <option value={4}>4</option>
+                </select>
+              </div>
+              <div >
+                <label htmlFor="" className="label">
+               Repeats
+                </label>
+                <select
+                  name="numberOfRetakes"
+                  id="numberOfRetakes"
+                  className="input border-black input-bordered w-full "
+                  onChange={(e) => setNumberOfRetakes(parseInt(e.target.value))}
+                  required
+                >
+                  <option value={parseInt(numberOfRetakes)}>{numberOfRetakes}</option>
+                  <option value={0}>0</option>
+                  <option value={1}>1</option>
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                  <option value={4}>4</option>
+                </select>
+              </div>
+            </div>
                   <div className="form-control mt-1 flex flex-col lg:flex-row justify-between items-start lg:items-center">
                   <p className="font-bold text-md">Written</p>
                   </div>
@@ -1259,6 +1366,8 @@ const ShowBothExam = () => {
         modalData={selectedExamId}
         remove={deactivateExam}
       ></PopUpModal>
+        <ImageAdder title={`${singleExam.iLink===null?"Add Image" :"Update Image"}`} apiEndPoint="/" examId={singleExamId} setIsLoading={setIsLoading} />
+        <SolutionSheetAdder  apiEndPoint="/" examId={singleExamId} setIsLoading={setIsLoading} type={1} />
     </div>
   );
 };

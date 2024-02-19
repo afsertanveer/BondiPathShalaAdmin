@@ -1139,7 +1139,7 @@ const ShowExam = () => {
                     name="set_name"
                     id="set_name"
                     className="input border-black input-bordered w-full "
-                    onChange={(e) => setNameOfSet(e.target.value)}
+                    onChange={(e) => setNameOfSet(parseInt(e.target.value))}
                     required
                   >
                     <option>---</option>

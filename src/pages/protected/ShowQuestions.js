@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import DeactivateButton from "../../features/common/components/DeactivateButton";
 import PopUpModal from "../../features/common/components/PopUpModal";
 import { optionName } from "../../utils/globalVariables";
+import { isEmptyObject } from "../../utils/globalFunction";
 const ShowQuestions = () => {
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -24,6 +25,8 @@ const ShowQuestions = () => {
   const [questionExam, setQuestionExam] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
+  const [singleExam,setSingleExam] = useState({});
+  const [selectedSet,setSelectedSet] = useState(-1);
   
   const handleChangeCourse = (e) => {
     setSelectedSubject("");
@@ -62,6 +65,36 @@ const ShowQuestions = () => {
     setExams([]);
     setQuestions([]);
   };
+  const handleChangeExam = e =>{
+        if(e.target.value!==''){
+          setSelectedExam(e.target.value);
+          axios
+        .get(`/api/exam/getExamById?examId=${e.target.value}`)
+        .then(({ data }) => {
+          setSingleExam(data)
+          if(data.numberOfSet>0){
+
+          }else{
+            axios
+            .get(`/api/exam/questionbyexamid?examId=${selectedExam}`)
+            .then(({ data }) => {
+              setQuestions(data);
+              setIsLoading(false);
+            }).catch(e=>{
+              setQuestions([]);
+              setSelectedQuestions([]);
+              toast.error(e.response.data);
+            })
+          }
+          
+        })
+        .catch((e) => console.log(e))
+        }else{
+          setSelectedExam("");
+          setSingleExam({});
+          setQuestions([]);
+        }
+  }
   const handleChangeBothStatus = val =>{
     if(val==="0"){
       setBothStatus(false);
@@ -201,25 +234,13 @@ const ShowQuestions = () => {
     } else {
       setExams([]);
     }
-    if (selectedExam !== "") {
-      axios
-        .get(`/api/exam/questionbyexamid?examId=${selectedExam}`)
-        .then(({ data }) => {
-          setQuestions(data);
-          setIsLoading(false);
-        }).catch(e=>{
-          setQuestions([]);
-          setSelectedQuestions([]);
-          toast.error(e.response.data);
-        })
-    } else {
-      setQuestions([]);
-    }
-  }, [selectedCourse, selectedSubject, selectedExam]);
+   
+   
+  }, [selectedCourse, selectedSubject]);
   return (
     <div className=" ">
       <div className="bg-white py-4 px-2 my-3 ">
-        <div className=" w-full  mx-auto grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className={` w-full  mx-auto grid grid-cols-1 lg:${singleExam?.numberOfSet>0?'grid-cols-4':'grid-cols-3 '} gap-4`}>
           <div className="form-control">
             <label className="label-text text-center" htmlFor="">
               Select Course
@@ -269,7 +290,7 @@ const ShowQuestions = () => {
               id="exam_list"
               className="input w-full border-black input-bordered"
               required
-              onChange={(e) => setSelectedExam(e.target.value)}
+              onChange={(e) => handleChangeExam(e)}
             >
               <option value=""></option>
               {exams.length > 0 &&
@@ -280,6 +301,28 @@ const ShowQuestions = () => {
                 ))}
             </select>
           </div>
+          {
+            singleExam?.numberOfSet>0 && <div className="form-control">
+            <label className="label-text text-center" htmlFor="">
+              Select Set Name
+            </label>
+            <select
+              name="exam_list"
+              id="exam_list"
+              className="input w-full border-black input-bordered"
+              required
+              onChange={(e) => setSelectedSet(parseInt(e.target.value))}
+            >
+              <option value=""></option>
+              {[...Array(singleExam?.numberOfSet).keys()].map((id) => (
+                      <option key={id} value={id}>
+                        {optionName[id]}
+                      </option>
+                    ))}
+            </select>
+          </div>
+          }
+
         </div>
         
       </div>

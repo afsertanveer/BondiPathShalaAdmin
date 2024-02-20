@@ -108,7 +108,7 @@ const ShowExam = () => {
     const form = e.target
     const name = form.exam.value
     const type = form.type.value
-    const variation = form.variation.value
+    const variation = singleExam.examVariation;
     const startTime = form.start_time.value
     const endTime = form.end_time.value
     if (singleExam.examVariation === 1) {
@@ -213,8 +213,14 @@ const ShowExam = () => {
         setNumberOfOptions(0)
         setIsText(true)
       })
-      .catch((e) => console.log(e))
+      .catch((e) =>{
+        toast.error(e.response.data);
+        if(e.response.status===405){
+          form.reset();
+        }
+      })
     document.getElementById('my-modal-2').checked = false
+ 
   }
   const fillMarks = (m, id) => {
     const prevMarks = [...qvmark]
@@ -824,23 +830,16 @@ const ShowExam = () => {
                   <label htmlFor="" className="label">
                     Variation
                   </label>
-                  <select
+                  <input
                     name="variation"
                     id="variation"
                     className="input border-black input-bordered w-full "
                     required
+                    value={singleExam.examVariation === 1
+                      ? 'MCQ'
+                      :  'Written'}
                     disabled
-                  >
-                    <option value={singleExam.examVariation}>
-                      {singleExam.examVariation === 1
-                        ? 'MCQ'
-                        : singleExam.examVariation === 2
-                        ? 'Written'
-                        : 'Both'}
-                    </option>
-                    <option value={1}>MCQ</option>
-                    <option value={2}>Written</option>
-                  </select>
+                  />
                 </div>
               </div>
               <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-center">
@@ -1008,7 +1007,7 @@ const ShowExam = () => {
                   </label>
                 </div>
               </div>
-              {type === '1' && (
+              {singleExam.examVariation === 1 && (
                 <div className="form-control grid grid-cols-1 lg:grid-cols-2 gap-3 ">
                   <div>
                     <label htmlFor="" className="label">

@@ -66,27 +66,16 @@ const ShowQuestions = () => {
     setQuestions([]);
   };
   const handleChangeExam = e =>{
+    
+      setQuestions([]);
+      setSelectedExam("");
+     
         if(e.target.value!==''){
-          setSelectedExam(e.target.value);
           axios
         .get(`/api/exam/getExamById?examId=${e.target.value}`)
         .then(({ data }) => {
           setSingleExam(data)
-          if(data.numberOfSet>0){
-
-          }else{
-            axios
-            .get(`/api/exam/questionbyexamid?examId=${selectedExam}`)
-            .then(({ data }) => {
-              setQuestions(data);
-              setIsLoading(false);
-            }).catch(e=>{
-              setQuestions([]);
-              setSelectedQuestions([]);
-              toast.error(e.response.data);
-            })
-          }
-          
+          setSelectedExam(e.target.value);
         })
         .catch((e) => console.log(e))
         }else{
@@ -94,6 +83,23 @@ const ShowQuestions = () => {
           setSingleExam({});
           setQuestions([]);
         }
+  }
+  const handleChangeSet = setName =>{
+    setSelectedSet(parseInt(setName));
+    if(parseInt(setName)!==-1){
+      axios
+          .get(`/api/exam/questionByExamIdAndSet?examId=${selectedExam}&setName=${setName}`)
+          .then(({ data }) => {
+            setQuestions(data);
+            setIsLoading(false);
+          }).catch(e=>{
+            setQuestions([]);
+            setSelectedQuestions([]);
+            toast.error(e.response.data);
+          })
+    }else{
+          setQuestions([]);
+    }
   }
   const handleChangeBothStatus = val =>{
     if(val==="0"){
@@ -302,18 +308,18 @@ const ShowQuestions = () => {
             </select>
           </div>
           {
-            singleExam?.numberOfSet>0 && <div className="form-control">
+            singleExam?.numberOfSet>0 && selectedExam!=='' && <div className="form-control">
             <label className="label-text text-center" htmlFor="">
               Select Set Name
             </label>
             <select
-              name="exam_list"
-              id="exam_list"
+              name="set_name"
+              id="set_name"
               className="input w-full border-black input-bordered"
               required
-              onChange={(e) => setSelectedSet(parseInt(e.target.value))}
+              onChange={(e) => handleChangeSet(parseInt(e.target.value))}
             >
-              <option value=""></option>
+              <option value={-1}></option>
               {[...Array(singleExam?.numberOfSet).keys()].map((id) => (
                       <option key={id} value={id}>
                         {optionName[id]}
@@ -353,7 +359,7 @@ const ShowQuestions = () => {
                   <input
                     type="checkbox"
                     id="all_check"
-                    className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    className="w-6 h-8  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                     onChange={setQuestionBulkAll}
                   />
                 </th>
@@ -362,8 +368,8 @@ const ShowQuestions = () => {
                 <th className="bg-white">
                   Correct<br></br> Option
                 </th>
-                <th className="bg-white">Explanation </th>
-                <th>Action</th>
+                {/* <th className="bg-white">Explanation </th> */}
+                <th className="w-[20px]">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -412,7 +418,7 @@ const ShowQuestions = () => {
                     <td className="w-[10px]">
                       {optionName[question.correctOption]}
                     </td>
-                    <td className="w-1/4">
+                    {/* <td className="w-1/4">
                       <img
                         src={
                           process.env.REACT_APP_API_HOST +
@@ -421,7 +427,7 @@ const ShowQuestions = () => {
                         }
                         alt=""
                       />
-                    </td>
+                    </td> */}
                     <td>                      
                       <DeactivateButton setter={setSelectedQuestionId} value={question.questionId}></DeactivateButton>
                     </td>

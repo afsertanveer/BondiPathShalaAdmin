@@ -10,6 +10,8 @@ import { optionName } from "../../utils/globalVariables";
 import Select from "react-select";
 import ImageAdder from "../../components/ImageAdder/ImageAdder";
 import SolutionSheetAdder from "../../components/common/SolutionSheetAdder";
+import { Link } from "react-router-dom";
+import QuestionAdder from "../../components/QuestionAdder/QuestionAdder";
 
 const ShowBothExam = () => {
   const [courses, setCourses] = useState([]);
@@ -34,7 +36,8 @@ const ShowBothExam = () => {
   const [updatenumberOfOptions,setUpdateNumberOfOptions] = useState(4);
   const [numberOfRetakes,setNumberOfRetakes] = useState(4);
   const [numberOfSet,setNumberOfSet] = useState(4);
-  console.log(selectedTeachers);
+  const [nameOfSet,setNameOfSet] = useState(0);
+  // console.log(selectedTeachers);
 
   const generator = (examId) => {
     axios
@@ -154,12 +157,12 @@ const ShowBothExam = () => {
     }
     let options = [];
     if (isText === true) {
-      for (let i = 0; i < numberOfOptions; i++) {
+      for (let i = 0; i < singleExam.numberOfOptions; i++) {
         options.push(document.getElementById(`option${i}`).value);
       }
     }
     let questionLink = "";
-    const explanationILink = form.explanationILink.files[0];
+    const explanationILink = null;
     const formdata = new FormData();
     if (isText === false) {
       questionLink = form.iLink.files[0];
@@ -185,6 +188,7 @@ const ShowBothExam = () => {
     formdata.append("correctOption", parseInt(correctOption));
     formdata.append("status", true);
     formdata.append("examId", singleExamId);
+    formdata.append('setName', nameOfSet)
 
     console.log(question);
 
@@ -197,10 +201,6 @@ const ShowBothExam = () => {
       .then((data) => {
         toast.success("success");
         form.reset();
-
-        document.getElementById("num_of_options").disabled = false;
-        setNumberOfOptions(0);
-        setIsText(true);
       })
       .catch((e) => console.log(e));
     document.getElementById("my-modal-2").checked = false;
@@ -302,7 +302,7 @@ const ShowBothExam = () => {
         axios
         .get(`/api/user/teacherlistbycourse?courseId=${selectedCourse}`)
         .then(({ data }) => {
-          console.log(data);
+          // console.log(data);
           setTeachers(data)
           setIsLoading(false);
         }).catch(err=>console.log("teacher fetching error"));
@@ -338,6 +338,13 @@ const ShowBothExam = () => {
           setQuestionType(data.questionType);
           setSscChecked(data.sscStatus);
           setHscChecked(data.hscStatus);
+          if(data.questionType==="0"){
+            console.log("great");
+            setIsText(false);
+          }else{
+            setIsText(true);
+          }
+          setIsLoading(false);
         })
         .catch((e) => console.log(e));
     } else {
@@ -349,7 +356,7 @@ const ShowBothExam = () => {
       <div className="flex justify-center items-center py-2 px-2 my-3  ">
         <div className="bg-white w-full  lg:w-1/2 px-4  py-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div className="form-control">
-            <label className="label-text text-center" htmlFor="">
+            <label className="text-lg text-center" htmlFor="">
               Select Course
             </label>
             <select
@@ -372,7 +379,7 @@ const ShowBothExam = () => {
             </select>
           </div>
           <div className="form-control">
-            <label className="label-text text-center" htmlFor="">
+            <label className="text-lg text-center" htmlFor="">
               Select Subject
             </label>
             <select
@@ -470,22 +477,32 @@ const ShowBothExam = () => {
                             <small>Add Exam Rule</small>
                           </label>
                         )}
+                         <label
+                          onClick={() => handleAssignExamId(exam._id)}
+                          htmlFor="imageAdder"
+                          className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                        >
+                          {exam.iLink === null ? 'Add Image' : 'Update Image'}
+                        </label>
                         <label
-                            onClick={() => handleAssignExamId(exam._id)}
-                            htmlFor="imageAdder"
-                            className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 w-full lg:mb-0 text-white"
+                          onClick={() => handleAssignExamId(exam._id)}
+                          htmlFor="solutionSheet"
+                          className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                        >
+                          {exam.sollutionSheet === null
+                            ? 'Add SolutionSheet'
+                            : 'Update SolutionSheet'}
+                        </label>
+                        {exam.sollutionSheet !== null && (
+                          <Link
+                            className="text-green-700 font-extrabold text-lg underline "
+                            to={exam.sollutionSheet}
+                            target="_blank"
                           >
-                            <small>{exam.iLink===null? 'Add Image' : 'Update Image'}</small>
-                          </label>
-                        <label
-                            onClick={() => handleAssignExamId(exam._id)}
-                            htmlFor="solutionSheet"
-                            className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 w-full lg:mb-0 text-white"
-                          >
-                            <small>{/* {exam.solutionSheet===true? 'Add SolutionSheet' : 'Update SolutionSheet'}
-                             */}
-                             Add</small>
-                          </label>
+                            Solve
+                          </Link>
+                        )}
+                       
                         <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="assign-teacher"
@@ -591,7 +608,7 @@ const ShowBothExam = () => {
             <form className="add-form" onSubmit={handleAssignTeacher}>
               <div className="form-control">
                 <label htmlFor="" className=" label">
-                  <span className="label-text mb-2">Select Teachers </span>
+                  <span className="text-lg mb-2">Select Teachers </span>
                 </label>
                 <Select
                   options={teachers}
@@ -635,7 +652,7 @@ const ShowBothExam = () => {
             <form className="add-form" onSubmit={handleAddRule}>
               <div className="form-control">
                 <label htmlFor="" className=" label">
-                  <span className="label-text mb-2">Add Rule Image </span>
+                  <span className="text-lg mb-2">Add Rule Image </span>
                 </label>
                 <input
                   type="file"
@@ -662,7 +679,7 @@ const ShowBothExam = () => {
                 <form className="add-form" onSubmit={handleUpdateExam}>
                   <div className="form-control">
                     <label htmlFor="" className=" label">
-                      <span className="label-text">Exam Name </span>
+                      <span className="text-lg">Exam Name </span>
                     </label>
                     <input
                       className="input input-bordered  border-black"
@@ -1039,140 +1056,13 @@ const ShowBothExam = () => {
             </div>
           </div>
       <div id="add-question-modal">
-        <input type="checkbox" id="my-modal-2" className="modal-toggle" />
-        <div className="modal modal-middle ml:0 lg:ml-56">
-          <div className="modal-box w-11/12 max-w-5xl h-11/12">
-            <form className="add-form" onSubmit={handleAddQuestion}>
-              <label htmlFor="" className="label-text">
-                Question Type
-              </label>
-              <select
-                name="type"
-                id="type"
-                className="input border-black input-bordered w-full  "
-                onChange={(e) => setIsText(!isText)}
-                required
-              >
-                <option value={true}>Text</option>
-                <option value={false}>Image</option>
-              </select>
-              {isText === true ? (
-                <>
-                  <label htmlFor="" className=" label">
-                    <span className="label-text">Write Down the question </span>
-                  </label>
-                  <textarea
-                    className="textarea textarea-info   border-black"
-                    name="question_text"
-                    id="question_text"
-                    cols={100}
-                    placeholder="Description"
-                  ></textarea>
-                </>
-              ) : (
-                <>
-                  <label htmlFor="" className=" label">
-                    <span className="label-text">Select Question Image </span>
-                  </label>
-                  <input
-                    type="file"
-                    name="iLink"
-                    id="iLink"
-                    className="file-input w-full  input-bordered  border-black "
-                    required
-                  />
-                </>
-              )}
-              <label htmlFor="" className="label">
-                Number of Options
-              </label>
-              <input
-                type="number"
-                className="input w-full  input-bordered border-black "
-                name="num_of_options"
-                id="num_of_options"
-                min="2"
-                onInput={(e) =>
-                  e.target.value < 0 ? (e.target.value = "") : e.target.value
-                }
-                onBlur={(e) => handleChangeNumberOfInput(e)}
-                required
-              />
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-4">
-                {isText === true &&
-                  numberOfOptions > 0 &&
-                  [...Array(numberOfOptions).keys()].map((id) => {
-                    return (
-                      <div key={id}>
-                        <div>
-                          <label htmlFor="" className="label-text">
-                            {optionName[id] + ")"}
-                          </label>
-                          <input
-                            type="text"
-                            placeholder={`Option ${id + 1}`}
-                            name={`option${id}`}
-                            id={`option${id}`}
-                            className="input w-full  input-bordered border-black "
-                            required
-                          />
-                        </div>
-                      </div>
-                    );
-                  })}
-              </div>
-
-              {numberOfOptions > 0 && (
-                <>
-                  <label className="label-text">Correct Option</label>
-                  <select
-                    name="type"
-                    id="type"
-                    className="input border-black input-bordered w-full  "
-                    onChange={(e) => setCorrectOption(e.target.value)}
-                    required
-                  >
-                    <option>---</option>
-                    {[...Array(numberOfOptions).keys()].map((id) => (
-                      <option key={id} value={id}>
-                        {optionName[id]}
-                      </option>
-                    ))}
-                  </select>
-                </>
-              )}
-              <label htmlFor="" className=" label">
-                <span className="label-text">Explanation Link </span>
-              </label>
-              <input
-                type="file"
-                name="explanationILink"
-                id="explanationILink"
-                className="file-input w-full  input-bordered  border-black "
-                required
-              />
-              <div className="form-control my-2">
-                <input
-                  type="submit"
-                  value="Add Question"
-                  className="btn w-32 "
-                />
-              </div>
-            </form>
-            <div className="modal-action">
-              <label htmlFor="my-modal-2" className="btn bg-red text-white">
-                Close
-              </label>
-            </div>
-          </div>
-        </div>
         {/* written modal  */}
         <input type="checkbox" id="written-modal" className="modal-toggle" />
         <div className="modal modal-middle ml:0 lg:ml-56">
           <div className="modal-box w-11/12 max-w-5xl h-11/12">
             <form className="add-form" onSubmit={handleAddWrittenQuestion}>
             <label htmlFor="" className=" label">
-                    <span className="label-text">Select Question Image </span>
+                    <span className="text-lg">Select Question Image </span>
                   </label>
                   <input
                     type="file"
@@ -1202,7 +1092,7 @@ const ShowBothExam = () => {
                     return (
                       <div key={id}>
                         <div>
-                          <label htmlFor="" className="label-text">
+                          <label htmlFor="" className="text-lg">
                             {(id+1) + ")"}
                           </label>
                           <input
@@ -1238,7 +1128,7 @@ const ShowBothExam = () => {
         <div className="modal modal-middle ml:0 lg:ml-56">
           <div className="modal-box w-11/12 max-w-5xl h-11/12">
             <form className="add-form" onSubmit={handleAddQuestion}>
-              <label htmlFor="" className="label-text">
+              <label htmlFor="" className="text-lg">
                 Question Type
               </label>
               <select
@@ -1254,7 +1144,7 @@ const ShowBothExam = () => {
               {isText === true ? (
                 <>
                   <label htmlFor="" className=" label">
-                    <span className="label-text">Write Down the question </span>
+                    <span className="text-lg">Write Down the question </span>
                   </label>
                   <textarea
                     className="textarea textarea-info   border-black"
@@ -1267,7 +1157,7 @@ const ShowBothExam = () => {
               ) : (
                 <>
                   <label htmlFor="" className=" label">
-                    <span className="label-text">Select Question Image </span>
+                    <span className="text-lg">Select Question Image </span>
                   </label>
                   <input
                     type="file"
@@ -1300,7 +1190,7 @@ const ShowBothExam = () => {
                     return (
                       <div key={id}>
                         <div>
-                          <label htmlFor="" className="label-text">
+                          <label htmlFor="" className="text-lg">
                             {optionName[id] + ")"}
                           </label>
                           <input
@@ -1319,7 +1209,7 @@ const ShowBothExam = () => {
 
               {numberOfOptions > 0 && (
                 <>
-                  <label className="label-text">Correct Option</label>
+                  <label className="text-lg">Correct Option</label>
                   <select
                     name="type"
                     id="type"
@@ -1337,7 +1227,7 @@ const ShowBothExam = () => {
                 </>
               )}
               <label htmlFor="" className=" label">
-                <span className="label-text">Explanation Link </span>
+                <span className="text-lg">Explanation Link </span>
               </label>
               <input
                 type="file"
@@ -1362,12 +1252,19 @@ const ShowBothExam = () => {
           </div>
         </div>
       </div>
+      <QuestionAdder singleExam={singleExam} 
+      handleAddQuestion={handleAddQuestion} 
+      setNameOfSet={setNameOfSet}
+      setCorrectOption={setCorrectOption}
+      isText={isText}
+      setIsText={setIsText}
+      />
       <PopUpModal
         modalData={selectedExamId}
         remove={deactivateExam}
       ></PopUpModal>
-        <ImageAdder title={`${singleExam.iLink===null?"Add Image" :"Update Image"}`} apiEndPoint="/" examId={singleExamId} setIsLoading={setIsLoading} />
-        <SolutionSheetAdder  apiEndPoint="/" examId={singleExamId} setIsLoading={setIsLoading} type={1} />
+        <ImageAdder title={`${singleExam.iLink===null?"Add Image" :"Update Image"}`} apiEndPoint="/api/both/updateBothExamPhoto" examId={singleExamId} setIsLoading={setIsLoading} />
+        <SolutionSheetAdder  apiEndPoint="/api/exam/uploadsollution" examId={singleExamId} setIsLoading={setIsLoading} type={1} />
     </div>
   );
 };

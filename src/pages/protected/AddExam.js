@@ -347,7 +347,8 @@ const AddExam = () => {
                   </label>
                 </div>
             </div>
-            <div className="form-control grid grid-cols-1 lg:grid-cols-4 gap-3 ">
+            {
+              selectedVariation==='1' && <div className="form-control grid grid-cols-1 lg:grid-cols-4 gap-3 ">
               <div >
                 <label htmlFor="" className="label">
                   Question Type
@@ -406,7 +407,7 @@ const AddExam = () => {
               </div>
               <div >
                 <label htmlFor="" className="label">
-               Repeats
+               Retakes
                 </label>
                 <select
                   name="numberOfRetakes"
@@ -424,6 +425,7 @@ const AddExam = () => {
                 </select>
               </div>
             </div>
+            }
             <div className="form-control">
               <label htmlFor="" className="label">
                 Exam Image

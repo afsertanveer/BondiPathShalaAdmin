@@ -38,8 +38,15 @@ const AddBothExam = () => {
     const totalMarks = form.total_marks.value;
     const status = true;
     const negativeMarks = parseFloat(form.negative_marking.value);
-    const iLink = form.iLink.files[0];
     const formdata = new FormData();
+    let iLink = null ;
+    if(form.iLink.files[0]===undefined){
+      formdata.append("iLink", iLink);
+    }else{      
+      iLink = form.iLink.files[0];
+      formdata.append("iLink", iLink);
+    }
+    console.log(iLink);
     formdata.append("iLink", iLink);
     const stype = parseInt(selectedType);
     formdata.append("name",name);
@@ -65,7 +72,9 @@ const AddBothExam = () => {
     formdata.append("numberOfOptions",numberOfOptions)
     formdata.append("questionType",questionType)
     formdata.append("numberOfSet",numberOfSet)
-    console.log(formdata);
+    for (var pair of formdata.entries()) {
+      console.log(pair[0]+ ', ' + pair[1]); 
+  }
     await axios
       .post(`/api/both/createbothexam`, formdata, {
         headers: {
@@ -74,8 +83,8 @@ const AddBothExam = () => {
       })
       .then(({ data }) => {
         console.log(data);
-        toast.success("Full Exam Added Succesfully");
-        navigate("/dashboard");
+        toast.success(`${name}  Added Succesfully`);
+        window.location.reload(false);
       }).catch(err=>{
         toast.error(err.response.data);
         console.log(err);
@@ -382,7 +391,7 @@ const AddBothExam = () => {
               </div>
               <div >
                 <label htmlFor="" className="label">
-               Repeats
+               Retakes
                 </label>
                 <select
                   name="numberOfRetakes"

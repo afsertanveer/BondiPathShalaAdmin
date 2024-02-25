@@ -38,7 +38,7 @@ const AddBundleQuestion = () => {
 
   const handleChangeExam = (e) => {
     setSelectedExam('')
-    setSlots(0)
+    setSlots(-1)
     if (e.target.value !== '') {
       axios
         .get(`/api/exam/getExamById?examId=${e.target.value}`)
@@ -68,6 +68,8 @@ const AddBundleQuestion = () => {
             arrayFiller[i] = -1;
         }
         setCorrectOptions(arrayFiller)
+      }).catch(e=>{
+        setSlots(0);
       })
   }
 
@@ -133,7 +135,7 @@ const AddBundleQuestion = () => {
                 toast.success('successfully added all the questions')
                 setUploadImages([]);
                 setSelectedExam([]);
-                setSlots(0);
+                setSlots(-1);
                 setIsLoading(false);
                 window.location.reload(false);
             }
@@ -283,6 +285,11 @@ const AddBundleQuestion = () => {
         </div>
       </div>
       {isLoading && <Loader />}
+      {
+        selectedExam!=='' && slots===0 && <div className='flex justify-center items-center border-4 rounded-lg bg-white border-color-one py-8 px-4 my-10 mx-8'>
+          <p className='text-[32px] font-extrabold text-success'>You have already added the questions for this set!</p>
+        </div>
+      }
       {slots > 1 && (
         <div className='my-5'>
           <label htmlFor="" className=" label">

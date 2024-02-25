@@ -13,6 +13,7 @@ import moment from 'moment/moment'
 import ImageAdder from '../../components/ImageAdder/ImageAdder'
 import SolutionSheetAdder from '../../components/common/SolutionSheetAdder'
 import { Link } from 'react-router-dom'
+import QuestionAdder from '../../components/QuestionAdder/QuestionAdder'
 
 const ShowExam = () => {
   const [courses, setCourses] = useState([])
@@ -38,7 +39,7 @@ const ShowExam = () => {
   const [updatenumberOfOptions, setUpdateNumberOfOptions] = useState(4)
   const [numberOfRetakes, setNumberOfRetakes] = useState(4)
   const [numberOfSet, setNumberOfSet] = useState(4)
-  const [nameOfSet,setNameOfSet] = useState(0);
+  const [nameOfSet, setNameOfSet] = useState(0)
 
   const generator = (id) => {
     axios
@@ -108,7 +109,7 @@ const ShowExam = () => {
     const form = e.target
     const name = form.exam.value
     const type = form.type.value
-    const variation = singleExam.examVariation;
+    const variation = singleExam.examVariation
     const startTime = form.start_time.value
     const endTime = form.end_time.value
     if (singleExam.examVariation === 1) {
@@ -158,22 +159,21 @@ const ShowExam = () => {
   }
   const handleAddQuestion = async (e) => {
     e.preventDefault()
-    const curQtype = singleExam.questionType;
     const form = e.target
     let questionText = ''
-    if (curQtype === "1") {
+    if (isText === true) {
       questionText = form.question_text.value
     }
     let options = []
-    if (curQtype === "1") {
-      for (let i = 0; i <singleExam.numberOfOptions; i++) {
+    if (isText === true) {
+      for (let i = 0; i < singleExam.numberOfOptions; i++) {
         options.push(document.getElementById(`option${i}`).value)
       }
     }
     let questionLink = ''
-    const explanationILink = null;
+    const explanationILink = null
     const formdata = new FormData()
-    if (curQtype === "0") {
+    if (isText === false) {
       questionLink = form.iLink.files[0]
       formdata.append('iLink', questionLink)
     } else {
@@ -191,7 +191,7 @@ const ShowExam = () => {
     //   examId: singleExamId,
     // }
     formdata.append('questionText', questionText)
-    formdata.append('type', curQtype)
+    formdata.append('type', isText)
     formdata.append('options', JSON.stringify(options))
     formdata.append('optionCount', singleExam.numberOfOptions)
     formdata.append('correctOption', parseInt(correctOption))
@@ -208,19 +208,14 @@ const ShowExam = () => {
       .then((data) => {
         toast.success('success')
         form.reset()
-
-        document.getElementById('num_of_options').disabled = false
-        setNumberOfOptions(0)
-        setIsText(true)
       })
-      .catch((e) =>{
-        toast.error(e.response.data);
-        if(e.response.status===405){
-          form.reset();
+      .catch((e) => {
+        toast.error(e.response.data)
+        if (e.response.status === 405) {
+          form.reset()
         }
       })
     document.getElementById('my-modal-2').checked = false
- 
   }
   const fillMarks = (m, id) => {
     const prevMarks = [...qvmark]
@@ -379,6 +374,11 @@ const ShowExam = () => {
           setQuestionType(data.questionType)
           setSscChecked(data.sscStatus)
           setHscChecked(data.hscStatus)
+          if (data.questionType === '0') {
+            setIsText(false)
+          } else {
+            setIsText(true)
+          }
         })
         .catch((e) => console.log(e))
     } else {
@@ -634,7 +634,6 @@ const ShowExam = () => {
                             Add Question
                           </label>
                         )}
-                        
 
                         <DeactivateButton
                           setter={setSelectedExamId}
@@ -830,16 +829,9 @@ const ShowExam = () => {
                   <label htmlFor="" className="label">
                     Variation
                   </label>
-                  <input
-                    name="variation"
-                    id="variation"
-                    className="input border-black input-bordered w-full "
-                    required
-                    value={singleExam.examVariation === 1
-                      ? 'MCQ'
-                      :  'Written'}
-                    disabled
-                  />
+                  <label>
+                    {singleExam.examVariation === 1 ? 'MCQ' : 'Written'}
+                  </label>
                 </div>
               </div>
               <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-center">
@@ -1117,158 +1109,6 @@ const ShowExam = () => {
         </div>
       </div>
       <div id="add-question-modal">
-        <input type="checkbox" id="my-modal-2" className="modal-toggle" />
-        <div className="modal modal-middle ml:0 lg:ml-56">
-          <div className="modal-box w-11/12 max-w-5xl h-11/12">
-            {
-              singleExam.questionType==="0"?
-              <form className="add-form" onSubmit={handleAddQuestion}>
-               <label htmlFor="" className=" label">
-                    <span className="label-text">Select Question Image </span>
-                  </label>
-                  <input
-                    type="file"
-                    name="iLink"
-                    id="iLink"
-                    className="file-input w-full input-bordered  border-black "
-                    required
-                  />
-                  <label className="label-text">Set Name</label>
-                  <select
-                    name="set_name"
-                    id="set_name"
-                    className="input border-black input-bordered w-full "
-                    onChange={(e) => setNameOfSet(parseInt(e.target.value))}
-                    required
-                  >
-                    <option>---</option>
-                    {[...Array(singleExam.numberOfSet).keys()].map((id) => (
-                      <option key={id} value={id}>
-                        {optionName[id]}
-                      </option>
-                    ))}
-                  </select>
-              
-              <label htmlFor="" className="label">
-                Number of Options
-              </label>
-              <input
-                type="number"
-                className="input w-full input-bordered border-black font-extrabold  "
-                name="num_of_options"
-                id="num_of_options"
-                value={singleExam.numberOfOptions}
-                disable
-                required
-              />
-              <label className="label-text">Correct Option</label>
-                  <select
-                    name="correc_option"
-                    id="correc_option"
-                    className="input border-black input-bordered w-full "
-                    onChange={(e) => setCorrectOption(e.target.value)}
-                    required
-                  >
-                    <option>---</option>
-                    {[...Array(singleExam.numberOfOptions).keys()].map((id) => (
-                      <option key={id} value={id}>
-                        {optionName[id]}
-                      </option>
-                    ))}
-                  </select>
-              
-              <div className="form-control my-2">
-                <input
-                  type="submit"
-                  value="Add Question"
-                  className="btn w-32 "
-                />
-              </div>
-            </form> :<form className="add-form" onSubmit={handleAddQuestion}>
-            <label htmlFor="" className=" label">
-                    <span className="label-text">Write Down the question </span>
-                  </label>
-                  <textarea
-                    className="textarea textarea-info   border-black"
-                    name="question_text"
-                    id="question_text"
-                    cols={100}
-                    placeholder="Description"
-                  ></textarea>
-              
-              <label htmlFor="" className="label">
-                Number of Options
-              </label>
-              <input
-                type="number"
-                className="input w-full input-bordered border-black "
-                name="num_of_options"
-                id="num_of_options"
-                value={singleExam.numberOfOptions}
-                disable
-                required
-              />
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-4">
-                {
-                  singleExam.numberOfOptions > 0 &&
-                  [...Array(singleExam.numberOfOptions).keys()].map((id) => {
-                    return (
-                      <div key={id}>
-                        <div>
-                          <label htmlFor="" className="label-text">
-                            {optionName[id] + ')'}
-                          </label>
-                          <input
-                            type="text"
-                            placeholder={`Option ${id + 1}`}
-                            name={`option${id}`}
-                            id={`option${id}`}
-                            className="input w-full input-bordered border-black "
-                            required
-                          />
-                        </div>
-                      </div>
-                    )
-                  })}
-              </div>
-
-              {singleExam.numberOfOptions > 0 && (
-                <>
-                  <label className="label-text">Correct Option</label>
-                  <select
-                    name="type"
-                    id="type"
-                    className="input border-black input-bordered w-full "
-                    onChange={(e) => setCorrectOption(e.target.value)}
-                    required
-                  >
-                    <option>---</option>
-                    {[...Array(singleExam.numberOfOptions).keys()].map((id) => (
-                      <option key={id} value={id}>
-                        {optionName[id]}
-                      </option>
-                    ))}
-                  </select>
-                </>
-              )}
-              
-              <div className="form-control my-2">
-                <input
-                  type="submit"
-                  value="Add Question"
-                  className="btn w-32 "
-                />
-              </div>
-            </form>
-            }
-            
-            <div className="modal-action">
-              <label htmlFor="my-modal-2" className="btn bg-red text-white">
-                Close
-              </label>
-            </div>
-          </div>
-        </div>
         {/* written modal  */}
         <input type="checkbox" id="written-modal" className="modal-toggle" />
         <div className="modal modal-middle ml:0 lg:ml-56">
@@ -1337,8 +1177,15 @@ const ShowExam = () => {
             </div>
           </div>
         </div>
-       
       </div>
+      <QuestionAdder
+        singleExam={singleExam}
+        handleAddQuestion={handleAddQuestion}
+        setNameOfSet={setNameOfSet}
+        setCorrectOption={setCorrectOption}
+        isText={isText}
+        setIsText={setIsText}
+      />
       <PopUpModal
         modalData={selectedExamId}
         remove={deactivateExam}

@@ -22,12 +22,12 @@ const ShowBothQuestions = () => {
   const [selectedExam, setSelectedExam] = useState('')
   const [examType, setExamType] = useState('')
   const [questionCourse, setQuestionCourse] = useState('')
+  const [bothStatus, setBothStatus] = useState(false)
   const [questionSubject, setQuestionSubject] = useState('')
   const [selectedQuestionId, setSelectedQuestionId] = useState('')
   const [questionExam, setQuestionExam] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [selectedQuestions, setSelectedQuestions] = useState([])
-  const [bothStatus, setBothStatus] = useState(false)
   const [singleExam, setSingleExam] = useState({})
   const [singleSecondExam, setSingleSecondExam] = useState({})
   const [selectedSet, setSelectedSet] = useState(-1)
@@ -102,26 +102,26 @@ const ShowBothQuestions = () => {
   }
   
 
-  const handleChangeSecondSubject = (e) => {
-    setQuestionSubject(e.target.value)
-    setSecondExams([])
-    axios
-      .get(`/api/both/getbothexambysubject?subjectId=${e.target.value}`)
-      .then(({ data }) => {
-        setSecondExams(data.examPage.exam)
-        setIsLoading(false)
-      })
-      .catch((e) => console.log(e))
-  }
+ 
   const handleSecondExam = (val) => {
     if (val !== '') {
-      axios
-        .get(`/api/exam/getExamById?examId=${val}`)
-        .then(({ data }) => {
-          setSingleSecondExam(data)
-          setQuestionExam(val)
-        })
-        .catch((e) => console.log(e))
+      if (bothStatus === false) {
+        axios
+          .get(`/api/exam/getExamById?examId=${val}`)
+          .then(({ data }) => {
+            setSingleSecondExam(data)
+            setQuestionExam(val)
+          })
+          .catch((e) => console.log(e))
+      } else {
+        axios
+          .get('/api/both/getbothexambyid?examId=' + val)
+          .then(({ data }) => {
+            console.log(data)
+            setSingleSecondExam(data)
+            setQuestionExam(val)
+          })
+      }
     } else {
       setSecondExams('')
       setSingleSecondExam({})
@@ -191,19 +191,85 @@ const ShowBothQuestions = () => {
   const sendQuestions = async (e) => {
     e.preventDefault()
     const examId = questionExam
-    const questionSet = {
-      examId,
-      questionArray: selectedQuestions,
+    if (secondSet !== -1) {
+      const questionSet = {
+        examId,
+        questionArray: selectedQuestions,
+        setName: secondSet,
+      }
+      console.log(questionSet)
+      console.log(selectedQuestions.length)
+      let slot
+      if (bothStatus) {
+        axios
+          .get(
+            `/api/both/slotAvailable?examId=${examId}&setName=${parseInt(
+              secondSet
+            )}`
+          )
+          .then(async ({ data }) => {
+            slot = parseInt(data.slots) - selectedQuestions.length
+            if (slot > 0) {
+              await axios
+                .put('/api/both/bothaddquestionmcqbulk', questionSet)
+                .then(({ data }) => {
+                  toast.success(
+                    'Successfully added all the questions to both Exam'
+                  )
+                  e.target.reset()
+                  document.getElementById('my-modal').checked = false
+                  window.location.reload(false)
+                })
+                .catch((e) => console.log(e))
+            } else {
+              if (data.slots === 0) {
+                toast.error('No slot available')
+              } else if (data.slots === 1) {
+                toast.error('You can send only 1 photo')
+              } else {
+                toast.error(`You can transfer only  ${data.slots} photoes`)
+              }
+            }
+          })
+      } else {
+        axios
+          .get(
+            `/api/exam/slotAvailable?examId=${examId}&setName=${parseInt(
+              secondSet
+            )}`
+          )
+          .then(async ({ data }) => {
+            const slot = parseInt(data.slots) - selectedQuestions.length
+            if (slot >= 0) {
+              await axios
+                .put('/api/exam/addQuestionMcqBulk', questionSet)
+                .then(({ data }) => {
+                  toast.success('Successfully transfered all the questions')
+                  e.target.reset()
+                  document.getElementById('my-modal').checked = false
+                  window.location.reload(false)
+                })
+                .catch((e) => console.log(e))
+            } else {
+              if (data.slots === 0) {
+                toast.error('No slot available')
+              } else if (data.slots === 1) {
+                toast.error('You can send only 1 photo')
+              } else {
+                toast.error(`You can transfer  ${data.slots} photoes`)
+              }
+            }
+          })
+          .catch((e) => {
+            console.log(e)
+            toast.error(e)
+          })
+      }
+    } else {
+      toast.error('Select correct Set')
+      // document.getElementById("my-modal").checked = false;
+      // window.location.reload(false);
     }
-    await axios
-      .put('/api/both/bothaddquestionmcqbulk', questionSet)
-      .then(({ data }) => {
-        toast.success('Successfully added all the questions')
-        e.target.reset()
-        document.getElementById('my-modal').checked = false
-        window.location.reload(false)
-      })
-      .catch((e) => console.log(e))
   }
 
   const removeQuestion = (questionId) => {
@@ -509,78 +575,7 @@ const ShowBothQuestions = () => {
         </div>
       )}
 
-      <input type="checkbox" id="my-modal" className="modal-toggle" />
-      <div className="modal">
-        <div className="modal-box">
-          <form
-            onSubmit={sendQuestions}
-            className="mt-4 w-full  mx-auto flex flex-col "
-          >
-            <div className="form-control">
-              <label className="label-text" htmlFor="">
-                Select Course
-              </label>
-              <select
-                className="input border-black input-bordered w-full"
-                required
-                onChange={(e) => handleChangeSecondCourse(e)}
-              >
-                <option value=""></option>
-                {courses.length > 0 &&
-                  courses.map((course) => (
-                    <option key={course._id} value={course._id}>
-                      {course.name}
-                    </option>
-                  ))}
-              </select>
-            </div>
-            <div className="form-control mr-3">
-              <label className="label-text" htmlFor="">
-                Select Subject
-              </label>
-              <select
-                className="input  border-black input-bordered w-full"
-                required
-                onChange={(e) => handleChangeSecondSubject(e)}
-              >
-                <option value=""></option>
-                {secondsubjects.length > 0 &&
-                  secondsubjects.map((subject) => (
-                    <option key={subject._id} value={subject._id}>
-                      {subject.name}
-                    </option>
-                  ))}
-              </select>
-            </div>
-            <div className="form-control mr-3">
-              <label className="label-text" htmlFor="">
-                Select Exam Name
-              </label>
-              <select
-                className="input  border-black input-bordered w-full"
-                required
-                onChange={(e) => setQuestionExam(e.target.value)}
-              >
-                <option value=""></option>
-                {secondexams.length > 0 &&
-                  secondexams.map((exam) => (
-                    <option key={exam._id} value={exam._id}>
-                      {exam.name}
-                    </option>
-                  ))}
-              </select>
-            </div>
-            <div className="form-control mt-4  flext justify-center items-center">
-              <input type="submit" value="Add Questions" className="btn" />
-            </div>
-          </form>
-          <div className="modal-action">
-            <label htmlFor="my-modal" className="btn bg-red w-[80px]">
-              Close!
-            </label>
-          </div>
-        </div>
-      </div>
+
       <QuestionSender
         sendQuestions={sendQuestions}
         handleChangeSecondCourse={handleChangeSecondCourse}

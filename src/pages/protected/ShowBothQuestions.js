@@ -461,7 +461,7 @@ const ShowBothQuestions = () => {
             <table className="table w-full my-10 customTable">
               <thead>
                 <tr>
-                  <th className="bg-white w-[10px] text-left">
+                  <th className="bg-white w-1/12 text-left">
                     <input
                       type="checkbox"
                       id="all_check"
@@ -469,6 +469,7 @@ const ShowBothQuestions = () => {
                       onChange={setQuestionBulkAll}
                     />
                   </th>
+                  <th className='w-1/12'>SI No.</th>
                   <th className="bg-white">Question </th>
                   <th className="bg-white">Options</th>
                   <th className="bg-white">
@@ -479,7 +480,7 @@ const ShowBothQuestions = () => {
                 </tr>
               </thead>
               <tbody>
-                {questions.map((question) => (
+                {questions.map((question,idx) => (
                   <tr key={question.questionId}>
                     <td className="w-[10px]">
                       <input
@@ -492,6 +493,7 @@ const ShowBothQuestions = () => {
                         }
                       />
                     </td>
+                    <td className='text-center font-extrabold'>{idx+1}.</td>
                     <td className="w-1/4">
                       {question.type === true ? (
                         question.question

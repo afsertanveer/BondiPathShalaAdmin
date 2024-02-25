@@ -21,6 +21,10 @@ const AddSpecialExam = () => {
   const [isHSC, setIsHSC] = useState(false);
   const [fixedSubject,setFixedSubject] =useState([]);
   const [allSubjects, setAllSubjects] = useState([]);
+  const [questionType,setQuestionType] = useState(0);
+  const [numberOfOptions,setNumberOfOptions] = useState(4);
+  const [numberOfRetakes,setNumberOfRetakes] = useState(4);
+  const [numberOfSet,setNumberOfSet] = useState(4);
 
   const handleAddExam = async (e) => {
     e.preventDefault();
@@ -146,6 +150,10 @@ const AddSpecialExam = () => {
     formdata.append("status", status);
     formdata.append("fixedSubject", JSON.stringify(fixedSubject));
     formdata.append("noOfFixedSubject", noOfFixedSubject);
+    formdata.append("numberOfRetakes",numberOfRetakes)
+    formdata.append("numberOfOptions",numberOfOptions)
+    formdata.append("questionType",questionType)
+    formdata.append("numberOfSet",numberOfSet)
     formdata.append("sscStatus", isSSC);
     formdata.append("hscStatus", isHSC);
 
@@ -512,6 +520,83 @@ const AddSpecialExam = () => {
                     />
                   </div>
                 </div>
+                <div className="form-control grid grid-cols-1 lg:grid-cols-4 gap-3 ">
+              <div >
+                <label htmlFor="" className="label">
+                  Question Type
+                </label>
+                <select
+                  name="questionType"
+                  id="questionType"
+                  className="input border-black input-bordered w-full "
+                  onChange={(e) => setQuestionType(parseInt(e.target.value))}
+                  required
+                >
+                  <option value={0}>Image</option>
+                  <option value={1}>Text</option>
+                  <option value={0}>Image</option>
+                </select>
+              </div>
+              <div >
+                <label htmlFor="" className="label">
+                  Options
+                </label>
+                <select
+                  name="numberOfOptions"
+                  id="numberOfOptions"
+                  className="input border-black input-bordered w-full "
+                  onChange={(e) => setNumberOfOptions(parseInt(e.target.value))}
+                  required
+                >
+                <option value={4}>4</option>
+                <option value={0}>0</option>
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+                <option value={4}>4</option>
+                <option value={4}>5</option>
+                <option value={4}>6</option>
+                </select>
+              </div>
+              <div >
+                <label htmlFor="" className="label">
+                  Sets
+                </label>
+                <select
+                  name="numberOfSets"
+                  id="numberOfSets"
+                  className="input border-black input-bordered w-full "
+                  onChange={(e) => setNumberOfSet(parseInt(e.target.value))}
+                  required
+                >
+                  <option value={4}>4</option>
+                  <option value={0}>0</option>
+                  <option value={1}>1</option>
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                  <option value={4}>4</option>
+                </select>
+              </div>
+              <div >
+                <label htmlFor="" className="label">
+               Retakes
+                </label>
+                <select
+                  name="numberOfRetakes"
+                  id="numberOfRetakes"
+                  className="input border-black input-bordered w-full "
+                  onChange={(e) => setNumberOfRetakes(parseInt(e.target.value))}
+                  required
+                >
+                  <option value={4}>4</option>
+                  <option value={0}>0</option>
+                  <option value={1}>1</option>
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                  <option value={4}>4</option>
+                </select>
+              </div>
+            </div>
                 <label htmlFor="" className="label text-lg font-bold">
                   Written:
                 </label>

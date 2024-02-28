@@ -489,14 +489,14 @@ const ShowBothExam = () => {
                           htmlFor="solutionSheet"
                           className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
-                          {exam.sollutionSheet === null
+                          {exam.solutionSheet === null
                             ? 'Add SolutionSheet'
                             : 'Update SolutionSheet'}
                         </label>
-                        {exam.sollutionSheet !== null && (
+                        {exam.solutionSheet !== null && (
                           <Link
                             className="text-green-700 font-extrabold text-lg underline "
-                            to={exam.sollutionSheet}
+                            to={exam.solutionSheet}
                             target="_blank"
                           >
                             Solve
@@ -1017,7 +1017,7 @@ const ShowBothExam = () => {
                       />
                       <label
                         htmlFor="disabled-checked-checkbox"
-                        className="ml-2 text-sm font-medium"
+                        className="ml-2 text-lg"
                       >
                         SSC
                       </label>
@@ -1033,7 +1033,7 @@ const ShowBothExam = () => {
                       />
                       <label
                         htmlFor="disabled-checked-checkbox"
-                        className="ml-2 text-sm font-medium"
+                        className="ml-2 text-lg"
                       >
                         HSC
                       </label>

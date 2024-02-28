@@ -237,7 +237,7 @@ const AddFreeExam = () => {
                   />
                   <label
                     htmlFor="disabled-checked-checkbox"
-                    className="ml-2 text-sm font-medium"
+                    className="ml-2 text-lg"
                   >
                     SSC
                   </label>
@@ -251,7 +251,7 @@ const AddFreeExam = () => {
                   />
                   <label
                     htmlFor="disabled-checked-checkbox"
-                    className="ml-2 text-sm font-medium"
+                    className="ml-2 text-lg"
                   >
                     HSC
                   </label>
@@ -265,7 +265,7 @@ const AddFreeExam = () => {
                   />
                   <label
                     htmlFor="disabled-checked-checkbox"
-                    className="ml-2 text-sm font-medium"
+                    className="ml-2 text-lg"
                   >
                     BUET
                   </label>
@@ -279,7 +279,7 @@ const AddFreeExam = () => {
                   />
                   <label
                     htmlFor="disabled-checked-checkbox"
-                    className="ml-2 text-sm font-medium"
+                    className="ml-2 text-lg"
                   >
                     Medical
                   </label>
@@ -293,7 +293,7 @@ const AddFreeExam = () => {
                   />
                   <label
                     htmlFor="disabled-checked-checkbox"
-                    className="ml-2 text-sm font-medium"
+                    className="ml-2 text-lg"
                   >
                     University
                   </label>

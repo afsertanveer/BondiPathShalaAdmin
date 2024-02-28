@@ -18,6 +18,8 @@ import QuestionAdder from '../../components/QuestionAdder/QuestionAdder'
 const ShowExam = () => {
   const [courses, setCourses] = useState([])
   const [subjects, setSubjects] = useState([])
+  const [curriculums, setCurriculums] = useState([])
+  const [selectedCurriculum, setSelectedCurriculum] = useState(null)
   const [exams, setExams] = useState([])
   const [selectedCourse, setSelectedCourse] = useState('')
   const [selectedSubject, setSelectedSubject] = useState('')
@@ -30,8 +32,7 @@ const ShowExam = () => {
   const [selectedExamId, setSelectedExamId] = useState('')
   const [ruleImg, setRuleImg] = useState('')
   const [examType, setExamType] = useState('')
-  const [sscChecked, setSscChecked] = useState(false)
-  const [hscChecked, setHscChecked] = useState(false)
+  const [addmissionChecked, setAddmissionChecked] = useState(false)
   const [qvmark, setQvmark] = useState([])
   const [teachers, setTeachers] = useState([])
   const [selectedTeachers, setSelectedTeachers] = useState([])
@@ -121,8 +122,7 @@ const ShowExam = () => {
     }
     const duration = form.duration.value
     const negativeMarks = form.negative_marking.value
-    const ssc = document.getElementById('ssc').checked === true ? true : false
-    const hsc = document.getElementById('hsc').checked === true ? true : false
+    const admission = document.getElementById('isAdmission').checked === true ? true : false;
     const updatedExam = {
       examId: singleExam._id,
       name,
@@ -139,11 +139,8 @@ const ShowExam = () => {
       status: true,
       duration: duration,
       negativeMarks,
-      sscStatus: ssc,
-      hscStatus: hsc,
-      buetStatus: singleExam.buetStatus,
-      medicalStatus: singleExam.medicalStatus,
-      universityStatus: singleExam.universityStatus,
+      isAdmission: admission,
+      curriculumName:selectedCurriculum,
       numberOfRetakes,
       numberOfSet,
       questionType: questionType,
@@ -324,6 +321,11 @@ const ShowExam = () => {
   }
   useEffect(() => {
     setIsLoading(true)
+    axios.get('/api/curriculum/getcurriculums').then(({ data }) => {
+      // console.log(data);
+      setCurriculums(data)
+      setIsLoading(false)
+    })
     axios.get('/api/course/getallcourseadmin').then(({ data }) => {
       setCourses(data.courses)
       setIsLoading(false)
@@ -372,8 +374,7 @@ const ShowExam = () => {
           setUpdateNumberOfOptions(data.numberOfOptions)
           setNumberOfSet(data.numberOfSet)
           setQuestionType(data.questionType)
-          setSscChecked(data.sscStatus)
-          setHscChecked(data.hscStatus)
+          setAddmissionChecked(data.isAdmission)
           if (data.questionType === '0') {
             setIsText(false)
           } else {
@@ -487,7 +488,7 @@ const ShowExam = () => {
                   Duration
                 </th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-2">
-                  SSC?/HSC?
+                  Curriculum Name
                 </th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-2">
                   Marks/Questions-
@@ -521,8 +522,7 @@ const ShowExam = () => {
                       {exam.duration} Minutes
                     </td>
                     <td className="px-6 py-2 text-center">
-                      {exam.sscStatus ? 'Yes' : 'No'} /{' '}
-                      {exam.hscStatus ? 'Yes' : 'No'}
+                      {exam.curriculumName===null? "None" :exam.curriculumName }
                     </td>
                     <td className="px-6 py-2 text-center">
                       {exam.examVariation === 1 ? exam.marksPerMcq : 'N/A'}-
@@ -560,14 +560,14 @@ const ShowExam = () => {
                           htmlFor="solutionSheet"
                           className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
-                          {exam.sollutionSheet === null
+                          {exam.solutionSheet === null
                             ? 'Add SolutionSheet'
                             : 'Update SolutionSheet'}
                         </label>
-                        {exam.sollutionSheet !== null && (
+                        {exam.solutionSheet !== null && (
                           <Link
                             className="text-green-700 font-extrabold text-lg underline "
-                            to={exam.sollutionSheet}
+                            to={exam.solutionSheet}
                             target="_blank"
                           >
                             Solve
@@ -946,8 +946,8 @@ const ShowExam = () => {
                   </span>
                 </div>
               </div>
-              <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-center">
-                <div className="w-full lg:w-1/3">
+              <div className="form-control grid grid-cols-1 lg:grid-cols-3 gap-3">
+                <div className="">
                   <label htmlFor="" className="label">
                     Negative Marking (%)
                   </label>
@@ -968,39 +968,48 @@ const ShowExam = () => {
                 </div>
                 <div className="flex items-center mt-0 lg:mt-5 ">
                   <input
-                    id="ssc"
+                    id="isAdmission"
                     type="checkbox"
-                    name="ssc"
-                    checked={sscChecked}
-                    onChange={() => setSscChecked(!sscChecked)}
+                    name="isAdmission"
+                    checked={addmissionChecked}
+                    onChange={() => setAddmissionChecked(!addmissionChecked)}
                     className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                   />
                   <label
                     htmlFor="disabled-checked-checkbox"
-                    className="ml-2 text-sm font-medium"
+                    className="ml-2 text-lg"
                   >
-                    SSC
+                    Is Admission
                   </label>
                 </div>
                 <div className="flex items-center mt-0 lg:mt-5 ">
-                  <input
-                    id="hsc"
-                    type="checkbox"
-                    name="hsc"
-                    checked={hscChecked}
-                    onChange={() => setHscChecked(!hscChecked)}
-                    className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  />
                   <label
                     htmlFor="disabled-checked-checkbox"
-                    className="ml-2 text-sm font-medium"
+                    className="ml-2 text-lg"
                   >
-                    HSC
+                    Curriculum Name
                   </label>
+                  <select
+                    name="curriculums"
+                    id="curriculums"
+                    className="input w-full  border-black input-bordered "
+                    required
+                    onChange={(e) => setSelectedCurriculum(e.target.value)}
+                  >
+                    <option value={singleExam.curriculumName}>{singleExam.curriculumName===null? "NONE" : singleExam.curriculumName}</option>
+                    {singleExam.curriculumName!==null && <option value={null}>NONE</option>
+                   }
+                    {curriculums.length > 0 &&
+                      curriculums.map((curriculum) => (
+                        <option key={curriculum._id} value={curriculum.name}>
+                          {curriculum.name}
+                        </option>
+                      ))}
+                  </select>
                 </div>
               </div>
               {singleExam.examVariation === 1 && (
-                <div className="form-control grid grid-cols-1 lg:grid-cols-2 gap-3 ">
+                <div className="form-control grid grid-cols-1 lg:grid-cols-2 gap-3 mt-4 ">
                   <div>
                     <label htmlFor="" className="label">
                       Question Type

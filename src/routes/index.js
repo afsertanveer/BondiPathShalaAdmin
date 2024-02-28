@@ -53,6 +53,7 @@ const ViewSingleScriptAdmin = lazy(()=>import('./../pages/protected/ViewSingleSc
 const ExamSolutionWritten = lazy(()=>import('./../pages/protected/ExamSolutionWritten'));
 const AddBundleQuestion = lazy(()=>import('./../pages/protected/AddBundleQuestion'));
 const AddBundleQuestionBoth = lazy(()=>import('./../pages/protected/AddBundleQuestionBoth'));
+const AddCurriculum =  lazy(()=>import('./../pages/protected/AddCurriCulum'));
 const ExamReset = lazy(()=>import('./../pages/protected/ExamReset'));
 const user =JSON.parse(localStorage.getItem('user')) ;
 const role = user.role;
@@ -162,6 +163,10 @@ if(role===3){
     {
       path: '/courses/create-new', // the url
       component: CreateCourse, // view rendered
+    },
+    {
+      path: '/curriculum/create', // the url
+      component: AddCurriculum, // view rendered
     },
     {
       path:'/:examId/checkanswer/:studentId',

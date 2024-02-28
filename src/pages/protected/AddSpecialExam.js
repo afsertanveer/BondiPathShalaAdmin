@@ -692,7 +692,7 @@ const AddSpecialExam = () => {
                   />
                   <label
                     htmlFor="disabled-checked-checkbox"
-                    className="ml-2 text-sm font-medium"
+                    className="ml-2 text-lg"
                   >
                     SSC
                   </label>
@@ -708,7 +708,7 @@ const AddSpecialExam = () => {
                   />
                   <label
                     htmlFor="disabled-checked-checkbox"
-                    className="ml-2 text-sm font-medium"
+                    className="ml-2 text-lg"
                   >
                     HSC
                   </label>

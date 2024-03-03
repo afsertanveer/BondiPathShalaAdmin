@@ -38,11 +38,13 @@
  
 }
 .width-setter{
-  min-width: 200px;
+  min-width: 200px !important;
 }
 label{
   font-weight: 500;
-  font-size: smaller I !important;
+  margin-right: 5px;
+  min-width: 80px;
+  
 }
 .customTable{
   margin-top: 20px;
@@ -56,6 +58,9 @@ label{
   height: 35px !important;
   
 }
+/* th>div{
+  min-width: 300px @i;
+} */
 
 .add-form .form-control{
   padding: 0;

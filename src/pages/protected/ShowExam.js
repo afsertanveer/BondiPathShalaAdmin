@@ -122,7 +122,8 @@ const ShowExam = () => {
     }
     const duration = form.duration.value
     const negativeMarks = form.negative_marking.value
-    const admission = document.getElementById('isAdmission').checked === true ? true : false;
+    const admission =
+      document.getElementById('isAdmission').checked === true ? true : false
     const updatedExam = {
       examId: singleExam._id,
       name,
@@ -140,7 +141,7 @@ const ShowExam = () => {
       duration: duration,
       negativeMarks,
       isAdmission: admission,
-      curriculumName:selectedCurriculum,
+      curriculumName: selectedCurriculum,
       numberOfRetakes,
       numberOfSet,
       questionType: questionType,
@@ -318,6 +319,19 @@ const ShowExam = () => {
         toast.success('Assigned and Distributed')
       })
       .catch((err) => console.log(err))
+  }
+  const refillQuestions = id =>{
+    const sendingData = {
+      examId:id
+    };
+    axios
+    .post('/api/exam/refillquestion',sendingData)
+    .then((data) => {
+      console.log(data)
+      toast.success('Questions added to all sets')
+      window.location.reload(false)
+    })
+    .catch((err) => toast.error(err.response.data))
   }
   useEffect(() => {
     setIsLoading(true)
@@ -498,7 +512,10 @@ const ShowExam = () => {
                   Total Marks
                 </th>
                 <th className=" bg-white font-semibold text-sm uppercase px-6 py-2">
-                  Action
+                  Pre Exam Action
+                </th>
+                <th className=" bg-white font-semibold text-sm uppercase px-6 py-2">
+                  Post Exam Action
                 </th>
               </tr>
             </thead>
@@ -522,7 +539,9 @@ const ShowExam = () => {
                       {exam.duration} Minutes
                     </td>
                     <td className="px-6 py-2 text-center">
-                      {exam.curriculumName===null? "None" :exam.curriculumName }
+                      {exam.curriculumName === null
+                        ? 'None'
+                        : exam.curriculumName}
                     </td>
                     <td className="px-6 py-2 text-center">
                       {exam.examVariation === 1 ? exam.marksPerMcq : 'N/A'}-
@@ -555,6 +574,46 @@ const ShowExam = () => {
                         >
                           {exam.iLink === null ? 'Add Image' : 'Update Image'}
                         </label>
+
+                        <label
+                          onClick={() => handleAssignExamId(exam._id)}
+                          htmlFor="my-modal"
+                          className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                        >
+                          Update
+                        </label>
+                        {exam.examVariation === 1 && (
+                          <label
+                            htmlFor="my-modal-2"
+                            onClick={() => setSingleExamId(exam._id)}
+                            className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          >
+                            Add Question
+                          </label>
+                        )}
+                        {exam.examVariation === 2 && (
+                          <label
+                            htmlFor="written-modal"
+                            onClick={() => setSingleExamId(exam._id)}
+                            className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          >
+                            Add Question
+                          </label>
+                        )}
+                        <button
+                          className="btn bg-button text-[12px] hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          onClick={() => refillQuestions(exam._id)}
+                        >
+                          Refill MCQ Sets
+                        </button>
+                        <DeactivateButton
+                          setter={setSelectedExamId}
+                          value={exam._id}
+                        ></DeactivateButton>
+                      </div>
+                    </td>
+                    <td className="px-2 py-3">
+                      <div className="grid grid-cols-1 gap-2">
                         <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="solutionSheet"
@@ -609,36 +668,6 @@ const ShowExam = () => {
                             Generate Meritlist
                           </label>
                         )}
-                        <label
-                          onClick={() => handleAssignExamId(exam._id)}
-                          htmlFor="my-modal"
-                          className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                        >
-                          Update
-                        </label>
-                        {exam.examVariation === 1 && (
-                          <label
-                            htmlFor="my-modal-2"
-                            onClick={() => setSingleExamId(exam._id)}
-                            className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                          >
-                            Add Question
-                          </label>
-                        )}
-                        {exam.examVariation === 2 && (
-                          <label
-                            htmlFor="written-modal"
-                            onClick={() => setSingleExamId(exam._id)}
-                            className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                          >
-                            Add Question
-                          </label>
-                        )}
-
-                        <DeactivateButton
-                          setter={setSelectedExamId}
-                          value={exam._id}
-                        ></DeactivateButton>
                       </div>
                     </td>
                   </tr>
@@ -996,9 +1025,14 @@ const ShowExam = () => {
                     required
                     onChange={(e) => setSelectedCurriculum(e.target.value)}
                   >
-                    <option value={singleExam.curriculumName}>{singleExam.curriculumName===null? "NONE" : singleExam.curriculumName}</option>
-                    {singleExam.curriculumName!==null && <option value={null}>NONE</option>
-                   }
+                    <option value={singleExam.curriculumName}>
+                      {singleExam.curriculumName === null
+                        ? 'NONE'
+                        : singleExam.curriculumName}
+                    </option>
+                    {singleExam.curriculumName !== null && (
+                      <option value={null}>NONE</option>
+                    )}
                     {curriculums.length > 0 &&
                       curriculums.map((curriculum) => (
                         <option key={curriculum._id} value={curriculum.name}>
@@ -1046,13 +1080,15 @@ const ShowExam = () => {
                       <option value={parseInt(updatenumberOfOptions)}>
                         {updatenumberOfOptions}
                       </option>
-                      <option value={0}>0</option>
-                      <option value={1}>1</option>
                       <option value={2}>2</option>
                       <option value={3}>3</option>
                       <option value={4}>4</option>
-                      <option value={4}>5</option>
-                      <option value={4}>6</option>
+                      <option value={5}>5</option>
+                      <option value={6}>6</option>
+                      <option value={7}>7</option>
+                      <option value={8}>8</option>
+                      <option value={9}>9</option>
+                      <option value={10}>10</option>
                     </select>
                   </div>
                   <div>

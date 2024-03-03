@@ -4,7 +4,7 @@ import { optionName } from '../../utils/globalVariables'
 import Loader from '../../Shared/Loader'
 import toast from 'react-hot-toast'
 
-const AddBundleQuestionBoth = () => {
+const AddBundleQuestionSpecial = () => {
   const [courses, setCourses] = useState([])
   const [subjects, setSubjects] = useState([])
   const [exams, setExams] = useState([])
@@ -14,7 +14,7 @@ const AddBundleQuestionBoth = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [singleExam, setSingleExam] = useState({})
   const [selectedSet, setSelectedSet] = useState(-1)
-  const [slots, setSlots] = useState(0)
+  const [slots, setSlots] = useState(-1)
   const [selectedImages, setSelectedIMages] = useState([])
   const [uploadImages,setUploadImages] = useState([]);
   const [correctOptions, setCorrectOptions] = useState([])
@@ -31,22 +31,16 @@ const AddBundleQuestionBoth = () => {
 
   const handleChangeSubject = (e) => {
     setSelectedSubject(e.target.value)
-    setSelectedExam('')
-    setExams([])
-    setSlots(0);
+    
   }
 
   const handleChangeExam = (e) => {
     setSelectedExam('')
     setSlots(-1)
-    if (e.target.value !== '') {
-      axios
-        .get(`/api/both/getbothexambyid?examId=${e.target.value}`)
-        .then(({ data }) => {
-          setSingleExam(data)
-          setSelectedExam(e.target.value)
-        })
-        .catch((e) => console.log(e))
+    if (e.target.value !== '') {     
+        setSelectedExam(e.target.value)
+        setExams([])
+        setSlots(0);
     } else {
       setSelectedExam('')
       setSingleExam({})
@@ -156,41 +150,48 @@ const AddBundleQuestionBoth = () => {
       setIsLoading(false)
     })
     if (selectedCourse !== '') {
+        
       axios
-        .get(`/api/subject/getsubjectbycourse?courseId=${selectedCourse}`)
-        .then(({ data }) => {
-          setSubjects(data.data)
-          setIsLoading(false)
-        })
-        .catch((e) => console.log(e))
+      .get(`/api/special/showspecialexambycourse?courseId=${selectedCourse}`)
+      .then(({ data }) => {
+        setExams(data);
+        if (data.length === 0) {
+          toast.error("No Data");
+        }
+        setIsLoading(false);
+      })
+      .catch((e) => toast.error(e.response.data));
     } else {
       setSubjects([])
     }
-    if (selectedSubject !== '') {
+    if(selectedExam!==''){
         axios
-        .get(`/api/both/getbothexambysubject?subjectId=${selectedSubject}`)
+        .get(`/api/subject/getsubjectbycourse?courseId=${selectedCourse}`)
         .then(({ data }) => {
-          setExams(data.examPage.exam);
-          if (data.examPage.exam.length === 0) {
-            toast.error("No Data");
-          }
+          setSubjects(data.data);
           setIsLoading(false);
-        })
-        .catch((e) =>{
-          toast.error(e.response.data)
-          setExams([]);
-        });
-    } else {
-      setExams([])
+        }).catch(err=>console.log("subject fetching error"));
     }
-  }, [selectedCourse, selectedSubject])
+    if(selectedSubject!==''){
+        axios
+        .get(`/api/special/showspecialexambyid?examId=${selectedExam}`)
+        .then(({ data }) => {
+          setSingleExam(data);
+          
+        })
+        .catch((e) => console.log(e));
+    } else {
+      setSingleExam({});
+    }
+    
+  }, [selectedCourse, selectedSubject,selectedExam])
   return (
     <div className="px-8 mb-40">
       <div className="bg-white py-4 px-2 my-3 ">
         <div
           className={` w-full  mx-auto grid grid-cols-1 lg:${
             singleExam?.numberOfSet > 0 ? 'grid-cols-4' : 'grid-cols-3 '
-          } gap-4`}
+          } gap-2`}
         >
           <div className="form-control">
             <label className="label-text text-center" htmlFor="">
@@ -218,30 +219,6 @@ const AddBundleQuestionBoth = () => {
           </div>
           <div className="form-control">
             <label className="label-text text-center" htmlFor="">
-              Select Subject
-            </label>
-            <select
-              name="course_list"
-              id="course_list"
-              className="input w-full border-black input-bordered"
-              required
-              onChange={(e) => handleChangeSubject(e)}
-            >
-              <option value=""></option>
-              {subjects?.length > 0 &&
-                subjects.map((subject) => (
-                  <option
-                    className="text-center"
-                    key={subject._id}
-                    value={subject._id}
-                  >
-                    {subject.name}
-                  </option>
-                ))}
-            </select>
-          </div>
-          <div className="form-control">
-            <label className="label-text text-center" htmlFor="">
               Select Exam Name
             </label>
             <select
@@ -260,6 +237,30 @@ const AddBundleQuestionBoth = () => {
                     value={exam._id}
                   >
                     {exam.name}
+                  </option>
+                ))}
+            </select>
+          </div>
+          <div className="form-control">
+            <label className="label-text text-center" htmlFor="">
+              Select Subject
+            </label>
+            <select
+              name="course_list"
+              id="course_list"
+              className="input w-full border-black input-bordered"
+              required
+              onChange={(e) => handleChangeSubject(e)}
+            >
+              <option value=""></option>
+              {subjects?.length > 0 &&
+                subjects.map((subject) => (
+                  <option
+                    className="text-center"
+                    key={subject._id}
+                    value={subject._id}
+                  >
+                    {subject.name}
                   </option>
                 ))}
             </select>
@@ -289,7 +290,7 @@ const AddBundleQuestionBoth = () => {
       </div>
       {isLoading && <Loader />}
       {
-        selectedExam!=='' && slots===0 && <div className='flex justify-center items-center border-4 rounded-lg bg-white border-color-one py-8 px-4 my-10 mx-8'>
+         slots===0 && <div className='flex justify-center items-center border-4 rounded-lg bg-white border-color-one py-8 px-4 my-10 mx-8'>
           <p className='text-[32px] font-extrabold text-success'>You have already added the questions for this set!</p>
         </div>
       }
@@ -370,4 +371,4 @@ const AddBundleQuestionBoth = () => {
   )
 }
 
-export default AddBundleQuestionBoth
+export default AddBundleQuestionSpecial

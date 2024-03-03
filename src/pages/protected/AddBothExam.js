@@ -1,112 +1,115 @@
-import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-import axios from "../../utils/axios";
-import Loader from "../../Shared/Loader";
-import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import React from 'react'
+import { useEffect } from 'react'
+import { useState } from 'react'
+import axios from '../../utils/axios'
+import Loader from '../../Shared/Loader'
+import { toast } from 'react-hot-toast'
 
 const AddBothExam = () => {
-  const [courses, setCourses] = useState([]);
-  const [subjects, setSubjects] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState("");
-  const [selectedSubject, setSelectedSubject] = useState("");
-  const [selectedType, setSelectedType] = useState(-1);
-  const [isSSC, setIsSSC] = useState(false);
-  const [isHSC, setIsHSC] = useState(false);
-  const [questionType,setQuestionType] = useState(0);
-  const [numberOfOptions,setNumberOfOptions] = useState(4);
-  const [numberOfRetakes,setNumberOfRetakes] = useState(4);
-  const [numberOfSet,setNumberOfSet] = useState(4);
-  const navigate = useNavigate();
+  const [courses, setCourses] = useState([])
+  const [subjects, setSubjects] = useState([])
+  const [curriculums, setCurriculums] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [selectedCourse, setSelectedCourse] = useState('')
+  const [selectedSubject, setSelectedSubject] = useState('')
+  const [selectedCurriculum, setSelectedCurriculum] = useState(null)
+  const [selectedType, setSelectedType] = useState(-1)
+  const [questionType, setQuestionType] = useState(0)
+  const [numberOfOptions, setNumberOfOptions] = useState(4)
+  const [numberOfRetakes, setNumberOfRetakes] = useState(4)
+  const [numberOfSet, setNumberOfSet] = useState(4)
+  const [isAdmission, setIsAdmission] = useState(false)
+  // const navigate = useNavigate();
 
   const handleAddExam = async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const name = form.exam.value;
-    const startTime = form.start_time.value;
-    const endTime = form.end_time.value;
-    const duration = parseInt(form.duration.value);
-    const totalQuestionMcq = parseInt(form.mcq_questions.value);
-    const marksPerMcq = parseInt(form.mcq_mpq.value);
-    const mcqTotalMarks = parseInt(form.mcq_total_marks.value);
-    const writtenTotalMarks = parseInt(form.written_total_marks.value);
-    const mcqDuration = parseInt(form.mcq_duration.value);
-    const writtenDuration = parseInt(form.written_duration.value);
-    const totalQuestionWritten = parseInt(form.written_questions.value);
-    const totalMarks = form.total_marks.value;
-    const status = true;
-    const negativeMarks = parseFloat(form.negative_marking.value);
-    const formdata = new FormData();
-    let iLink = null ;
+    e.preventDefault()
+    const form = e.target
+    const name = form.exam.value
+    const startTime = form.start_time.value
+    const endTime = form.end_time.value
+    const duration = parseInt(form.duration.value)
+    const totalQuestionMcq = parseInt(form.mcq_questions.value)
+    const marksPerMcq = parseInt(form.mcq_mpq.value)
+    const mcqTotalMarks = parseInt(form.mcq_total_marks.value)
+    const writtenTotalMarks = parseInt(form.written_total_marks.value)
+    const mcqDuration = parseInt(form.mcq_duration.value)
+    const writtenDuration = parseInt(form.written_duration.value)
+    const totalQuestionWritten = parseInt(form.written_questions.value)
+    const totalMarks = form.total_marks.value
+    const status = true
+    const negativeMarks = parseFloat(form.negative_marking.value)
+    const formdata = new FormData()
+    let iLink = null
     if(form.iLink.files[0]===undefined){
       formdata.append("iLink", iLink);
     }else{      
       iLink = form.iLink.files[0];
       formdata.append("iLink", iLink);
     }
-    console.log(iLink);
-    formdata.append("iLink", iLink);
-    const stype = parseInt(selectedType);
-    formdata.append("name",name);
-    formdata.append("examType", stype);
-    formdata.append("startTime",startTime);
-    formdata.append("endTime",endTime);
-    formdata.append("totalDuration",duration);
-    formdata.append("mcqDuration",mcqDuration);
-    formdata.append("writtenDuration",writtenDuration);
-    formdata.append("totalQuestionWritten",totalQuestionWritten);
-    formdata.append("totalQuestionMcq",totalQuestionMcq);
-    formdata.append("totalMarksMcq",mcqTotalMarks);
-    formdata.append("totalMarksWritten",writtenTotalMarks);
-    formdata.append("marksPerMcq",marksPerMcq);
-    formdata.append("status",status);
-    formdata.append("subjectId",selectedSubject);
-    formdata.append("courseId",selectedCourse);
-    formdata.append("sscStatus",isSSC);
-    formdata.append("hscStatus",isHSC);
-    formdata.append("negativeMarks",negativeMarks);
-    formdata.append("totalMarks",totalMarks);
-    formdata.append("numberOfRetakes",numberOfRetakes)
-    formdata.append("numberOfOptions",numberOfOptions)
-    formdata.append("questionType",questionType)
-    formdata.append("numberOfSet",numberOfSet)
-    for (var pair of formdata.entries()) {
-      console.log(pair[0]+ ', ' + pair[1]); 
-  }
+    console.log(iLink)
+    const stype = parseInt(selectedType)
+    formdata.append('name', name)
+    formdata.append('examType', stype)
+    formdata.append('startTime', startTime)
+    formdata.append('endTime', endTime)
+    formdata.append('totalDuration', duration)
+    formdata.append('mcqDuration', mcqDuration)
+    formdata.append('writtenDuration', writtenDuration)
+    formdata.append('totalQuestionWritten', totalQuestionWritten)
+    formdata.append('totalQuestionMcq', totalQuestionMcq)
+    formdata.append('totalMarksMcq', mcqTotalMarks)
+    formdata.append('totalMarksWritten', writtenTotalMarks)
+    formdata.append('marksPerMcq', marksPerMcq)
+    formdata.append('status', status)
+    formdata.append('subjectId', selectedSubject)
+    formdata.append('courseId', selectedCourse)
+    formdata.append('curriculumName', selectedCurriculum)
+    formdata.append('isAdmission', isAdmission)
+    formdata.append('negativeMarks', negativeMarks)
+    formdata.append('totalMarks', totalMarks)
+    formdata.append('numberOfRetakes', numberOfRetakes)
+    formdata.append('numberOfOptions', numberOfOptions)
+    formdata.append('questionType', questionType)
+    formdata.append('numberOfSet', numberOfSet)
+
     await axios
       .post(`/api/both/createbothexam`, formdata, {
         headers: {
-          "Content-Type": "multipart/ form-data",
+          'Content-Type': 'multipart/ form-data',
         },
       })
       .then(({ data }) => {
-        console.log(data);
-        toast.success(`${name}  Added Succesfully`);
-        window.location.reload(false);
-      }).catch(err=>{
-        toast.error(err.response.data);
-        console.log(err);
+        console.log(data)
+        toast.success(`${name}  Added Succesfully`)
+        window.location.reload(false)
       })
-  };
+      .catch((err) => {
+        toast.error(err.response.data)
+        console.log(err)
+      })
+  }
   useEffect(() => {
-    setIsLoading(true);
-    axios.get("/api/course/getallcourseadmin").then(({ data }) => {
-      setCourses(data.courses);
-      setIsLoading(false);
-    });
-    if (selectedCourse !== "") {
+    setIsLoading(true)
+    axios.get('/api/curriculum/getcurriculums').then(({ data }) => {
+      // console.log(data);
+      setCurriculums(data)
+      setIsLoading(false)
+    })
+    axios.get('/api/course/getallcourseadmin').then(({ data }) => {
+      setCourses(data.courses)
+      setIsLoading(false)
+    })
+    if (selectedCourse !== '') {
       axios
         .get(`/api/subject/getsubjectbycourse?courseId=${selectedCourse}`)
         .then(({ data }) => {
-          setSubjects(data.data);
-          setIsLoading(false);
-        });
+          setSubjects(data.data)
+          setIsLoading(false)
+        })
     } else {
-      setSubjects([]);
+      setSubjects([])
     }
-  }, [selectedCourse]);
+  }, [selectedCourse])
   return (
     <div>
       <div className="w-full lg:w-2/3 py-2  bg-white flex flex-col mx-auto  px-4  rounded-lg  shadow-lg ">
@@ -123,7 +126,7 @@ const AddBothExam = () => {
                 type="text"
                 name="exam"
                 id="exam"
-                placeholder="Subject Name"
+                placeholder="Exam Name"
                 required
               />
             </div>
@@ -224,7 +227,7 @@ const AddBothExam = () => {
                   id="duration"
                   min="1"
                   onInput={(e) =>
-                    e.target.value < 0 ? (e.target.value = "") : e.target.value
+                    e.target.value < 0 ? (e.target.value = '') : e.target.value
                   }
                   required
                 />
@@ -232,7 +235,7 @@ const AddBothExam = () => {
               </div>
               <div className="w-full lg:w-1/3 mr-0 lg:mr-4">
                 <label className="label" htmlFor="">
-                 Duration (MCQ)
+                  Duration (MCQ)
                 </label>
                 <input
                   type="mumber"
@@ -241,7 +244,7 @@ const AddBothExam = () => {
                   id="mcq_duration"
                   min="1"
                   onInput={(e) =>
-                    e.target.value < 0 ? (e.target.value = "") : e.target.value
+                    e.target.value < 0 ? (e.target.value = '') : e.target.value
                   }
                   required
                 />
@@ -249,7 +252,7 @@ const AddBothExam = () => {
               </div>
               <div className="w-full lg:w-1/3 mr-0 lg:mr-4">
                 <label className="label" htmlFor="">
-                   Duration(Writen)
+                  Duration(Writen)
                 </label>
                 <input
                   type="mumber"
@@ -258,7 +261,7 @@ const AddBothExam = () => {
                   id="written_duration"
                   min="1"
                   onInput={(e) =>
-                    e.target.value < 0 ? (e.target.value = "") : e.target.value
+                    e.target.value < 0 ? (e.target.value = '') : e.target.value
                   }
                   required
                 />
@@ -266,12 +269,12 @@ const AddBothExam = () => {
               </div>
             </div>
             <div className="w-full flex">
-            <p className="text-lg font-bold">MCQ:</p> 
+              <p className="text-lg font-bold">MCQ:</p>
             </div>
             <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-start">
-            <div className="w-full lg:w-1/4 mr-0 lg:mr-4">
+              <div className="w-full lg:w-1/4 mr-0 lg:mr-4">
                 <label htmlFor="" className="label">
-                  Total  Questions
+                  Total Questions
                 </label>
                 <input
                   type="number"
@@ -279,7 +282,7 @@ const AddBothExam = () => {
                   name="mcq_questions"
                   id="mcq_questions"
                   onInput={(e) =>
-                    e.target.value < 0 ? (e.target.value = "") : e.target.value
+                    e.target.value < 0 ? (e.target.value = '') : e.target.value
                   }
                   required
                 />
@@ -294,14 +297,14 @@ const AddBothExam = () => {
                   name="mcq_mpq"
                   id="mcq_mpq"
                   onInput={(e) =>
-                    e.target.value < 0 ? (e.target.value = "") : e.target.value
+                    e.target.value < 0 ? (e.target.value = '') : e.target.value
                   }
                   required
                 />
-              </div>        
+              </div>
               <div className="w-full lg:w-1/4 mr-0 lg:mr-4">
                 <label htmlFor="" className="label">
-                 Total Marks
+                  Total Marks
                 </label>
                 <input
                   type="number"
@@ -310,11 +313,11 @@ const AddBothExam = () => {
                   id="mcq_total_marks"
                   step="any"
                   onChange={(e) =>
-                    e.target.value < 0 ? (e.target.value = "") : e.target.value
+                    e.target.value < 0 ? (e.target.value = '') : e.target.value
                   }
                   required
                 />
-              </div>    
+              </div>
               <div className="w-full lg:w-1/4 mr-0 lg:mr-4">
                 <label htmlFor="" className="label">
                   (-) Marking %
@@ -326,14 +329,14 @@ const AddBothExam = () => {
                   id="negative_marking"
                   step="any"
                   onChange={(e) =>
-                    e.target.value < 0 ? (e.target.value = "") : e.target.value
+                    e.target.value < 0 ? (e.target.value = '') : e.target.value
                   }
                   required
                 />
-              </div>    
+              </div>
             </div>
             <div className="form-control grid grid-cols-1 lg:grid-cols-4 gap-3 ">
-              <div >
+              <div>
                 <label htmlFor="" className="label">
                   Question Type
                 </label>
@@ -349,7 +352,7 @@ const AddBothExam = () => {
                   <option value={0}>Image</option>
                 </select>
               </div>
-              <div >
+              <div>
                 <label htmlFor="" className="label">
                   Options
                 </label>
@@ -360,17 +363,17 @@ const AddBothExam = () => {
                   onChange={(e) => setNumberOfOptions(parseInt(e.target.value))}
                   required
                 >
-                <option value={4}>4</option>
-                <option value={0}>0</option>
-                <option value={1}>1</option>
-                <option value={2}>2</option>
-                <option value={3}>3</option>
-                <option value={4}>4</option>
-                <option value={4}>5</option>
-                <option value={4}>6</option>
+                  <option value={4}>4</option>
+                  <option value={0}>0</option>
+                  <option value={1}>1</option>
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                  <option value={4}>4</option>
+                  <option value={4}>5</option>
+                  <option value={4}>6</option>
                 </select>
               </div>
-              <div >
+              <div>
                 <label htmlFor="" className="label">
                   Sets
                 </label>
@@ -389,9 +392,9 @@ const AddBothExam = () => {
                   <option value={4}>4</option>
                 </select>
               </div>
-              <div >
+              <div>
                 <label htmlFor="" className="label">
-               Retakes
+                  Retakes
                 </label>
                 <select
                   name="numberOfRetakes"
@@ -410,12 +413,12 @@ const AddBothExam = () => {
               </div>
             </div>
             <div className="w-full flex">
-            <p className="text-lg font-bold">Written:</p> 
+              <p className="text-lg font-bold">Written:</p>
             </div>
-            <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-start">
-              <div className="w-full lg:w-1/4 mr-0 lg:mr-4">
+            <div className="form-control grid grid-cols-1 lg:grid-cols-2 gap-x-5 gap-y-3">
+              <div className="">
                 <label htmlFor="" className="label">
-                   Total Questions
+                  Total Questions
                 </label>
                 <input
                   type="number"
@@ -423,12 +426,12 @@ const AddBothExam = () => {
                   name="written_questions"
                   id="written_questions"
                   onInput={(e) =>
-                    e.target.value < 0 ? (e.target.value = "") : e.target.value
+                    e.target.value < 0 ? (e.target.value = '') : e.target.value
                   }
                   required
                 />
               </div>
-              <div className="w-full lg:w-1/4 mr-0 lg:mr-4">
+              <div className="">
                 <label htmlFor="" className="label">
                   Total Marks
                 </label>
@@ -438,40 +441,11 @@ const AddBothExam = () => {
                   name="written_total_marks"
                   id="written_total_marks"
                   onInput={(e) =>
-                    e.target.value < 0 ? (e.target.value = "") : e.target.value
+                    e.target.value < 0 ? (e.target.value = '') : e.target.value
                   }
                   required
                 />
-              </div>    
-              <div className="w-full lg:w-1/4 flex items-center mt-0 lg:mt-5 mr-0 lg:mr-4 ">
-                  <input
-                    id="disabled-checked-checkbox"
-                    type="checkbox"             
-                    onChange={(e) => setIsSSC(!isSSC)}
-                    className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  <label
-                    htmlFor="disabled-checked-checkbox"
-                    className="ml-2 text-lg"
-                  >
-                    SSC
-                  </label>
-                </div>
-                <div className="w-full lg:w-1/4 flex items-center mt-0 lg:mt-5 ">
-                  <input
-                    id="disabled-checked-checkbox"
-                    type="checkbox"             
-                    onChange={(e) => setIsHSC(!isHSC)}
-                    className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  <label
-                    htmlFor="disabled-checked-checkbox"
-                    className="ml-2 text-lg"
-                  >
-                    HSC
-                  </label>
-                </div>    
-                  
+              </div>
             </div>
             <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-start">
               <div className="w-full ">
@@ -487,9 +461,47 @@ const AddBothExam = () => {
                   min={1}
                   required
                 />
-              </div>            
+              </div>
             </div>
-            
+            <div className="grid grid-cols-2 gap-x-4 ">
+              <div className="flex items-center mt-0 lg:mt-5 ">
+                <input
+                  id="disabled-checked-checkbox"
+                  type="checkbox"
+                  onChange={(e) => setIsAdmission(!isAdmission)}
+                  className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  htmlFor="disabled-checked-checkbox"
+                  className="ml-2 text-lg"
+                >
+                  Is Admission
+                </label>
+              </div>
+              <div className="flex items-center mt-0 lg:mt-5 ">
+                <label
+                  htmlFor="disabled-checked-checkbox"
+                  className="ml-2 text-lg"
+                >
+                  Curriculum
+                </label>
+                <select
+                  name="course"
+                  id="course"
+                  className="input w-full  border-black input-bordered "
+                  required
+                  onChange={(e) => setSelectedCurriculum(e.target.value)}
+                >
+                  <option value={null}></option>
+                  {curriculums.length > 0 &&
+                    curriculums.map((curriculum) => (
+                      <option key={curriculum._id} value={curriculum.name}>
+                        {curriculum.name}
+                      </option>
+                    ))}
+                </select>
+              </div>
+            </div>
             <div className="form-control">
               <label htmlFor="" className="label">
                 Exam Image
@@ -512,7 +524,7 @@ const AddBothExam = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AddBothExam;
+export default AddBothExam

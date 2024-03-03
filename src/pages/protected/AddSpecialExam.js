@@ -5,6 +5,7 @@ import axios from "../../utils/axios";
 import Loader from "../../Shared/Loader";
 import { toast } from "react-hot-toast";
 import Select from "react-select";
+import { singleColumnGrid, twoColumnGrid } from "../../utils/globalVariables";
 
 const AddSpecialExam = () => {
   const [courses, setCourses] = useState([]);
@@ -12,19 +13,20 @@ const AddSpecialExam = () => {
   const [selectedCourse, setSelectedCourse] = useState("");
   const [selectedSubjects, setSelectedSubjects] = useState([]);
   const [selectedOptionalSubjects, setSelectedOptionalSubjects] = useState([]);
+  const [selectedCurriculum, setSelectedCurriculum] = useState(null)
+  const [curriculums, setCurriculums] = useState([])
   const selectedVariation = "4";
   const totalSubject = 6;
   const totalOptionalSubject = 2;
   const examSubjectNumber = 4;
   const noOfFixedSubject = 2;
-  const [isSSC, setIsSSC] = useState(false);
-  const [isHSC, setIsHSC] = useState(false);
   const [fixedSubject,setFixedSubject] =useState([]);
   const [allSubjects, setAllSubjects] = useState([]);
   const [questionType,setQuestionType] = useState(0);
   const [numberOfOptions,setNumberOfOptions] = useState(4);
   const [numberOfRetakes,setNumberOfRetakes] = useState(4);
   const [numberOfSet,setNumberOfSet] = useState(4);
+  const [isAdmission, setIsAdmission] = useState(false)
 
   const handleAddExam = async (e) => {
     e.preventDefault();
@@ -69,6 +71,7 @@ const AddSpecialExam = () => {
     }
     const iLink = form.iLink.files[0];
     const formdata = new FormData();
+    console.log(iLink);
     formdata.append("iLink", iLink);
     const svar = parseInt(selectedVariation);
     let oSubject = selectedOptionalSubjects;
@@ -154,8 +157,8 @@ const AddSpecialExam = () => {
     formdata.append("numberOfOptions",numberOfOptions)
     formdata.append("questionType",questionType)
     formdata.append("numberOfSet",numberOfSet)
-    formdata.append("sscStatus", isSSC);
-    formdata.append("hscStatus", isHSC);
+    formdata.append("curriculumName",selectedCurriculum)
+    formdata.append("isAdmission",isAdmission)
 
     await axios
       .post(`/api/special/createspecialexam`, formdata, {
@@ -165,17 +168,25 @@ const AddSpecialExam = () => {
       })
       .then(({ data }) => {
         console.log(data);
-        toast.success("Special Exam Added Succesfully");
+        toast.success(data);
         window.location.reload(false);
-      });
+      }).catch(e=>{
+        console.log(e);
+      })
   };
   useEffect(() => {
     setIsLoading(true);
+    axios.get('/api/curriculum/getcurriculums').then(({ data }) => {
+      // console.log(data);
+      setCurriculums(data)
+      setIsLoading(false)
+    })
     axios.get("/api/course/getallcourseadmin").then(({ data }) => {
       setCourses(data.courses);
       setIsLoading(false);
     });
-    if (selectedCourse !== "") {
+    if (selectedCourse !== "") {      
+    setIsLoading(true);
       axios
         .get(`/api/subject/getsubjectbycourse?courseId=${selectedCourse}`)
         .then(({ data }) => {
@@ -211,7 +222,7 @@ const AddSpecialExam = () => {
                 type="text"
                 name="exam"
                 id="exam"
-                placeholder="Subject Name"
+                placeholder="Exam Name"
                 required
               />
             </div>
@@ -315,8 +326,25 @@ const AddSpecialExam = () => {
                 />
               </div>
             </div>
-            <div className="form-control flex flex-col lg:flex-row justify-between  items-start lg:items-center">
-              <div className="w-full lg:w-1/2 mr-0 lg:mr-2">
+            <div className={`form-control ${singleColumnGrid}`}>
+            <div className="">
+                <label className="label ml-0 lg:ml-2" htmlFor="">
+                 Select All Subjects
+                </label>
+
+                <Select
+                  options={allSubjects}
+                  onChange={(choice) => setSelectedSubjects(choice)}
+                  isMulti
+                  isDisabled={
+                    selectedSubjects.length === parseInt(totalSubject)
+                  }
+                  labelledBy="Select"
+                />
+              </div>
+            </div>
+            <div className={`form-control ${twoColumnGrid}` }>
+              <div className="">
                 <label className="label ml-0 lg:ml-2" htmlFor="">
                   Select Fixed Subject
                 </label>
@@ -332,7 +360,7 @@ const AddSpecialExam = () => {
                   labelledBy="Select"
                 />
               </div>
-              <div className="w-full lg:w-1/2 mr-0 lg:mr-2">
+              <div className="">
                 <label className="label ml-0 lg:ml-2" htmlFor="">
                   Select Optional Subject
                 </label>
@@ -344,21 +372,6 @@ const AddSpecialExam = () => {
                   isDisabled={
                     selectedOptionalSubjects.length ===
                     parseInt(totalOptionalSubject)
-                  }
-                  labelledBy="Select"
-                />
-              </div>
-              <div className="w-full lg:w-1/2">
-                <label className="label ml-0 lg:ml-2" htmlFor="">
-                  Select Subject
-                </label>
-
-                <Select
-                  options={allSubjects}
-                  onChange={(choice) => setSelectedSubjects(choice)}
-                  isMulti
-                  isDisabled={
-                    selectedSubjects.length === parseInt(totalSubject)
                   }
                   labelledBy="Select"
                 />
@@ -433,8 +446,8 @@ const AddSpecialExam = () => {
                   </div>
                 </div>
                 
-                <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-start">
-                <div className="w-full lg:w-1/4 mr-0 lg:mr-2">
+                <div className="form-control grid grid-cols-1 lg:grid-cols-2 gap-x-3">
+                <div className="">
                     <label htmlFor="" className="label">
                       Questions/Subject
                     </label>
@@ -448,7 +461,7 @@ const AddSpecialExam = () => {
                       required
                     />
                   </div>  
-                <div className="w-full lg:w-1/3 mr-0 lg:mr-2">
+                <div className="">
                     <label htmlFor="" className="label">
                       Total Question
                     </label>
@@ -465,7 +478,9 @@ const AddSpecialExam = () => {
                       required
                     />
                   </div>
-                  <div className="w-full lg:w-1/3 mr-0 lg:mr-2">
+                </div>
+                <div className={`form-control ${twoColumnGrid}`}>
+                <div className="">
                     <label htmlFor="" className="label">
                       Marks Per Question
                     </label>
@@ -482,7 +497,7 @@ const AddSpecialExam = () => {
                       required
                     />
                   </div>
-                  <div className="w-full lg:w-1/3">
+                  <div className="">
                     <label htmlFor="" className="label">
                       Negative Marking (%)
                     </label>
@@ -669,8 +684,8 @@ const AddSpecialExam = () => {
                 </div>
               </Fragment>
             )}
-            <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-center">
-              <div className="w-full lg:w-1/2 mr-0 lg:mr-2">
+            <div className="form-control grid grid-cols-1 lg:grid-cols-4 gap-x-2">
+              <div className="col-span-1 lg:col-span-2">
                 <label htmlFor="" className="label">
                   Exam Image
                 </label>
@@ -679,41 +694,46 @@ const AddSpecialExam = () => {
                   name="iLink"
                   id="iLink"
                   className="file-input w-full input-bordered  border-black "
-                  required
+                  // required
                 />
               </div>
-              <div className="w-full lg:w-1/4 mr-0 lg:mr-2">
-                <div className="flex items-center mt-0 lg:mt-5 ">
+              <div className="flex items-center mt-0 lg:mt-5 ">
                   <input
                     id="disabled-checked-checkbox"
-                    type="checkbox"
-                    onChange={(e) => setIsSSC(!isSSC)}
+                    type="checkbox"             
+                    onChange={(e) => setIsAdmission(!isAdmission)}
                     className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                   />
                   <label
                     htmlFor="disabled-checked-checkbox"
                     className="ml-2 text-lg"
                   >
-                    SSC
+                    Is Admission
                   </label>
                 </div>
-              </div>
-              <div className="w-full lg:w-1/4 mr-0 lg:mr-2">
                 <div className="flex items-center mt-0 lg:mt-5 ">
-                  <input
-                    id="disabled-checked-checkbox"
-                    type="checkbox"
-                    onChange={(e) => setIsHSC(!isHSC)}
-                    className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  <label
+                <label
                     htmlFor="disabled-checked-checkbox"
                     className="ml-2 text-lg"
                   >
-                    HSC
+                    Curriculum 
                   </label>
+                  <select
+                  name="course"
+                  id="course"
+                  className="input w-full  border-black input-bordered "
+                  required
+                  onChange={(e) => setSelectedCurriculum(e.target.value)}
+                >
+                  <option value={null}></option>
+                  {curriculums.length > 0 &&
+                    curriculums.map((curriculum) => (
+                      <option key={curriculum._id} value={curriculum.name}>
+                        {curriculum.name}
+                      </option>
+                    ))}
+                </select>
                 </div>
-              </div>
             </div>
             <div className="form-control mt-2">
               <input

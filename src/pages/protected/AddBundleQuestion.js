@@ -98,7 +98,7 @@ const AddBundleQuestion = () => {
   const addAllQuestions = async()=>{
     // document.getElementById("addButton").disabled =true;
     // setDisabler(true)
-    const curQtype = singleExam.questionType;
+    const curQtype = 0;
     let questionText = ''
     let options = []
     setIsLoading(true)

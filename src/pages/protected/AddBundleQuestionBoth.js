@@ -90,6 +90,7 @@ const AddBundleQuestionBoth = () => {
   }
 
   const addBulkCorrectOption = (ca,id) =>{
+    setIsLoading(true);
     const correctAnswerList = correctOptions;
     correctAnswerList[id] = ca ;
     console.log(correctAnswerList);
@@ -98,7 +99,7 @@ const AddBundleQuestionBoth = () => {
   const addAllQuestions = async()=>{
     // document.getElementById("addButton").disabled =true;
     // setDisabler(true)
-    const curQtype = singleExam.questionType;
+    const curQtype = 0;
     let questionText = ''
     let options = []
     setIsLoading(true)
@@ -186,6 +187,7 @@ const AddBundleQuestionBoth = () => {
   }, [selectedCourse, selectedSubject])
   return (
     <div className="px-8 mb-40">
+    {isLoading && <Loader/>}
       <div className="bg-white py-4 px-2 my-3 ">
         <div
           className={` w-full  mx-auto grid grid-cols-1 lg:${

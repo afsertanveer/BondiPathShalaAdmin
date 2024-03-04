@@ -200,7 +200,7 @@ const ShowQuestions = () => {
       }
       console.log(questionSet)
       console.log(selectedQuestions.length)
-      let slot
+      let curSlot
       if (bothStatus) {
         axios
           .get(
@@ -209,8 +209,9 @@ const ShowQuestions = () => {
             )}`
           )
           .then(async ({ data }) => {
-            slot = parseInt(data.slots) - selectedQuestions.length
-            if (slot > 0) {
+            curSlot = parseInt(data.slots) - selectedQuestions.length
+            console.log(selectedQuestions.length, parseInt(data.slots), curSlot)
+            if (curSlot >= 0) {
               await axios
                 .put('/api/both/bothaddquestionmcqbulk', questionSet)
                 .then(({ data }) => {
@@ -241,6 +242,7 @@ const ShowQuestions = () => {
           )
           .then(async ({ data }) => {
             const slot = parseInt(data.slots) - selectedQuestions.length
+            console.log(slot+"aasdas "+selectedQuestions.length+"  "+parseInt(data.slots))
             if (slot >= 0) {
               await axios
                 .put('/api/exam/addQuestionMcqBulk', questionSet)
@@ -257,7 +259,7 @@ const ShowQuestions = () => {
               } else if (data.slots === 1) {
                 toast.error('You can send only 1 photo')
               } else {
-                toast.error(`You can transfer  ${data.slots} photoes`)
+                toast.error(`You cannot transfer more  photoes than the exam has`)
               }
             }
           })

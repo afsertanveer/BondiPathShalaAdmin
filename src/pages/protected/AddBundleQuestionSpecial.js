@@ -22,7 +22,7 @@ const AddBundleQuestionSpecial = () => {
 
   const handleChangeCourse = (e) => {
     setSelectedSubject('')
-    setSlots(0)
+    setSlots(-1)
     setSubjects([])
     setExams('')
     setExams([])
@@ -34,26 +34,16 @@ const AddBundleQuestionSpecial = () => {
     
   }
 
-  const handleChangeExam = (e) => {
-    setSelectedExam('')
-    setSlots(-1)
-    if (e.target.value !== '') {     
-        setSelectedExam(e.target.value)
-        setExams([])
-        setSlots(0);
-    } else {
-      setSelectedExam('')
-      setSingleExam({})
-    }
-  }
+ 
 
   const handleChangeSet = (setName) => {
     setSelectedSet(parseInt(setName))
-    axios
+    if((parseInt(setName)!==-1)){
+      axios
       .get(
-        `/api/both/slotAvailable?examId=${selectedExam}&setName=${parseInt(
+        `/api/special/slotAvailable?examId=${selectedExam}&setName=${parseInt(
           setName
-        )}`
+        )}&subjectId=${selectedSubject}`
       )
       .then(({ data }) => {
         setSlots(data.slots)
@@ -63,8 +53,11 @@ const AddBundleQuestionSpecial = () => {
         }
         setCorrectOptions(arrayFiller)
       }).catch(e=>{
-        setSlots(0);
+        setSlots(-1);
       })
+    }else{
+      setSlots(-1)
+    }
   }
 
   async function onFileSelected(e) {
@@ -92,7 +85,8 @@ const AddBundleQuestionSpecial = () => {
   const addAllQuestions = async()=>{
     // document.getElementById("addButton").disabled =true;
     // setDisabler(true)
-    const curQtype = singleExam.questionType;
+    setIsLoading(true);
+    const curQtype = 0;
     let questionText = ''
     let options = []
     setIsLoading(true)
@@ -116,10 +110,11 @@ const AddBundleQuestionSpecial = () => {
         formdata.append('status', true)
         formdata.append('examId', selectedExam)
         formdata.append('setName', selectedSet)
+        formdata.append('subjectId', selectedSubject)
         
     
         await axios
-          .post(`/api/both/bothaddquestionmcq`, formdata, {
+          .post(`/api/special/addquestionmcq`, formdata, {
             headers: {
               'Content-Type': 'multipart/ form-data',
             },
@@ -187,6 +182,9 @@ const AddBundleQuestionSpecial = () => {
   }, [selectedCourse, selectedSubject,selectedExam])
   return (
     <div className="px-8 mb-40">
+      {
+        isLoading && <Loader/>
+      }
       <div className="bg-white py-4 px-2 my-3 ">
         <div
           className={` w-full  mx-auto grid grid-cols-1 lg:${
@@ -219,26 +217,22 @@ const AddBundleQuestionSpecial = () => {
           </div>
           <div className="form-control">
             <label className="label-text text-center" htmlFor="">
-              Select Exam Name
+              Select Exam
             </label>
             <select
-              name="exam_list"
-              id="exam_list"
-              className="input w-full border-black input-bordered"
+              name="exams"
+              id="exams"
+              className="input w-full border-black input-bordered text-center"
               required
-              onChange={(e) => handleChangeExam(e)}
+              onChange={(e) =>setSelectedExam(e.target.value)}
             >
-              <option value=""></option>
-              {exams.length > 0 &&
-                exams.map((exam) => (
-                  <option
-                    className="text-center"
-                    key={exam._id}
-                    value={exam._id}
-                  >
-                    {exam.name}
-                  </option>
-                ))}
+              <option value="">---Select Exam---</option>
+              {
+                exams.length>0 && exams.map(exam=><option key={exam._id} value={exam._id}>{exam.name}</option>)
+                
+                
+                }
+              
             </select>
           </div>
           <div className="form-control">
@@ -288,18 +282,13 @@ const AddBundleQuestionSpecial = () => {
           )}
         </div>
       </div>
-      {isLoading && <Loader />}
       {
          slots===0 && <div className='flex justify-center items-center border-4 rounded-lg bg-white border-color-one py-8 px-4 my-10 mx-8'>
           <p className='text-[32px] font-extrabold text-success'>You have already added the questions for this set!</p>
         </div>
       }
-      {
-        slots===1 && <div className='flex justify-center items-center border-4 rounded-lg bg-white border-color-one py-8 px-4 my-10 mx-8'>
-        <p className='text-[32px] font-extrabold text-success'>Only 1 Question to be added! Add question from Menu's show both exam section</p>
-      </div>
-      }
-      {slots > 1 && (
+     
+      {slots > 0 && (
         <div className='my-5'>
           <label htmlFor="" className=" label">
             <span className="label-text">Select Multiple Question Image </span>

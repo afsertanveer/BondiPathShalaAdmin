@@ -1,7 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { optionName } from '../../utils/globalVariables';
+import axios from '../../utils/axios';
+import toast from 'react-hot-toast';
 
-const SpecialQuestionSender = ({sendQuestionSpecial,handleChangeSecondCourse,courses,setQuestionExam,specialExams,setQuestionSubject,secondsubjects}) => {
-    return (
+const SpecialQuestionSender = ({sendQuestionSpecial,setIsLoading,setSecondSet,questionExam,courses,setQuestionSubject,setQuestionExam,questionSubject}) => {
+  const [exams,setExams] = useState([]);
+  const [subjects,setSubjects] = useState([]);
+  const [singleSecondExam,setSingleSecondExam] = useState("");
+  const handleChangeSpecialCourse = course => {
+    if (course !== '') {
+    axios
+        .get(`/api/special/showspecialexambycourse?courseId=${course}`)
+        .then(({ data }) => {
+          setExams(data);
+          if (data.lengdh === 0) {
+            toast.error("No Data");
+          }
+        setIsLoading(false);
+        }).catch(e=>console.log(e))
+        axios
+        .get(`/api/subject/getsubjectbycourse?courseId=${course}`)
+        .then(({ data }) => {
+          console.log(data.data);
+          setSubjects(data.data);
+          setIsLoading(false);
+        }).catch(err=>console.log("subject fetching error"));
+    }
+  }
+  const handleSpecialExam = exam =>{
+    if(exam!==''){
+      setQuestionExam(exam);
+      axios
+        .get(`/api/special/showspecialexambyid?examId=${exam}`)
+        .then(({ data }) => {
+          setSingleSecondExam(data);          
+        })
+        .catch((e) => console.log(e));
+    }
+  }
+  const handleChangeSet = setName =>{
+    if(setName!==-1){
+      setSecondSet(setName);
+    }
+  }  
+  return (
         <div>
             <input type="checkbox" id="my-modal-special" className="modal-toggle" />
       <div className="modal">
@@ -17,7 +59,7 @@ const SpecialQuestionSender = ({sendQuestionSpecial,handleChangeSecondCourse,cou
               <select
                 className="input border-black input-bordered w-full"
                 required
-                onChange={(e) => handleChangeSecondCourse(e)}
+                onChange={(e) => handleChangeSpecialCourse(e.target.value)}
               >
                 <option value=""></option>
                 {courses.length > 0 &&
@@ -35,11 +77,11 @@ const SpecialQuestionSender = ({sendQuestionSpecial,handleChangeSecondCourse,cou
               <select
                 className="input  border-black input-bordered w-full"
                 required
-                onChange={(e) => setQuestionExam(e.target.value)}
+                onChange={(e) => handleSpecialExam(e.target.value)}
               >
                 <option value=""></option>
-                {specialExams.length > 0 &&
-                  specialExams.map((exam) => (
+                {exams.length > 0 &&
+                  exams.map((exam) => (
                     <option key={exam._id} value={exam._id}>
                       {exam.name}
                     </option>
@@ -56,13 +98,34 @@ const SpecialQuestionSender = ({sendQuestionSpecial,handleChangeSecondCourse,cou
                 onChange={(e) => setQuestionSubject(e.target.value)}
               >
                 <option value=""></option>
-                {secondsubjects.length > 0 &&
-                  secondsubjects.map((subject) => (
+                {subjects.length > 0 &&
+                  subjects.map((subject) => (
                     <option key={subject._id} value={subject._id}>
                       {subject.name}
                     </option>
                   ))}
               </select>
+              {singleSecondExam?.numberOfSet > 0 && questionExam !== '' && questionSubject!=='' && (
+            <div className="form-control">
+              <label className="label-text text-center font-semibold text-lg" htmlFor="">
+                Select Set Name
+              </label>
+              <select
+                name="set_name"
+                id="set_name"
+                className="input w-full border-black input-bordered"
+                required
+                onChange={(e) => handleChangeSet(parseInt(e.target.value))}
+              >
+                <option value={-1}></option>
+                {[...Array(singleSecondExam?.numberOfSet).keys()].map((id) => (
+                  <option key={id} value={id}>
+                    {optionName[id]}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
             </div>
 
             <div className="form-control mt-4  flext justify-center items-center">

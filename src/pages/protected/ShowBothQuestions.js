@@ -8,6 +8,7 @@ import DeactivateButton from '../../features/common/components/DeactivateButton'
 import PopUpModal from '../../features/common/components/PopUpModal'
 import { optionName } from '../../utils/globalVariables'
 import QuestionSender from '../../components/QuestionSender/QuestionSender'
+import SpecialQuestionSender from './SpecialQuestionSender'
 const ShowBothQuestions = () => {
   const [courses, setCourses] = useState([])
   const [subjects, setSubjects] = useState([])
@@ -33,6 +34,26 @@ const ShowBothQuestions = () => {
   const [selectedSet, setSelectedSet] = useState(-1)
   const [secondSet, setSecondSet] = useState(-1)
 
+  const sendQuestionSpecial = async (e) => {
+    e.preventDefault()
+    const examId = questionExam
+    const questionSet = {
+      subjectId: questionSubject,
+      examId,
+      questionArray: selectedQuestions,
+      setName: secondSet,
+    }
+
+    await axios
+      .put('/api/special/addquestionmcqbulk', questionSet)
+      .then(({ data }) => {
+        toast.success('Successfully added all the questions')
+        e.target.reset()
+        document.getElementById('my-modal-special').checked = false
+        window.location.reload(false)
+      })
+      .catch((e) => console.log(e))
+  }
   const handleChangeCourse = (e) => {
     setSelectedSubject('')
     setSubjects([])
@@ -61,14 +82,13 @@ const ShowBothQuestions = () => {
     setQuestions([])
   }
 
-  const handleChangeExam = async(val)=>{
-    if(val!==''){
-      setSelectedExam(val);
-      
+  const handleChangeExam = async (val) => {
+    if (val !== '') {
+      setSelectedExam(val)
     }
   }
 
-  const changeExamType = async(type) => {
+  const changeExamType = async (type) => {
     if (type !== -1) {
       if (type === 2) {
         await axios
@@ -93,16 +113,16 @@ const ShowBothQuestions = () => {
             setWrittenQuestion({})
             toast.error(e.response.data)
           })
-      }else{
-        await axios.get("/api/both/getbothexambyid?examId="+selectedExam).then(({data})=>{
-          setSingleExam(data);
-        })
+      } else {
+        await axios
+          .get('/api/both/getbothexambyid?examId=' + selectedExam)
+          .then(({ data }) => {
+            setSingleExam(data)
+          })
       }
     }
   }
-  
 
- 
   const handleSecondExam = (val) => {
     if (val !== '') {
       if (bothStatus === false) {
@@ -285,21 +305,24 @@ const ShowBothQuestions = () => {
 
     document.getElementById('my-modal-1').checked = false
   }
-  const handleChangeSet = setName =>{
-    setSelectedSet(parseInt(setName));
-    if(parseInt(setName)!==-1){
+  const handleChangeSet = (setName) => {
+    setSelectedSet(parseInt(setName))
+    if (parseInt(setName) !== -1) {
       axios
-          .get(`/api/both/questionByExamIdAndSet?examId=${selectedExam}&setName=${setName}`)
-          .then(({ data }) => {
-            setQuestions(data);
-            setIsLoading(false);
-          }).catch(e=>{
-            setQuestions([]);
-            setSelectedQuestions([]);
-            toast.error(e.response.data);
-          })
-    }else{
-          setQuestions([]);
+        .get(
+          `/api/both/questionByExamIdAndSet?examId=${selectedExam}&setName=${setName}`
+        )
+        .then(({ data }) => {
+          setQuestions(data)
+          setIsLoading(false)
+        })
+        .catch((e) => {
+          setQuestions([])
+          setSelectedQuestions([])
+          toast.error(e.response.data)
+        })
+    } else {
+      setQuestions([])
     }
   }
 
@@ -344,7 +367,11 @@ const ShowBothQuestions = () => {
   return (
     <div className="px-0 lg:px-4 py-6 ">
       <div className="bg-white py-4 px-2 my-3 ">
-        <div className={`w-full  mx-auto grid gird-cols-1 ${singleExam?.numberOfSet>0? "lg:grid-cols-5" : "lg:grid-cols-4"} gap-3`}>
+        <div
+          className={`w-full  mx-auto grid gird-cols-1 ${
+            singleExam?.numberOfSet > 0 ? 'lg:grid-cols-5' : 'lg:grid-cols-4'
+          } gap-3`}
+        >
           <div className="form-control">
             <label className="label-text text-center" htmlFor="">
               Select Course
@@ -421,27 +448,27 @@ const ShowBothQuestions = () => {
               <option value={2}>Written</option>
             </select>
           </div>
-          {
-            singleExam?.numberOfSet>0 && selectedExam!=='' && <div className="form-control">
-            <label className="label-text text-center" htmlFor="">
-              Select Set Name
-            </label>
-            <select
-              name="set_name"
-              id="set_name"
-              className="input w-full border-black input-bordered"
-              required
-              onChange={(e) => handleChangeSet(parseInt(e.target.value))}
-            >
-              <option value={-1}></option>
-              {[...Array(singleExam?.numberOfSet).keys()].map((id) => (
-                      <option key={id} value={id}>
-                        {optionName[id]}
-                      </option>
-                    ))}
-            </select>
-          </div>
-          }
+          {singleExam?.numberOfSet > 0 && selectedExam !== '' && (
+            <div className="form-control">
+              <label className="label-text text-center" htmlFor="">
+                Select Set Name
+              </label>
+              <select
+                name="set_name"
+                id="set_name"
+                className="input w-full border-black input-bordered"
+                required
+                onChange={(e) => handleChangeSet(parseInt(e.target.value))}
+              >
+                <option value={-1}></option>
+                {[...Array(singleExam?.numberOfSet).keys()].map((id) => (
+                  <option key={id} value={id}>
+                    {optionName[id]}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
       </div>
       {isLoading && <Loader></Loader>}
@@ -454,6 +481,12 @@ const ShowBothQuestions = () => {
                 className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
               >
                 Send Questions
+              </label>
+              <label
+                htmlFor="my-modal-special"
+                className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+              >
+                Send Questions to Special
               </label>
             </div>
           )}
@@ -469,7 +502,7 @@ const ShowBothQuestions = () => {
                       onChange={setQuestionBulkAll}
                     />
                   </th>
-                  <th className='w-1/12'>SI No.</th>
+                  <th className="w-1/12">SI No.</th>
                   <th className="bg-white">Question </th>
                   <th className="bg-white">Options</th>
                   <th className="bg-white">
@@ -480,7 +513,7 @@ const ShowBothQuestions = () => {
                 </tr>
               </thead>
               <tbody>
-                {questions.map((question,idx) => (
+                {questions.map((question, idx) => (
                   <tr key={question.questionId}>
                     <td className="w-[10px]">
                       <input
@@ -493,7 +526,7 @@ const ShowBothQuestions = () => {
                         }
                       />
                     </td>
-                    <td className='text-center font-extrabold'>{idx+1}.</td>
+                    <td className="text-center font-extrabold">{idx + 1}.</td>
                     <td className="w-1/4">
                       {question.type === true ? (
                         question.question
@@ -576,7 +609,16 @@ const ShowBothQuestions = () => {
           )}
         </div>
       )}
-
+      <SpecialQuestionSender
+        sendQuestionSpecial={sendQuestionSpecial}
+        setIsLoading={setIsLoading}
+        courses={courses}
+        questionExam={questionExam}
+        setQuestionExam={setQuestionExam}
+        questionSubject={questionSubject}
+        setQuestionSubject={setQuestionSubject}
+        setSecondSet={setSecondSet}
+      />
 
       <QuestionSender
         sendQuestions={sendQuestions}

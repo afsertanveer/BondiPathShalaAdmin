@@ -5,6 +5,7 @@ import axios from "../../utils/axios";
 import Loader from "./../../Shared/Loader";
 import { toast } from "react-hot-toast";
 import { optionName } from "../../utils/globalVariables";
+import QuestionAdderSpecial from "./QuestionAdderSpecial";
 
 const AddQuestionSpecial = () => {
   const [courses, setCourses] = useState([]);
@@ -21,6 +22,8 @@ const AddQuestionSpecial = () => {
   const [correctOption, setCorrectOption] = useState(null);
   const [qvmark,setQvmark] = useState([]);
   const [numberOfWrittenQuestions,setNumberOfWrittenQuestions] = useState(-1);
+  const [nameOfSet,setNameOfSet] = useState(-1);
+  const [mcqOptions,setMcqOptions] = useState([]);
  
   const handleAddQuestion = async (e) => {
     e.preventDefault();
@@ -29,14 +32,10 @@ const AddQuestionSpecial = () => {
     if (isText === true) {
       questionText = form.question_text.value;
     }
-    let options = [];
-    if (isText === true) {
-      for (let i = 0; i < numberOfOptions; i++) {
-        options.push(document.getElementById(`option${i}`).value);
-      }
-    }
+   
+    console.log(mcqOptions);
     let questionLink = "";
-    const explanationILink = form.explanationILink.files[0];
+    const explanationILink = null;
     const formdata = new FormData();
     if (isText === false) {
       questionLink = form.iLink.files[0];
@@ -45,26 +44,18 @@ const AddQuestionSpecial = () => {
       formdata.append("iLink", questionLink);
     }
     formdata.append("explanationILink", explanationILink);
-    console.log(explanationILink);
-    const question = {
-      questionText: questionText,
-      type: isText,
-      options,
-      optionCount: numberOfOptions,
-      correctOption: parseInt(correctOption),
-      status: true,
-      examId: singleExamId,
-    };
+   
     formdata.append("questionText", questionText);
     formdata.append("type", isText);
-    formdata.append("options", JSON.stringify(options));
+    formdata.append("options", JSON.stringify(mcqOptions));
     formdata.append("optionCount", numberOfOptions);
     formdata.append("correctOption", parseInt(correctOption));
     formdata.append("status", true);
     formdata.append("examId", singleExamId);
     formdata.append("subjectId", selectedSubject);
+    formdata.append("setName", nameOfSet);
 
-    console.log(question);
+    // console.log(question);
 
     await axios
       .post(`api/special/addquestionmcq`, formdata, {
@@ -78,7 +69,6 @@ const AddQuestionSpecial = () => {
 
         document.getElementById("num_of_options").disabled = false;
         setNumberOfOptions(0);
-        setIsText(true);
       })
       .catch((e) => console.log(e));
     document.getElementById("my-modal-2").checked = false;
@@ -93,7 +83,6 @@ const AddQuestionSpecial = () => {
     const form = e.target;
     let questionLink = "";
     const formdata = new FormData();
-    console.log(singleExamId);
     questionLink = form.iLink.files[0];
     formdata.append("iLink", questionLink);
     formdata.append("totalQuestions", numberOfOptions);
@@ -118,22 +107,17 @@ const AddQuestionSpecial = () => {
         toast.success("success");
         document.getElementById("num_of_options").disabled = false;
         setNumberOfOptions(0);
-        setIsText(true);
       })
       .catch((e) => console.log(e));
     document.getElementById("my-modal-2").checked = false;
   };
-  const handleChangeNumberOfInput = (e) => {
-    setNumberOfOptions(parseInt(e.target.value));
-    document.getElementById("num_of_options").disabled = true;
-  };
+
   const handleChangeCourse = (e) => {
     setSelectedCourse(e.target.value);
     setExams([]);
   };
   const changeSubject = id =>{
     setSelectedSubject(id);
-    console.log(typeof(id));
     if(examType!==1){
       setNumberOfWrittenQuestions(singleExam.subjectInfo.filter(s=>s.subjectId===id)[0].noOfQuestionsWritten)
     }
@@ -171,6 +155,11 @@ const AddQuestionSpecial = () => {
         .get(`/api/special/showspecialexambyid?examId=${singleExamId}`)
         .then(({ data }) => {
           setsingleExam(data);
+          if (data.questionType === '0') {
+            setIsText(false)
+          } else {
+            setIsText(true)
+          }
           
         })
         .catch((e) => console.log(e));
@@ -298,135 +287,19 @@ const AddQuestionSpecial = () => {
           </table>
         </div>
       )}
+       <QuestionAdderSpecial
+        singleExam={singleExam}
+        handleAddQuestion={handleAddQuestion}
+        setNameOfSet={setNameOfSet}
+        setCorrectOption={setCorrectOption}
+        isText={isText}
+        setIsText={setIsText}
+        setMcqOptions={setMcqOptions}
+        mcqOptions={mcqOptions}
+      />
      
       <div id="add-question-modal">
-      <input type="checkbox" id="my-modal-2" className="modal-toggle" />
-      <div className="modal modal-middle ml:0 lg:ml-56">
-        <div className="modal-box w-11/12 max-w-5xl h-11/12">
-          <form className="add-form" onSubmit={handleAddQuestion}>
-            <label htmlFor="" className="label-text text-lg text-center">
-              Question Type
-            </label>
-            <select
-              name="type"
-              id="type"
-              className="input border-black input-bordered w-full "
-              onChange={(e) => setIsText(!isText)}
-              required
-            >
-              <option value={true}>Text</option>
-              <option value={false}>Image</option>
-            </select>
-            {isText === true ? (
-              <>
-                <label htmlFor="" className=" label">
-                  <span className="label-text text-lg text-center">Write Down the question </span>
-                </label>
-                <textarea
-                  className="textarea textarea-info   border-black"
-                  name="question_text"
-                  id="question_text"
-                  cols={100}
-                  placeholder="Description"
-                ></textarea>
-              </>
-            ) : (
-              <>
-                <label htmlFor="" className=" label">
-                  <span className="label-text text-lg text-center">Select Question Image </span>
-                </label>
-                <input
-                  type="file"
-                  name="iLink"
-                  id="iLink"
-                  className="file-input w-full input-bordered  border-black "
-                  required
-                />
-              </>
-            )}
-            <label htmlFor="" className="label">
-              Number of Options
-            </label>
-            <input
-              type="number"
-              className="input w-full input-bordered border-black "
-              name="num_of_options"
-              id="num_of_options"
-              min="2"
-              onInput={(e) =>
-                e.target.value < 0 ? (e.target.value = "") : e.target.value
-              }
-              onBlur={(e) => handleChangeNumberOfInput(e)}
-              required
-            />
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-4">
-              {isText === true &&
-                numberOfOptions > 0 &&
-                [...Array(numberOfOptions).keys()].map((id) => {
-                  return (
-                    <div key={id}>
-                      <div>
-                        <label htmlFor="" className="label-text text-lg text-center">
-                          {optionName[id] + ")"}
-                        </label>
-                        <input
-                          type="text"
-                          placeholder={`Option ${id + 1}`}
-                          name={`option${id}`}
-                          id={`option${id}`}
-                          className="input w-full input-bordered border-black "
-                          required
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
-            </div>
-
-            {numberOfOptions > 0 && (
-              <>
-                <label className="label-text text-lg text-center">Correct Option</label>
-                <select
-                  name="type"
-                  id="type"
-                  className="input border-black input-bordered w-full "
-                  onChange={(e) => setCorrectOption(e.target.value)}
-                  required
-                >
-                  <option>---</option>
-                  {[...Array(numberOfOptions).keys()].map((id) => (
-                    <option key={id} value={id}>
-                      {optionName[id]}
-                    </option>
-                  ))}
-                </select>
-              </>
-            )}
-            <label htmlFor="" className=" label">
-              <span className="label-text text-lg text-center">Explanation Link </span>
-            </label>
-            <input
-              type="file"
-              name="explanationILink"
-              id="explanationILink"
-              className="file-input w-full input-bordered  border-black "
-              required
-            />
-            <div className="form-control my-2">
-              <input
-                type="submit"
-                value="Add Question"
-                className="btn w-32 "
-              />
-            </div>
-          </form>
-          <div className="modal-action">
-            <label htmlFor="my-modal-2" className="btn bg-red text-white">
-              Close
-            </label>
-          </div>
-        </div>
-      </div>
+      
       <input type="checkbox" id="written-modal" className="modal-toggle" />
       <div className="modal modal-middle ml:0 lg:ml-56">
         <div className="modal-box w-11/12 max-w-5xl h-11/12">

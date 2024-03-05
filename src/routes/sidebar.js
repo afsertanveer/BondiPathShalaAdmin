@@ -414,7 +414,7 @@ else{
         </svg>
       
       , // icon component
-           name: 'Add MCQ Questions', // name that appear in Sidebar
+           name: 'Add Bundle MCQ Questions', // name that appear in Sidebar
         },
         {
           path: '/dashboard/exam/special-addquestion', //url
@@ -423,7 +423,7 @@ else{
         </svg>
       
       , // icon component
-           name: 'Add Written Question', // name that appear in Sidebar
+           name: 'Add  Question', // name that appear in Sidebar
         },
        
         {

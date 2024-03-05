@@ -62,6 +62,7 @@ const ShowQuestions = () => {
       .catch((e) => toast.error(e.response.data))
   }
 
+
   const handleChangeSubject = (e) => {
     setSelectedSubject(e.target.value)
     setSelectedExam('')
@@ -130,6 +131,7 @@ const ShowQuestions = () => {
         .catch((e) => toast.error(e.response.data))
     }
   }
+ 
   const handleSecondExam = (val) => {
     if (val !== '') {
       if (bothStatus === false) {
@@ -243,7 +245,13 @@ const ShowQuestions = () => {
           )
           .then(async ({ data }) => {
             const slot = parseInt(data.slots) - selectedQuestions.length
-            console.log(slot+"aasdas "+selectedQuestions.length+"  "+parseInt(data.slots))
+            console.log(
+              slot +
+                'aasdas ' +
+                selectedQuestions.length +
+                '  ' +
+                parseInt(data.slots)
+            )
             if (slot >= 0) {
               await axios
                 .put('/api/exam/addQuestionMcqBulk', questionSet)
@@ -260,7 +268,9 @@ const ShowQuestions = () => {
               } else if (data.slots === 1) {
                 toast.error('You can send only 1 photo')
               } else {
-                toast.error(`You cannot transfer more  photoes than the exam has`)
+                toast.error(
+                  `You cannot transfer more  photoes than the exam has`
+                )
               }
             }
           })
@@ -296,6 +306,7 @@ const ShowQuestions = () => {
       subjectId: questionSubject,
       examId,
       questionArray: selectedQuestions,
+      setName: secondSet,
     }
 
     await axios
@@ -563,20 +574,15 @@ const ShowQuestions = () => {
         </div>
       )}
 
-      <SpecialQuestionSender 
-      sendQuestionSpecial={sendQuestionSpecial}
-      handleChangeSecondCourse={handleChangeSecondCourse}
-      courses={courses}
-      secondsubjects={secondsubjects}
-      handleChangeBothStatus={handleChangeBothStatus}
-      handleSecondExam={handleSecondExam}
-      secondexams={secondexams}
-      singleSecondExam={singleSecondExam}
-      questionExam={questionExam}
-      setQuestionExam={setQuestionExam}
-      specialExams={specialExams}
-      setQuestionSubject={setQuestionSubject}
-      setSecondSet={setSecondSet}
+      <SpecialQuestionSender
+        sendQuestionSpecial={sendQuestionSpecial}
+        setIsLoading={setIsLoading}
+        courses={courses}
+        questionExam={questionExam}
+        setQuestionExam={setQuestionExam}
+        questionSubject={questionSubject}
+        setQuestionSubject={setQuestionSubject}
+        setSecondSet={setSecondSet}
       />
       <QuestionSender
         sendQuestions={sendQuestions}

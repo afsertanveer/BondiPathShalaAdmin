@@ -8,6 +8,7 @@ import { optionName } from "../../utils/globalVariables";
 import DeactivateButton from "../../features/common/components/DeactivateButton";
 import PopUpModal from "../../features/common/components/PopUpModal";
 import QuestionSender from "../../components/QuestionSender/QuestionSender";
+import SpecialQuestionSender from "./SpecialQuestionSender";
 const ShowQuestionSpecial = () => {
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -272,6 +273,26 @@ const sendQuestions = async (e) => {
     // window.location.reload(false);
   }
 }
+const sendQuestionSpecial = async (e) => {
+  e.preventDefault()
+  const examId = questionExam
+  const questionSet = {
+    subjectId: questionSubject,
+    examId,
+    questionArray: selectedQuestions,
+    setName: secondSet,
+  }
+
+  await axios
+    .put('/api/special/addquestionmcqbulk', questionSet)
+    .then(({ data }) => {
+      toast.success('Successfully added all the questions')
+      e.target.reset()
+      document.getElementById('my-modal-special').checked = false
+      window.location.reload(false)
+    })
+    .catch((e) => console.log(e))
+}
   useEffect(() => {
     setIsLoading(true);
     axios.get("/api/course/getallcourseadmin").then(({ data }) => {
@@ -291,7 +312,6 @@ const sendQuestions = async (e) => {
         axios
         .get(`/api/subject/getsubjectbycourse?courseId=${selectedCourse}`)
         .then(({ data }) => {
-          console.log(data.data);
           setSubjects(data.data);
           setIsLoading(false);
         }).catch(err=>console.log("subject fetching error"));
@@ -564,15 +584,15 @@ const sendQuestions = async (e) => {
                       
                     </td>
                     {
-                      (examType===1 || (bothStatus===1 && examType===3)) && <td className="w-1/5">
+                      (examType===1 || (bothStatus===1 && examType===3)) && <td className="w-fit lg:w-1/4">
                       {question.type !== false && (
-                        <div className="grid grid-cols-1 lg:grid-cols-2">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-3 pr-0 lg:pr-10">
                           {question.options.map((opt, idx) => {
                             return (
-                              <div key={idx}>
-                                <span className="text-x">
-                                  {`${optionName[idx]})  ${opt}`}{" "}
-                                </span>
+                              <div key={idx} className="grid grid-cols-1 lg:grid-cols-2 gap-x-2 gap-y-2 ">
+                                <span className="flex justify-start lg:justify-end">
+                                  {`${optionName[idx]})  `}&nbsp;
+                                </span><span className="flex justify-start">{opt}</span>
                               </div>
                             );
                           })}
@@ -597,6 +617,16 @@ const sendQuestions = async (e) => {
         </div>
       )}
          <PopUpModal modalData={selectedQuestionId} remove={removeQuestion}></PopUpModal>
+         <SpecialQuestionSender
+        sendQuestionSpecial={sendQuestionSpecial}
+        setIsLoading={setIsLoading}
+        courses={courses}
+        questionExam={questionExam}
+        setQuestionExam={setQuestionExam}
+        questionSubject={questionSubject}
+        setQuestionSubject={setQuestionSubject}
+        setSecondSet={setSecondSet}
+      />
          <QuestionSender
         sendQuestions={sendQuestions}
         handleChangeSecondCourse={handleChangeSecondCourse}

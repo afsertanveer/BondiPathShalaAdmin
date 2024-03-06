@@ -67,7 +67,8 @@ const ShowQuestionSpecial = () => {
           .get(`/api/exam/getExamById?examId=${val}`)
           .then(({ data }) => {
             setSingleSecondExam(data)
-            setQuestionExam(val)
+            setQuestionExam(val) 
+            setQuestions([])
           })
           .catch((e) => console.log(e))
       } else {
@@ -77,10 +78,12 @@ const ShowQuestionSpecial = () => {
             console.log(data)
             setSingleSecondExam(data)
             setQuestionExam(val)
+            setQuestions([])
           })
       }
     } else {
-      setSecondExams('')
+      setSecondExams('') 
+      setQuestions([])
       setSingleSecondExam({})
     }
   }
@@ -168,23 +171,30 @@ const onChangeExam = id=>{
   setSelectedExam(id);
 }
 const handleChangeSet = setName =>{
+  console.log(setName);
   setSelectedSet(parseInt(setName));
+  setIsLoading(true);
   if(parseInt(setName)!==-1){
     axios
     .get(`/api/special/questionByExamIdSubjectAndSet?examId=${selectedExam}&subjectId=${selectedSubject}&setName=${parseInt(setName)}`)
     .then(({ data }) => {
+      console.log(data);
       setQuestions(data);
+      setIsLoading(false);
       if(data.length===0){
         toast.error("No question for this set");
       }
       setWrittenQuestion(null)
       setIsLoading(false);
     }).catch(e=>{
+      setIsLoading(false);
       setQuestions([]);
       toast.error(e.response.data);
     })
 
   }else{
+  
+      setIsLoading(false);
         setQuestions([]);
   }
 }

@@ -8,18 +8,16 @@ import { toast } from "react-hot-toast";
 const AddExam = () => {
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
-  const [curriculums, setCurriculums] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
-  const [selectedCurriculum, setSelectedCurriculum] = useState(null);
   const [selectedType, setSelectedType] = useState(-1);
   const [selectedVariation, setSelectedVariation] = useState(-1);
-  const [isAdmission, setIsAdmission] = useState(false);
-  const [questionType,setQuestionType] = useState(0);
-  const [numberOfOptions,setNumberOfOptions] = useState(4);
-  const [numberOfRetakes,setNumberOfRetakes] = useState(4);
-  const [numberOfSet,setNumberOfSet] = useState(4);
+  const [isSSC, setIsSSC] = useState(false);
+  const [isHSC, setIsHSC] = useState(false);
+  const [isMedical, setIsMedical] = useState(false);
+  const [isBuet, setIsBuet] = useState(false);
+  const [isUniversity, setIsUniversity] = useState(false);
 
   const handleAddExam = async (e) => {
     e.preventDefault();
@@ -40,16 +38,9 @@ const AddExam = () => {
     if(selectedVariation==="1"){
       negativeMarks = parseFloat(form.negative_marking.value);
     }
-    // console.log(form.iLink.files[0]);
-  
-    let iLink = null ;
+    const iLink = form.iLink.files[0];
     const formdata = new FormData();
-    if(form.iLink.files[0]===undefined){
-      formdata.append("iLink", iLink);
-    }else{      
-      iLink = form.iLink.files[0];
-      formdata.append("iLink", iLink);
-    }
+    formdata.append("iLink", iLink);
     const stype = parseInt(selectedType)
     const svar = parseInt(selectedVariation);
     formdata.append("name",name);
@@ -64,13 +55,12 @@ const AddExam = () => {
     formdata.append("status",status)
     formdata.append("subjectId",selectedSubject)
     formdata.append("courseId",selectedCourse)
-    formdata.append("curriculumName",selectedCurriculum)
-    formdata.append("isAdmission",isAdmission)
+    formdata.append("sscStatus",isSSC)
+    formdata.append("hscStatus",isHSC)
+    formdata.append("buetStatus",isBuet)
+    formdata.append("medicalStatus",isMedical)
+    formdata.append("universityStatus",isUniversity)
     formdata.append("negativeMarks",negativeMarks)
-    formdata.append("numberOfRetakes",numberOfRetakes)
-    formdata.append("numberOfOptions",numberOfOptions)
-    formdata.append("questionType",questionType)
-    formdata.append("numberOfSet",numberOfSet)
     formdata.append("totalMarksMcq",totalMarks);
     await axios
       .post(`/api/exam/createexam`, formdata, {
@@ -81,17 +71,12 @@ const AddExam = () => {
       .then(({ data }) => {
         toast.success("Exam Added Succesfully");
         window.location.reload(false);
-      }).catch(e=>console.log(e));
+      });
   };
   useEffect(() => {
     setIsLoading(true);
     axios.get("/api/course/getallcourseadmin").then(({ data }) => {
       setCourses(data.courses);
-      setIsLoading(false);
-    });
-    axios.get("/api/curriculum/getcurriculums").then(({ data }) => {
-      // console.log(data);
-      setCurriculums(data);
       setIsLoading(false);
     });
     if (selectedCourse !== "") {
@@ -121,7 +106,7 @@ const AddExam = () => {
                 type="text"
                 name="exam"
                 id="exam"
-                placeholder="Exam Name"
+                placeholder="Subject Name"
                 required
               />
             </div>
@@ -322,118 +307,31 @@ const AddExam = () => {
                   <input
                     id="disabled-checked-checkbox"
                     type="checkbox"             
-                    onChange={(e) => setIsAdmission(!isAdmission)}
+                    onChange={(e) => setIsSSC(!isSSC)}
                     className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                   />
                   <label
                     htmlFor="disabled-checked-checkbox"
-                    className="ml-2 text-lg"
+                    className="ml-2 text-sm font-medium"
                   >
-                    Is Admission
+                    SSC
                   </label>
                 </div>
                 <div className="flex items-center mt-0 lg:mt-5 ">
-                <label
+                  <input
+                    id="disabled-checked-checkbox"
+                    type="checkbox"             
+                    onChange={(e) => setIsHSC(!isHSC)}
+                    className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                  <label
                     htmlFor="disabled-checked-checkbox"
-                    className="ml-2 text-lg"
+                    className="ml-2 text-sm font-medium"
                   >
-                    Curriculum Name
+                    HSC
                   </label>
-                  <select
-                  name="course"
-                  id="course"
-                  className="input w-full  border-black input-bordered "
-                  onChange={(e) => setSelectedCurriculum(e.target.value)}
-                >
-                  <option value={null}></option>
-                  {curriculums.length > 0 &&
-                    curriculums.map((curriculum) => (
-                      <option key={curriculum._id} value={curriculum.name}>
-                        {curriculum.name}
-                      </option>
-                    ))}
-                </select>
                 </div>
             </div>
-            {
-              selectedVariation==='1' && <div className="form-control grid grid-cols-1 lg:grid-cols-4 gap-3 ">
-              <div >
-                <label htmlFor="" className="label">
-                  Question Type
-                </label>
-                <select
-                  name="questionType"
-                  id="questionType"
-                  className="input border-black input-bordered w-full "
-                  onChange={(e) => setQuestionType(parseInt(e.target.value))}
-                  required
-                >
-                  <option value={0}>Image</option>
-                  <option value={1}>Text</option>
-                  <option value={0}>Image</option>
-                </select>
-              </div>
-              <div >
-                <label htmlFor="" className="label">
-                  Options
-                </label>
-                <select
-                  name="numberOfOptions"
-                  id="numberOfOptions"
-                  className="input border-black input-bordered w-full "
-                  onChange={(e) => setNumberOfOptions(parseInt(e.target.value))}
-                  required
-                >
-                <option value={4}>4</option>
-                <option value={0}>0</option>
-                <option value={1}>1</option>
-                <option value={2}>2</option>
-                <option value={3}>3</option>
-                <option value={4}>4</option>
-                <option value={4}>5</option>
-                <option value={4}>6</option>
-                </select>
-              </div>
-              <div >
-                <label htmlFor="" className="label">
-                  Sets
-                </label>
-                <select
-                  name="numberOfSets"
-                  id="numberOfSets"
-                  className="input border-black input-bordered w-full "
-                  onChange={(e) => setNumberOfSet(parseInt(e.target.value))}
-                  required
-                >
-                  <option value={4}>4</option>
-                  <option value={0}>0</option>
-                  <option value={1}>1</option>
-                  <option value={2}>2</option>
-                  <option value={3}>3</option>
-                  <option value={4}>4</option>
-                </select>
-              </div>
-              <div >
-                <label htmlFor="" className="label">
-               Retakes
-                </label>
-                <select
-                  name="numberOfRetakes"
-                  id="numberOfRetakes"
-                  className="input border-black input-bordered w-full "
-                  onChange={(e) => setNumberOfRetakes(parseInt(e.target.value))}
-                  required
-                >
-                  <option value={4}>4</option>
-                  <option value={0}>0</option>
-                  <option value={1}>1</option>
-                  <option value={2}>2</option>
-                  <option value={3}>3</option>
-                  <option value={4}>4</option>
-                </select>
-              </div>
-            </div>
-            }
             <div className="form-control">
               <label htmlFor="" className="label">
                 Exam Image
@@ -443,7 +341,7 @@ const AddExam = () => {
                 name="iLink"
                 id="iLink"
                 className="file-input w-full input-bordered  border-black "
-                
+                required
               />
             </div>
             <div className="form-control mt-2">

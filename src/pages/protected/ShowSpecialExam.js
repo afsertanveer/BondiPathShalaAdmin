@@ -9,8 +9,6 @@ import PopUpModal from "./../../features/common/components/PopUpModal";
 import Select from "react-select";
 import moment from "moment/moment";
 import { Link } from "react-router-dom";
-import SolutionSheetAdder from "../../components/common/SolutionSheetAdder";
-import ImageAdder from "../../components/ImageAdder/ImageAdder";
 
 const ShowSpecialExam = () => {
   const [courses, setCourses] = useState([]);
@@ -25,9 +23,6 @@ const ShowSpecialExam = () => {
   const [selectedTeachers, setSelectedTeachers] = useState([]);
   const examType = 4;
   const [subjects, setSubjects] = useState([]);
-  const [addmissionChecked, setAddmissionChecked] = useState(false)
-  const [curriculums, setCurriculums] = useState([]);
-  const [selectedCurriculum, setSelectedCurriculum] = useState(null);
   const generator = (id) => {
     console.log(id);
     axios
@@ -149,7 +144,6 @@ const ShowSpecialExam = () => {
     const totalMarksMcq = form.mcq_marks.value;
     const totalMarksWritten = form.written_marks.value;
     const negativeMarks = form.negative_marking.value;
-    const admission = document.getElementById('isAdmission').checked === true ? true : false;
     const updatedExam = {
       examId: singleExam._id,
       name,
@@ -163,8 +157,6 @@ const ShowSpecialExam = () => {
       writtenDuration,
       totalMarksWritten,
       negativeMarks,
-      isAdmission:admission,
-      curriculumName:selectedCurriculum
     };
     console.log(negativeMarks);
     await axios.put("/api/special/updatespecialexam", updatedExam).then(({ data }) => {
@@ -177,11 +169,6 @@ const ShowSpecialExam = () => {
   };
   useEffect(() => {
     setIsLoading(true);
-    axios.get("/api/curriculum/getcurriculums").then(({ data }) => {
-      // console.log(data);
-      setCurriculums(data);
-      setIsLoading(false);
-    });
     axios.get("/api/course/getallcourseadmin").then(({ data }) => {
       setCourses(data.courses);
       setIsLoading(false);
@@ -220,7 +207,6 @@ const ShowSpecialExam = () => {
         .get(`/api/special/showspecialexambyid?examId=${singleExamId}`)
         .then(({ data }) => {
           setsingleExam(data);
-          setAddmissionChecked(data.isAdmission);
         })
         .catch((e) => console.log(e));
     } else {
@@ -303,14 +289,7 @@ const ShowSpecialExam = () => {
                       {exam.hscStatus ? "Yes" : "No"}
                     </td>
                     <td className="px-6 py-2 text-center">
-                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-3 gap-y-4">
-                      <label
-                          onClick={() => handleAssignExamId(exam._id)}
-                          htmlFor="imageAdder"
-                          className="btn bg-button text-[12px] hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                        >
-                          {exam.iLink === null ? 'Add Exam Image' : 'Update Exam Image'}
-                        </label>
+                      <div className="flex flex-col lg:flex-row justify-center">
                         {exam.RuleImage !== "0" ? (
                           <label
                             onClick={() => handleAssignRule(exam._id)}
@@ -328,25 +307,6 @@ const ShowSpecialExam = () => {
                             Add Exam Rule
                           </label>
                         )}
-                        <label
-                          onClick={() => handleAssignExamId(exam._id)}
-                          htmlFor="solutionSheet"
-                          className="btn bg-button text-[12px] hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                        >
-                          {exam.solutionSheet === null
-                            ? 'Add SolutionSheet'
-                            : 'Update SolutionSheet'}
-                        </label>
-                        {exam.solutionSheet !== null && (
-                          <Link
-                            className="text-green-700 font-extrabold text-[12px] underline "
-                            to={exam.solutionSheet}
-                            target="_blank"
-                          >
-                            Solve Sheet
-                          </Link>
-                        )}
-                       
                         <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="my-popup"
@@ -876,51 +836,6 @@ const ShowSpecialExam = () => {
                     (minutes)
                   </span>
                 </div>
-                
-              </div>
-              <div className="form-control grid grid-cols-2 gap-x-3">
-                  <div className="flex items-center mt-0 lg:mt-5 ">
-                  <input
-                    id="isAdmission"
-                    type="checkbox"
-                    name="isAdmission"
-                    checked={addmissionChecked}
-                    onChange={() => setAddmissionChecked(!addmissionChecked)}
-                    className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  <label
-                    htmlFor="disabled-checked-checkbox"
-                    className="ml-2 text-lg"
-                  >
-                    Is Admission
-                  </label>
-                </div>
-                <div className="flex items-center mt-0 lg:mt-5 ">
-                  <label
-                    htmlFor="disabled-checked-checkbox"
-                    className="ml-2 text-lg"
-                  >
-                    Curriculum Name
-                  </label>
-                  <select
-                    name="curriculums"
-                    id="curriculums"
-                    className="input w-full  border-black input-bordered "
-                    required
-                    onChange={(e) => setSelectedCurriculum(e.target.value)}
-                  >
-                    <option value={singleExam.curriculumName}>{singleExam.curriculumName===null? "NONE" : singleExam.curriculumName}</option>
-                    {singleExam.curriculumName!==null && <option value={null}>NONE</option>
-                   }
-                    {curriculums.length > 0 &&
-                      curriculums.map((curriculum) => (
-                        <option key={curriculum._id} value={curriculum.name}>
-                          {curriculum.name}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-                  </div>
                 <div className="w-full">
                   <input
                     type="submit"
@@ -928,6 +843,7 @@ const ShowSpecialExam = () => {
                     className="btn w-[150px] mt-4"
                   />
                 </div>
+              </div>
               <div className="form-control mt-2 flex flex-row justify-end">                
                 <div className="modal-action">
                   <label htmlFor="update-modal" className="btn bg-[red] ">
@@ -942,10 +858,7 @@ const ShowSpecialExam = () => {
       <PopUpModal
         modalData={selectedExamId}
         remove={deactivateExam}
-      />
-      <ImageAdder title={`${singleExam.iLink===null?"Add Image" :"Update Image"}`} apiEndPoint="/api/special/updateSpecialExamPhoto" examId={singleExamId} setIsLoading={setIsLoading} />
-      <SolutionSheetAdder  apiEndPoint="/api/exam/uploadsollution" examId={singleExamId} setIsLoading={setIsLoading} type={2} />
-   
+      ></PopUpModal>
     </div>
   );
 };

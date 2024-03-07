@@ -645,7 +645,7 @@ const ShowFreeExam = () => {
                   /> 
                   <label
                     htmlFor="disabled-checked-checkbox"
-                    className="ml-2 text-lg"
+                    className="ml-2 text-sm font-medium"
                   >
                     SSC
                   </label>
@@ -661,7 +661,7 @@ const ShowFreeExam = () => {
                   />
                   <label
                     htmlFor="disabled-checked-checkbox"
-                    className="ml-2 text-lg"
+                    className="ml-2 text-sm font-medium"
                   >
                     HSC
                   </label>

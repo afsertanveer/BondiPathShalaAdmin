@@ -7,6 +7,8 @@ import { toast } from "react-hot-toast";
 import DeactivateButton from './../../features/common/components/DeactivateButton';
 import PopUpModal from './../../features/common/components/PopUpModal';
 import { subtractHours } from "../../utils/globalFunction";
+import QuestionAdder from "../../components/QuestionAdder/QuestionAdder";
+import ImageAdder from "../../components/ImageAdder/ImageAdder";
 
 const ShowFreeExam = () => {
   
@@ -15,41 +17,31 @@ const ShowFreeExam = () => {
   const [singleExamId, setSingleExamId] = useState(null);
   const [singleExam, setsingleExam] = useState({});
   const [isText, setIsText] = useState(true);
-  const [numberOfOptions, setNumberOfOptions] = useState(0);
   const [correctOption, setCorrectOption] = useState(null);
   const [selectedExamId,setSelectedExamId] = useState("");
   const [ruleImg,setRuleImg] = useState("");
   const [pStatus,setPStatus] = useState("");
-  const [sscChecked,setSscChecked] = useState(false);
-  const [hscChecked,setHscChecked] = useState(false);
-  const optionName = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "U",
-    "V",
-    "W",
-    "X",
-    "Y",
-    "Z",
-  ];
+  const [curriculums, setCurriculums] = useState([])
+  const [addmissionChecked, setAddmissionChecked] = useState(false)
+  const [questionType, setQuestionType] = useState(0)
+  const [updatenumberOfOptions, setUpdateNumberOfOptions] = useState(4)
+  const [numberOfSet, setNumberOfSet] = useState(4)
+  const [nameOfSet, setNameOfSet] = useState(0)
+  const [selectedCurriculum,setSelectedCurriculum] = useState("");
+ 
+  const refillQuestions = id =>{
+    const sendingData = {
+      examId:id
+    };
+    axios
+    .post('/api/exam/refillquestion',sendingData)
+    .then((data) => {
+      console.log(data)
+      toast.success('Questions added to all sets')
+      window.location.reload(false)
+    })
+    .catch((err) => toast.error(err.response.data))
+  }
   const assignIdstatus = (examId,status)=>{
     setSingleExamId(examId);
     setPStatus(status);
@@ -124,8 +116,8 @@ const ShowFreeExam = () => {
     const marksPerMcq = form.marks_per_question.value;
     const duration = form.duration.value;
     const negativeMarks = form.negative_marking.value;
-    const ssc = document.getElementById("ssc").checked===true? true : false;
-    const hsc = document.getElementById("hsc").checked===true? true : false;
+    const admission =
+      document.getElementById('isAdmission').checked === true ? true : false
     const totalMarksMcq = (parseInt(totalQuestionMcq)*parseInt(marksPerMcq))
     
     const updatedExam = {
@@ -141,11 +133,12 @@ const ShowFreeExam = () => {
       status:true,
       duration:duration,
       negativeMarks,
-      sscStatus:ssc,
-      hscStatus:hsc,
-      buetStatus:singleExam.buetStatus,
-      medicalStatus:singleExam.medicalStatus,
-      universityStatus:singleExam.universityStatus
+      isAdmission: admission,
+      curriculumName: selectedCurriculum,
+      numberOfRetakes:4,
+      numberOfSet,
+      questionType: questionType,
+      numberOfOptions: updatenumberOfOptions,
     }
     console.log(updatedExam);
     await axios.put('/api/exam/updateexam',updatedExam).then(({data})=>{
@@ -155,74 +148,76 @@ const ShowFreeExam = () => {
     })
     document.getElementById("my-modal").checked = false;
   };
-  const handleAddQuestion = async(e) => {
-    e.preventDefault();
-    const form = e.target;
-    let questionText = "";
-    if(isText===true){
-       questionText = form.question_text.value;
+  const handleAddQuestion = async (e) => {
+    e.preventDefault()
+    const form = e.target
+    let questionText = ''
+    if (isText === true) {
+      questionText = form.question_text.value
     }
-    let options = [];
-    if(isText===true){
-      for(let i=0;i<numberOfOptions;i++){
+    let options = []
+    if (isText === true) {
+      for (let i = 0; i < singleExam.numberOfOptions; i++) {
         options.push(document.getElementById(`option${i}`).value)
       }
     }
-    let  questionLink ="";
-    const explanationILink = form.explanationILink.files[0];
-    const formdata = new FormData();
-    if(isText===false){
-       questionLink = form.iLink.files[0];
-      formdata.append("iLink",questionLink)
-    }else{
-      formdata.append("iLink",questionLink)
+    let questionLink = ''
+    const explanationILink = null
+    const formdata = new FormData()
+    if (isText === false) {
+      questionLink = form.iLink.files[0]
+      formdata.append('iLink', questionLink)
+    } else {
+      formdata.append('iLink', questionLink)
     }
-    formdata.append("explanationILink",explanationILink)
-    console.log(explanationILink);
-    const question = {
-      questionText:questionText,
-      type:isText,
-      options,
-      optionCount:numberOfOptions,
-      correctOption:parseInt(correctOption),
-      status:true,
-      examId:singleExamId
-    }
-    formdata.append('questionText',questionText);
-    formdata.append('type',isText);
-    formdata.append('options',JSON.stringify(options));
-    formdata.append('optionCount',numberOfOptions);
-    formdata.append('correctOption',parseInt(correctOption));
-    formdata.append('status',true);
-    formdata.append('examId',singleExamId);
+    formdata.append('explanationILink', explanationILink)
 
-    console.log(question);
+    // const question = {
+    //   questionText: questionText,
+    //   type: isText,
+    //   options,
+    //   optionCount: numberOfOptions,
+    //   correctOption: parseInt(correctOption),
+    //   status: true,
+    //   examId: singleExamId,
+    // }
+    formdata.append('questionText', questionText)
+    formdata.append('type', isText)
+    formdata.append('options', JSON.stringify(options))
+    formdata.append('optionCount', singleExam.numberOfOptions)
+    formdata.append('correctOption', parseInt(correctOption))
+    formdata.append('status', true)
+    formdata.append('examId', singleExamId)
+    formdata.append('setName', nameOfSet)
 
-    await axios.post(`/api/exam/addquestionmcq`,formdata,{
-      headers: {
-        "Content-Type": "multipart/ form-data",
-      }
-    }).then(data=>{
-      toast.success("success");
-      form.reset();
-      
-    document.getElementById("num_of_options").disabled =false;
-    setNumberOfOptions(0);
-    setIsText(true);
-
-    }).catch(e=>console.log(e))
-    document.getElementById("my-modal-2").checked = false;
-  };
+    await axios
+      .post(`/api/exam/addquestionmcq`, formdata, {
+        headers: {
+          'Content-Type': 'multipart/ form-data',
+        },
+      })
+      .then((data) => {
+        toast.success('success')
+        form.reset()
+      })
+      .catch((e) => {
+        toast.error(e.response.data)
+        if (e.response.status === 405) {
+          form.reset()
+        }
+      })
+    document.getElementById('my-modal-2').checked = false
+  }
   const deactivateExam = async(examId) =>{
     await axios.put('/api/exam/deactivateexam',{examId}).then(({data})=>{
       toast.success("Exam Deactivated");
       window.location.reload(false);
     })
   }
-  const handleChangeNumberOfInput = e=>{
-    setNumberOfOptions(parseInt(e.target.value))
-    document.getElementById("num_of_options").disabled = true;
-  }
+  // const handleChangeNumberOfInput = e=>{
+  //   setNumberOfOptions(parseInt(e.target.value))
+  //   document.getElementById("num_of_options").disabled = true;
+  // }
   const handleExam = examName =>{
     if(examName.length>4){
       axios.get(`/api/freestudent/getfreeexamall`)
@@ -263,9 +258,14 @@ const ShowFreeExam = () => {
   }
   useEffect(() => {
     setIsLoading(true);
+    axios.get('/api/curriculum/getcurriculums').then(({ data }) => {
+      // console.log(data);
+      setCurriculums(data)
+      setIsLoading(false)
+    })
     axios.get(`/api/freestudent/getfreeexamall`)
     .then(({data} ) => {
-      console.log(data);
+      // console.log(data);
       setExams(data);      
       if(data.length===0){
         toast.error("No Data")
@@ -277,8 +277,16 @@ const ShowFreeExam = () => {
         .get(`/api/exam/getExamById?examId=${singleExamId}`)
         .then(({ data }) => {
           setsingleExam(data);
-          setSscChecked(data.sscStatus);
-          setHscChecked(data.hscStatus);
+          setUpdateNumberOfOptions(data.numberOfOptions)
+          setNumberOfSet(data.numberOfSet)
+          setQuestionType(data.questionType)
+          setAddmissionChecked(data.isAdmission)
+          setSelectedCurriculum(data.curriculumName)
+          if (data.questionType === '0') {
+            setIsText(false)
+          } else {
+            setIsText(true)
+          }
         })
         .catch((e) => console.log(e));
     } else {
@@ -316,15 +324,15 @@ const ShowFreeExam = () => {
               <tr>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">SI No.</th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Exam Name</th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Start Time</th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">End Time</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Start Time<br/>End Time</th>
+                {/* <th className="bg-white font-semibold text-sm uppercase px-6 py-4">End Time</th> */}
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Duration</th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Free Status</th>
                 <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Curriculam</th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Marks/Questions</th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Total Questions</th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Total Marks</th>
-                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Action</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Marks/Questions<br/>Total Questions<br/>Total Marks<br/></th>
+                {/* <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Total Questions</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Total Marks</th> */}
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Pre Action</th>
+                <th className="bg-white font-semibold text-sm uppercase px-6 py-4">Post Action</th>
               </tr>
             </thead>
             <tbody>
@@ -333,14 +341,15 @@ const ShowFreeExam = () => {
                   <tr key={exam._id} className="even:bg-table-row-even odd:bg-table-row-odd text-center"> 
                     <td className="px-6 py-4 text-center">{idx+1}</td>
                     <td className="px-6 py-4 text-center">{exam.name}</td>
-                    <td className="px-1 py-4 text-center">{subtractHours(new Date(exam.startTime)).toString().split("GMT")[0]}</td>
-                    <td className="px-1 py-4 text-center">{subtractHours(new Date(exam.endTime)).toString().split("GMT")[0]}</td>
+                    <td className="px-1 py-4 text-center">{subtractHours(new Date(exam.startTime)).toString().split("GMT")[0]}<br/>
+                    {subtractHours(new Date(exam.endTime)).toString().split("GMT")[0]}
+                    </td>
+                    {/* <td className="px-1 py-4 text-center">{subtractHours(new Date(exam.endTime)).toString().split("GMT")[0]}</td> */}
                     <td className="px-6 py-4 text-center">{exam.duration} Minutes</td>
-                    <td className="px-6 py-4 text-center">{exam.examFreeOrNot? "Yes" : "No"}</td>
-                    <td className="px-6 py-4 text-center">{exam.sscStatus? "SSC" : exam.hscStatus? "HSC": exam.buetStatus? "BUET":exam.medicalStatus? "Medical":exam.universityStatus?"University":"none"}</td>
-                    <td className="px-6 py-4 text-center">{exam.marksPerMcq}</td>
-                    <td className="px-6 py-4 text-center">{exam.totalQuestionMcq}</td>
-                    <td className="px-6 py-4 text-center">{exam.totalMarksMcq}</td>
+                    <td className="px-6 py-4 text-center">{exam.curriculumName!==null?exam.curriculumName:"N/A" }</td>
+                    <td className="px-6 py-4 text-center">{exam.marksPerMcq}<br/>{exam.totalQuestionMcq}<br/>{exam.totalMarksMcq}</td>
+                    {/* <td className="px-6 py-4 text-center">{exam.totalQuestionMcq}</td>
+                    <td className="px-6 py-4 text-center">{exam.totalMarksMcq}</td> */}
                     <td className="px-6 py-4 text-center">
                       <div className="flex flex-col lg:flex-row justify-center">
                       {
@@ -357,6 +366,38 @@ const ShowFreeExam = () => {
                       Add Exam Rule
                     </label>  
                       }
+                      <label
+                          onClick={() => handleAssignExamId(exam._id)}
+                          htmlFor="imageAdder"
+                          className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                        >
+                          {exam.iLink === null ? 'Add Exam Image' : 'Update Exam Image'}
+                        </label>
+                      <label
+                        onClick={() => handleAssignExamId(exam._id)}
+                        htmlFor="my-modal"
+                        className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                      >
+                        Update
+                      </label>
+                      <label
+                        htmlFor="my-modal-2"
+                        onClick={()=>setSingleExamId(exam._id)}
+                        className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                      >
+                        Add Questions
+                      </label>
+                      <button
+                          className="btn bg-button text-[12px] hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          onClick={() => refillQuestions(exam._id)}
+                        >
+                          Refill MCQ Sets
+                        </button>
+                      <DeactivateButton setter={setSelectedExamId} value={exam._id}></DeactivateButton>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <div className="flex flex-col lg:flex-row justify-center">
                       {
                         (exam.publishStatus===null || exam.publishStatus===false) && <label
                         onClick={() =>handleAssignExamId(exam._id)}
@@ -380,21 +421,6 @@ const ShowFreeExam = () => {
                     >
                       Generate Meritlist
                     </label>
-                      <label
-                        onClick={() => handleAssignExamId(exam._id)}
-                        htmlFor="my-modal"
-                        className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                      >
-                        Update
-                      </label>
-                      <label
-                        htmlFor="my-modal-2"
-                        onClick={()=>setSingleExamId(exam._id)}
-                        className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                      >
-                        Add Questions
-                      </label>
-                      <DeactivateButton setter={setSelectedExamId} value={exam._id}></DeactivateButton>
                       </div>
                     </td>
                   </tr>
@@ -613,10 +639,81 @@ const ShowFreeExam = () => {
                   </span>
                 </div>
               </div>
-              <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-center">
-                <div className="w-full lg:w-1/3">
+              <div className="form-control grid grid-cols-1 lg:grid-cols-3 gap-3 mt-4 ">
+                  <div>
+                    <label htmlFor="" className="label">
+                      Question Type
+                    </label>
+                    <select
+                      name="questionType"
+                      id="questionType"
+                      className="input border-black input-bordered w-full "
+                      onChange={(e) =>
+                        setQuestionType(parseInt(e.target.value))
+                      }
+                      required
+                    >
+                      <option value={parseInt(questionType)}>
+                        {questionType === '0' ? 'Image' : 'Text'}
+                      </option>
+                      <option value={1}>Text</option>
+                      <option value={0}>Image</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="" className="label">
+                      Options
+                    </label>
+                    <select
+                      name="numberOfOptions"
+                      id="numberOfOptions"
+                      className="input border-black input-bordered w-full "
+                      onChange={(e) =>
+                        setUpdateNumberOfOptions(parseInt(e.target.value))
+                      }
+                      required
+                    >
+                      <option value={parseInt(updatenumberOfOptions)}>
+                        {updatenumberOfOptions}
+                      </option>
+                      <option value={2}>2</option>
+                      <option value={3}>3</option>
+                      <option value={4}>4</option>
+                      <option value={5}>5</option>
+                      <option value={6}>6</option>
+                      <option value={7}>7</option>
+                      <option value={8}>8</option>
+                      <option value={9}>9</option>
+                      <option value={10}>10</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="" className="label">
+                      Sets
+                    </label>
+                    <select
+                      name="numberOfSets"
+                      id="numberOfSets"
+                      className="input border-black input-bordered w-full "
+                      onChange={(e) => setNumberOfSet(parseInt(e.target.value))}
+                      required
+                    >
+                      <option value={parseInt(numberOfSet)}>
+                        {numberOfSet}
+                      </option>
+                      <option value={0}>0</option>
+                      <option value={1}>1</option>
+                      <option value={2}>2</option>
+                      <option value={3}>3</option>
+                      <option value={4}>4</option>
+                    </select>
+                  </div>
+               
+                </div>
+              <div className="form-control grid grid-cols-1 lg:grid-cols-3 gap-x-2 gap-y-3">
+                <div className="">
                   <label htmlFor="" className="label">
-                    Negative Marking (%)
+                    Negative
                   </label>
                   <input
                     type="number"
@@ -633,38 +730,46 @@ const ShowFreeExam = () => {
                     required
                   />
                 </div>
-                <div className="flex items-center mt-0 lg:mt-5 ">
-                
+                <div className="flex flex-col-reverse justify-center items-center">
                   <input
-                    id="ssc"
+                    id="isAdmission"
                     type="checkbox"
-                    name="ssc"
-                    checked={sscChecked}
-                    onChange={()=>setSscChecked(!sscChecked)}
-                    className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  /> 
-                  <label
-                    htmlFor="disabled-checked-checkbox"
-                    className="ml-2 text-sm font-medium"
-                  >
-                    SSC
-                  </label>
-                </div>
-                <div className="flex items-center mt-0 lg:mt-5 ">
-                  <input
-                    id="hsc"
-                    type="checkbox"
-                    name="hsc"
-                    checked={hscChecked}
-                    onChange={()=>setHscChecked(!hscChecked)}
+                    name="isAdmission"
+                    checked={addmissionChecked}
+                    onChange={() => setAddmissionChecked(!addmissionChecked)}
                     className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                   />
                   <label
                     htmlFor="disabled-checked-checkbox"
-                    className="ml-2 text-sm font-medium"
+                    className="ml-2 text-lg"
                   >
-                    HSC
+                    Is Admission
                   </label>
+                </div>
+                <div className="flex flex-col ">
+                  <label
+                    htmlFor="disabled-checked-checkbox"
+                    className="ml-2 text-lg"
+                  >
+                    Curriculum 
+                  </label>
+                  <select
+                    name="curriculums"
+                    id="curriculums"
+                    className="input w-full  border-black input-bordered "
+                    required
+                    onChange={(e) => setSelectedCurriculum(e.target.value)}
+                  >
+                    <option value={singleExam.curriculumName}>{singleExam.curriculumName===null? "NONE" : singleExam.curriculumName}</option>
+                    {singleExam.curriculumName!==null && <option value={null}>NONE</option>
+                   }
+                    {curriculums.length > 0 &&
+                      curriculums.map((curriculum) => (
+                        <option key={curriculum._id} value={curriculum.name}>
+                          {curriculum.name}
+                        </option>
+                      ))}
+                  </select>
                 </div>
               </div>
               <div className="form-control mt-2 flex flex-row justify-between">
@@ -683,132 +788,20 @@ const ShowFreeExam = () => {
           </div>
         </div>
       </div>
-      <div id="add-question-modal">
-      <input type="checkbox" id="my-modal-2" className="modal-toggle" />
-          <div className="modal modal-middle ml:0 lg:ml-56">
-            <div className="modal-box w-11/12 max-w-5xl h-11/12">
-              <form className="add-form" onSubmit={handleAddQuestion}>
-                <label htmlFor="" className="label-text">
-                  Question Type
-                </label>
-                <select
-                  name="type"
-                  id="type"
-                  className="input border-black input-bordered w-full "
-                  onChange={(e) => setIsText(!isText)}
-                  required
-                >
-                  <option value={true}>Text</option>
-                  <option value={false}>Image</option>
-                </select>
-                {isText === true ? (
-                  <>
-                    <label htmlFor="" className=" label">
-                      <span className="label-text">
-                        Write Down the question{" "}
-                      </span>
-                    </label>
-                    <textarea
-                      className="textarea textarea-info   border-black"
-                      name="question_text"
-                      id="question_text"
-                      cols={100}
-                      placeholder="Description"
-                    ></textarea>
-                  </>
-                ) : (
-                  <>
-                    <label htmlFor="" className=" label">
-                      <span className="label-text">Select Question Image </span>
-                    </label>
-                    <input
-                      type="file"
-                      name="iLink"
-                      id="iLink"
-                      className="file-input w-full input-bordered  border-black "
-                      required
-                    />
-                  </>
-                )}
-                <label htmlFor="" className="label">
-                  Number of Options
-                </label>
-                <input
-                  type="number"
-                  className="input w-full input-bordered border-black "
-                  name="num_of_options"
-                  id="num_of_options"
-                  min="2"
-                  onInput={(e) =>
-                    e.target.value < 0 ? (e.target.value = "") : e.target.value
-                  }
-                  onBlur={(e) => handleChangeNumberOfInput(e)}
-                  required
-                />
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-4">
-                {isText===true && numberOfOptions > 0 &&
-                  [...Array(numberOfOptions).keys()].map((id) => {
-                    return (
-                      <div key={id}>
-                        <div>
-                        <label htmlFor="" className="label-text">
-                          {optionName[id] + ")"}
-                        </label>
-                        <input
-                          type="text"
-                          placeholder={`Option ${id + 1}`}
-                          name={`option${id}`}
-                          id={`option${id}`}
-                          className="input w-full input-bordered border-black "
-                          required
-                        />
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-                
-                {numberOfOptions > 0 && (
-                  <>
-                    <label className="label-text">Correct Option</label>
-                    <select
-                      name="type"
-                      id="type"
-                      className="input border-black input-bordered w-full "
-                      onChange={(e) => setCorrectOption(e.target.value)}
-                      required
-                    >
-                      <option>---</option>
-                      {[...Array(numberOfOptions).keys()].map((id) => (
-                        <option key={id} value={id}>
-                          {optionName[id]}
-                        </option>
-                      ))}
-                    </select>
-                  </>
-                )}
-                <label htmlFor="" className=" label">
-                  <span className="label-text">Explanation Link </span>
-                </label>
-                <input
-                  type="file"
-                  name="explanationILink"
-                  id="explanationILink"
-                  className="file-input w-full input-bordered  border-black "
-                  required
-                />
-              <div className="form-control my-2">
-                <input type="submit" value="Add Question" className="btn w-32 " />
-              </div>
-              </form>
-              <div className="modal-action">
-                <label htmlFor="my-modal-2" className="btn bg-red text-white">
-                  Close
-                </label>
-              </div>
-            </div>
-          </div>
-      </div>
+      <ImageAdder
+        title={`${singleExam.iLink === null ? 'Add Image' : 'Update Image'}`}
+        apiEndPoint="/api/exam/updateExamPhoto"
+        examId={singleExamId}
+        setIsLoading={setIsLoading}
+      />
+      <QuestionAdder
+        singleExam={singleExam}
+        handleAddQuestion={handleAddQuestion}
+        setNameOfSet={setNameOfSet}
+        setCorrectOption={setCorrectOption}
+        isText={isText}
+        setIsText={setIsText}
+      />
       <PopUpModal modalData={selectedExamId} remove={deactivateExam}></PopUpModal>
     </div>
   );

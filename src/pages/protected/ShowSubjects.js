@@ -6,6 +6,7 @@ import Loader from "./../../Shared/Loader";
 import { toast } from "react-hot-toast";
 import PopUpModal from "../../features/common/components/PopUpModal";
 import DeactivateButton from "../../features/common/components/DeactivateButton";
+import ImageAdder from "../../components/ImageAdder/ImageAdder";
 
 const ShowSubjects = () => {
   const [courses, setCourses] = useState([]);
@@ -82,7 +83,7 @@ const ShowSubjects = () => {
       axios
         .get(`/api/subject/getsubjectbycourse?courseId=${singleCourse}`)
         .then(({ data }) => {
-          console.log(data);
+          // console.log(data);
           setSubjects(data.data);
           setIsLoading(false);
         })
@@ -144,6 +145,13 @@ const ShowSubjects = () => {
                       </div>
                     </td>
                     <td>
+                    <label
+                          onClick={() =>  updateSubject(subject._id)}
+                          htmlFor="imageAdder"
+                          className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                        >
+                          {subject.iLink.includes("null") ? 'Add Subject Image' : 'Update Subject Image'}
+                        </label>
                       <label
                         onClick={() => updateSubject(subject._id)}
                         htmlFor="my-modal"
@@ -236,6 +244,14 @@ const ShowSubjects = () => {
           </div>
         </div>
       </div>
+      {
+        subjects.length>0 && singleSubject && <ImageAdder
+        title={`${singleSubject?.iLink?.includes("null")? 'Add Image' : 'Update Image'}`}
+        apiEndPoint="/api/subject/updatesubjectphoto"
+        examId={singleSubject._id}
+        setIsLoading={setIsLoading}
+      />
+      }
       <PopUpModal modalData={deactivateSubject} remove={removeSubject}></PopUpModal>
     </div>
   );

@@ -15,7 +15,10 @@ const AddSubject = () => {
     const form = e.target;
     const name = form.subject.value;
     const descr = form.description.value;
-    const file = form.iLink.files[0];
+    let file=null;
+    if(form.iLink.files[0]){
+      file = form.iLink.files[0];
+    }
     const formdata = new FormData();
     formdata.append("iLink", file);
     
@@ -81,7 +84,7 @@ const AddSubject = () => {
                 name="iLink"
                 id="iLink"
                 className="file-input mb-5 input input-bordered border-black pl-0"
-                required
+
               />
             </div>
             <div className="form-control">

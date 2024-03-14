@@ -198,7 +198,7 @@ const ShowExam = () => {
     formdata.append('setName', nameOfSet)
 
     await axios
-      .post(`/api/exam/addquestionmcq`, formdata, {
+      .post(`/api/exam/addquestionmcq?examId=${singleExamId}`, formdata, {
         headers: {
           'Content-Type': 'multipart/ form-data',
         },

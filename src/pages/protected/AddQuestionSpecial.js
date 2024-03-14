@@ -294,12 +294,12 @@ const AddQuestionSpecial = () => {
                         Add Written Question
                       </label>
                     )}
-                    {/* <button
+                    <button
                       className="btn bg-button text-[12px] hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                       onClick={() => refillQuestions(singleExamId)}
                     >
                       Refill MCQ Sets
-                    </button> */}
+                    </button>
                   </div>
                 </td>
               </tr>

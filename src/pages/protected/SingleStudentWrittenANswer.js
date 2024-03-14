@@ -160,7 +160,7 @@ const SingleStudentWrittenANswer = () => {
       )
       .then(({ data }) => {
         setSingleResult(data)
-        console.log('result', data)
+        // console.log('result', data)
         setAnswerScripts(data.answerScript)
         let answered = 0
         let vacantAnswer = []
@@ -168,13 +168,13 @@ const SingleStudentWrittenANswer = () => {
         let flag = 0;
         let tr=[]
         for (let i = 0; i < data.answerScript.length; i++) {
-          if (data.answerScript[i] === null) {
+          if (data.answerScript[i] === null || data.answerScript[i].length===0) {
             vacantAnswer.push(i + 1)
             tr.push(-1);
           } else {
             if(flag === 0){
               tr.push(1);
-              flag=1;
+              // flag=1;
             }else{
               tr.push(-1);
             }
@@ -182,8 +182,9 @@ const SingleStudentWrittenANswer = () => {
             answered++
           }
         }
-        // console.log(tr)
-        // console.log(checker)
+        console.log(tr)
+        console.log(checker)
+        console.log(answered)
         setTracker(tr);
         setEnabler(checker)
         setNumberOfAnsweredQuestions(answered)

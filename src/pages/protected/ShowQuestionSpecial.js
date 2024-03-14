@@ -10,6 +10,7 @@ import PopUpModal from '../../features/common/components/PopUpModal'
 import QuestionSender from '../../components/QuestionSender/QuestionSender'
 import SpecialQuestionSender from './SpecialQuestionSender'
 import OptionChanger from './OptionChanger'
+import { shuffle } from '../../utils/globalFunction'
 const ShowQuestionSpecial = () => {
   const [courses, setCourses] = useState([])
   const [subjects, setSubjects] = useState([])
@@ -185,8 +186,8 @@ const ShowQuestionSpecial = () => {
           )}`
         )
         .then(({ data }) => {
-          console.log(data)
-          setQuestions(data)
+          const newData = shuffle(data);
+          setQuestions(newData);
           setIsLoading(false)
           if (data.length === 0) {
             toast.error('No question for this set')
@@ -317,6 +318,7 @@ const ShowQuestionSpecial = () => {
       })
       .catch((e) => console.log(e))
   }
+
   useEffect(() => {
     setIsLoading(true)
     axios.get('/api/course/getallcourseadmin').then(({ data }) => {

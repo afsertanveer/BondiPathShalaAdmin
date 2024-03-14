@@ -125,7 +125,7 @@ const AddBundleQuestion = () => {
         
     
         await axios
-          .post(`/api/exam/addquestionmcq`, formdata, {
+          .post(`/api/exam/addquestionmcq?examId=${selectedExam}`, formdata, {
             headers: {
               'Content-Type': 'multipart/ form-data',
             },

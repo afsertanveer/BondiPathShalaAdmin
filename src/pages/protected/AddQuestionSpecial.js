@@ -58,7 +58,7 @@ const AddQuestionSpecial = () => {
     // console.log(question);
 
     await axios
-      .post(`api/special/addquestionmcq`, formdata, {
+      .post(`api/special/addquestionmcq?examId=${singleExamId}`, formdata, {
         headers: {
           'Content-Type': 'multipart/ form-data',
         },

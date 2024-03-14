@@ -195,7 +195,7 @@ const ShowBothExam = () => {
     console.log(question)
 
     await axios
-      .post(`/api/both/bothaddquestionmcq`, formdata, {
+      .post(`/api/both/bothaddquestionmcq?examId=${singleExamId}`, formdata, {
         headers: {
           'Content-Type': 'multipart/ form-data',
         },

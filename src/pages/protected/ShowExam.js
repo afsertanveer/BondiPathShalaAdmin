@@ -191,12 +191,12 @@ const ShowExam = () => {
     formdata.append('questionText', questionText)
     formdata.append('type', isText)
     formdata.append('options', JSON.stringify(options))
-    formdata.append('optionCount', singleExam.numberOfOptions)
+    formdata.append('optionCount', updatenumberOfOptions)
     formdata.append('correctOption', parseInt(correctOption))
     formdata.append('status', true)
     formdata.append('examId', singleExamId)
     formdata.append('setName', nameOfSet)
-
+    console.log(updatenumberOfOptions);
     await axios
       .post(`/api/exam/addquestionmcq?examId=${singleExamId}`, formdata, {
         headers: {
@@ -240,7 +240,7 @@ const ShowExam = () => {
     formdata.append('marksPerQuestion', newArr)
     formdata.append('totalMarks', totalMarks)
     await axios
-      .post(`/api/exam/addquestionwritten`, formdata, {
+      .post(`/api/exam/addquestionwritten?examId=${singleExamId}`, formdata, {
         headers: {
           'Content-Type': 'multipart/ form-data',
         },
@@ -572,7 +572,7 @@ const ShowExam = () => {
                           htmlFor="imageAdder"
                           className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
-                          {exam.iLink === null ? 'Add Image' : 'Update Image'}
+                          {exam.iLink === null ? 'Add Exam Image' : 'Update Exam Image'}
                         </label>
 
                         <label
@@ -600,12 +600,12 @@ const ShowExam = () => {
                             Add Question
                           </label>
                         )}
-                        <button
+                       { exam.examVariation === 1  && <button
                           className="btn bg-button text-[12px] hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                           onClick={() => refillQuestions(exam._id)}
                         >
                           Refill MCQ Sets
-                        </button>
+                        </button>}
                         <DeactivateButton
                           setter={setSelectedExamId}
                           value={exam._id}

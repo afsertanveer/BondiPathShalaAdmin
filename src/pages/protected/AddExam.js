@@ -249,8 +249,8 @@ const AddExam = () => {
               </div>
             </div>
             {
-              selectedVariation==="1" && <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-start">
-              <div className="w-full lg:w-1/3">
+              selectedVariation==="1" && <div className="form-control grid grid-cols-1 lg:grid-cols-3 gap-x-2 gap-y-3">
+              <div className="">
                 <label htmlFor="" className="label">
                   Total Question
                 </label>
@@ -265,7 +265,7 @@ const AddExam = () => {
                   required
                 />
               </div>
-              <div className="w-full lg:w-1/3">
+              <div className="">
                 <label htmlFor="" className="label">
                   Marks Per Question
                 </label>
@@ -277,6 +277,23 @@ const AddExam = () => {
                   onInput={(e) =>
                     e.target.value < 0 ? (e.target.value = "") : e.target.value
                   }
+                  required
+                />
+              </div>
+              <div className=" ">
+                <label htmlFor="" className="label">
+                  Negative Marking (%) 
+                </label>
+                <input
+                  type="number"
+                  className="input w-full input-bordered  border-black "
+                  name="negative_marking"
+                  id="negative_marking"
+                  step="any"
+                  onChange={(e) =>
+                    e.target.value < 0 ? (e.target.value = "") : e.target.value
+                  }
+                  disabled={selectedVariation==="2"}
                   required
                 />
               </div>
@@ -297,27 +314,12 @@ const AddExam = () => {
                   min={1}
                   required
                 />
-              </div>            
+              </div> 
+                         
             </div>
             }
             <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-center">
-              <div className="w-full lg:w-1/3">
-                <label htmlFor="" className="label">
-                  Negative Marking (%) (Per Question)
-                </label>
-                <input
-                  type="number"
-                  className="input w-full input-bordered  border-black "
-                  name="negative_marking"
-                  id="negative_marking"
-                  step="any"
-                  onChange={(e) =>
-                    e.target.value < 0 ? (e.target.value = "") : e.target.value
-                  }
-                  disabled={selectedVariation==="2"}
-                  required
-                />
-              </div>
+             
               <div className="flex items-center mt-0 lg:mt-5 ">
                   <input
                     id="disabled-checked-checkbox"
@@ -390,8 +392,8 @@ const AddExam = () => {
                 <option value={2}>2</option>
                 <option value={3}>3</option>
                 <option value={4}>4</option>
-                <option value={4}>5</option>
-                <option value={4}>6</option>
+                <option value={5}>5</option>
+                <option value={6}>6</option>
                 </select>
               </div>
               <div >
@@ -411,6 +413,10 @@ const AddExam = () => {
                   <option value={2}>2</option>
                   <option value={3}>3</option>
                   <option value={4}>4</option>
+                  <option value={5}>5</option>
+                  <option value={6}>6</option>
+                  <option value={7}>7</option>
+                  <option value={8}>8</option>
                 </select>
               </div>
               <div >

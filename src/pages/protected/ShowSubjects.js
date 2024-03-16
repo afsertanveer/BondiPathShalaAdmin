@@ -135,13 +135,15 @@ const ShowSubjects = () => {
                     <td>{subject.name}</td>
                     <td className="w-1/3">
                       <div className="flex justify-center">
-                        <img
+                        {
+                          subject.iLink!==null && <img
                           src={
                             process.env.REACT_APP_API_HOST + "/" + subject.iLink
                           }
                           alt="subject_image"
                           className=" w-1/2"
                         />
+                        }
                       </div>
                     </td>
                     <td>
@@ -150,7 +152,7 @@ const ShowSubjects = () => {
                           htmlFor="imageAdder"
                           className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
-                          {subject.iLink.includes("null") ? 'Add Subject Image' : 'Update Subject Image'}
+                          {subject.iLink===null ? 'Add Subject Image' : 'Update Subject Image'}
                         </label>
                       <label
                         onClick={() => updateSubject(subject._id)}

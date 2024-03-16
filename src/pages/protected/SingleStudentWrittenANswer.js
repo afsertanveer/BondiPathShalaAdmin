@@ -156,7 +156,7 @@ const SingleStudentWrittenANswer = () => {
     setIsLoading(true)
     axios
       .get(
-        `/api/student/getwrittenstudentsinglebyexam?examId=${params.examId}&&studentId=${params.studentId}`
+        `/api/student/getwrittenstudentsinglebyexam?examId=${params.examId}&studentId=${params.studentId}`
       )
       .then(({ data }) => {
         setSingleResult(data)

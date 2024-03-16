@@ -98,7 +98,7 @@ const AddQuestionSpecial = () => {
     formdata.append('totalMarks', totalMarks)
     formdata.append('subjectId', selectedSubject)
     await axios
-      .post(`/api/special/addquestionwritten`, formdata, {
+      .post(`/api/special/addquestionwritten?examId=${singleExamId}`, formdata, {
         headers: {
           'Content-Type': 'multipart/ form-data',
         },

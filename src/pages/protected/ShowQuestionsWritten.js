@@ -94,9 +94,9 @@ const ShowQuestionsWritten = () => {
     }
   }, [selectedCourse, selectedSubject, selectedExam]);
   return (
-    <div className=" bg-white">
-      <div className=" py-4 px-2 my-3 ">
-        <div className="w-full  mx-auto flex flex-row justify-between items-center">
+    <div className="px-2 lg:px-8">
+      <div className=" bg-white px-2 py-4 lg:px-6 my-3 ">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-x-3 gap-y-2">
           <div className="form-control">
             <label className="label-text" htmlFor="">
               Select Course

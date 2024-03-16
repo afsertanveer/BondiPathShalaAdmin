@@ -186,7 +186,7 @@ const ShowBothExam = () => {
     formdata.append('questionText', questionText)
     formdata.append('type', isText)
     formdata.append('options', JSON.stringify(options))
-    formdata.append('optionCount', numberOfOptions)
+    formdata.append('optionCount', updateNumberOfOptions)
     formdata.append('correctOption', parseInt(correctOption))
     formdata.append('status', true)
     formdata.append('examId', singleExamId)
@@ -233,7 +233,7 @@ const ShowBothExam = () => {
     formdata.append('marksPerQuestion', newArr)
     formdata.append('totalMarks', totalMarks)
     await axios
-      .post(`/api/both/bothAddQuestionWritten`, formdata, {
+      .post(`/api/both/bothAddQuestionWritten?examId=${singleExamId}`, formdata, {
         headers: {
           'Content-Type': 'multipart/ form-data',
         },

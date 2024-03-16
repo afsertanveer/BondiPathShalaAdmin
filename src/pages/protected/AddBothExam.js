@@ -374,6 +374,7 @@ const AddBothExam = () => {
                 </select>
               </div>
               <div>
+             
                 <label htmlFor="" className="label">
                   Sets
                 </label>
@@ -390,6 +391,10 @@ const AddBothExam = () => {
                   <option value={2}>2</option>
                   <option value={3}>3</option>
                   <option value={4}>4</option>
+                  <option value={5}>5</option>
+                  <option value={6}>6</option>
+                  <option value={7}>7</option>
+                  <option value={8}>8</option>
                 </select>
               </div>
               <div>
@@ -481,7 +486,7 @@ const AddBothExam = () => {
               <div className="flex items-center mt-0 lg:mt-5 ">
                 <label
                   htmlFor="disabled-checked-checkbox"
-                  className="ml-2 text-lg"
+                  className="mr-5 text-lg"
                 >
                   Curriculum
                 </label>
@@ -489,7 +494,6 @@ const AddBothExam = () => {
                   name="course"
                   id="course"
                   className="input w-full  border-black input-bordered "
-                  required
                   onChange={(e) => setSelectedCurriculum(e.target.value)}
                 >
                   <option value={null}></option>

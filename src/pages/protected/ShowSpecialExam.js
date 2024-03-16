@@ -278,7 +278,10 @@ const ShowSpecialExam = () => {
                   SSC?/HSC?
                 </th>
                 <th className="width-setter bg-white font-semibold text-sm uppercase px-6 py-2">
-                  Action
+                  Pre Exam Action
+                </th>
+                <th className="width-setter bg-white font-semibold text-sm uppercase px-6 py-2">
+                  Post Exam Action
                 </th>
               </tr>
             </thead>
@@ -303,7 +306,7 @@ const ShowSpecialExam = () => {
                       {exam.hscStatus ? "Yes" : "No"}
                     </td>
                     <td className="px-6 py-2 text-center">
-                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-3 gap-y-4">
+                      <div className="grid grid-cols-1 gap-x-3 gap-y-4">
                       <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="imageAdder"
@@ -328,6 +331,30 @@ const ShowSpecialExam = () => {
                             Add Exam Rule
                           </label>
                         )}
+                        <label
+                          onClick={() => handleAssignExamId(exam._id)}
+                          htmlFor="update-modal"
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                        >
+                          Update
+                        </label>
+                       
+                        {/* <label
+                          onClick={() => handleAssignExamId(exam._id)}
+                          htmlFor="show-modal"
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                        >
+                          Show
+                        </label> */}
+                        <DeactivateButton
+                          setter={setSelectedExamId}
+                          value={exam._id}
+                        ></DeactivateButton>
+                      </div>
+                    </td>
+                    <td className="px-6 py-2 text-center">
+                      <div className="grid grid-cols-1  gap-x-3 gap-y-4">
+                      
                         <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="solutionSheet"
@@ -363,13 +390,6 @@ const ShowSpecialExam = () => {
                         </label>
                         <label
                           onClick={() => handleAssignExamId(exam._id)}
-                          htmlFor="update-modal"
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                        >
-                          Update
-                        </label>
-                        <label
-                          onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="my-popup-written"
                           className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
@@ -382,10 +402,6 @@ const ShowSpecialExam = () => {
                         >
                           Show
                         </label> */}
-                        <DeactivateButton
-                          setter={setSelectedExamId}
-                          value={exam._id}
-                        ></DeactivateButton>
                       </div>
                     </td>
                   </tr>

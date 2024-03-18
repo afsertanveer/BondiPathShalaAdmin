@@ -727,7 +727,6 @@ const AddSpecialExam = () => {
                   name="course"
                   id="course"
                   className="input w-full  border-black input-bordered "
-                  required
                   onChange={(e) => setSelectedCurriculum(e.target.value)}
                 >
                   <option value={null}></option>

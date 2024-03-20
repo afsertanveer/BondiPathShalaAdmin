@@ -135,7 +135,7 @@ const AddQuestionSpecial = () => {
     .then((data) => {
       console.log(data)
       toast.success('Questions added to all sets')
-      window.location.reload(false)
+      // window.location.reload(false)
     })
     .catch((err) => toast.error(err.response.data))
   }

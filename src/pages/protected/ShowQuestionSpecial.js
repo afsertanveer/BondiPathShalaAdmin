@@ -314,7 +314,7 @@ const ShowQuestionSpecial = () => {
         toast.success('Successfully added all the questions')
         e.target.reset()
         document.getElementById('my-modal-special').checked = false
-        window.location.reload(false)
+        // window.location.reload(false)
       })
       .catch((e) => console.log(e))
   }

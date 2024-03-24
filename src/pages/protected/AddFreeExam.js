@@ -48,8 +48,8 @@ const AddFreeExam = () => {
       formdata.append("iLink", iLink);
     }
     formdata.append("name",name);
-    formdata.append("examType", 0);
-    formdata.append("examVariation",0);
+    formdata.append("examType", -1);
+    formdata.append("examVariation",-1);
     formdata.append("examFreeOrNot",true)
     formdata.append("startTime",startTime)
     formdata.append("endTime",endTime)

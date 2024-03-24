@@ -19,7 +19,7 @@ const AddFreeExam = lazy(()=>import('../pages/protected/AddFreeExam'));
 const ShowExam = lazy(()=>import('../pages/protected/ShowExam'));
 const ShowFreeExam = lazy(()=>import('../pages/protected/ShowFreeExam'));
 const ShowQuestions = lazy(()=>import('../pages/protected/ShowQuestions'));
-const ShowFreeQuestions = lazy(()=>import('../pages/protected/ShowFreeQuestions'));
+const ShowFreeQuestion = lazy(()=>import('../pages/protected/ShowFreeQuestion'));
 const ShowQuestionsWritten = lazy(()=>import('../pages/protected/ShowQuestionsWritten'));
 const ExamDetails = lazy(()=>import('../pages/protected/ExamDetails'));
 const WrittenExamDetails = lazy(()=>import('../pages/protected/WrittenExamDetails'));
@@ -301,7 +301,7 @@ if(role===3){
     },
     {
       path: '/freeexam/show-questions', // the url
-      component: ShowFreeQuestions, // view rendered
+      component: ShowFreeQuestion, // view rendered
       
     },
     {

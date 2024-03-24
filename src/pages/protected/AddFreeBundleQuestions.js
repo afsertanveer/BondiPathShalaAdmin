@@ -169,7 +169,7 @@ const AddFreeBundleQuestions = () => {
     if (selectedSubject !== '') {
       axios
         .get(
-          `/api/exam/getexambysubadmin?subjectId=${selectedSubject}&examType=-1`
+          `/api/exam/getexambysubadmin?subjectId=${selectedSubject}&examType=-1&type=free`
         )
         .then(({ data }) => {
           const newData = data.filter((d) => d.examVariation === 1)

@@ -54,6 +54,7 @@ const SingleStudentSpecialWritten = lazy(()=>import('./../pages/protected/Single
 const ViewSingleScriptAdmin = lazy(()=>import('./../pages/protected/ViewSingleScriptAdmin'));
 const ExamSolutionWritten = lazy(()=>import('./../pages/protected/ExamSolutionWritten'));
 const AddBundleQuestion = lazy(()=>import('./../pages/protected/AddBundleQuestion'));
+const AddFreeBundleQuestions = lazy(()=>import('./../pages/protected/AddFreeBundleQuestions'));
 const AddBundleQuestionBoth = lazy(()=>import('./../pages/protected/AddBundleQuestionBoth'));
 const AddBundleQuestionSpecial = lazy(()=>import('./../pages/protected/AddBundleQuestionSpecial'));
 const AddCurriculum =  lazy(()=>import('./../pages/protected/AddCurriCulum'));
@@ -126,7 +127,7 @@ if(role===3){
     },
     {
       path:'/freeaddquestions/AddBundleQuestion',
-      component:AddBundleQuestion
+      component:AddFreeBundleQuestions
     },
     {
       path:'/addquestions/AddBundleQuestionBoth',

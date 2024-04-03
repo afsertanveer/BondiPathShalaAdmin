@@ -926,7 +926,7 @@ const ShowSpecialExam = () => {
                     onChange={(e) => setSelectedCurriculum(e.target.value)}
                   >
                     <option value={singleExam.curriculumName}>{singleExam.curriculumName===null? "NONE" : singleExam.curriculumName}</option>
-                    {singleExam.curriculumName!==null && <option value={null}>NONE</option>
+                    {singleExam.curriculumName!==null && <option value="null">NONE</option>
                    }
                     {curriculums.length > 0 &&
                       curriculums.map((curriculum) => (

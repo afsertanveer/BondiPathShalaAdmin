@@ -59,6 +59,7 @@ const AddBundleQuestionBoth = lazy(()=>import('./../pages/protected/AddBundleQue
 const AddBundleQuestionSpecial = lazy(()=>import('./../pages/protected/AddBundleQuestionSpecial'));
 const AddCurriculum =  lazy(()=>import('./../pages/protected/AddCurriCulum'));
 const ShowCurriculum =  lazy(()=>import('./../pages/protected/ShowCurriculum'));
+const StorageClear =  lazy(()=>import('./../pages/protected/StorageClear'));
 const ExamReset = lazy(()=>import('./../pages/protected/ExamReset'));
 const user =JSON.parse(localStorage.getItem('user')) ;
 const role = user.role;
@@ -124,6 +125,10 @@ if(role===3){
     {
       path:'/addquestions/AddBundleQuestion',
       component:AddBundleQuestion
+    },
+    {
+      path:'/storage/clearstorage',
+      component:StorageClear
     },
     {
       path:'/freeaddquestions/AddBundleQuestion',

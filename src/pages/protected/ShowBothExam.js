@@ -773,7 +773,7 @@ const ShowBothExam = () => {
                     Questions
                   </label>
                   <input
-                    type="number"
+                    type="number"  step="0.01"
                     className="input w-full  input-bordered  border-black "
                     name="total_questions"
                     id="total_questions"
@@ -791,7 +791,7 @@ const ShowBothExam = () => {
                     Marks/Question
                   </label>
                   <input
-                    type="number"
+                    type="number"  step="0.01"
                     className="input w-full  input-bordered  border-black "
                     name="marks_per_question"
                     id="marks_per_question"
@@ -809,7 +809,7 @@ const ShowBothExam = () => {
                     Marks
                   </label>
                   <input
-                    type="number"
+                    type="number"  step="0.01"
                     className="input w-full  input-bordered  border-black "
                     name="total_marks"
                     id="total_marks"
@@ -921,7 +921,7 @@ const ShowBothExam = () => {
                     Questions
                   </label>
                   <input
-                    type="number"
+                    type="number"  step="0.01"
                     className="input w-full  input-bordered  border-black "
                     name="total_questions_written"
                     id="total_questions_written"
@@ -939,7 +939,7 @@ const ShowBothExam = () => {
                     Marks
                   </label>
                   <input
-                    type="number"
+                    type="number"  step="0.01"
                     className="input w-full  input-bordered  border-black "
                     name="tmw"
                     id="tmw"
@@ -1027,12 +1027,12 @@ const ShowBothExam = () => {
                     Total Marks
                   </label>
                   <input
-                    type="number"
+                    type="number"  step="0.01"
                     className="input w-full  input-bordered  border-black "
                     name="full_marks"
                     id="full_marks"
                     defaultValue={singleExam.totalMarks}
-                    step="any"
+                    
                     onChange={(e) =>
                       e.target.value < 0
                         ? (e.target.value = '')
@@ -1046,12 +1046,12 @@ const ShowBothExam = () => {
                     Negative
                   </label>
                   <input
-                    type="number"
+                    type="number"  step="0.01"
                     className="input w-full  input-bordered  border-black "
                     name="negative_marking"
                     id="negative_marking"
                     defaultValue={singleExam.negativeMarksMcq}
-                    step="any"
+                    
                     onChange={(e) =>
                       e.target.value < 0
                         ? (e.target.value = '')
@@ -1145,7 +1145,7 @@ const ShowBothExam = () => {
                 Number of Questions
               </label>
               <input
-                type="number"
+                type="number"  step="0.01"
                 className="input w-full  input-bordered border-black "
                 name="num_of_options"
                 id="num_of_options"
@@ -1244,7 +1244,7 @@ const ShowBothExam = () => {
                 Number of Options
               </label>
               <input
-                type="number"
+                type="number"  step="0.01"
                 className="input w-full  input-bordered border-black "
                 name="num_of_options"
                 id="num_of_options"

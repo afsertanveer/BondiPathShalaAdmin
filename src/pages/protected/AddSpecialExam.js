@@ -385,7 +385,7 @@ const AddSpecialExam = () => {
                       Total Duration
                     </label>
                     <input
-                      type="number"
+                      type="number"  step="0.01"
                       className="input w-full input-bordered  border-black "
                       name="total_duration"
                       id="total_duration"
@@ -406,7 +406,7 @@ const AddSpecialExam = () => {
                       Total Marks
                     </label>
                     <input
-                      type="number"
+                      type="number"  step="0.01"
                       className="input w-full input-bordered  border-black "
                       name="total_marks"
                       id="total_marks"
@@ -452,7 +452,7 @@ const AddSpecialExam = () => {
                       Questions/Subject
                     </label>
                     <input
-                      type="number"
+                      type="number"  step="0.01"
                       className="input w-full input-bordered  border-black "
                       name="mcq_ques_per_subject"
                       id="mcq_ques_per_subject"
@@ -466,7 +466,7 @@ const AddSpecialExam = () => {
                       Total Question
                     </label>
                     <input
-                      type="number"
+                      type="number"  step="0.01"
                       className="input w-full input-bordered  border-black "
                       name="mcq_total_questions"
                       id="mcq_total_questions"
@@ -485,7 +485,7 @@ const AddSpecialExam = () => {
                       Marks Per Question
                     </label>
                     <input
-                      type="number"
+                      type="number"  step="0.01"
                       className="input w-full input-bordered  border-black "
                       name="marks_per_question"
                       id="marks_per_question"
@@ -502,11 +502,11 @@ const AddSpecialExam = () => {
                       Negative Marking (%)
                     </label>
                     <input
-                      type="number"
+                      type="number"  step="0.01"
                       className="input w-full input-bordered  border-black "
                       name="negative_marking"
                       id="negative_marking"
-                      step="any"
+                      
                       onChange={(e) =>
                         e.target.value < 0
                           ? (e.target.value = "")
@@ -522,7 +522,7 @@ const AddSpecialExam = () => {
                       MCQ Total Marks
                     </label>
                     <input
-                      type="number"
+                      type="number"  step="0.01"
                       className="input w-full input-bordered  border-black "
                       name="mcq_total_marks"
                       id="mcq_total_marks"
@@ -649,7 +649,7 @@ const AddSpecialExam = () => {
                       Questions/Subject
                     </label>
                     <input
-                      type="number"
+                      type="number"  step="0.01"
                       className="input w-full input-bordered  border-black "
                       name="written_ques_per_subject"
                       id="written_ques_per_subject"
@@ -663,7 +663,7 @@ const AddSpecialExam = () => {
                       Total Questions
                     </label>
                     <input
-                      type="number"
+                      type="number"  step="0.01"
                       className="input w-full input-bordered  border-black "
                       name="total_written_questions"
                       id="total_written_questions"
@@ -677,7 +677,7 @@ const AddSpecialExam = () => {
                       Total Marks
                     </label>
                     <input
-                      type="number"
+                      type="number"  step="0.01"
                       className="input w-full input-bordered  border-black "
                       name="total_written_marks"
                       id="total_written_marks"

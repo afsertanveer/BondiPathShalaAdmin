@@ -187,7 +187,7 @@ const AddSpecialMcq = () => {
                   Optional Subject
                 </label>
                 <input
-                  type="number"
+                  type="number"  step="0.01"
                   className="input input-bordered w-full  border-black "
                   name="nos"
                   id="nos"
@@ -298,7 +298,7 @@ const AddSpecialMcq = () => {
                     Total Duration
                   </label>
                   <input
-                    type="number"
+                    type="number"  step="0.01"
                     className="input w-full input-bordered  border-black "
                     name="total_duration"
                     id="total_duration"
@@ -318,7 +318,7 @@ const AddSpecialMcq = () => {
                     Total Marks
                   </label>
                   <input
-                    type="number"
+                    type="number"  step="0.01"
                     className="input w-full input-bordered  border-black "
                     name="total_marks"
                     id="total_marks"
@@ -337,7 +337,7 @@ const AddSpecialMcq = () => {
                     Total Question
                   </label>
                   <input
-                    type="number"
+                    type="number"  step="0.01"
                     className="input w-full input-bordered  border-black "
                     name="mcq_total_questions"
                     id="mcq_total_questions"
@@ -354,7 +354,7 @@ const AddSpecialMcq = () => {
                     Marks Per Question
                   </label>
                   <input
-                    type="number"
+                    type="number"  step="0.01"
                     className="input w-full input-bordered  border-black "
                     name="marks_per_question"
                     id="marks_per_question"
@@ -371,11 +371,11 @@ const AddSpecialMcq = () => {
                     Negative Marking (%)
                   </label>
                   <input
-                    type="number"
+                    type="number"  step="0.01"
                     className="input w-full input-bordered  border-black "
                     name="negative_marking"
                     id="negative_marking"
-                    step="any"
+                    
                     onChange={(e) =>
                       e.target.value < 0
                         ? (e.target.value = '')

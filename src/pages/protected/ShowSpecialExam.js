@@ -743,12 +743,12 @@ const ShowSpecialExam = () => {
                     Total Marks
                   </label>
                   <input
-                    type="number"
+                    type="number"  step="0.01"
                     className="input w-full input-bordered  border-black "
                     name="total_marks"
                     id="total_marks"
                     defaultValue={singleExam.totalMarks}
-                    step="any"
+                    
                     onChange={(e) =>
                       e.target.value < 0
                         ? (e.target.value = "")
@@ -762,12 +762,12 @@ const ShowSpecialExam = () => {
                     Total Duration
                   </label>
                   <input
-                    type="number"
+                    type="number"  step="0.01"
                     className="input w-full input-bordered  border-black "
                     name="total_duration"
                     id="total_duration"
                     defaultValue={singleExam.totalDuration}
-                    step="any"
+                    
                     onChange={(e) =>
                       e.target.value < 0
                         ? (e.target.value = "")
@@ -783,7 +783,7 @@ const ShowSpecialExam = () => {
                     MCQ Duration
                   </label>
                   <input
-                    type="number"
+                    type="number"  step="0.01"
                     className="input w-full input-bordered  border-black "
                     name="mcq_duration"
                     id="mcq_duration"
@@ -801,7 +801,7 @@ const ShowSpecialExam = () => {
                     Marks/Question
                   </label>
                   <input
-                    type="number"
+                    type="number"  step="0.01"
                     className="input w-full input-bordered  border-black "
                     name="marks_per_question"
                     id="marks_per_question"
@@ -820,7 +820,7 @@ const ShowSpecialExam = () => {
                     MCQ Marks
                   </label>
                   <input
-                    type="number"
+                    type="number"  step="0.01"
                     className="input w-full input-bordered  border-black "
                     name="mcq_marks"
                     id="mcq_marks"
@@ -838,12 +838,12 @@ const ShowSpecialExam = () => {
                       Negative Marking
                     </label>
                     <input
-                      type="number"
+                      type="number"  step="0.01"
                       className="input w-full input-bordered  border-black "
                       name="negative_marking"
                       id="negative_marking"
                       defaultValue={singleExam.negativeMarksMcq}
-                      step="any"
+                      
                       onChange={(e) =>
                         e.target.value < 0
                           ? (e.target.value = "")
@@ -857,7 +857,7 @@ const ShowSpecialExam = () => {
                      Written Marks
                   </label>
                   <input
-                    type="number"
+                    type="number"  step="0.01"
                     className="input w-full input-bordered  border-black "
                     name="written_marks"
                     id="written_marks"

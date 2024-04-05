@@ -339,7 +339,7 @@ const AddQuestionSpecial = () => {
                 Number of Questions
               </label>
               <input
-                type="number"
+                type="number"  step="0.01"
                 className="input w-full input-bordered border-black "
                 name="num_of_options"
                 id="num_of_options"

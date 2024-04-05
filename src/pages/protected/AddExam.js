@@ -255,7 +255,7 @@ const AddExam = () => {
                   Total Question
                 </label>
                 <input
-                  type="number"
+                  type="number"  step="0.01"
                   className="input w-full input-bordered  border-black "
                   name="total_questions"
                   id="total_questions"
@@ -270,7 +270,7 @@ const AddExam = () => {
                   Marks Per Question
                 </label>
                 <input
-                  type="number"
+                  type="number"  step="0.01"
                   className="input w-full input-bordered  border-black "
                   name="marks_per_question"
                   id="marks_per_question"
@@ -285,11 +285,11 @@ const AddExam = () => {
                   Negative Marking (%) 
                 </label>
                 <input
-                  type="number"
+                  type="number"  step="0.01"
                   className="input w-full input-bordered  border-black "
                   name="negative_marking"
                   id="negative_marking"
-                  step="any"
+                  
                   onChange={(e) =>
                     e.target.value < 0 ? (e.target.value = "") : e.target.value
                   }
@@ -307,7 +307,7 @@ const AddExam = () => {
                   Total Marks
                 </label>
                 <input
-                  type="number"
+                  type="number"  step="0.01"
                   className="input w-full input-bordered  border-black "
                   name="total_marks"
                   id="total_marks"

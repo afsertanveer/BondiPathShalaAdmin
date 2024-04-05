@@ -585,7 +585,7 @@ const ShowFreeExam = () => {
                     Questions
                   </label>
                   <input
-                    type="number"
+                    type="number"  step="0.01"
                     className="input w-full input-bordered  border-black "
                     name="total_questions"
                     id="total_questions"
@@ -603,7 +603,7 @@ const ShowFreeExam = () => {
                     Marks/Question
                   </label>
                   <input
-                    type="number"
+                    type="number"  step="0.01"
                     className="input w-full input-bordered  border-black "
                     name="marks_per_question"
                     id="marks_per_question"
@@ -716,12 +716,12 @@ const ShowFreeExam = () => {
                     Negative
                   </label>
                   <input
-                    type="number"
+                    type="number"  step="0.01"
                     className="input w-full input-bordered  border-black "
                     name="negative_marking"
                     id="negative_marking"
                     defaultValue={singleExam.negativeMarks}
-                    step="any"
+                    
                     onChange={(e) =>
                       e.target.value < 0
                         ? (e.target.value = "")

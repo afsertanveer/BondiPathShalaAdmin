@@ -277,7 +277,7 @@ const AddBothExam = () => {
                   Total Questions
                 </label>
                 <input
-                  type="number"
+                  type="number"  step="0.01"
                   className="input w-full input-bordered  border-black "
                   name="mcq_questions"
                   id="mcq_questions"
@@ -292,7 +292,7 @@ const AddBothExam = () => {
                   Marks/Question
                 </label>
                 <input
-                  type="number"
+                  type="number"  step="0.01"
                   className="input w-full input-bordered  border-black "
                   name="mcq_mpq"
                   id="mcq_mpq"
@@ -307,11 +307,11 @@ const AddBothExam = () => {
                   Total Marks
                 </label>
                 <input
-                  type="number"
+                  type="number"  step="0.01"
                   className="input w-full input-bordered  border-black "
                   name="mcq_total_marks"
                   id="mcq_total_marks"
-                  step="any"
+                  
                   onChange={(e) =>
                     e.target.value < 0 ? (e.target.value = '') : e.target.value
                   }
@@ -323,11 +323,11 @@ const AddBothExam = () => {
                   (-) Marking %
                 </label>
                 <input
-                  type="number"
+                  type="number"  step="0.01"
                   className="input w-full input-bordered  border-black "
                   name="negative_marking"
                   id="negative_marking"
-                  step="any"
+                  
                   onChange={(e) =>
                     e.target.value < 0 ? (e.target.value = '') : e.target.value
                   }
@@ -426,7 +426,7 @@ const AddBothExam = () => {
                   Total Questions
                 </label>
                 <input
-                  type="number"
+                  type="number"  step="0.01"
                   className="input w-full input-bordered  border-black "
                   name="written_questions"
                   id="written_questions"
@@ -441,7 +441,7 @@ const AddBothExam = () => {
                   Total Marks
                 </label>
                 <input
-                  type="number"
+                  type="number"  step="0.01"
                   className="input w-full input-bordered  border-black "
                   name="written_total_marks"
                   id="written_total_marks"
@@ -458,7 +458,7 @@ const AddBothExam = () => {
                   Total Marks
                 </label>
                 <input
-                  type="number"
+                  type="number"  step="0.01"
                   className="input w-full input-bordered  border-black font-extrabold "
                   placeholder="Total Marks"
                   name="total_marks"

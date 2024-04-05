@@ -12,13 +12,10 @@ import SpecialQuestionSender from './SpecialQuestionSender'
 import OptionChanger from './OptionChanger'
 const ShowQuestions = () => {
   const [courses, setCourses] = useState([])
-  const [subjects, setSubjects] = useState([])
   const [exams, setExams] = useState([])
   const [secondsubjects, setSecondSubjects] = useState([])
   const [secondexams, setSecondExams] = useState([])
   const [questions, setQuestions] = useState([])
-  const [selectedCourse, setSelectedCourse] = useState('')
-  const [selectedSubject, setSelectedSubject] = useState('')
   const [selectedExam, setSelectedExam] = useState('')
   const [bothStatus, setBothStatus] = useState(false)
   const [specialExams, setSpecialExmas] = useState([])
@@ -33,14 +30,6 @@ const ShowQuestions = () => {
   const [secondSet, setSecondSet] = useState(-1)
   const [numberOfOptions,setNumberOfOptions]= useState(0);
 
-  const handleChangeCourse = (e) => {
-    setSelectedSubject('')
-    setSubjects([])
-    setExams('')
-    setExams([])
-    setQuestions([])
-    setSelectedCourse(e.target.value)
-  }
   const handleChangeSecondCourse = (e) => {
     setSecondSubjects([])
     setSecondExams([])
@@ -65,12 +54,7 @@ const ShowQuestions = () => {
   }
 
 
-  const handleChangeSubject = (e) => {
-    setSelectedSubject(e.target.value)
-    setSelectedExam('')
-    setExams([])
-    setQuestions([])
-  }
+ 
   const handleChangeExam = (e) => {
     setQuestions([])
     setSelectedExam('')
@@ -328,88 +312,25 @@ const ShowQuestions = () => {
       setCourses(data.courses)
       setIsLoading(false)
     })
-    if (selectedCourse !== '') {
-      axios
-        .get(`/api/subject/getsubjectbycourse?courseId=${selectedCourse}`)
-        .then(({ data }) => {
-          setSubjects(data.data)
-          setIsLoading(false)
-        })
-        .catch((e) => console.log(e))
-    } else {
-      setSubjects([])
-    }
-    if (selectedSubject !== '') {
-      axios
-        .get(
-          `/api/exam/getexambysubadmin?subjectId=${selectedSubject}&examType=-1&type=free`
-        )
-        .then(({ data }) => {
-          const newData = data.filter((d) => d.examVariation === 1)
-          setExams(newData)
-          setIsLoading(false)
-        })
-        .catch((e) => console.log(e))
-    } else {
-      setExams([])
-    }
-  }, [selectedCourse, selectedSubject])
+    axios.get(`/api/freestudent/getfreeexamall`)
+    .then(({data} ) => {
+      // console.log(data);
+      setExams(data);      
+      if(data.length===0){
+        toast.error("No Data")
+      }
+      setIsLoading(false);
+    }).catch(e=>toast.error(e.response.data))
+  }, [])
   return (
     <div className=" ">
       <div className="bg-white py-4 px-2 my-3 ">
         <div
           className={` w-full  mx-auto grid grid-cols-1 lg:${
-            singleExam?.numberOfSet > 0 ? 'grid-cols-4' : 'grid-cols-3 '
+            singleExam?.numberOfSet > 0 ? 'grid-cols-2' : 'grid-cols-1 '
           } gap-4`}
         >
-          <div className="form-control">
-            <label className="label-text text-center" htmlFor="">
-              Select Course
-            </label>
-            <select
-              name="course_list"
-              id="course_list"
-              className="input w-full border-black input-bordered"
-              required
-              onChange={(e) => handleChangeCourse(e)}
-            >
-              <option value=""></option>
-              {courses.length > 0 &&
-                courses.map((course) => (
-                  <option
-                    className="text-center"
-                    key={course._id}
-                    value={course._id}
-                  >
-                    {course.name}
-                  </option>
-                ))}
-            </select>
-          </div>
-          <div className="form-control">
-            <label className="label-text text-center" htmlFor="">
-              Select Subject
-            </label>
-            <select
-              name="course_list"
-              id="course_list"
-              className="input w-full border-black input-bordered"
-              required
-              onChange={(e) => handleChangeSubject(e)}
-            >
-              <option value=""></option>
-              {subjects?.length > 0 &&
-                subjects.map((subject) => (
-                  <option
-                    className="text-center"
-                    key={subject._id}
-                    value={subject._id}
-                  >
-                    {subject.name}
-                  </option>
-                ))}
-            </select>
-          </div>
+          
           <div className="form-control">
             <label className="label-text text-center" htmlFor="">
               Select Exam Name

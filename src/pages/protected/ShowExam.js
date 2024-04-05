@@ -899,7 +899,7 @@ const ShowExam = () => {
                         Questions
                       </label>
                       <input
-                        type="number"
+                        type="number"  step="0.01"
                         className="input w-full input-bordered  border-black "
                         name="total_questions"
                         id="total_questions"
@@ -917,7 +917,7 @@ const ShowExam = () => {
                         Marks/Question
                       </label>
                       <input
-                        type="number"
+                        type="number"  step="0.01"
                         className="input w-full input-bordered  border-black "
                         name="marks_per_question"
                         id="marks_per_question"
@@ -938,7 +938,7 @@ const ShowExam = () => {
                       Total Marks
                     </label>
                     <input
-                      type="number"
+                      type="number"  step="0.01"
                       className="input w-full input-bordered  border-black "
                       name="total_marks"
                       id="total_marks"
@@ -981,12 +981,12 @@ const ShowExam = () => {
                     Negative Marking (%)
                   </label>
                   <input
-                    type="number"
+                    type="number"  step="0.01"
                     className="input w-full input-bordered  border-black "
                     name="negative_marking"
                     id="negative_marking"
                     defaultValue={singleExam.negativeMarks}
-                    step="any"
+                    
                     onChange={(e) =>
                       e.target.value < 0
                         ? (e.target.value = '')
@@ -1173,7 +1173,7 @@ const ShowExam = () => {
                 Number of Questions
               </label>
               <input
-                type="number"
+                type="number"  step="0.01"
                 className="input w-full input-bordered border-black "
                 name="num_of_options"
                 id="num_of_options"

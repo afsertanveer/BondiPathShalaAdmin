@@ -322,7 +322,7 @@ const AddBundleQuestion = () => {
                     Number of Options
                   </label>
                   <input
-                    type="number"
+                    type="number"  step="0.01"
                     className="input  input-bordered border-black font-extrabold w-full h-9"
                     name="num_of_options"
                     id="num_of_options"

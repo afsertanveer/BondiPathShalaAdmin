@@ -4,7 +4,7 @@ import axios from '../../utils/axios'
 import Loader from '../../Shared/Loader'
 import { toast } from 'react-hot-toast'
 import Select from 'react-select'
-import { singleColumnGrid, twoColumnGrid } from '../../utils/globalVariables'
+import { mcqSpcial, singleColumnGrid, twoColumnGrid } from '../../utils/globalVariables'
 
 const AddSpecialMcq = () => {
   const [courses, setCourses] = useState([])
@@ -26,46 +26,123 @@ const AddSpecialMcq = () => {
   const [numberOfRetakes, setNumberOfRetakes] = useState(4)
   const [numberOfSet, setNumberOfSet] = useState(4)
   const [isAdmission, setIsAdmission] = useState(false)
+  const [subjectInfo,setSubjectInfo] = useState([]);
+
+  const fillQuestionData = (e,subjectId) =>{
+    const obj = {
+      subjectId,
+      noOfQuestionsMcq:e.target.value
+      }
+      e.target.disabled = true; 
+    const prevSubjectInfo = subjectInfo;
+    prevSubjectInfo.push(obj);
+    setSubjectInfo(prevSubjectInfo);
+  }
 
   const handleAddExam = async (e) => {
     e.preventDefault()
+    // console.log(subjectInfo);
     const form = e.target
-    const name = form.exam.value
-    const startTime = form.start_time.value
-    const endTime = form.end_time.value
-    const duration = form.total_duration.value
-    const totalMarks = form.total_marks.value
-    const totalQuestions = form.mcq_total_questions.value
-    const marksPerMcq = form.marks_per_question.value
-    const negativeMarks = form.negative_marking.value
-    const status = true
-    const exam = {
-      name,
-      startTime,
-      endTime,
-      duration,
-      totalMarks,
-      totalQuestions,
-      marksPerMcq,
-      negativeMarks,
-      status,
-      selectedCourse,
-      numberOfSubject,
-      numberOfOptionalSubject,
-      numberOfFixedSubject,
-      examSubjectNumber,
-      selectedOptionalSubjects,
-      selectedFixedSubject,
-      isOptionalAvailable,
-      isAdmission,
-      selectedCurriculum,
-      selectedSubjects,
-      questionType,
-      numberOfOptions,
-      numberOfRetakes,
-      numberOfSet,
+    let numberOfOptionalSubject = 0;
+    if(isOptionalAvailable){
+      numberOfOptionalSubject =  form.nos.value;
     }
-    console.log(exam)
+    const name = form.exam.value;
+    const startTime = form.start_time.value;
+    const endTime = form.end_time.value;
+    const duration = form.total_duration.value;
+    const totalMarks = form.total_marks.value;
+    const marksPerMcq = form.marks_per_question.value;
+    const negativeMarks = form.negative_marking.value;
+    const totalQuestionMcq = parseInt(form.mcq_total_questions.value);
+    const status = true;
+    // const exam = {
+    //   name,
+    //   startTime,
+    //   endTime,
+    //   subjectInfo,
+    //   duration,
+    //   totalMarks,
+    //   totalQuestions,
+    //   marksPerMcq,
+    //   negativeMarks,
+    //   status,
+    //   selectedCourse,
+    //   numberOfSubject,
+    //   numberOfOptionalSubject,
+    //   numberOfFixedSubject,
+    //   examSubjectNumber,
+    //   selectedOptionalSubjects,
+    //   selectedFixedSubject,
+    //   isOptionalAvailable,
+    //   isAdmission,
+    //   selectedCurriculum,
+    //   selectedSubjects,
+    //   questionType,
+    //   numberOfOptions,
+    //   numberOfRetakes,
+    //   numberOfSet,
+    // }
+    const iLink = form.iLink.files[0];
+    const formdata = new FormData();
+
+    let oSubject = selectedOptionalSubjects;
+    let selectedOsbuject = [];
+    for (let i = 0; i < oSubject.length; i++) {
+      selectedOsbuject.push(oSubject[i].value);
+    }
+    let allSubjects = selectedSubjects;
+    let selectedAllSubjects = [];
+    for( let i = 0 ; i<allSubjects.length ; i++){
+      selectedAllSubjects.push(subjectInfo[i].subjectId);
+    }
+    
+    formdata.append("iLink", iLink);
+    formdata.append("name", name);
+    formdata.append("courseId", selectedCourse);
+    formdata.append("examVariation", 5);
+    formdata.append("startTime", startTime);
+    formdata.append("endTime", endTime);
+    formdata.append("noOfOptionalSubject", numberOfOptionalSubject);
+    formdata.append("noOfTotalSubject", subjectInfo.length);
+    formdata.append("noOfExamSubject", examSubjectNumber);
+    formdata.append("allSubject", JSON.stringify(selectedAllSubjects));
+    formdata.append("optionalSubject", JSON.stringify(selectedOsbuject));
+    formdata.append("duration", duration);
+    formdata.append("totalMarks", totalMarks);
+    formdata.append("totalQuestionMcq", totalQuestionMcq);
+    formdata.append("subjectInfo", JSON.stringify(subjectInfo));
+    formdata.append("marksPerMcq", marksPerMcq);
+    formdata.append("totalMarksMcq,", parseFloat(parseFloat(marksPerMcq)*parseInt(totalQuestionMcq)).toFixed(2));
+    formdata.append("negativeMarks", negativeMarks);
+    formdata.append("status", status);
+    formdata.append("fixedSubject", JSON.stringify(selectedFixedSubject));
+    formdata.append("noOfFixedSubject", selectedFixedSubject.length);
+    formdata.append("numberOfRetakes",numberOfRetakes)
+    formdata.append("numberOfOptions",numberOfOptions)
+    formdata.append("questionType",questionType)
+    formdata.append("numberOfSet",numberOfSet)
+    formdata.append("solutionSheet",null)
+    formdata.append("curriculumName",selectedCurriculum)
+    formdata.append("isAdmission",isAdmission)
+
+    // for (var pair of formdata.entries()) {
+    //   console.log(pair[0] + " - " + pair[1]);
+    // }
+
+    await axios
+      .post(`${mcqSpcial}/createspecialmcqexam`, formdata, {
+        headers: {
+          "Content-Type": "multipart/ form-data",
+        },
+      })
+      .then(({ data }) => {
+        console.log(data);
+        toast.success(data);
+        window.location.reload(false);
+      }).catch(e=>{
+        console.log(e);
+      })
   }
   useEffect(() => {
     setIsLoading(true)
@@ -187,7 +264,7 @@ const AddSpecialMcq = () => {
                   Optional Subject
                 </label>
                 <input
-                  type="number"  step="0.01"
+                  type="number"  
                   className="input input-bordered w-full  border-black "
                   name="nos"
                   id="nos"
@@ -290,6 +367,31 @@ const AddSpecialMcq = () => {
                   />
                 )}
               </div>
+            </div>
+            <div className='grid grid-cols-1 lg:grid-cols-2 gap-2'>
+              {
+                 selectedSubjects.length === parseInt(numberOfSubject) && selectedSubjects.map((sb,idx)=>(
+                  <div className="w-full">
+                <label className="label" htmlFor="">
+                  {sb.label}
+                </label>
+                <input
+                    type="number"  step="0.01"
+                    className="input w-full input-bordered  border-black "
+                    name="total_marks"
+                    id="total_marks"
+                    placeholder='Number of MCQ'
+                    onInput={(e) =>
+                      e.target.value < 0
+                        ? (e.target.value = '')
+                        : e.target.value
+                    }
+                    onBlur={(e)=>fillQuestionData(e,sb.value)}
+                    required
+                  />
+              </div>
+                 ))
+              }
             </div>
             <div>
               <div className="form-control flex flex-col lg:flex-row justify-between items-start lg:items-start">
@@ -506,7 +608,7 @@ const AddSpecialMcq = () => {
                   name="course"
                   id="course"
                   className="input w-full  border-black input-bordered "
-                  required
+                  // required
                   onChange={(e) => setSelectedCurriculum(e.target.value)}
                 >
                   <option value={null}></option>

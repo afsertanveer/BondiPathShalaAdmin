@@ -171,6 +171,7 @@ const AddQuestionSpecial = () => {
         .get(`/api/special/showspecialexambyid?examId=${singleExamId}`)
         .then(({ data }) => {
           setsingleExam(data)
+          setMcqOptions(data.numberOfOptions)
           if (data.questionType === '0') {
             setIsText(false)
           } else {
@@ -261,7 +262,7 @@ const AddQuestionSpecial = () => {
             <thead>
               <tr>
                 <th className="bg-white  font-semibold text-sm uppercase px-2 py-2">
-                  Exam Name
+                  Subject 
                 </th>
                 <th className="width-setter bg-white font-semibold text-sm uppercase px-6 py-2">
                   Action

@@ -3,6 +3,7 @@ export const variation = ["","MCQ","Written","Both"];
 export const itemPerPage = 5;
 export const twoColumnGrid = "grid grid-cols-1 lg:grid-cols-2 gap-x-3";
 export const singleColumnGrid = "grid grid-cols-1";
+export const mcqSpcial = '/api/mcqspecialexam';
 export const optionName = [
     "A",
     "B",

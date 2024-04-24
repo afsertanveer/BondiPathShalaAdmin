@@ -41,7 +41,9 @@ const AddBothExam = lazy(()=>import('./../pages/protected/AddBothExam'));
 const AddSpecialExam = lazy(()=>import('./../pages/protected/AddSpecialExam'));
 const ShowBothExam = lazy(()=>import('./../pages/protected/ShowBothExam'));
 const ShowSpecialExam = lazy(()=>import('./../pages/protected/ShowSpecialExam'));
+const ShowMcqSpecialExam = lazy(()=>import('./../pages/protected/ShowMcqSpecialExam'));
 const AddQuestionSpecial = lazy(()=>import('./../pages/protected/AddQuestionSpecial'));
+const AddQuestionMcqSpecial = lazy(()=>import('./../pages/protected/AddQuestionMcqSpecial'));
 const AddSpecialMcq = lazy(()=>import('./../pages/protected/AddSpecialMcq'));
 const ShowQuestionSpecial = lazy(()=>import('./../pages/protected/ShowQuestionSpecial'));
 const ShowBothQuestions = lazy(()=>import('./../pages/protected/ShowBothQuestions'));
@@ -57,6 +59,7 @@ const AddBundleQuestion = lazy(()=>import('./../pages/protected/AddBundleQuestio
 const AddFreeBundleQuestions = lazy(()=>import('./../pages/protected/AddFreeBundleQuestions'));
 const AddBundleQuestionBoth = lazy(()=>import('./../pages/protected/AddBundleQuestionBoth'));
 const AddBundleQuestionSpecial = lazy(()=>import('./../pages/protected/AddBundleQuestionSpecial'));
+const McqSepcialBundleQuestion = lazy(()=>import('./../pages/protected/McqSepcialBundleQuestion'));
 const AddCurriculum =  lazy(()=>import('./../pages/protected/AddCurriCulum'));
 const ShowCurriculum =  lazy(()=>import('./../pages/protected/ShowCurriculum'));
 const StorageClear =  lazy(()=>import('./../pages/protected/StorageClear'));
@@ -141,6 +144,10 @@ if(role===3){
     {
       path:'/addquestions/AddBundleQuestionSpecial',
       component:AddBundleQuestionSpecial
+    },
+    {
+      path:'/addquestionsmcqspecial/AddBundleQuestionSpecial',
+      component:McqSepcialBundleQuestion
     },
     {
       path: '/scripts/both/view', // the url
@@ -261,6 +268,11 @@ if(role===3){
       
     },
     {
+      path: '/exam/mcqspecial-addquestion', // the url
+      component:AddQuestionMcqSpecial , // view rendered
+      
+    },
+    {
       path: '/exam/show-special-addquestion-mcq', // the url
       component:ShowQuestionSpecial , // view rendered
       
@@ -268,6 +280,11 @@ if(role===3){
     {
       path: '/exam/special', // the url
       component: ShowSpecialExam, // view rendered
+      
+    },
+    {
+      path: '/exam/mcqspecial', // the url
+      component: ShowMcqSpecialExam, // view rendered
       
     },
     {

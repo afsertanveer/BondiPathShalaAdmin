@@ -1181,7 +1181,7 @@ const ShowExam = () => {
                 onInput={(e) =>
                   e.target.value < 0 ? (e.target.value = '') : e.target.value
                 }
-                onChange={(e) => handleChangeNumberOfInput(e)}
+                onBlur={(e) => handleChangeNumberOfInput(e)}
                 required
               />
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-4">

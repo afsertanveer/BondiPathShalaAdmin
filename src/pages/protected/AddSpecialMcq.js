@@ -125,6 +125,7 @@ const AddSpecialMcq = () => {
     formdata.append("solutionSheet",null)
     formdata.append("curriculumName",selectedCurriculum)
     formdata.append("isAdmission",isAdmission)
+    formdata.append("isOptionalAvailable",isOptionalAvailable)
 
     // for (var pair of formdata.entries()) {
     //   console.log(pair[0] + " - " + pair[1]);

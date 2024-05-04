@@ -41,7 +41,7 @@ const McqSepcialBundleQuestion = () => {
     if((parseInt(setName)!==-1)){
       axios
       .get(
-        `/api/special/slotAvailable?examId=${selectedExam}&setName=${parseInt(
+        `/api/mcqspecialexam/slotAvailable?examId=${selectedExam}&setName=${parseInt(
           setName
         )}&subjectId=${selectedSubject}`
       )
@@ -114,7 +114,7 @@ const McqSepcialBundleQuestion = () => {
         
     
         await axios
-          .post(`/api/special/addquestionmcq?examId=${selectedExam}`, formdata, {
+          .post(`/api/mcqspecialexam/addquestionmcq?examId=${selectedExam}`, formdata, {
             headers: {
               'Content-Type': 'multipart/ form-data',
             },
@@ -147,7 +147,7 @@ const McqSepcialBundleQuestion = () => {
     if (selectedCourse !== '') {
         
       axios
-      .get(`/api/special/showspecialexambycourse?courseId=${selectedCourse}`)
+      .get(`/api/mcqspecialexam/showmcqspecialexambycourse?courseId=${selectedCourse}`)
       .then(({ data }) => {
         setExams(data);
         if (data.length === 0) {
@@ -169,7 +169,7 @@ const McqSepcialBundleQuestion = () => {
     }
     if(selectedSubject!==''){
         axios
-        .get(`/api/special/showspecialexambyid?examId=${selectedExam}`)
+        .get(`/api/mcqspecialexam/showspecialexambyid?examId=${selectedExam}`)
         .then(({ data }) => {
           setSingleExam(data);
           

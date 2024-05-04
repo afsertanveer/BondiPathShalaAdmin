@@ -46,6 +46,7 @@ const AddQuestionSpecial = lazy(()=>import('./../pages/protected/AddQuestionSpec
 const AddQuestionMcqSpecial = lazy(()=>import('./../pages/protected/AddQuestionMcqSpecial'));
 const AddSpecialMcq = lazy(()=>import('./../pages/protected/AddSpecialMcq'));
 const ShowQuestionSpecial = lazy(()=>import('./../pages/protected/ShowQuestionSpecial'));
+const ShowQuestionMcqSpecial = lazy(()=>import('./../pages/protected/ShowQuestionMcqSpecial'));
 const ShowBothQuestions = lazy(()=>import('./../pages/protected/ShowBothQuestions'));
 const Recheck = lazy(()=>import('./../pages/protected/Recheck'));
 const RecheckBoth = lazy(()=>import('./../pages/protected/RecheckBoth'));
@@ -275,6 +276,11 @@ if(role===3){
     {
       path: '/exam/show-special-addquestion-mcq', // the url
       component:ShowQuestionSpecial , // view rendered
+      
+    },
+    {
+      path: '/exam/show-special-mcq-question', // the url
+      component:ShowQuestionMcqSpecial , // view rendered
       
     },
     {

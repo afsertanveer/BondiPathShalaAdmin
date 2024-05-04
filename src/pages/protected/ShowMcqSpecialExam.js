@@ -28,9 +28,9 @@ const ShowMcqSpecialExam = () => {
   const [subjects, setSubjects] = useState([]);
   const [addmissionChecked, setAddmissionChecked] = useState(false)
   const [curriculums, setCurriculums] = useState([]);
-  const [selectedCurriculum, setSelectedCurriculum] = useState(null);
+  // const [selectedCurriculum, setSelectedCurriculum] = useState(null);
   const generator = (id) => {
-    console.log(id);
+    // console.log(id);
     axios
       .post(`/api/mcqspecialexam/publishexam`,{examId:id})
       .then((data) => {
@@ -292,7 +292,7 @@ const ShowMcqSpecialExam = () => {
                       {exam.duration} Minutes
                     </td>
                     <td className="px-6 py-2 text-center">
-                      {exam.curriculumName}
+                      {exam.curriculumName==="null"? "No Curriculum" : exam.curriculumName}
                     </td>
                     <td className="px-6 py-2 text-center">
                       <div className="grid grid-cols-1 gap-x-3 gap-y-4">
@@ -370,13 +370,6 @@ const ShowMcqSpecialExam = () => {
                         >
                           Generate Meritlist
                         </label>
-                        <label
-                          onClick={() => handleAssignExamId(exam._id)}
-                          htmlFor="my-popup-written"
-                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                        >
-                          Submit Exam
-                        </label> 
                       </div>
                     </td>
                   </tr>

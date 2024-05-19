@@ -9,7 +9,6 @@ import { toast } from 'react-hot-toast'
 import Pagination from '../../components/common/Pagination'
 const McqSpecialExamDetails = () => {
   const [courses, setCourses] = useState([])
-  const [subjects, setSubjects] = useState([])
   const [exams, setExams] = useState([])
   const [detailedExam, setDetailedExam] = useState([])
   const [examInfo, setExamInfo] = useState({})
@@ -22,26 +21,19 @@ const McqSpecialExamDetails = () => {
 
   const handleChangeCourse = (e) => {
     setSelectedSubject('')
-    setSubjects([])
     setExams('')
     setExams([])
     setSelectedCourse(e.target.value)
     setDetailedExam([])
   }
 
-  const handleChangeSubject = (e) => {
-    setSelectedSubject(e.target.value)
-    setSelectedExam('')
-    setExams([])
-    setDetailedExam([])
-  }
 
   const handlePageClick = (event) => {
     let clickedPage = parseInt(event.selected) + 1
     if (event.selected > 0) {
       axios
         .get(
-          `/api/special/specialgethistory?examId=${selectedExam}&page=${clickedPage}`
+          `/api/mcqspecialexam/specialgethistory?examId=${selectedExam}&page=${clickedPage}`
         )
         .then(({ data }) => {
           console.log(data)
@@ -56,7 +48,7 @@ const McqSpecialExamDetails = () => {
         })
     } else {
       axios
-        .get(`/api/special/specialgethistory?examId=${selectedExam}&page=${1}`)
+        .get(`/api/mcqspecialexam/specialgethistory?examId=${selectedExam}&page=${1}`)
         .then(({ data }) => {
           console.log(data)
           setDetailedExam(data?.data)
@@ -73,47 +65,36 @@ const McqSpecialExamDetails = () => {
   const handleRegNo = (regNo) => {
     if (regNo.length >= 6) {
       axios
-        .get(
-          `api/special/specialgethistoryfilter?examId=${selectedExam}&regNo=${regNo}`
-        )
-        .then(({ data }) => {
-          setDetailedExam(data?.data)
-          setExamInfo(data.examInfo)
-          setPagiNationData({})
-          setIsLoading(false)
-        })
-        .catch((e) => {
-          toast.error(e.response.data)
-          axios
-            .get(
-              `/api/student/gethistorybyexamid?examId=${selectedExam}&page=${currentPage}`
-            )
-            .then(({ data }) => {
-              setDetailedExam(data?.data)
-              setExamInfo(data.examInfo)
-              setPagiNationData(data.paginateData)
-              setIsLoading(false)
-            })
-            .catch((e) => {
-              toast.error(e.response.data)
-              setDetailedExam([])
-            })
-        })
+      .get(
+        `/api/mcqspecialexam/specialgethistoryfilter?examId=${selectedExam}&regNo=${regNo}`
+      )
+      .then(({ data }) => {
+        console.log(data)
+        setDetailedExam(data?.data)
+        setExamInfo(data.examInfo)
+        setPagiNationData(data.paginateData)
+        setIsLoading(false)
+      })
+      .catch((e) => {
+        toast.error(e.response.data)
+        setDetailedExam([])
+      })
     } else {
       axios
-        .get(
-          `/api/special/specialgethistory?examId=${selectedExam}&page=${currentPage}`
-        )
-        .then(({ data }) => {
-          setDetailedExam(data?.data)
-          setExamInfo(data.examInfo)
-          setPagiNationData(data.paginateData)
-          setIsLoading(false)
-        })
-        .catch((e) => {
-          toast.error(e.response.data)
-          setDetailedExam([])
-        })
+      .get(
+        `/api/mcqspecialexam/specialgethistory?examId=${selectedExam}&page=${currentPage}`
+      )
+      .then(({ data }) => {
+        console.log(data)
+        setDetailedExam(data?.data)
+        setExamInfo(data.examInfo)
+        setPagiNationData(data.paginateData)
+        setIsLoading(false)
+      })
+      .catch((e) => {
+        toast.error(e.response.data)
+        setDetailedExam([])
+      })
     }
   }
   useEffect(() => {
@@ -125,25 +106,26 @@ const McqSpecialExamDetails = () => {
         setIsLoading(false)
       })
       .catch((e) => console.log(e))
-    if (selectedCourse !== '') {
-      axios
-        .get(`/api/special/showspecialexambycourse?courseId=${selectedCourse}`)
-        .then(({ data }) => {
-          setExams(data)
-          if (data.length === 0) {
-            toast.error('No Data')
-          }
-          setIsLoading(false)
-        })
-        .catch((e) => toast.error(e.response.data))
-    } else {
-      setExams([])
-    }
+      if (selectedCourse !== "") {
+        axios
+          .get(`/api/mcqspecialexam/showmcqspecialexambycourse?courseId=${selectedCourse}`)
+          .then(({ data }) => {
+            setExams(data);
+            if (data.length === 0) {
+              toast.error("No Data");
+            }
+            setIsLoading(false);
+          })
+          .catch((e) => toast.error(e.response.data));
+  
+      } else {
+        setExams([]);
+      }
 
     if (selectedExam !== '') {
       axios
         .get(
-          `/api/special/specialgethistory?examId=${selectedExam}&page=${currentPage}`
+          `/api/mcqspecialexam/specialgethistory?examId=${selectedExam}&page=${currentPage}`
         )
         .then(({ data }) => {
           console.log(data)
@@ -239,7 +221,7 @@ const McqSpecialExamDetails = () => {
                 <th className="w-[160px]">Title</th>
                 <th className="w-[90px]">Marks</th>
                 <th className="w-[110px]">Merit Postition</th>
-                <th className="w-[200px]">Action</th>
+                {/* <th className="w-[200px]">Action</th> */}
               </tr>
             </thead>
             <tbody>
@@ -264,7 +246,7 @@ const McqSpecialExamDetails = () => {
                         ? 'Pending'
                         : data.meritPosition}
                     </td>
-                    <td>
+                    {/* <td>
                       <div className="flex px-2 justify-evenly">
                         <Link
                           to={`/dashboard/exams/${data.studentId}/${examInfo.id}/solution?type=mcq-special`}
@@ -274,16 +256,8 @@ const McqSpecialExamDetails = () => {
                         >
                           MCQ
                         </Link>
-                        <Link
-                          to={`/dashboard/exams/${data.studentId}/${examInfo.id}/solutionwritten?type=written-special`}
-                          target="_blank"
-                          className="tooltip text-red font-bold  text-center h-[38px] w-[38px]"
-                          data-tip="Get Solution"
-                        >
-                          Written
-                        </Link>
                       </div>
-                    </td>
+                    </td> */}
                   </tr>
                 ))
               ) : (

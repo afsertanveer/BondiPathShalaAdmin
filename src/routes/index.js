@@ -22,6 +22,7 @@ const ShowQuestions = lazy(()=>import('../pages/protected/ShowQuestions'));
 const ShowFreeQuestion = lazy(()=>import('../pages/protected/ShowFreeQuestion'));
 const ShowQuestionsWritten = lazy(()=>import('../pages/protected/ShowQuestionsWritten'));
 const ExamDetails = lazy(()=>import('../pages/protected/ExamDetails'));
+const McqSpecialExamDetails = lazy(()=>import('../pages/protected/McqSpecialExamDetails'));
 const WrittenExamDetails = lazy(()=>import('../pages/protected/WrittenExamDetails'));
 const BothExamDetails = lazy(()=>import('../pages/protected/BothExamDetails'));
 const FreeExamDetails = lazy(()=>import('../pages/protected/FreeExamDetails'));
@@ -41,6 +42,7 @@ const AddBothExam = lazy(()=>import('./../pages/protected/AddBothExam'));
 const AddSpecialExam = lazy(()=>import('./../pages/protected/AddSpecialExam'));
 const ShowBothExam = lazy(()=>import('./../pages/protected/ShowBothExam'));
 const ShowSpecialExam = lazy(()=>import('./../pages/protected/ShowSpecialExam'));
+const ViewResultMcqSepcial = lazy(()=>import('./../pages/protected/ViewResultMcqSepcial'));
 const ShowMcqSpecialExam = lazy(()=>import('./../pages/protected/ShowMcqSpecialExam'));
 const AddQuestionSpecial = lazy(()=>import('./../pages/protected/AddQuestionSpecial'));
 const AddQuestionMcqSpecial = lazy(()=>import('./../pages/protected/AddQuestionMcqSpecial'));
@@ -131,6 +133,10 @@ if(role===3){
       component:AddBundleQuestion
     },
     {
+      path:'/exam/view-special-mcq-result',
+      component:ViewResultMcqSepcial
+    },
+    {
       path:'/storage/clearstorage',
       component:StorageClear
     },
@@ -157,6 +163,10 @@ if(role===3){
     {
       path:'/:examId/check/:studentId/:subjectId',
       component:ViewSingleScriptAdmin
+    },
+    {
+      path:'/exams/special-mcq-examdetails',
+      component:McqSpecialExamDetails
     },
     {
       path: '/scripts/special/view', // the url

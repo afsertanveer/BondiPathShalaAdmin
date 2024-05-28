@@ -3,6 +3,8 @@ import axios from '../../utils/axios'
 import { optionName } from '../../utils/globalVariables'
 import Loader from '../../Shared/Loader'
 import toast from 'react-hot-toast'
+import GetData from './GetData'
+import Latex from 'react-latex'
 
 const AddBundleQuestion = () => {
   const [courses, setCourses] = useState([])
@@ -16,9 +18,24 @@ const AddBundleQuestion = () => {
   const [selectedSet, setSelectedSet] = useState(-1)
   const [slots, setSlots] = useState(0)
   const [selectedImages, setSelectedIMages] = useState([])
-  const [uploadImages,setUploadImages] = useState([]);
+  const [uploadImages, setUploadImages] = useState([])
   const [correctOptions, setCorrectOptions] = useState([])
-  const [disabler,setDisabler] = useState(false);
+  const [disabler, setDisabler] = useState(false)
+  const [quesType, setQuesType] = useState(null)
+  const [questionDetails, setQuestionDetails] = useState([{}])
+  const [enabler,setEnabler] = useState([]);
+  const [questionArray,setQuestionArray] = useState([]);
+  const [count,setCount] = useState(-1);
+
+  const addDetails = (id) => {
+    let prevData = []
+    prevData = questionDetails
+    const question =document.getElementById(`ques${id}`).value;
+    prevData[id].question = question;
+    
+    console.log(question);
+    setQuestionDetails(prevData)
+  }
 
   const handleChangeCourse = (e) => {
     setSelectedSubject('')
@@ -33,7 +50,7 @@ const AddBundleQuestion = () => {
     setSelectedSubject(e.target.value)
     setSelectedExam('')
     setExams([])
-    setSlots(0);
+    setSlots(0)
   }
 
   const handleChangeExam = (e) => {
@@ -44,6 +61,25 @@ const AddBundleQuestion = () => {
         .get(`/api/exam/getExamById?examId=${e.target.value}`)
         .then(({ data }) => {
           setSingleExam(data)
+          console.log(data)
+          let emptyArray = []
+          let numberArray  = [];
+          let qArray = [];
+          for (let i = 0; i < data.totalQuestionMcq; i++) {
+            const obj ={};
+            obj.question = "";
+            obj.options = [];
+            obj.optionCount = data.numberOfOptions;
+            obj.explanationILink = null;
+            obj.status = true;
+            emptyArray[i] = obj;
+            numberArray[i] = 1;
+            qArray[i] = '';
+          }
+          setEnabler(numberArray);
+          setQuestionArray(qArray);
+          setQuestionDetails(emptyArray)
+          setQuesType(data.questionType)
           setSelectedExam(e.target.value)
         })
         .catch((e) => console.log(e))
@@ -52,7 +88,17 @@ const AddBundleQuestion = () => {
       setSingleExam({})
     }
   }
-
+  const addData = id =>{
+    setIsLoading(true);
+    console.log(questionDetails);
+    setCount(prev=>prev+1);
+    let prevData = questionArray;
+    // console.log(value)
+    const question =document.getElementById(`ques${id}`).value;
+    prevData[id] = question;
+    setQuestionArray(prevData);
+    setIsLoading(false);
+  }
   const handleChangeSet = (setName) => {
     setSelectedSet(parseInt(setName))
     axios
@@ -63,92 +109,90 @@ const AddBundleQuestion = () => {
       )
       .then(({ data }) => {
         setSlots(data.slots)
-        let arrayFiller = [];
-        for( let i = 0 ; i<data.slots; i++ ){
-            arrayFiller[i] = -1;
+        let arrayFiller = []
+        for (let i = 0; i < data.slots; i++) {
+          arrayFiller[i] = -1
         }
         setCorrectOptions(arrayFiller)
-      }).catch(e=>{
-        setSlots(0);
+      })
+      .catch((e) => {
+        setSlots(0)
       })
   }
 
   async function onFileSelected(e) {
     console.log()
     const imgList = []
-    const savImg = [];
-    if(e.target.files.length<=slots){
-        for (let i = 0; i < e.target.files.length; i++) {
-            imgList.push(URL.createObjectURL(e.target.files[i]))
-            savImg[i] = e.target.files[i];
-          }    
-          setUploadImages(savImg)
-          setSelectedIMages(imgList)
-    }else{
-        toast.error(`You can maximum select ${slots} `)
+    const savImg = []
+    if (e.target.files.length <= slots) {
+      for (let i = 0; i < e.target.files.length; i++) {
+        imgList.push(URL.createObjectURL(e.target.files[i]))
+        savImg[i] = e.target.files[i]
+      }
+      setUploadImages(savImg)
+      setSelectedIMages(imgList)
+    } else {
+      toast.error(`You can maximum select ${slots} `)
     }
   }
 
-  const addBulkCorrectOption = (ca,id) =>{
-    const correctAnswerList = correctOptions;
-    correctAnswerList[id] = ca ;
-    console.log(correctAnswerList);
-    setCorrectOptions(correctAnswerList);
+  const addBulkCorrectOption = (ca, id) => {
+    const correctAnswerList = correctOptions
+    correctAnswerList[id] = ca
+    console.log(correctAnswerList)
+    setCorrectOptions(correctAnswerList)
   }
-  const addAllQuestions = async()=>{
+  const addAllQuestions = async () => {
     // document.getElementById("addButton").disabled =true;
     // setDisabler(true)
-    const curQtype = 0;
+    const curQtype = 0
     let questionText = ''
     let options = []
     setIsLoading(true)
-    
-    let questionLink = ''
-    const explanationILink = null;
-    const iImages = uploadImages;
-    for(let i = 0 ; i<iImages.length ;i++ ){
-        console.log(iImages[i]);
-        const optAnswer = correctOptions[i];
-        const formdata = new FormData()
-        questionLink =iImages[i];
-        formdata.append('iLink', questionLink)
-        formdata.append('explanationILink', explanationILink)
-    
-        formdata.append('questionText', questionText)
-        formdata.append('type', curQtype)
-        formdata.append('options', JSON.stringify(options))
-        formdata.append('optionCount', singleExam.numberOfOptions)
-        formdata.append('correctOption', parseInt(optAnswer))
-        formdata.append('status', true)
-        formdata.append('examId', selectedExam)
-        formdata.append('setName', selectedSet)
-        
-    
-        await axios
-          .post(`/api/exam/addquestionmcq?examId=${selectedExam}`, formdata, {
-            headers: {
-              'Content-Type': 'multipart/ form-data',
-            },
-          })
-          .then((data) => {
-            if(i+1===uploadImages.length){
-                toast.success('successfully added all the questions')
-                setUploadImages([]);
-                setSelectedExam([]);
-                setSlots(-1);
-                setIsLoading(false);
-                window.location.reload(false);
-            }
-            // toast.success("Uploaded")
-          })
-          .catch((e) =>{
-            toast.error(e.response.data);
-          })
-    }
-  
 
+    let questionLink = ''
+    const explanationILink = null
+    const iImages = uploadImages
+    for (let i = 0; i < iImages.length; i++) {
+      console.log(iImages[i])
+      const optAnswer = correctOptions[i]
+      const formdata = new FormData()
+      questionLink = iImages[i]
+      formdata.append('iLink', questionLink)
+      formdata.append('explanationILink', explanationILink)
+
+      formdata.append('questionText', questionText)
+      formdata.append('type', curQtype)
+      formdata.append('options', JSON.stringify(options))
+      formdata.append('optionCount', singleExam.numberOfOptions)
+      formdata.append('correctOption', parseInt(optAnswer))
+      formdata.append('status', true)
+      formdata.append('examId', selectedExam)
+      formdata.append('setName', selectedSet)
+
+      await axios
+        .post(`/api/exam/addquestionmcq?examId=${selectedExam}`, formdata, {
+          headers: {
+            'Content-Type': 'multipart/ form-data',
+          },
+        })
+        .then((data) => {
+          if (i + 1 === uploadImages.length) {
+            toast.success('successfully added all the questions')
+            setUploadImages([])
+            setSelectedExam([])
+            setSlots(-1)
+            setIsLoading(false)
+            window.location.reload(false)
+          }
+          // toast.success("Uploaded")
+        })
+        .catch((e) => {
+          toast.error(e.response.data)
+        })
+    }
   }
-  
+
   useEffect(() => {
     setIsLoading(true)
     axios.get('/api/course/getallcourseadmin').then(({ data }) => {
@@ -285,13 +329,15 @@ const AddBundleQuestion = () => {
         </div>
       </div>
       {isLoading && <Loader />}
-      {
-        selectedExam!=='' && slots===0 && <div className='flex justify-center items-center border-4 rounded-lg bg-white border-color-one py-8 px-4 my-10 mx-8'>
-          <p className='text-[32px] font-extrabold text-success'>You have already added the questions for this set!</p>
+      {selectedExam !== '' && slots === 0 && (
+        <div className="flex justify-center items-center border-4 rounded-lg bg-white border-color-one py-8 px-4 my-10 mx-8">
+          <p className="text-[32px] font-extrabold text-success">
+            You have already added the questions for this set!
+          </p>
         </div>
-      }
-      {slots > 1 && (
-        <div className='my-5'>
+      )}
+      {slots > 1 && quesType === '0' && (
+        <div className="my-5">
           <label htmlFor="" className=" label">
             <span className="label-text">Select Multiple Question Image </span>
           </label>
@@ -306,8 +352,10 @@ const AddBundleQuestion = () => {
           />
         </div>
       )}
-      {slots>0 && selectedImages.length > 0 &&
-        selectedImages.map((image, id) =>(
+      {slots > 0 &&
+        quesType === '0' &&
+        selectedImages.length > 0 &&
+        selectedImages.map((image, id) => (
           <div key={id} className="grid grid-cols-1 my-8 ">
             <div className="w-full px-2 py-2 lg:px-8 border border-color-one bg-white rounded-lg ">
               <label className="text-[32px] font-bold">
@@ -318,27 +366,35 @@ const AddBundleQuestion = () => {
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-10">
                 <div className="my-4 px-4 lg:my-0">
-                  <label htmlFor="" className="label font-semibold text-[16px] ">
+                  <label
+                    htmlFor=""
+                    className="label font-semibold text-[16px] "
+                  >
                     Number of Options
                   </label>
                   <input
-                    type="number"  step="0.01"
+                    type="number"
+                    step="0.01"
                     className="input  input-bordered border-black font-extrabold w-full h-9"
                     name="num_of_options"
                     id="num_of_options"
                     value={singleExam.numberOfOptions}
-                    onChange={(e)=>{}}
+                    onChange={(e) => {}}
                     disable
                     required
                   />
                 </div>
                 <div>
-                  <label className="label font-semibold text-[16px] ">Correct Option</label>
+                  <label className="label font-semibold text-[16px] ">
+                    Correct Option
+                  </label>
                   <select
                     name="type"
                     id="type"
                     className="input border-black input-bordered w-full h-5 "
-                    onChange={(e) => addBulkCorrectOption(parseInt(e.target.value),id)}
+                    onChange={(e) =>
+                      addBulkCorrectOption(parseInt(e.target.value), id)
+                    }
                     required
                   >
                     <option value={-1}>---</option>
@@ -354,10 +410,113 @@ const AddBundleQuestion = () => {
           </div>
         ))}
 
-        {slots>1 && disabler===false && <button
-        id='addButton'
-        onClick={addAllQuestions}
-        className={`btn btn-warning btn-sm rounded-tr-none rounded-bl-none hover:bg-orange-400 h-12`}> Add All Questions</button>}
+<p>count:{count}</p>
+  
+       
+      {slots > 0 && 
+        quesType === '1' &&
+        [...Array(singleExam.totalQuestionMcq).keys()].map((id) => ( enabler[id]===1 && !isLoading &&
+          <div key={id} className="grid grid-cols-1 my-8 ">
+            <div className="w-full px-2 py-2 lg:px-8 border border-color-one bg-white rounded-lg ">
+              <label className="text-[32px] font-bold">
+                Question: {id + 1}
+              </label>
+              <div className="flex justify-start items-center my-6">
+                <textarea
+                  className="textarea textarea-info   border-black"
+                  name={`ques${id}`}
+                  id={`ques${id}`}
+                  cols={100}
+                  enterKey={(e)=>addData(id)}
+                  placeholder="Description"
+                ></textarea>
+                <button className='btn btn-lg' onClick={(e)=>addData(id)}>Check</button>
+              </div>
+              <hr/>
+              {
+                isLoading? <Loader/> : <div className="flex justify-start items-center my-3" >
+                  <Latex>{questionArray[id]}</Latex>
+                {/* <input value={questionArray[id]} type="text"  placeholder="0.00" readOnly /> */}
+              </div>
+              }
+              <div className="flex justify-start items-center">
+                  <label
+                    htmlFor=""
+                    className="label font-semibold text-[16px] "
+                  >
+                    Number of Options : {singleExam.numberOfOptions}
+                  </label>
+                  
+                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-4">
+                {singleExam.numberOfOptions > 0 &&
+                  [...Array(singleExam.numberOfOptions).keys()].map((id) => {
+                    return (
+                      <div key={id}>
+                        <div>
+                          <label htmlFor="" className="text-lg">
+                            {optionName[id] + ')'}
+                          </label>
+                          <input
+                            type="text"
+                            placeholder={`Option ${id + 1}`}
+                            name={`option${id}`}
+                            id={`option${id}`}
+                            className="input w-full input-bordered border-black "
+                            required
+                          />
+                        </div>
+                      </div>
+                    )
+                  })}
+              </div>
+              <div className="flex justify-start items-center">
+                  <label className="label font-semibold text-[16px] ">
+                    Correct Option
+                  </label>
+                  <select
+                    name="type"
+                    id="type"
+                    className="input border-black input-bordered w-full h-5 "
+                    onChange={(e) =>
+                      addBulkCorrectOption(parseInt(e.target.value), id)
+                    }
+                    required
+                  >
+                    <option value={-1}>---</option>
+                    {[...Array(singleExam.numberOfOptions).keys()].map((id) => (
+                      <option key={id} value={id}>
+                        {optionName[id]}
+                      </option>
+                    ))}
+                  </select>
+                  
+                </div>
+              
+              <div className="flex justify-center items-center">
+                <button
+                  id="addButton"
+                  onClick={() => addDetails(id)}
+                  className={`btn btn-warning rounded-tr-none rounded-bl-none hover:bg-orange-400 h-12`}
+                >
+                  {' '}
+                  Add{' '}
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+       
+      {slots > 1 && disabler === false && (
+        <button
+          id="addButton"
+          onClick={addAllQuestions}
+          className={`btn btn-warning btn-sm rounded-tr-none rounded-bl-none hover:bg-orange-400 h-12`}
+        >
+          {' '}
+          Add All Questions
+        </button>
+      )}
     </div>
   )
 }

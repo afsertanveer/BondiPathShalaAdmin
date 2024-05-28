@@ -196,7 +196,7 @@ const ShowExam = () => {
     formdata.append('status', true)
     formdata.append('examId', singleExamId)
     formdata.append('setName', nameOfSet)
-    console.log(updatenumberOfOptions);
+    console.log(updatenumberOfOptions)
     await axios
       .post(`/api/exam/addquestionmcq?examId=${singleExamId}`, formdata, {
         headers: {
@@ -320,18 +320,38 @@ const ShowExam = () => {
       })
       .catch((err) => console.log(err))
   }
-  const refillQuestions = id =>{
+  const refillQuestions = (id) => {
     const sendingData = {
-      examId:id
-    };
+      examId: id,
+    }
     axios
-    .post('/api/exam/refillquestion',sendingData)
-    .then((data) => {
-      console.log(data)
-      toast.success('Questions added to all sets')
-      window.location.reload(false)
-    })
-    .catch((err) => toast.error(err.response.data))
+      .post('/api/exam/refillquestion', sendingData)
+      .then((data) => {
+        console.log(data)
+        toast.success('Questions added to all sets')
+        window.location.reload(false)
+      })
+      .catch((err) => toast.error(err.response.data))
+  }
+  const recalculate = (id) => {
+    axios
+      .post(`/api/exam/calculatemartks?type=${examType}`, {
+        examId: singleExamId,
+      })
+      .then((data) => {
+        axios
+          .put(`/api/student/updatestudentexaminfo?examId=${id}`)
+          .then((data) => {
+            axios
+              .post(`/api/student/updaterank?examId=${id}`)
+              .then((data) => {
+                toast.success('Rank Generated Successfully')
+                window.location.reload(false)
+              })
+              .catch((e) => console.log(e))
+          })
+          .catch((e) => console.log(e))
+      })
   }
   useEffect(() => {
     setIsLoading(true)
@@ -572,7 +592,9 @@ const ShowExam = () => {
                           htmlFor="imageAdder"
                           className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
-                          {exam.iLink === null ? 'Add Exam Image' : 'Update Exam Image'}
+                          {exam.iLink === null
+                            ? 'Add Exam Image'
+                            : 'Update Exam Image'}
                         </label>
 
                         <label
@@ -600,12 +622,14 @@ const ShowExam = () => {
                             Add Question
                           </label>
                         )}
-                       { exam.examVariation === 1  && <button
-                          className="btn bg-button text-[12px] hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                          onClick={() => refillQuestions(exam._id)}
-                        >
-                          Refill MCQ Sets
-                        </button>}
+                        {exam.examVariation === 1 && (
+                          <button
+                            className="btn bg-button text-[12px] hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                            onClick={() => refillQuestions(exam._id)}
+                          >
+                            Refill MCQ Sets
+                          </button>
+                        )}
                         <DeactivateButton
                           setter={setSelectedExamId}
                           value={exam._id}
@@ -639,6 +663,15 @@ const ShowExam = () => {
                             className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                           >
                             Generate Meritlist
+                          </label>
+                        )}
+                        {examType === '1' && (
+                          <label
+                            onClick={() => handleAssignExamId(exam._id)}
+                            htmlFor="my-calculate"
+                            className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          >
+                            Recalculate
                           </label>
                         )}
                         {examType === '2' && (
@@ -677,6 +710,26 @@ const ShowExam = () => {
         </div>
       )}
       <div>
+        <input type="checkbox" id="my-calculate" className="modal-toggle" />
+        <div className="modal">
+          <div className="modal-box">
+            <h3 className="font-semibold text-lg text-center">
+              {`Are you sure?`}
+            </h3>
+
+            <div className="modal-action flex justify-center items-center">
+              <button
+                className="btn mr-2"
+                onClick={() => recalculate(singleExamId)}
+              >
+                Yes
+              </button>
+              <label htmlFor="my-calculate" className="btn bg-[red]">
+                No!
+              </label>
+            </div>
+          </div>
+        </div>
         <input type="checkbox" id="my-popup-written" className="modal-toggle" />
         <div className="modal">
           <div className="modal-box">
@@ -899,7 +952,8 @@ const ShowExam = () => {
                         Questions
                       </label>
                       <input
-                        type="number"  step="0.01"
+                        type="number"
+                        step="0.01"
                         className="input w-full input-bordered  border-black "
                         name="total_questions"
                         id="total_questions"
@@ -917,7 +971,8 @@ const ShowExam = () => {
                         Marks/Question
                       </label>
                       <input
-                        type="number"  step="0.01"
+                        type="number"
+                        step="0.01"
                         className="input w-full input-bordered  border-black "
                         name="marks_per_question"
                         id="marks_per_question"
@@ -938,7 +993,8 @@ const ShowExam = () => {
                       Total Marks
                     </label>
                     <input
-                      type="number"  step="0.01"
+                      type="number"
+                      step="0.01"
                       className="input w-full input-bordered  border-black "
                       name="total_marks"
                       id="total_marks"
@@ -981,12 +1037,12 @@ const ShowExam = () => {
                     Negative Marking (%)
                   </label>
                   <input
-                    type="number"  step="0.01"
+                    type="number"
+                    step="0.01"
                     className="input w-full input-bordered  border-black "
                     name="negative_marking"
                     id="negative_marking"
                     defaultValue={singleExam.negativeMarks}
-                    
                     onChange={(e) =>
                       e.target.value < 0
                         ? (e.target.value = '')
@@ -1173,7 +1229,8 @@ const ShowExam = () => {
                 Number of Questions
               </label>
               <input
-                type="number"  step="0.01"
+                type="number"
+                step="0.01"
                 className="input w-full input-bordered border-black "
                 name="num_of_options"
                 id="num_of_options"

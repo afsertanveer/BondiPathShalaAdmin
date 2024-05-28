@@ -15,34 +15,36 @@ const SingleStudentSpecialWritten = () => {
   const [answerScripts, setAnswerScripts] = useState([])
   const [vacantAnswerSubmitter, setVacantAnswerSubmitter] = useState([])
   const [numberOfAnsweredQuestions, setNumberOfAnsweredQuestions] = useState(-1)
-  const [enabler,setEnabler] = useState([]);
-  const [tracker,setTracker] = useState([]);
-  const [saveId,setSaveId] = useState(-1);
+  const [enabler, setEnabler] = useState([])
+  const [tracker, setTracker] = useState([])
+  const [saveId, setSaveId] = useState(-1)
+  const [totalAnsweredQuestion, setTotalAnsweredQuestion] = useState(-1)
+  const [teacherId, setTeacherId] = useState(null)
 
   const navigate = useNavigate()
   let prevSource = []
- 
+
   const sendImage = async (e) => {
-    let lastTracker = tracker;
-    lastTracker[saveId] = -1 ;
-    let lastEnabler = enabler;
-    for( let i = 0 ; i<lastEnabler.length; i++){
-      if(lastEnabler[i]===saveId){
-        lastEnabler[i] = -1;
+    let lastTracker = tracker
+    lastTracker[saveId] = -1
+    let lastEnabler = enabler
+    for (let i = 0; i < lastEnabler.length; i++) {
+      if (lastEnabler[i] === saveId) {
+        lastEnabler[i] = -1
       }
     }
     // const id = saveId;
     // console.log(id)
-    for( let i = 0 ; i<lastEnabler.length ; i++ ){
-      if(lastTracker[lastEnabler[i]]===-1 && enabler[i]!==saveId){
-          lastTracker[lastEnabler[i]] = 1 ;
-          break;
+    for (let i = 0; i < lastEnabler.length; i++) {
+      if (lastTracker[lastEnabler[i]] === -1 && enabler[i] !== saveId) {
+        lastTracker[lastEnabler[i]] = 1
+        break
       }
     }
-    console.log("check",lastTracker)
-    console.log("enabler",lastEnabler)
-    setTracker(lastTracker);
-    setEnabler(lastEnabler);
+    console.log('check', lastTracker)
+    console.log('enabler', lastEnabler)
+    setTracker(lastTracker)
+    setEnabler(lastEnabler)
     e.preventDefault()
     setIsLoading(true)
 
@@ -51,7 +53,7 @@ const SingleStudentSpecialWritten = () => {
     const obtainedMarks = parseFloat(form.obtMarks.value).toFixed(2)
 
     let answer
-    console.log(source.length);
+    console.log(source.length)
     if (source.length === 0) {
       answer = {
         questionNo: idx + 1,
@@ -74,7 +76,7 @@ const SingleStudentSpecialWritten = () => {
       .post('/api/special/checkscriptsingle', answer)
       .then((data) => {
         setAnsTracker((prev) => prev + 1)
-        setSendButtonEnabler(true);
+        setSendButtonEnabler(true)
         toast.success('Successfully updated')
         setSource([])
         setIsLoading(false)
@@ -87,7 +89,11 @@ const SingleStudentSpecialWritten = () => {
       studentId: params.studentId,
       examId: params.examId,
     }
-  
+    const scriptCount = {
+      teacherId: teacherId,
+      examId: params.examId,
+      noq: totalAnsweredQuestion,
+    }
     let answer
     for (let k = 0; k < vacantAnswerSubmitter.length; k++) {
       answer = {
@@ -105,10 +111,11 @@ const SingleStudentSpecialWritten = () => {
             axios
               .post('/api/special/markscalculation', marksCalculation)
               .then((data) => {
-                toast.success('successfully updated the result')
-                setIsLoading(false)
-                navigate("/dashboard/scripts/special/view")
-                
+                axios.post('/api/scripts/add', scriptCount).then((data) => {
+                  toast.success('successfully updated the result')
+                  setIsLoading(false)
+                  navigate('/dashboard/scripts/view')
+                })
               })
               .catch((e) => console.log(e))
           }
@@ -120,9 +127,11 @@ const SingleStudentSpecialWritten = () => {
       axios
         .post('/api/special/markscalculation', marksCalculation)
         .then((data) => {
-          toast.success('successfully updated the result')
-          setIsLoading(false)
-          navigate("/dashboard/scripts/special/view")
+          axios.post('/api/scripts/add', scriptCount).then((data) => {
+            toast.success('successfully updated the result')
+            setIsLoading(false)
+            navigate('/dashboard/scripts/view')
+          })
         })
         .catch((e) => console.log(e))
     }
@@ -131,16 +140,20 @@ const SingleStudentSpecialWritten = () => {
     //console.log(id)
     if (
       isNaN(marks) === false &&
-      parseFloat(marks) <= singleResult.marksPerQuestion[id] && source.length === answerScripts[id].length
+      parseFloat(marks) <= singleResult.marksPerQuestion[id] &&
+      source.length === answerScripts[id].length
     ) {
       // setButtonDisabler(false)
-      setSendButtonEnabler(false);
+      setSendButtonEnabler(false)
     } else {
-      setSendButtonEnabler(true);
+      setSendButtonEnabler(true)
     }
   }
   useEffect(() => {
     setIsLoading(true)
+    const teacher = JSON.parse(localStorage.getItem('user'))
+    // console.log('user', teacherId)
+    setTeacherId(teacher._id)
     axios
       .get(
         `/api/special/getWrittenStudentSingleByExam?examId=${params.examId}&&studentId=${params.studentId}`
@@ -149,30 +162,41 @@ const SingleStudentSpecialWritten = () => {
         setSingleResult(data)
         // console.log('result', data)
         setAnswerScripts(data.answerScript)
+        let count = 0
+        for (let i = 0; i < data.answerScript.length; i++) {
+          if (data.answerScript[i].length > 0) {
+            count++
+          }
+        }
+        // console.log('setTotalAnsweredQuestion', count)
+        setTotalAnsweredQuestion(count)
         let answered = 0
         let vacantAnswer = []
-        let checker =[];
-        let flag = 0;
-        let tr=[]
+        let checker = []
+        let flag = 0
+        let tr = []
         for (let i = 0; i < data.answerScript.length; i++) {
-          if (data.answerScript[i] === null || data.answerScript[i].length===0) {
+          if (
+            data.answerScript[i] === null ||
+            data.answerScript[i].length === 0
+          ) {
             vacantAnswer.push(i + 1)
-            tr.push(-1);
+            tr.push(-1)
           } else {
-            if(flag === 0){
-              tr.push(1);
+            if (flag === 0) {
+              tr.push(1)
               // flag=1;
-            }else{
-              tr.push(-1);
+            } else {
+              tr.push(-1)
             }
-            checker.push(i);
+            checker.push(i)
             answered++
           }
         }
         console.log(tr)
         console.log(checker)
         console.log(answered)
-        setTracker(tr);
+        setTracker(tr)
         setEnabler(checker)
         setNumberOfAnsweredQuestions(answered)
         setVacantAnswerSubmitter(vacantAnswer)
@@ -185,62 +209,70 @@ const SingleStudentSpecialWritten = () => {
     <div className="min-h-full mb-80 mx-0 px-0 lg:px-8 pe-8 lg:pe-0 ">
       {ansTracker !== numberOfAnsweredQuestions &&
         answerScripts.map((answer, idx) => (
-          <div key={idx} >
-            {answer !== null && tracker[idx]===1 && (
+          <div key={idx}>
+            {answer !== null && tracker[idx] === 1 && (
               <>
                 <p className=" my-4 text-4xl font-extrabold  border-4  border-color-one   w-10 h-10 flex justify-center items-center rounded-full">
                   {idx + 1}
                 </p>
-                <div className='grid grid-cols-1 px-2 py-1 border-4 border-color-one rounded-lg '>
+                <div className="grid grid-cols-1 px-2 py-1 border-4 border-color-one rounded-lg ">
                   {Array.isArray(answer) === true &&
                     answer.map((photo, index) => (
                       <div key={index}>
-                        <CheckAnswerScript key={index} index={index} photo={photo} singleResult={singleResult} idx={idx} answer={answer} 
-                          source={source} setSource={setSource} setSendButtonEnabler={setSendButtonEnabler} sendButtonEnabler={sendButtonEnabler} prevSource={prevSource}
+                        <CheckAnswerScript
+                          key={index}
+                          index={index}
+                          photo={photo}
+                          singleResult={singleResult}
+                          idx={idx}
+                          answer={answer}
+                          source={source}
+                          setSource={setSource}
+                          setSendButtonEnabler={setSendButtonEnabler}
+                          sendButtonEnabler={sendButtonEnabler}
+                          prevSource={prevSource}
                         />
-                        {
-                          index + 1 === answer.length &&
-                        
-                        <form onSubmit={sendImage} className="my-4 ">
-                          <input
-                            type="text"
-                            className="input input-bordered  border-black hidden"
-                            name="index"
-                            id=""
-                            defaultValue={idx}
-                          />
-                          <p className="ml-4 text-lg font-bold text-red">
-                            Marks out of {singleResult.marksPerQuestion[idx]}
-                          </p>
-                          <div className="flex flex-col lg:flex-row ">
+                        {index + 1 === answer.length && (
+                          <form onSubmit={sendImage} className="my-4 ">
                             <input
                               type="text"
-                              name="obtMarks"
-                              id="obtMarks"
-                              autoComplete="off"
-                              className="input input-bordered  border-black"
-                              onChange={(e) => checkNumber(e.target.value, idx)}
-                              required
+                              className="input input-bordered  border-black hidden"
+                              name="index"
+                              id=""
+                              defaultValue={idx}
                             />
-                            <input
-                              type="submit"
-                              className="ml-0 lg:ml-4 mt-2 lg:mt-0 btn"
-                              onClick={()=>setSaveId(idx)}
-                              value="Save Marks"
-                              disabled={sendButtonEnabler}
-                            />
-                          </div>
-                        </form>
-                        }
+                            <p className="ml-4 text-lg font-bold text-red">
+                              Marks out of {singleResult.marksPerQuestion[idx]}
+                            </p>
+                            <div className="flex flex-col lg:flex-row ">
+                              <input
+                                type="text"
+                                name="obtMarks"
+                                id="obtMarks"
+                                autoComplete="off"
+                                className="input input-bordered  border-black"
+                                onChange={(e) =>
+                                  checkNumber(e.target.value, idx)
+                                }
+                                required
+                              />
+                              <input
+                                type="submit"
+                                className="ml-0 lg:ml-4 mt-2 lg:mt-0 btn"
+                                onClick={() => setSaveId(idx)}
+                                value="Save Marks"
+                                disabled={sendButtonEnabler}
+                              />
+                            </div>
+                          </form>
+                        )}
                       </div>
                     ))}
                 </div>
               </>
-              
             )}
           </div>
         ))}
-        
 
       <div className="flex justify-center items-center">
         {ansTracker === numberOfAnsweredQuestions && (

@@ -66,6 +66,8 @@ const McqSepcialBundleQuestion = lazy(()=>import('./../pages/protected/McqSepcia
 const AddCurriculum =  lazy(()=>import('./../pages/protected/AddCurriCulum'));
 const ShowCurriculum =  lazy(()=>import('./../pages/protected/ShowCurriculum'));
 const StorageClear =  lazy(()=>import('./../pages/protected/StorageClear'));
+const TeacherScriptCount =  lazy(()=>import('./../pages/protected/TeacherScriptCount'));
+const AllTeacherScriptCount =  lazy(()=>import('./../pages/protected/AllTeacherScriptCount'));
 const ExamReset = lazy(()=>import('./../pages/protected/ExamReset'));
 const user =JSON.parse(localStorage.getItem('user')) ;
 const role = user.role;
@@ -76,6 +78,10 @@ if(role===3){
       path: '/', // the url
       component: Dashboard, // view rendered
     },    
+    {
+      path: '/scriptcount', // the url
+      component: TeacherScriptCount, // view rendered
+    },
     {
       path: '/scripts/view', // the url
       component: ViewWrittenScripts, // view rendered
@@ -127,6 +133,10 @@ if(role===3){
     {
       path: '/', // the url
       component: Dashboard, // view rendered
+    },
+    {
+      path: '/adminscriptcount', // the url
+      component: AllTeacherScriptCount, // view rendered
     },
     {
       path:'/addquestions/AddBundleQuestion',

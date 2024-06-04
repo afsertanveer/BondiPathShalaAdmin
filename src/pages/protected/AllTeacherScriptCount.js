@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import axios from '../../utils/axios'
 import Loader from '../../Shared/Loader'
 import toast from 'react-hot-toast'
-import Latex from 'react-latex'
 
 const AllTeacherScriptCount = () => {
   const [data, setData] = useState([])

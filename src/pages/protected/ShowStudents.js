@@ -79,7 +79,7 @@ const ShowStudents = () => {
     }
   }, [selectedCourse, currentPage]);
   return (
-    <div>
+    <div className="px-4">
       <div className=" py-4 px-2 my-3 w-full">
         <label className="label-text mr-3" htmlFor="">
           Select Course

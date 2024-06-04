@@ -3,8 +3,9 @@ import axios from '../../utils/axios'
 import { optionName } from '../../utils/globalVariables'
 import Loader from '../../Shared/Loader'
 import toast from 'react-hot-toast'
-import GetData from './GetData'
-import Latex from 'react-latex'
+// import GetData from './GetData'
+import 'katex/dist/katex.min.css'
+import Latex from 'react-latex-next'
 
 const AddBundleQuestion = () => {
   const [courses, setCourses] = useState([])
@@ -23,18 +24,21 @@ const AddBundleQuestion = () => {
   const [disabler, setDisabler] = useState(false)
   const [quesType, setQuesType] = useState(null)
   const [questionDetails, setQuestionDetails] = useState([{}])
-  const [enabler,setEnabler] = useState([]);
-  const [questionArray,setQuestionArray] = useState([]);
-  const [count,setCount] = useState(-1);
+  const [enabler, setEnabler] = useState([])
+  const [previewData,setPreviewData] = useState("question");
 
   const addDetails = (id) => {
-    let prevData = []
-    prevData = questionDetails
-    const question =document.getElementById(`ques${id}`).value;
-    prevData[id].question = question;
+
+    let prevEnabler = enabler;
     
-    console.log(question);
-    setQuestionDetails(prevData)
+    axios.post('/api/exam/addTextQuestion',questionDetails[id]).then(({data})=>{
+      prevEnabler[id] =  0;
+      setEnabler(prevEnabler);
+      setSingleExam(singleExam);
+      toast.success("Question added Successfully");
+      addData(id)
+    }).catch(err=>console.log(err))
+
   }
 
   const handleChangeCourse = (e) => {
@@ -63,21 +67,25 @@ const AddBundleQuestion = () => {
           setSingleExam(data)
           console.log(data)
           let emptyArray = []
-          let numberArray  = [];
-          let qArray = [];
+          let numberArray = []
           for (let i = 0; i < data.totalQuestionMcq; i++) {
-            const obj ={};
-            obj.question = "";
-            obj.options = [];
-            obj.optionCount = data.numberOfOptions;
-            obj.explanationILink = null;
-            obj.status = true;
-            emptyArray[i] = obj;
-            numberArray[i] = 1;
-            qArray[i] = '';
+            const obj = {}
+            obj.question = ''
+            obj.options = []
+            for (let j = 0; j<data.numberOfOptions; j++) {
+              obj.options[j] = ''
+            }
+            obj.optionCount = data.numberOfOptions
+            obj.explanationILink = null
+            obj.status = true
+            obj.type = true
+            obj.correctOption = -1;
+            obj.setName = selectedSet;
+            obj.examId = e.target.value;
+            emptyArray[i] = obj
+            numberArray[i] = 1
           }
-          setEnabler(numberArray);
-          setQuestionArray(qArray);
+          setEnabler(numberArray)
           setQuestionDetails(emptyArray)
           setQuesType(data.questionType)
           setSelectedExam(e.target.value)
@@ -88,16 +96,18 @@ const AddBundleQuestion = () => {
       setSingleExam({})
     }
   }
-  const addData = id =>{
-    setIsLoading(true);
-    console.log(questionDetails);
-    setCount(prev=>prev+1);
-    let prevData = questionArray;
-    // console.log(value)
-    const question =document.getElementById(`ques${id}`).value;
-    prevData[id] = question;
-    setQuestionArray(prevData);
-    setIsLoading(false);
+  const addData = (id) => {
+    setIsLoading(true)
+    // setPreviewData("");
+    // console.log(questionDetails)
+    let prevDetails = questionDetails
+    const question = document.getElementById(`ques${id}`).value
+    prevDetails[id].question = question;
+    prevDetails[id].setName = selectedSet;
+    setPreviewData(question);
+    setQuestionDetails(prevDetails)
+
+    setIsLoading(false)
   }
   const handleChangeSet = (setName) => {
     setSelectedSet(parseInt(setName))
@@ -192,7 +202,22 @@ const AddBundleQuestion = () => {
         })
     }
   }
-
+  const addOptionValue = (questionNo, optionNo) => {
+    setIsLoading(true)
+    let prevData = questionDetails
+    const optionvalue = document.getElementById(
+      `option${optionNo}`
+    ).value;
+    prevData[questionNo].options[optionNo] = optionvalue
+    setPreviewData(optionvalue)
+    setQuestionDetails(prevData)
+    setIsLoading(false)
+  }
+  const changCorrectOption = (answer ,id) =>{
+    let prevData = questionDetails; 
+    prevData[id].correctOption  = answer;
+    setQuestionDetails(prevData);
+  }
   useEffect(() => {
     setIsLoading(true)
     axios.get('/api/course/getallcourseadmin').then(({ data }) => {
@@ -410,104 +435,124 @@ const AddBundleQuestion = () => {
           </div>
         ))}
 
-<p>count:{count}</p>
-  
-       
-      {slots > 0 && 
+      {slots > 0 &&
         quesType === '1' &&
-        [...Array(singleExam.totalQuestionMcq).keys()].map((id) => ( enabler[id]===1 && !isLoading &&
-          <div key={id} className="grid grid-cols-1 my-8 ">
-            <div className="w-full px-2 py-2 lg:px-8 border border-color-one bg-white rounded-lg ">
-              <label className="text-[32px] font-bold">
-                Question: {id + 1}
-              </label>
-              <div className="flex justify-start items-center my-6">
-                <textarea
-                  className="textarea textarea-info   border-black"
-                  name={`ques${id}`}
-                  id={`ques${id}`}
-                  cols={100}
-                  enterKey={(e)=>addData(id)}
-                  placeholder="Description"
-                ></textarea>
-                <button className='btn btn-lg' onClick={(e)=>addData(id)}>Check</button>
-              </div>
-              <hr/>
-              {
-                isLoading? <Loader/> : <div className="flex justify-start items-center my-3" >
-                  <Latex>{questionArray[id]}</Latex>
-                {/* <input value={questionArray[id]} type="text"  placeholder="0.00" readOnly /> */}
-              </div>
-              }
-              <div className="flex justify-start items-center">
-                  <label
-                    htmlFor=""
-                    className="label font-semibold text-[16px] "
-                  >
-                    Number of Options : {singleExam.numberOfOptions}
+        [...Array(slots
+          ).keys()].map(
+          (id) =>
+            !isLoading && (
+              <div key={id} className={`grid grid-cols-1 my-2  ${enabler[id]===0 && 'pointer-events-none bg-color-five'}`}>
+                <div className="w-full px-2 py-2 lg:px-8 border border-color-one bg-white rounded-lg ">
+                  <label className="text-[32px] font-bold">
+                    Question: {id + 1}
                   </label>
-                  
+                  {
+                    enabler[id]===1? <>
+                    <div className="flex justify-start items-center my-6">
+                    <textarea
+                      className="textarea textarea-info text-2xl font-bold border-black"
+                      name={`ques${id}`}
+                      id={`ques${id}`}
+                      cols={400}
+                      rows={5}
+                      // enterKey={(e)=>addData(id)}
+                      placeholder="Description"
+                    ></textarea>
+                    <button className="btn btn-lg" onClick={(e) => addData(id)}>
+                      Check
+                    </button>
+                  </div>
+                  <hr />
+                  <div className="text-2xl font-bold">
+                    {previewData && previewData!== '' && (
+                      <>
+                        <Latex>{previewData}</Latex>
+                      </>
+                    )}
+                  </div>
+
+                  <div className="flex justify-start items-center">
+                    <label
+                      htmlFor=""
+                      className="label font-semibold text-[16px] "
+                    >
+                      Number of Options : {singleExam.numberOfOptions}
+                    </label>
+                  </div>
+                  <div className="grid grid-cols-1  gap-0 lg:gap-2">
+                    {singleExam.numberOfOptions > 0 &&
+                      [...Array(singleExam.numberOfOptions).keys()].map(
+                        (idx) => {
+                          return (
+                            <div key={idx} className='my-2'>
+                              <div>
+                                <label htmlFor="" className="text-lg">
+                                  {optionName[idx] + ')'}
+                                </label>
+                                <input
+                                  type="text"
+                                  placeholder={`Option ${idx + 1}`}
+                                  name={`option${idx}`}
+                                  id={`option${idx}`}
+                                  className="input w-full text-2xl font-bold input-bordered border-black "
+                                  required
+                                />
+                              </div>
+                              <button
+                                className="btn mt-2"
+                                onClick={()=>addOptionValue(id, idx)}
+                              >
+                                {' '}
+                                Check {optionName[idx]}
+                              </button>
+                            </div>
+                          )
+                        }
+                      )}
+                  </div>
+                  <div className="flex justify-start items-center">
+                    <label className="label font-semibold text-[16px] ">
+                      Correct Option
+                    </label>
+                    <select
+                      name="type"
+                      id="type"
+                      className="input border-black input-bordered w-full h-5 "
+                      onChange={(e) =>
+                        changCorrectOption(parseInt(e.target.value), id)
+                      }
+                      required
+                    >
+                      <option value={-1}>---</option>
+                      {[...Array(singleExam.numberOfOptions).keys()].map(
+                        (id) => (
+                          <option key={id} value={id}>
+                            {optionName[id]}
+                          </option>
+                        )
+                      )}
+                    </select>
+                  </div>
+                  <div className="flex justify-center items-center">
+                    <button
+                      id="addButton"
+                      onClick={() => addDetails(id)}
+                      className={`btn btn-warning rounded-tr-none rounded-bl-none hover:bg-orange-400 h-12`}
+                    >
+                      {' '}
+                      Add{' '}
+                    </button>
+                  </div>
+                    </>
+                    :
+                    <p className='text-2xl text-success font-bold'>Question Added Successfully</p>
+                  }
                 </div>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-4">
-                {singleExam.numberOfOptions > 0 &&
-                  [...Array(singleExam.numberOfOptions).keys()].map((id) => {
-                    return (
-                      <div key={id}>
-                        <div>
-                          <label htmlFor="" className="text-lg">
-                            {optionName[id] + ')'}
-                          </label>
-                          <input
-                            type="text"
-                            placeholder={`Option ${id + 1}`}
-                            name={`option${id}`}
-                            id={`option${id}`}
-                            className="input w-full input-bordered border-black "
-                            required
-                          />
-                        </div>
-                      </div>
-                    )
-                  })}
               </div>
-              <div className="flex justify-start items-center">
-                  <label className="label font-semibold text-[16px] ">
-                    Correct Option
-                  </label>
-                  <select
-                    name="type"
-                    id="type"
-                    className="input border-black input-bordered w-full h-5 "
-                    onChange={(e) =>
-                      addBulkCorrectOption(parseInt(e.target.value), id)
-                    }
-                    required
-                  >
-                    <option value={-1}>---</option>
-                    {[...Array(singleExam.numberOfOptions).keys()].map((id) => (
-                      <option key={id} value={id}>
-                        {optionName[id]}
-                      </option>
-                    ))}
-                  </select>
-                  
-                </div>
-              
-              <div className="flex justify-center items-center">
-                <button
-                  id="addButton"
-                  onClick={() => addDetails(id)}
-                  className={`btn btn-warning rounded-tr-none rounded-bl-none hover:bg-orange-400 h-12`}
-                >
-                  {' '}
-                  Add{' '}
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-       
-      {slots > 1 && disabler === false && (
+            )
+        )}
+
+      {slots > 1 && quesType==="0" && disabler === false && (
         <button
           id="addButton"
           onClick={addAllQuestions}

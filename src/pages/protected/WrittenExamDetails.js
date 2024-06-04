@@ -160,9 +160,9 @@ const WrittenExamDetails = () => {
     }
   }, [selectedCourse, selectedSubject, selectedExam,currentPage]);
   return (
-    <div className=" bg-white  min-h-[800px]">
-      <div className=" py-4 px-2 my-3 ">
-        <div className="w-full  mx-auto flex flex-row justify-between items-center">
+    <div className="px-4">
+      <div className=" bg-white py-4 px-2 my-3 ">
+        <div className="w-full  mx-auto grid grid-cols-1 lg:grid-cols-3 gap-4">
           <div className="form-control">
             <label className="label-text" htmlFor="">
               Select Course

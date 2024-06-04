@@ -27,7 +27,7 @@
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
     "react-html-table-to-excel": "^2.0.0",
-    "react-latex": "^2.0.0",
+    "react-latex-next": "^3.0.0",
     "react-loading-skeleton": "^3.3.1",
     "react-multi-select-component": "^4.3.4",
     "react-notifications": "^1.7.4",

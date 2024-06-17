@@ -295,18 +295,33 @@ const ShowBothExam = () => {
       })
       .catch((err) => console.log(err))
   }
-  const refillQuestions = id =>{
+  const refillQuestions = id => {
     const sendingData = {
-      examId:id
+      examId: id
     };
     axios
-    .post('/api/both/refillquestion',sendingData)
-    .then((data) => {
-      console.log(data)
-      toast.success('Questions added to all sets')
-      window.location.reload(false)
-    })
-    .catch((err) => toast.error(err.response.data))
+      .post('/api/both/refillquestion', sendingData)
+      .then((data) => {
+        console.log(data)
+        toast.success('Questions added to all sets')
+        window.location.reload(false)
+      })
+      .catch((err) => toast.error(err.response.data))
+  }
+  const recalculate = (id) => {
+    axios
+      .post(`/api/exam/calculatemartks?type=2`, {
+        examId: singleExamId,
+      })
+      .then((data) => {
+        axios
+          .post(`/api/teacher/bothupdaterank`, { examId:singleExamId })
+          .then((data) => {
+            toast.success('Rank Generated Successfully')
+            window.location.reload(false)
+          })
+          .catch((e) => console.log(e))
+      }).catch((e)=>console.log(e))
   }
   useEffect(() => {
     setIsLoading(true)
@@ -463,10 +478,10 @@ const ShowBothExam = () => {
                   Total Marks
                 </th>
                 <th className="width-setter bg-white font-semibold text-[12px] uppercase px-6 py-2">
-                Pre Exam  Action
+                  Pre Exam  Action
                 </th>
                 <th className="width-setter bg-white font-semibold text-[12px] uppercase px-6 py-2">
-                 Post Exam  Action
+                  Post Exam  Action
                 </th>
               </tr>
             </thead>
@@ -541,7 +556,7 @@ const ShowBothExam = () => {
                         </label>
                         <button
                           className="btn bg-button text-[12px] hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                          onClick={()=>refillQuestions(exam._id)}
+                          onClick={() => refillQuestions(exam._id)}
                         >
                           Refill MCQ Sets
                         </button>
@@ -553,8 +568,8 @@ const ShowBothExam = () => {
                     </td>
                     <td className="px-6 py-2 text-center">
                       <div className='grid grid-cols-1 gap-x-2 gap-y-2'>
-                        
-                      <label
+
+                        <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="solutionSheet"
                           className="btn bg-button text-[12px] hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
@@ -594,7 +609,14 @@ const ShowBothExam = () => {
                         >
                           Generate Meritlist
                         </label>
-                        
+                        <label
+                          onClick={() => handleAssignExamId(exam._id)}
+                          htmlFor="my-calculate"
+                          className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                        >
+                          Recalculate
+                        </label>
+
                       </div>
                     </td>
                   </tr>
@@ -624,6 +646,26 @@ const ShowBothExam = () => {
         </div>
       </div>
       <div>
+        <input type="checkbox" id="my-calculate" className="modal-toggle" />
+        <div className="modal">
+          <div className="modal-box">
+            <h3 className="font-semibold text-lg text-center">
+              {`Are you sure?`}
+            </h3>
+
+            <div className="modal-action flex justify-center items-center">
+              <button
+                className="btn mr-2"
+                onClick={() => recalculate(singleExamId)}
+              >
+                Yes
+              </button>
+              <label htmlFor="my-calculate" className="btn bg-[red]">
+                No!
+              </label>
+            </div>
+          </div>
+        </div>
         <input type="checkbox" id="my-popup" className="modal-toggle" />
         <div className="modal">
           <div className="modal-box">
@@ -773,7 +815,7 @@ const ShowBothExam = () => {
                     Questions
                   </label>
                   <input
-                    type="number"  step="0.01"
+                    type="number" step="0.01"
                     className="input w-full  input-bordered  border-black "
                     name="total_questions"
                     id="total_questions"
@@ -791,7 +833,7 @@ const ShowBothExam = () => {
                     Marks/Question
                   </label>
                   <input
-                    type="number"  step="0.01"
+                    type="number" step="0.01"
                     className="input w-full  input-bordered  border-black "
                     name="marks_per_question"
                     id="marks_per_question"
@@ -809,7 +851,7 @@ const ShowBothExam = () => {
                     Marks
                   </label>
                   <input
-                    type="number"  step="0.01"
+                    type="number" step="0.01"
                     className="input w-full  input-bordered  border-black "
                     name="total_marks"
                     id="total_marks"
@@ -921,7 +963,7 @@ const ShowBothExam = () => {
                     Questions
                   </label>
                   <input
-                    type="number"  step="0.01"
+                    type="number" step="0.01"
                     className="input w-full  input-bordered  border-black "
                     name="total_questions_written"
                     id="total_questions_written"
@@ -939,7 +981,7 @@ const ShowBothExam = () => {
                     Marks
                   </label>
                   <input
-                    type="number"  step="0.01"
+                    type="number" step="0.01"
                     className="input w-full  input-bordered  border-black "
                     name="tmw"
                     id="tmw"
@@ -1027,12 +1069,12 @@ const ShowBothExam = () => {
                     Total Marks
                   </label>
                   <input
-                    type="number"  step="0.01"
+                    type="number" step="0.01"
                     className="input w-full  input-bordered  border-black "
                     name="full_marks"
                     id="full_marks"
                     defaultValue={singleExam.totalMarks}
-                    
+
                     onChange={(e) =>
                       e.target.value < 0
                         ? (e.target.value = '')
@@ -1046,12 +1088,12 @@ const ShowBothExam = () => {
                     Negative
                   </label>
                   <input
-                    type="number"  step="0.01"
+                    type="number" step="0.01"
                     className="input w-full  input-bordered  border-black "
                     name="negative_marking"
                     id="negative_marking"
                     defaultValue={singleExam.negativeMarksMcq}
-                    
+
                     onChange={(e) =>
                       e.target.value < 0
                         ? (e.target.value = '')
@@ -1145,7 +1187,7 @@ const ShowBothExam = () => {
                 Number of Questions
               </label>
               <input
-                type="number"  step="0.01"
+                type="number" step="0.01"
                 className="input w-full  input-bordered border-black "
                 name="num_of_options"
                 id="num_of_options"
@@ -1244,7 +1286,7 @@ const ShowBothExam = () => {
                 Number of Options
               </label>
               <input
-                type="number"  step="0.01"
+                type="number" step="0.01"
                 className="input w-full  input-bordered border-black "
                 name="num_of_options"
                 id="num_of_options"

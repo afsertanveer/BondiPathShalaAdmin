@@ -333,6 +333,7 @@ const ShowExam = () => {
       })
       .catch((err) => toast.error(err.response.data))
   }
+  
   const recalculate = (id) => {
     axios
       .post(`/api/exam/calculatemartks?type=${examType}`, {

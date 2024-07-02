@@ -22,6 +22,7 @@ const CheckAnswerScript = ({
     const imageEditorInst = imageEditor.current.imageEditorInst
     const data = imageEditorInst.toDataURL()
     let bigImage = document.createElement('img')
+    console.log(imageEditor.current.imageEditorInst);
     bigImage.src = data
     bigImage.onload = (e2) => {
       let canvas = document.createElement('canvas')
@@ -33,8 +34,12 @@ const CheckAnswerScript = ({
       context.drawImage(bigImage, 0, 0, canvas.width, canvas.height)
       let newImageUrl = context.canvas.toDataURL('image/jpeg', 100)
       prevSource = [...source]
-      prevSource.push(newImageUrl)
+      console.log(prevSource);
+      let image = new Image();
+      image.src = newImageUrl;
+      prevSource.push(image)
       // console.log(newImageUrl);
+      setSource(image)
       setSource(prevSource)
       setSendButtonEnabler(false)
     }
@@ -47,6 +52,8 @@ const CheckAnswerScript = ({
     // //console.log('imageData: ', data)
 
     let bigImage = document.createElement('img')
+    
+    console.log(imageEditor.current.imageEditorInst);
     bigImage.src = data
     bigImage.onload = (e2) => {
       let canvas = document.createElement('canvas')
@@ -58,9 +65,13 @@ const CheckAnswerScript = ({
       context.drawImage(bigImage, 0, 0, canvas.width, canvas.height)
       let newImageUrl = context.canvas.toDataURL('image/jpeg', 100)
       prevSource = [...source]
-      prevSource.push(newImageUrl)
+      console.log(prevSource);
+      let image = new Image();
+      image.src = newImageUrl;
+      console.log(image);
+      prevSource.push(image)
       // console.log(newImageUrl);
-      setSource(prevSource)
+      setSource(image)
     }
 
     toast.success('Image Saved')

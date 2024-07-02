@@ -20,6 +20,7 @@ const SingleStudentBothWrittenAnswer = () => {
   const [saveId, setSaveId] = useState(-1)
   const [totalAnsweredQuestion, setTotalAnsweredQuestion] = useState(-1)
   const [teacherId, setTeacherId] = useState(null)
+  const [error,setError] = useState("");
 
   const navigate = useNavigate()
   let prevSource = []
@@ -46,14 +47,23 @@ const SingleStudentBothWrittenAnswer = () => {
     setTracker(lastTracker)
     setEnabler(lastEnabler)
     e.preventDefault()
-    setIsLoading(true)
+ 
 
     const form = e.target
     const idx = parseInt(form.index.value)
     const obtainedMarks = parseFloat(form.obtMarks.value).toFixed(2)
-
+    console.log(singleResult.marksPerQuestion[idx] ,obtainedMarks)
+    // setError("Please Check the marking")
+    //   return;
+    if (
+      parseFloat(obtainedMarks) > singleResult.marksPerQuestion[idx] 
+    ) {
+      setError("Please Check the marking")
+      return;
+    }
     let answer
-    console.log(source.length)
+    // setIsLoading(true)
+    // console.log(source.length)
     if (source.length === 0) {
       answer = {
         questionNo: idx + 1,
@@ -78,6 +88,7 @@ const SingleStudentBothWrittenAnswer = () => {
         setAnsTracker((prev) => prev + 1)
         setSendButtonEnabler(true)
         toast.success('Successfully updated')
+        setError("");
         setSource([])
         setIsLoading(false)
       })
@@ -206,6 +217,10 @@ const SingleStudentBothWrittenAnswer = () => {
   return isLoading ? (
     <Loader />
   ) : (
+    <div>
+      {
+        source.length>0 && source.map((sr)=><img key={sr} src={sr} alt='lhata'/>)
+      }
     <div className="min-h-full mb-80 mx-0 px-0 lg:px-8 pe-8 lg:pe-0 ">
       {ansTracker !== numberOfAnsweredQuestions &&
         answerScripts.map((answer, idx) => (
@@ -256,6 +271,7 @@ const SingleStudentBothWrittenAnswer = () => {
                                 }
                                 required
                               />
+                              <p className='ml-0 lg:ml-4 text-red text-xl flex justify-center items-center font-bold'>{error}</p>
                               <input
                                 type="submit"
                                 className="ml-0 lg:ml-4 mt-2 lg:mt-0 btn"
@@ -281,6 +297,7 @@ const SingleStudentBothWrittenAnswer = () => {
           </button>
         )}
       </div>
+    </div>
     </div>
   )
 }

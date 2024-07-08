@@ -37,9 +37,7 @@ const CheckAnswerScript = ({
       console.log(prevSource);
       let image = new Image();
       image.src = newImageUrl;
-      prevSource.push(image)
-      // console.log(newImageUrl);
-      setSource(image)
+      prevSource.push(newImageUrl)
       setSource(prevSource)
       setSendButtonEnabler(false)
     }
@@ -66,12 +64,9 @@ const CheckAnswerScript = ({
       let newImageUrl = context.canvas.toDataURL('image/jpeg', 100)
       prevSource = [...source]
       console.log(prevSource);
-      let image = new Image();
-      image.src = newImageUrl;
-      console.log(image);
-      prevSource.push(image)
-      // console.log(newImageUrl);
-      setSource(image)
+      prevSource.push(newImageUrl)
+      setSource(prevSource)
+      // setSource(image)
     }
 
     toast.success('Image Saved')

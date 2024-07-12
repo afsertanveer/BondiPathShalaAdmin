@@ -67,13 +67,7 @@ const ViewResult = () => {
         </div>        
       </div>
       {isLoading && <Loader></Loader>}
-      {
-        detailedExam[0].curriculumName && <div className=" my-10 flex justify-center items-center">
-        
-        <p className="text-2xl font-bold text-color-one">{detailedExam[0].curriculumName}</p>
-
-      </div>
-      }
+    
       {detailedExam?.length > 0 && (
         <div className="overflow-x-auto pt-1 pb-8 px-4">
              <ReactHTMLTableToExcel

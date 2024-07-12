@@ -150,6 +150,7 @@ const ShowQuestionMcqSpecial = () => {
       }
     }
     setSelectedQuestions(prev)
+    console.log("total size",prev.length);
   }
   const setQuestionBulkAll = () => {
     let q = []
@@ -167,6 +168,8 @@ const ShowQuestionMcqSpecial = () => {
         allCheckboxes[i].checked = false
       }
     }
+    
+    console.log("total size",q.length);
     setSelectedQuestions(q)
   }
   const onChangeExam = (id) => {

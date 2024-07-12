@@ -45,11 +45,9 @@ const ViewResult = () => {
   return (
     <div className=" bg-white  min-h-[800px]">
       <div className=" py-4 px-2 my-3 ">
-        <div className="w-full  mx-auto flex flex-row justify-between items-center">
+        <div className="grid grid-cols-1 px-10 ">
           <div className="form-control">
-            <label className="label-text" htmlFor="">
-              Select Exam Name
-            </label>
+       
             <select
               name="exam_list"
               id="exam_list"
@@ -57,10 +55,10 @@ const ViewResult = () => {
               required
               onChange={(e) => setSelectedExam(e.target.value)}
             >
-              <option value=""></option>
+              <option className="text-center" value="">--Select Exam--</option>
               {exams.length > 0 &&
                 exams.map((exam) => (
-                  <option key={exam._id} value={exam._id}>
+                  <option className="text-center" key={exam._id} value={exam._id}>
                     {exam.name}
                   </option>
                 ))}
@@ -69,6 +67,13 @@ const ViewResult = () => {
         </div>        
       </div>
       {isLoading && <Loader></Loader>}
+      {
+        detailedExam[0].curriculumName && <div className=" my-10 flex justify-center items-center">
+        
+        <p className="text-2xl font-bold text-color-one">{detailedExam[0].curriculumName}</p>
+
+      </div>
+      }
       {detailedExam?.length > 0 && (
         <div className="overflow-x-auto pt-1 pb-8 px-4">
              <ReactHTMLTableToExcel
@@ -85,11 +90,7 @@ const ViewResult = () => {
               <th className="w-[160px]">Student Name</th>
               <th className="py-5 w-[180px]">Mobile Number</th>
               <th className="py-5 w-[180px]">Full Mobile Number</th>
-              <th className="py-5 w-[180px]">SSC  Roll</th>
-              <th className="py-5 w-[180px]">HSC  Roll</th>
-              <th className="py-5 w-[180px]">BUET Admission Roll</th>
-              <th className="py-5 w-[180px]">Medical Admission Roll</th>
-              <th className="py-5 w-[180px]">University<br/> Admission Roll</th>
+              <th className="py-5 w-[180px]">CurriculumName  Roll</th>
               <th className="w-[160px]">Institution</th>
               <th className="w-[160px]">Start Time</th>
               <th className="w-[160px]">End Time</th>
@@ -108,11 +109,7 @@ const ViewResult = () => {
                   <td>{data.studentName}</td>
                   <td>{data.mobileNo}</td>
                   <td>{data.mobileNoOrg}</td>
-                  <td>{data.sscRoll===null? 'N/A' : data.sscRoll}</td>
-                  <td>{data.hscRoll===null? 'N/A' : data.hscRoll}</td>
-                  <td>{data.buetRoll===null? 'N/A' : data.buetRoll}</td>
-                  <td>{data.medicalRoll===null? 'N/A' : data.medicalRoll}</td>
-                  <td>{data.universityRoll===null? 'N/A' : data.universityRoll}</td>
+                  <td>{data.curricullumRoll===null? 'N/A' : data.curricullumRoll}</td>
                   {/* <td>{data.mobileNoOrg}</td> */}
                   <td>{data.institution}</td>
                   <td>{data.examStartTime}</td>

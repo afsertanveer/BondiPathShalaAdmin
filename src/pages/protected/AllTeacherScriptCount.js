@@ -16,6 +16,7 @@ const AllTeacherScriptCount = () => {
   useEffect(() => {
     setIsLoading(true)
     axios.get('/api/scripts/getAll').then(({ data }) => {
+      // const newData = data.filter(d=>d.tecacherId.name!==null)
       console.log(data)
       setData(data)
       setIsLoading(false)
@@ -46,7 +47,7 @@ const AllTeacherScriptCount = () => {
               data.map((user, idx) => (
                 <tr key={user._id}>
                   <td>{idx + 1}</td>
-                  <td>{user.teacherId.name}</td>
+                  <td>{user.teacherId?.name}</td>
                   <td>{user.examId.name}</td>
                   <td>{user.numberOfQuestions}</td>
                   <td>{user.numberOfStudents}</td>

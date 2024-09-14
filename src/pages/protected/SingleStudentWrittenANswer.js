@@ -20,6 +20,7 @@ const SingleStudentWrittenANswer = () => {
   const [saveId, setSaveId] = useState(-1)
   const [totalAnsweredQuestion, setTotalAnsweredQuestion] = useState(-1)
   const [teacherId,setTeacherId] = useState(null);
+  const [examName,setExamName] = useState("")
 
 
   const navigate = useNavigate()
@@ -99,6 +100,7 @@ const SingleStudentWrittenANswer = () => {
       teacherId: teacherId,
       examId: params.examId,
       noq: totalAnsweredQuestion,
+      examName:singleResult.examName
     }
     let answer
     for (let k = 0; k < vacantAnswerSubmitter.length; k++) {

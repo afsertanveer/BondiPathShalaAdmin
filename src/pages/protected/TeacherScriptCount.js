@@ -38,7 +38,7 @@ const TeacherScriptCount = () => {
               data.map((user,idx) => (
                 <tr key={user._id}>
                   <td>{idx+1}</td>
-                  <td>{user.examId.name}</td>
+                  <td>{user.examName? user.examName : "Random Exam"}</td>
                   <td>{user.numberOfQuestions}</td>
                   <td>{user.numberOfStudents}</td>
                   <td className={`${user.paid===true? ' text-success' : 'text-red'} font-semibold text-center`}>{user.paid? "Paid" : "Not Paid"}</td>

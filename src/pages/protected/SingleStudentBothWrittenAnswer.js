@@ -42,8 +42,8 @@ const SingleStudentBothWrittenAnswer = () => {
         break
       }
     }
-    console.log('check', lastTracker)
-    console.log('enabler', lastEnabler)
+    // console.log('check', lastTracker)
+    // console.log('enabler', lastEnabler)
     setTracker(lastTracker)
     setEnabler(lastEnabler)
     e.preventDefault()
@@ -104,6 +104,7 @@ const SingleStudentBothWrittenAnswer = () => {
       teacherId: teacherId,
       examId: params.examId,
       noq: totalAnsweredQuestion,
+      examName:singleResult.examName
     }
     let answer
     for (let k = 0; k < vacantAnswerSubmitter.length; k++) {

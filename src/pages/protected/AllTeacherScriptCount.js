@@ -48,7 +48,7 @@ const AllTeacherScriptCount = () => {
                 <tr key={user._id}>
                   <td>{idx + 1}</td>
                   <td>{user.teacherId?.name}</td>
-                  <td>{user.examId.name}</td>
+                  <td>{user.examName}</td>
                   <td>{user.numberOfQuestions}</td>
                   <td>{user.numberOfStudents}</td>
                   <td>

@@ -11,7 +11,7 @@ import Select from 'react-select'
 import ImageAdder from '../../components/ImageAdder/ImageAdder'
 import SolutionSheetAdder from '../../components/common/SolutionSheetAdder'
 import { Link } from 'react-router-dom'
-import QuestionAdder from '../../components/QuestionAdder/QuestionAdder'
+import QuestionAdderBoth from '../../components/QuestionAdder/QuestionAdderBoth'
 
 const ShowBothExam = () => {
   const [courses, setCourses] = useState([])
@@ -1366,7 +1366,7 @@ const ShowBothExam = () => {
           </div>
         </div>
       </div>
-      <QuestionAdder
+      <QuestionAdderBoth 
         singleExam={singleExam}
         handleAddQuestion={handleAddQuestion}
         setNameOfSet={setNameOfSet}

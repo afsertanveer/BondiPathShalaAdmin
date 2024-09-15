@@ -10,6 +10,7 @@ import { optionName } from '../../utils/globalVariables'
 import QuestionSender from '../../components/QuestionSender/QuestionSender'
 import SpecialQuestionSender from './SpecialQuestionSender'
 import OptionChanger from './OptionChanger'
+import QuestionEdit from '../../components/QuestionAdder/QuestionEdit'
 const ShowBothQuestions = () => {
   const [courses, setCourses] = useState([])
   const [subjects, setSubjects] = useState([])
@@ -35,6 +36,7 @@ const ShowBothQuestions = () => {
   const [selectedSet, setSelectedSet] = useState(-1)
   const [secondSet, setSecondSet] = useState(-1)
   const [numberOfOptions, setNumberOfOptions] = useState(0)
+  const [questionId,setQuestionId] = useState("")
 
   const sendQuestionSpecial = async (e) => {
     e.preventDefault()
@@ -232,7 +234,7 @@ const ShowBothQuestions = () => {
           )
           .then(async ({ data }) => {
             slot = parseInt(data.slots) - selectedQuestions.length
-            if (slot > 0) {
+            if (slot >= 0) {
               await axios
                 .put('/api/both/bothaddquestionmcqbulk', questionSet)
                 .then(({ data }) => {
@@ -297,7 +299,7 @@ const ShowBothQuestions = () => {
 
   const removeQuestion = (questionId) => {
     axios
-      .put('/api/exam/updatequestionstatus', { questionId })
+      .put('/api/both/updatequestionstatus', { questionId,examId:selectedExam })
       .then(({ data }) => {
         toast.success('Removed Successfuly')
         let prev = [...questions]
@@ -574,6 +576,15 @@ const ShowBothQuestions = () => {
                         setter={setSelectedQuestionId}
                         value={question.questionId}
                       ></DeactivateButton>
+                      {
+                          question.type==true && <label
+                          htmlFor="question-update-modal"
+                          onClick={() => setQuestionId(question.questionId)}
+                          className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                        >
+                          update Question
+                        </label>
+                        }
                       </div>
                     </td>
                   </tr>
@@ -610,7 +621,10 @@ const ShowBothQuestions = () => {
           )}
         </div>
       )}
-      
+      <QuestionEdit
+        singleExam={singleExam}
+        questionId={questionId}
+      />
       <OptionChanger questionId={selectedQuestionId} numberOfOptions={numberOfOptions}/>
       <SpecialQuestionSender
         sendQuestionSpecial={sendQuestionSpecial}

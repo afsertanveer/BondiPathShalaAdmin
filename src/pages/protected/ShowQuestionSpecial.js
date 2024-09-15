@@ -11,6 +11,7 @@ import QuestionSender from '../../components/QuestionSender/QuestionSender'
 import SpecialQuestionSender from './SpecialQuestionSender'
 import OptionChanger from './OptionChanger'
 import { shuffle } from '../../utils/globalFunction'
+import QuestionEdit from '../../components/QuestionAdder/QuestionEdit'
 const ShowQuestionSpecial = () => {
   const [courses, setCourses] = useState([])
   const [subjects, setSubjects] = useState([])
@@ -35,6 +36,7 @@ const ShowQuestionSpecial = () => {
   const [secondSet, setSecondSet] = useState(-1)
   const [numberOfOptions, setNumberOfOptions] = useState(0)
   const [specialExams, setSpecialExmas] = useState([])
+  const [questionId,setQuestionId] = useState("")
 
   function arrayRemove(arr, value) {
     return arr.filter(function (ele) {
@@ -92,7 +94,7 @@ const ShowQuestionSpecial = () => {
   }
   const removeQuestion = (questionId) => {
     axios
-      .put('/api/exam/updatequestionstatus', { questionId })
+      .put('/api/special/updatequestionstatus', { questionId,examId:selectedExam })
       .then(({ data }) => {
         toast.success('Removed Successfuly')
         let prev = [...questions]
@@ -672,6 +674,15 @@ const ShowQuestionSpecial = () => {
                         setter={setSelectedQuestionId}
                         value={question.questionId}
                       ></DeactivateButton>
+                      {
+                          question.type==true && <label
+                          htmlFor="question-update-modal"
+                          onClick={() => setQuestionId(question.questionId)}
+                          className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                        >
+                          update Question
+                        </label>
+                        }
                       </div>
                     </td>
                   </tr>
@@ -681,6 +692,10 @@ const ShowQuestionSpecial = () => {
           )}
         </div>
       )}
+      <QuestionEdit
+        singleExam={singleExam}
+        questionId={questionId}
+      />
 
       <OptionChanger
         questionId={selectedQuestionId}

@@ -219,9 +219,9 @@ const SingleStudentBothWrittenAnswer = () => {
     <Loader />
   ) : (
     <div>
-      {
+      {/* {
         source.length>0 && source.map((sr)=><img key={sr} src={sr} alt='lhata'/>)
-      }
+      } */}
     <div className="min-h-full mb-80 mx-0 px-0 lg:px-8 pe-8 lg:pe-0 ">
       {ansTracker !== numberOfAnsweredQuestions &&
         answerScripts.map((answer, idx) => (

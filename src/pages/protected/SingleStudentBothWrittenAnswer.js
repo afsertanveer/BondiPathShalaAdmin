@@ -126,7 +126,7 @@ const SingleStudentBothWrittenAnswer = () => {
                 axios.post('/api/scripts/add', scriptCount).then((data) => {
                   toast.success('successfully updated the result')
                   setIsLoading(false)
-                  navigate('/dashboard/scripts/view')
+                  navigate('/dashboard/scripts/both/view')
                 })
               })
               .catch((e) => console.log(e))
@@ -142,7 +142,7 @@ const SingleStudentBothWrittenAnswer = () => {
           axios.post('/api/scripts/add', scriptCount).then((data) => {
             toast.success('successfully updated the result')
             setIsLoading(false)
-            navigate('/dashboard/scripts/view')
+            navigate('/dashboard/scripts/both/view')
           })
         })
         .catch((e) => console.log(e))
@@ -164,7 +164,6 @@ const SingleStudentBothWrittenAnswer = () => {
   useEffect(() => {
     setIsLoading(true)
     const teacher = JSON.parse(localStorage.getItem('user'))
-    // console.log('user', teacherId)
     setTeacherId(teacher._id)
     axios
       .get(

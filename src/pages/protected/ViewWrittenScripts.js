@@ -80,6 +80,14 @@ const ViewWrittenScripts = () => {
   
     useEffect(() => {
       setIsLoading(true);
+      const resultData = JSON.parse(localStorage.getItem('writtenData')) || []
+      const paginateData = JSON.parse(localStorage.getItem('writtenDataPagination')) || {}
+      // console.log(resultData,paginateData)
+      if(resultData.length>0){
+        setWrittenData(resultData)
+        setPagiNationData(paginateData)
+        setIsLoading(false);
+      }
       axios.get("/api/course/getallcourseadmin").then(({ data }) => {
         setCourses(data.courses);
         setIsLoading(false);
@@ -115,6 +123,8 @@ const ViewWrittenScripts = () => {
             }else{
 
               setWrittenData(data.data1)
+              localStorage.setItem("writtenData",JSON.stringify(data.data1))
+              localStorage.setItem("writtenDataPagination",JSON.stringify(data.paginateData))
             }
             setPagiNationData(data.paginateData)
             setIsLoading(false);

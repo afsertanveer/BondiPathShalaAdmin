@@ -64,6 +64,14 @@ const ViewScriptSpecial = () => {
 
   useEffect(() => {
     setIsLoading(true);
+    const resultData = JSON.parse(localStorage.getItem('specialData')) || []
+    const paginateData = JSON.parse(localStorage.getItem('specialDataPagination')) || {}
+    // console.log(resultData,paginateData)
+    if (resultData.length > 0) {
+      setWrittenData(resultData)
+      setPagiNationData(paginateData)
+      setIsLoading(false);
+    }
     axios.get("/api/course/getallcourseadmin").then(({ data }) => {
       setCourses(data.courses);
       setIsLoading(false);
@@ -90,6 +98,8 @@ const ViewScriptSpecial = () => {
           .then(({ data }) => {
             setWrittenData(data.data1);
             setPagiNationData(data.paginateData);
+            localStorage.setItem("specialData", JSON.stringify(data.data1))
+            localStorage.setItem("specialDataPagination", JSON.stringify(data.paginateData))
             setIsLoading(false);
           })
           .catch((e) => {

@@ -21,6 +21,11 @@ const ViewScriptBoth = () => {
     const role = user.role;
     const resultData = JSON.parse(localStorage.getItem('bothData')) || []
     const paginateData = JSON.parse(localStorage.getItem('bothDataPagination')) || {}
+    if(resultData.length>0){
+      setWrittenData(resultData)
+      setPagiNationData(paginateData)
+      // setIsLoading(false);
+    }
     const handleChangeCourse = (e) => {
       setSelectedSubject("");
       setSubjects([]);
@@ -82,11 +87,11 @@ const ViewScriptBoth = () => {
       setIsLoading(true);
       
       // console.log(resultData,paginateData)
-      if(resultData.length>0){
-        setWrittenData(resultData)
-        setPagiNationData(paginateData)
-        setIsLoading(false);
-      }
+      // if(resultData.length>0){
+      //   setWrittenData(resultData)
+      //   setPagiNationData(paginateData)
+      //   // setIsLoading(false);
+      // }
       // setIsLoading(true);
       axios.get("/api/course/getallcourseadmin").then(({ data }) => {
         setCourses(data.courses);

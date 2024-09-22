@@ -44,6 +44,7 @@ function Login(){
                 localStorage.setItem('user', JSON.stringify(data));
                 toast.success("Successful Login");
                 window.location.href = '/dashboard'
+                
             })
             .catch(err => {
                 let errMsg = err.response?.data || "Login failed"

@@ -80,13 +80,10 @@ const ViewWrittenScripts = () => {
   
     useEffect(() => {
       setIsLoading(true);
-      const resultData = JSON.parse(localStorage.getItem('writtenData')) || []
-      const paginateData = JSON.parse(localStorage.getItem('writtenDataPagination')) || {}
-      // console.log(resultData,paginateData)
-      if(resultData.length>0){
-        setWrittenData(resultData)
-        setPagiNationData(paginateData)
-        setIsLoading(false);
+      const examId = JSON.parse(localStorage.getItem('exam')) || ""
+      if(examId!==""){
+        setSelectedExam(examId)
+        setIsLoading(false)
       }
       axios.get("/api/course/getallcourseadmin").then(({ data }) => {
         setCourses(data.courses);
@@ -103,6 +100,7 @@ const ViewWrittenScripts = () => {
         setSubjects([]);
       }
       if (selectedSubject !== "") {
+        localStorage.setItem("exam",JSON.stringify(selectedExam))
         axios
           .get(`/api/exam/getExamBySub?subjectId=${selectedSubject}&&examType=2`)
           .then(({ data }) => {

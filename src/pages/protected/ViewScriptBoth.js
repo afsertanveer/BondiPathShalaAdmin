@@ -19,6 +19,7 @@ const ViewScriptBoth = () => {
     const [pagiNationData, setPagiNationData] = useState({});
     const user =JSON.parse(localStorage.getItem('user')) ;
     const role = user.role;
+    
     const handleChangeCourse = (e) => {
       setSelectedSubject("");
       setSubjects([]);
@@ -78,13 +79,10 @@ const ViewScriptBoth = () => {
   
     useEffect(() => {
       setIsLoading(true);
-      const resultData = JSON.parse(localStorage.getItem('bothData')) || []
-      const paginateData = JSON.parse(localStorage.getItem('bothDataPagination')) || {}
-      // console.log(resultData,paginateData)
-      if(resultData.length>0){
-        setWrittenData(resultData)
-        setPagiNationData(paginateData)
-        setIsLoading(false);
+      const examId = JSON.parse(localStorage.getItem('bothExam')) || ""
+      if(examId!==""){
+        setSelectedExam(examId)
+        setIsLoading(false)
       }
       // setIsLoading(true);
       axios.get("/api/course/getallcourseadmin").then(({ data }) => {
@@ -113,6 +111,8 @@ const ViewScriptBoth = () => {
       }
       if (selectedExam !== "") {
         if(role===3){
+          
+          localStorage.setItem("bothExam",JSON.stringify(selectedExam))
           axios
           .get(`/api/teacher/bothgetstudentdata?examId=${selectedExam}`)
           .then(({ data }) => {

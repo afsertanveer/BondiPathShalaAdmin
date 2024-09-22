@@ -32,19 +32,16 @@ function Login(){
             .then(({data}) => {
                 console.log(data)
                 if(data.role===3){
-                    console.log("TEACHER")
-                    localStorage.setItem("writtenData",JSON.stringify([]))
-                    localStorage.setItem("writtenDataPagination",JSON.stringify({}))
-                    localStorage.setItem("bothData",JSON.stringify([]))
-                    localStorage.setItem("bothDataPagination",JSON.stringify({}))
-                    localStorage.setItem("specialData",JSON.stringify([]))
-                    localStorage.setItem("specialDataPagination",JSON.stringify({}))
+                    // console.log("TEACHER")
+                    localStorage.setItem("exam",JSON.stringify(""))
+                    localStorage.setItem("bothExam",JSON.stringify(""))
+                    localStorage.setItem("specialExam",JSON.stringify(""))
                 }
                 localStorage.setItem("token",data.token);
                 localStorage.setItem('user', JSON.stringify(data));
                 toast.success("Successful Login");
                 window.location.href = '/dashboard'
-                
+
             })
             .catch(err => {
                 let errMsg = err.response?.data || "Login failed"

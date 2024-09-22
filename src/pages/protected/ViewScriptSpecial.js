@@ -64,13 +64,10 @@ const ViewScriptSpecial = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    const resultData = JSON.parse(localStorage.getItem('bothData')) || []
-      const paginateData = JSON.parse(localStorage.getItem('paginateData')) || {}
-      // console.log(resultData,paginateData)
-      if(resultData.length>0){
-        setWrittenData(resultData)
-        setPagiNationData(paginateData)
-        setIsLoading(false);
+    const examId = JSON.parse(localStorage.getItem('specialExam')) || ""
+      if(examId!==""){
+        setSelectedExam(examId)
+        setIsLoading(false)
       }
     axios.get("/api/course/getallcourseadmin").then(({ data }) => {
       setCourses(data.courses);
@@ -93,6 +90,7 @@ const ViewScriptSpecial = () => {
 
     if (selectedExam !== "") {
       if (role === 3) {
+        localStorage.setItem("specialExam",JSON.stringify(selectedExam))
         axios
           .get(`/api/special/getstudentdata?examId=${selectedExam}`)
           .then(({ data }) => {

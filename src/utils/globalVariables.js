@@ -4,6 +4,7 @@ export const itemPerPage = 5;
 export const twoColumnGrid = "grid grid-cols-1 lg:grid-cols-2 gap-x-3";
 export const singleColumnGrid = "grid grid-cols-1";
 export const mcqSpcial = '/api/mcqspecialexam';
+
 export const optionName = [
     "A",
     "B",
@@ -33,13 +34,16 @@ export const optionName = [
     "Z",
   ];
 export const  whiteTheme = {
+  'editor.ui.text._els.color' : "#ff0000",
   'common.bi.image': 'https://uicdn.toast.com/toastui/img/tui-image-editor-bi.png',
   'common.bisize.width': '251px',
   'common.bisize.height': '21px',
   'common.backgroundImage': './img/bg.png',
   'common.backgroundColor': '#fff',
   'common.border': '1px solid #c1c1c1',
-
+  // 'common.drawing.color':'red',
+  // 'colorpicker.button.border': '1px solid #1e1e1e',
+  // 'colorpicker.title.color': '#fff',
   // header
   'header.backgroundImage': 'none',
   'header.backgroundColor': 'transparent',

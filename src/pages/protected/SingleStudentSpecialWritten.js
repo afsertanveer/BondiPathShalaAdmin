@@ -208,6 +208,7 @@ const SingleStudentSpecialWritten = () => {
     <Loader />
   ) : (
     <div className="min-h-full mb-80 mx-0 px-0 lg:px-8 pe-8 lg:pe-0 ">
+      {/* <h1 className='bg-[#00a9ff]'>ASDADA</h1> */}
       {ansTracker !== numberOfAnsweredQuestions &&
         answerScripts.map((answer, idx) => (
           <div key={idx}>

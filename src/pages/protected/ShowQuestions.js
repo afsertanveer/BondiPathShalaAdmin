@@ -512,7 +512,7 @@ const ShowQuestions = () => {
                           type="checkbox"
                           name="single_checbox"
                           id={`select_question` + question.questionId}
-                          className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                          className="w-4 h-4 justify-center border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                           onChange={(e) =>
                             setQuestionBulk(e, question.questionId)
                           }
@@ -520,13 +520,13 @@ const ShowQuestions = () => {
                       </div>
                     </td>
                     <td>
-                      <span className="text-[20px] font-bold">
+                      <span className="text-[20px]  justify-center  font-bold">
                         &nbsp; {idx + 1}.{' '}
                       </span>
                     </td>
-                    <td className="w-1/4">
+                    <td className="w-1/3">
                       {question.type === true ? (
-                        question.question
+                        <p className='w-96'  style={{whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}}>{question.question}</p>
                       ) : (
                         <img
                           src={
@@ -538,13 +538,13 @@ const ShowQuestions = () => {
                         ></img>
                       )}
                     </td>
-                    <td className="w-1/5">
+                    <td className=" justify-left w-1/5">
                       {question.type !== false && (
-                        <div className="grid grid-cols-1 lg:grid-cols-2">
+                        <div className="grid grid-cols-1">
                           {question.options.map((opt, idx) => {
                             return (
                               <div key={idx}>
-                                <span className="text-x">
+                                <span className="text-x  style={{whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}}">
                                   {`${optionName[idx]})  ${opt}`}{' '}
                                 </span>
                               </div>

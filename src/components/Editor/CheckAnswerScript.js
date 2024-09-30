@@ -83,9 +83,12 @@ const CheckAnswerScript = ({
             menu: ['draw', 'rotate'],
             initMenu: 'draw',
             theme: whiteTheme,
-            draw: {
-              color: '#ff0000',
-            },
+            draw:{
+              freeDrawing:{
+               brushColor:'#fff'
+              },
+              brushSize:'8px',
+            },         
             uiSize: {
               width: '100%',
               height: '942px',
@@ -120,5 +123,6 @@ const CheckAnswerScript = ({
     </div>
   )
 }
+
 
 export default CheckAnswerScript

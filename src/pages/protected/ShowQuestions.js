@@ -544,7 +544,7 @@ const ShowQuestions = () => {
                           {question.options.map((opt, idx) => {
                             return (
                               <div key={idx}>
-                                <span className="text-x  style={{whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}}">
+                                <span className="text-xl" style={{whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}}>
                                   {`${optionName[idx]})  ${opt}`}{' '}
                                 </span>
                               </div>

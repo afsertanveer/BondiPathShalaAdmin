@@ -532,7 +532,7 @@ const ShowBothQuestions = () => {
                     <td className="text-center font-extrabold">{idx + 1}.</td>
                     <td className="w-1/4">
                       {question.type === true ? (
-                        question.question
+                        <p className='w-96'  style={{whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}}>{question.question}</p>
                       ) : (
                         <img
                           src={
@@ -546,11 +546,11 @@ const ShowBothQuestions = () => {
                     </td>
                     <td className="w-1/5">
                       {question.type !== false && (
-                        <div className="grid grid-cols-1 lg:grid-cols-2">
+                        <div className="grid grid-cols-1">
                           {question.options.map((opt, idx) => {
                             return (
                               <div key={idx}>
-                                <span className="text-x">
+                                <span className="text-x" style={{whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}}>
                                   {`${optionName[idx]})  ${opt}`}{' '}
                                 </span>
                               </div>

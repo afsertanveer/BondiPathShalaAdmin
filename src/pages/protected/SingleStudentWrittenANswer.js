@@ -4,6 +4,7 @@ import axios from '../../utils/axios'
 import Loader from '../../Shared/Loader'
 import toast from 'react-hot-toast'
 import CheckAnswerScript from '../../components/Editor/CheckAnswerScript'
+import CommentAdder from '../../components/common/CommentAdder'
 
 const SingleStudentWrittenANswer = () => {
   const params = useParams()
@@ -19,8 +20,8 @@ const SingleStudentWrittenANswer = () => {
   const [tracker, setTracker] = useState([])
   const [saveId, setSaveId] = useState(-1)
   const [totalAnsweredQuestion, setTotalAnsweredQuestion] = useState(-1)
-  const [teacherId,setTeacherId] = useState(null);
-  const [examName,setExamName] = useState("")
+  const [teacherId, setTeacherId] = useState(null);
+  const [examName, setExamName] = useState("")
 
 
   const navigate = useNavigate()
@@ -100,7 +101,7 @@ const SingleStudentWrittenANswer = () => {
       teacherId: teacherId,
       examId: params.examId,
       noq: totalAnsweredQuestion,
-      examName:singleResult.examName
+      examName: singleResult.examName
     }
     let answer
     for (let k = 0; k < vacantAnswerSubmitter.length; k++) {
@@ -314,14 +315,25 @@ const SingleStudentWrittenANswer = () => {
           </div>
         ))}
 
-      <div className="flex justify-center items-center">
+      <div className="grid grid-cols-1 ">
         {ansTracker === numberOfAnsweredQuestions && (
-          <button className="btn" onClick={() => finalSave()}>
-            Finish The Process
-          </button>
+          <>
+            <div className='flex justify-center items-center'>
+              <CommentAdder studentId={params.studentId} examId={params.examId} />
+
+            </div>
+
+            <div className='flex justify-center items-center'>
+              <button className="btn mt-5" onClick={() => finalSave()}>
+                Finish The Process
+              </button>
+            </div>
+          </>
+
+
         )}
       </div>
-      
+
     </div>
   )
 }

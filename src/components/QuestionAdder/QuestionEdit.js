@@ -141,7 +141,7 @@ const QuestionEdit = ({
                         </div>
                     </div>
                     <div className="modal-action">
-                        <label htmlFor="my-modal-2" className="btn bg-red text-white">
+                        <label htmlFor="question-update-modal" className="btn bg-red text-white">
                             Close
                         </label>
                     </div>

@@ -29,12 +29,12 @@ const ShowSpecialExam = () => {
   const [curriculums, setCurriculums] = useState([]);
   const [selectedCurriculum, setSelectedCurriculum] = useState(null);
   const generator = (id) => {
-    console.log(id);
+    // console.log(id);
     axios
-      .post(`/api/special/publishexam`,{examId:id})
+      .post(`/api/special/publishexam`, { examId: id })
       .then((data) => {
         axios
-          .post(`/api/special/updaterank`,{examId:id})
+          .post(`/api/special/updaterank`, { examId: id })
           .then((data) => {
             toast.success("Rank Generated Successfully");
             window.location.reload(false);
@@ -114,7 +114,26 @@ const ShowSpecialExam = () => {
       })
       .catch((err) => toast.error(err));
   };
-
+  const recalculate = (id) => {
+    axios
+      .post(`/api/exam/calculatemartks?type=${3}`, {
+        examId: id,
+      })
+      .then((data) => {
+        axios
+          .post(`/api/special/publishexam`, { examId: id })
+          .then((data) => {
+            axios
+              .post(`/api/special/updaterank`, { examId: id })
+              .then((data) => {
+                toast.success("Rank Generated Successfully");
+                window.location.reload(false);
+              })
+              .catch((e) => console.log(e));
+          })
+          .catch((e) => console.log(e));
+      })
+  }
   const handleAssignTeacher = (e) => {
     e.preventDefault();
     let steachers = [];
@@ -163,8 +182,8 @@ const ShowSpecialExam = () => {
       writtenDuration,
       totalMarksWritten,
       negativeMarks,
-      isAdmission:admission,
-      curriculumName:selectedCurriculum
+      isAdmission: admission,
+      curriculumName: selectedCurriculum
     };
     console.log(negativeMarks);
     await axios.put("/api/special/updatespecialexam", updatedExam).then(({ data }) => {
@@ -295,8 +314,8 @@ const ShowSpecialExam = () => {
                     <td className="px-1 py-2 text-center">{idx + 1}</td>
                     <td className="px-2 py-2 text-center">{exam.name}</td>
                     <td className="px-1 py-2 text-center">
-                      {moment(exam.startTime).subtract(6,'h').format("llll")} <br />
-                      {moment(exam.endTime).subtract(6,'h').format("llll")}
+                      {moment(exam.startTime).subtract(6, 'h').format("llll")} <br />
+                      {moment(exam.endTime).subtract(6, 'h').format("llll")}
                     </td>
                     <td className="px-6 py-2 text-center">
                       {exam.totalDuration} Minutes
@@ -307,7 +326,7 @@ const ShowSpecialExam = () => {
                     </td>
                     <td className="px-6 py-2 text-center">
                       <div className="grid grid-cols-1 gap-x-3 gap-y-4">
-                      <label
+                        <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="imageAdder"
                           className="btn bg-button text-[12px] hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
@@ -338,7 +357,7 @@ const ShowSpecialExam = () => {
                         >
                           Update
                         </label>
-                       
+
                         {/* <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="show-modal"
@@ -354,7 +373,7 @@ const ShowSpecialExam = () => {
                     </td>
                     <td className="px-6 py-2 text-center">
                       <div className="grid grid-cols-1  gap-x-3 gap-y-4">
-                      
+
                         <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="solutionSheet"
@@ -373,7 +392,7 @@ const ShowSpecialExam = () => {
                             Solve Sheet
                           </Link>
                         )}
-                       
+
                         <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="my-popup"
@@ -394,7 +413,14 @@ const ShowSpecialExam = () => {
                           className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
                           Submit Exam
-                        </label> 
+                        </label>
+                        <label
+                          onClick={() => handleAssignExamId(exam._id)}
+                          htmlFor="my-calculate"
+                          className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                        >
+                          Recalculate
+                        </label>
                         {/* <label
                           onClick={() => handleAssignExamId(exam._id)}
                           htmlFor="show-modal"
@@ -410,6 +436,26 @@ const ShowSpecialExam = () => {
           </table>
         </div>
       )}
+      <input type="checkbox" id="my-calculate" className="modal-toggle" />
+      <div className="modal">
+        <div className="modal-box">
+          <h3 className="font-semibold text-lg text-center">
+            {`Are you sure?`}
+          </h3>
+
+          <div className="modal-action flex justify-center items-center">
+            <button
+              className="btn mr-2"
+              onClick={() => recalculate(singleExamId)}
+            >
+              Yes
+            </button>
+            <label htmlFor="my-calculate" className="btn bg-[red]">
+              No!
+            </label>
+          </div>
+        </div>
+      </div>
       <div>
         {/* <input type="checkbox" id="show-modal" className="modal-toggle" />
         <div className="modal ">
@@ -743,12 +789,12 @@ const ShowSpecialExam = () => {
                     Total Marks
                   </label>
                   <input
-                    type="number"  step="0.01"
+                    type="number" step="0.01"
                     className="input w-full input-bordered  border-black "
                     name="total_marks"
                     id="total_marks"
                     defaultValue={singleExam.totalMarks}
-                    
+
                     onChange={(e) =>
                       e.target.value < 0
                         ? (e.target.value = "")
@@ -762,12 +808,12 @@ const ShowSpecialExam = () => {
                     Total Duration
                   </label>
                   <input
-                    type="number"  step="0.01"
+                    type="number" step="0.01"
                     className="input w-full input-bordered  border-black "
                     name="total_duration"
                     id="total_duration"
                     defaultValue={singleExam.totalDuration}
-                    
+
                     onChange={(e) =>
                       e.target.value < 0
                         ? (e.target.value = "")
@@ -783,7 +829,7 @@ const ShowSpecialExam = () => {
                     MCQ Duration
                   </label>
                   <input
-                    type="number"  step="0.01"
+                    type="number" step="0.01"
                     className="input w-full input-bordered  border-black "
                     name="mcq_duration"
                     id="mcq_duration"
@@ -801,7 +847,7 @@ const ShowSpecialExam = () => {
                     Marks/Question
                   </label>
                   <input
-                    type="number"  step="0.01"
+                    type="number" step="0.01"
                     className="input w-full input-bordered  border-black "
                     name="marks_per_question"
                     id="marks_per_question"
@@ -813,14 +859,14 @@ const ShowSpecialExam = () => {
                     }
                     required
                   />
-                  
+
                 </div>
                 <div className="w-full ">
                   <label htmlFor="" className="label">
                     MCQ Marks
                   </label>
                   <input
-                    type="number"  step="0.01"
+                    type="number" step="0.01"
                     className="input w-full input-bordered  border-black "
                     name="mcq_marks"
                     id="mcq_marks"
@@ -834,30 +880,30 @@ const ShowSpecialExam = () => {
                   />
                 </div>
                 <div className="w-full ">
-                    <label htmlFor="" className="label">
-                      Negative Marking
-                    </label>
-                    <input
-                      type="number"  step="0.01"
-                      className="input w-full input-bordered  border-black "
-                      name="negative_marking"
-                      id="negative_marking"
-                      defaultValue={singleExam.negativeMarksMcq}
-                      
-                      onChange={(e) =>
-                        e.target.value < 0
-                          ? (e.target.value = "")
-                          : e.target.value
-                      }
-                      required
-                    />
-                </div>                
-                <div className="w-full">
                   <label htmlFor="" className="label">
-                     Written Marks
+                    Negative Marking
                   </label>
                   <input
-                    type="number"  step="0.01"
+                    type="number" step="0.01"
+                    className="input w-full input-bordered  border-black "
+                    name="negative_marking"
+                    id="negative_marking"
+                    defaultValue={singleExam.negativeMarksMcq}
+
+                    onChange={(e) =>
+                      e.target.value < 0
+                        ? (e.target.value = "")
+                        : e.target.value
+                    }
+                    required
+                  />
+                </div>
+                <div className="w-full">
+                  <label htmlFor="" className="label">
+                    Written Marks
+                  </label>
+                  <input
+                    type="number" step="0.01"
                     className="input w-full input-bordered  border-black "
                     name="written_marks"
                     id="written_marks"
@@ -892,10 +938,10 @@ const ShowSpecialExam = () => {
                     (minutes)
                   </span>
                 </div>
-                
+
               </div>
               <div className="form-control grid grid-cols-2 gap-x-3">
-                  <div className="flex items-center mt-0 lg:mt-5 ">
+                <div className="flex items-center mt-0 lg:mt-5 ">
                   <input
                     id="isAdmission"
                     type="checkbox"
@@ -925,9 +971,9 @@ const ShowSpecialExam = () => {
                     required
                     onChange={(e) => setSelectedCurriculum(e.target.value)}
                   >
-                    <option value={singleExam.curriculumName}>{singleExam.curriculumName===null? "NONE" : singleExam.curriculumName}</option>
-                    {singleExam.curriculumName!==null && <option value="null">NONE</option>
-                   }
+                    <option value={singleExam.curriculumName}>{singleExam.curriculumName === null ? "NONE" : singleExam.curriculumName}</option>
+                    {singleExam.curriculumName !== null && <option value="null">NONE</option>
+                    }
                     {curriculums.length > 0 &&
                       curriculums.map((curriculum) => (
                         <option key={curriculum._id} value={curriculum.name}>
@@ -936,15 +982,15 @@ const ShowSpecialExam = () => {
                       ))}
                   </select>
                 </div>
-                  </div>
-                <div className="w-full">
-                  <input
-                    type="submit"
-                    value="Update"
-                    className="btn w-[150px] mt-4"
-                  />
-                </div>
-              <div className="form-control mt-2 flex flex-row justify-end">                
+              </div>
+              <div className="w-full">
+                <input
+                  type="submit"
+                  value="Update"
+                  className="btn w-[150px] mt-4"
+                />
+              </div>
+              <div className="form-control mt-2 flex flex-row justify-end">
                 <div className="modal-action">
                   <label htmlFor="update-modal" className="btn bg-[red] ">
                     Close!
@@ -959,9 +1005,9 @@ const ShowSpecialExam = () => {
         modalData={selectedExamId}
         remove={deactivateExam}
       />
-      <ImageAdder title={`${singleExam.iLink===null?"Add Image" :"Update Image"}`} apiEndPoint="/api/special/updateSpecialExamPhoto" examId={singleExamId} setIsLoading={setIsLoading} />
-      <SolutionSheetAdder  apiEndPoint="/api/exam/uploadsollution" examId={singleExamId} setIsLoading={setIsLoading} type={2} />
-   
+      <ImageAdder title={`${singleExam.iLink === null ? "Add Image" : "Update Image"}`} apiEndPoint="/api/special/updateSpecialExamPhoto" examId={singleExamId} setIsLoading={setIsLoading} />
+      <SolutionSheetAdder apiEndPoint="/api/exam/uploadsollution" examId={singleExamId} setIsLoading={setIsLoading} type={2} />
+
     </div>
   );
 };

@@ -319,7 +319,7 @@ const SingleStudentWrittenANswer = () => {
         {ansTracker === numberOfAnsweredQuestions && (
           <>
             <div className='flex justify-center items-center'>
-              <CommentAdder studentId={params.studentId} examId={params.examId} />
+              <CommentAdder studentId={params.studentId} examId={params.examId} subjectId={null} />
 
             </div>
 

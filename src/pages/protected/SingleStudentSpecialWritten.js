@@ -21,6 +21,7 @@ const SingleStudentSpecialWritten = () => {
   const [saveId, setSaveId] = useState(-1)
   const [totalAnsweredQuestion, setTotalAnsweredQuestion] = useState(-1)
   const [teacherId, setTeacherId] = useState(null)
+  const [subjectId,setSubjectId] = useState(null);
 
   const navigate = useNavigate()
   let prevSource = []
@@ -163,6 +164,7 @@ const SingleStudentSpecialWritten = () => {
       .then(({ data }) => {
         setSingleResult(data)
         // console.log('result', data)
+        setSubjectId(data.subjectId);
         setAnswerScripts(data.answerScript)
         let count = 0
         for (let i = 0; i < data.answerScript.length; i++) {
@@ -281,7 +283,7 @@ const SingleStudentSpecialWritten = () => {
         {ansTracker === numberOfAnsweredQuestions && (
           <>
             <div className='flex justify-center items-center'>
-              <CommentAdder studentId={params.studentId} examId={params.examId} />
+              <CommentAdder studentId={params.studentId} examId={params.examId} subjectId={subjectId} />
 
             </div>
 

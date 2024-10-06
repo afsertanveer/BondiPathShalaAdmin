@@ -21,7 +21,7 @@ export default function CommentAdder({ examId, studentId,subjectId }) {
     }
     return (
         <div className="flex justify-start items-center mt-4 px-4 lg:px-10">
-            <form  onSubmit={addComment}>
+            {/* <form  onSubmit={addComment}>
             <div className='grid grid-cols-1'>
             <textarea
                 className="textarea textarea-info text-2xl font-bold border-black"
@@ -38,7 +38,7 @@ export default function CommentAdder({ examId, studentId,subjectId }) {
                 Add Comment
             </button>
             </div>
-            </form>
+            </form> */}
         </div>
     )
 }

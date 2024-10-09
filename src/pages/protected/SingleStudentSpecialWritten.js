@@ -237,43 +237,46 @@ const SingleStudentSpecialWritten = () => {
                           sendButtonEnabler={sendButtonEnabler}
                           prevSource={prevSource}
                         />
-                        <div className='flex justify-center items-center'>
-                          <CommentAdder studentId={params.studentId} examId={params.examId} subjectId={subjectId} questionNo={idx} />
 
-                        </div>
                         {index + 1 === answer.length && (
-                          <form onSubmit={sendImage} className="my-4 ">
-                            <input
-                              type="text"
-                              className="input input-bordered  border-black hidden"
-                              name="index"
-                              id=""
-                              defaultValue={idx}
-                            />
-                            <p className="ml-4 text-lg font-bold text-red">
-                              Marks out of {singleResult.marksPerQuestion[idx]}
-                            </p>
-                            <div className="flex flex-col lg:flex-row ">
+                          <>
+                            <div className='flex justify-center items-center'>
+                              <CommentAdder studentId={params.studentId} examId={params.examId} subjectId={subjectId} questionNo={idx} />
+
+                            </div>
+                            <form onSubmit={sendImage} className="my-4 ">
                               <input
                                 type="text"
-                                name="obtMarks"
-                                id="obtMarks"
-                                autoComplete="off"
-                                className="input input-bordered  border-black"
-                                onChange={(e) =>
-                                  checkNumber(e.target.value, idx)
-                                }
-                                required
+                                className="input input-bordered  border-black hidden"
+                                name="index"
+                                id=""
+                                defaultValue={idx}
                               />
-                              <input
-                                type="submit"
-                                className="ml-0 lg:ml-4 mt-2 lg:mt-0 btn"
-                                onClick={() => setSaveId(idx)}
-                                value="Save Marks"
-                                disabled={sendButtonEnabler}
-                              />
-                            </div>
-                          </form>
+                              <p className="ml-4 text-lg font-bold text-red">
+                                Marks out of {singleResult.marksPerQuestion[idx]}
+                              </p>
+                              <div className="flex flex-col lg:flex-row ">
+                                <input
+                                  type="text"
+                                  name="obtMarks"
+                                  id="obtMarks"
+                                  autoComplete="off"
+                                  className="input input-bordered  border-black"
+                                  onChange={(e) =>
+                                    checkNumber(e.target.value, idx)
+                                  }
+                                  required
+                                />
+                                <input
+                                  type="submit"
+                                  className="ml-0 lg:ml-4 mt-2 lg:mt-0 btn"
+                                  onClick={() => setSaveId(idx)}
+                                  value="Save Marks"
+                                  disabled={sendButtonEnabler}
+                                />
+                              </div>
+                            </form>
+                          </>
                         )}
                       </div>
                     ))}

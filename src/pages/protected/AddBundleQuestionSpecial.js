@@ -22,8 +22,9 @@ const AddBundleQuestionSpecial = () => {
   const [correctOption, setCorrectOption] = useState(-1)
   const [disabler, setDisabler] = useState(false);
   const [quesType, setQuesType] = useState("-1")
-  const [previewData,setPreviewData] = useState("question");
+  const [previewData, setPreviewData] = useState("question");
   const [questionDetails, setQuestionDetails] = useState({})
+  const [trackingSlot,setTrackingSlot] = useState(1);
 
   const handleChangeCourse = (e) => {
     setSelectedSubject('')
@@ -136,24 +137,25 @@ const AddBundleQuestionSpecial = () => {
 
 
   }
-  const addTextQuestion = e =>{
+  const addTextQuestion = e => {
     setIsLoading(true)
     e.preventDefault()
     let data = questionDetails
-    data.correctOption = correctOption 
+    data.correctOption = correctOption
     data.optionCount = singleExam.numberOfOptions;
     data.status = true
     data.examId = singleExam._id
     data.type = true
     data.subjectId = selectedSubject
-    axios.post('/api/special/addTextQuestion',data).then(({data})=>{
-      let curslot = slots ;
-      curslot--
-      setSlots(curslot)
+    axios.post('/api/special/addTextQuestion', data).then(({ data }) => {
+      // let curslot = slots;
+      // curslot--
+      // setSlots(curslot)
+      setTrackingSlot(prev=>prev+1) ;
       e.target.reset();
       setIsLoading(false)
       toast.success("Question added Successfully");
-    }).catch(err=>console.log(err))
+    }).catch(err => console.log(err))
 
 
   }
@@ -179,9 +181,9 @@ const AddBundleQuestionSpecial = () => {
     const question = document.getElementById(`ques`).value
     prevDetails.questionText = question;
     prevDetails.setName = selectedSet;
-    if(!prevDetails.options){
+    if (!prevDetails.options) {
       prevDetails.options = []
-      for( let i = 0 ; i<singleExam.numberOfOptions ; i++){
+      for (let i = 0; i < singleExam.numberOfOptions; i++) {
         prevDetails.options[i] = ''
       }
     }
@@ -240,7 +242,7 @@ const AddBundleQuestionSpecial = () => {
         isLoading && <Loader />
       }
       {
-        quesType === '1' && <h1 className='text-lg font-bold my-5'>Remaining Questions: {slots} </h1>
+        quesType === '1' && <h1 className='text-lg font-bold my-5'>{trackingSlot}/{slots} </h1>
       }
       <div className="bg-white py-4 px-2 my-3 ">
         <div
@@ -416,117 +418,124 @@ const AddBundleQuestionSpecial = () => {
 
       {slots > 0 &&
         quesType === '1' &&
-            !isLoading && (
-              <div  className={`grid grid-cols-1 my-2 `}>
-                <form onSubmit={addTextQuestion}>
-                <div className="w-full px-2 py-2 lg:px-8 border border-color-one bg-white rounded-lg ">
-                  <label className="text-[32px] font-bold">
-                    Question:
-                  </label>
-                  <>
-                      <div className="flex justify-start items-center my-6">
-                        <textarea
-                          className="textarea textarea-info text-2xl font-bold border-black"
-                          name={`ques`}
-                          id={`ques`}
-                          cols={400}
-                          rows={5}
-                          // enterKey={(e)=>addData(id)}
-                          placeholder="Description"
-                        ></textarea>
-                        <button className="btn btn-lg" onClick={(e) => addData()}>
-                          Check
-                        </button>
-                      </div>
-                      <hr />
-                      <div className="text-2xl font-bold">
-                        {previewData && previewData !== '' && (
-                          <>
-                            <Latex>{previewData}</Latex>
-                          </>
-                        )}
-                      </div>
+        !isLoading && (
+          <div className={`grid grid-cols-1 my-2 `}>
+            <form onSubmit={addTextQuestion}>
+              <div className="w-full px-2 py-2 lg:px-8 border border-color-one bg-white rounded-lg ">
+                <label className="text-[32px] font-bold">
+                  Question:
+                </label>
+                <>
+                  <div className="flex justify-start items-center my-6">
+                    <textarea
+                      className="textarea textarea-info text-2xl font-bold border-black"
+                      name={`ques`}
+                      id={`ques`}
+                      cols={400}
+                      rows={5}
+                      // enterKey={(e)=>addData(id)}
+                      placeholder="Description"
+                    ></textarea>
+                    <button className="btn btn-lg" onClick={(e) => addData()}>
+                      Check
+                    </button>
+                  </div>
+                  <hr />
+                  <div className="text-2xl font-bold">
+                    {previewData && previewData !== '' && (
+                      <>
+                        <Latex>{previewData}</Latex>
+                      </>
+                    )}
+                  </div>
 
-                      <div className="flex justify-start items-center">
-                        <label
-                          htmlFor=""
-                          className="label font-semibold text-[16px] "
-                        >
-                          Number of Options : {singleExam.numberOfOptions}
-                        </label>
-                      </div>
-                      <div className="grid grid-cols-1  gap-0 lg:gap-2">
-                        {singleExam.numberOfOptions > 0 &&
-                          [...Array(singleExam.numberOfOptions).keys()].map(
-                            (idx) => {
-                              return (
-                                <div key={idx} className='my-2'>
-                                  <div>
-                                    <label htmlFor="" className="text-lg">
-                                      {optionName[idx] + ')'}
-                                    </label>
-                                    <input
-                                      type="text"
-                                      placeholder={`Option ${idx + 1}`}
-                                      name={`textoption${idx}`}
-                                      id={`textoption${idx}`}
-                                      className="input w-full text-2xl font-bold input-bordered border-black "
-                                      required
-                                    />
-                                  </div>
-                                  <button
-                                    className="btn mt-2"
-                                    onClick={(e) => addOptionValue( e,idx)}
-                                  >
-                                    {' '}
-                                    Check {optionName[idx]}
-                                  </button>
-                                </div>
-                              )
-                            }
-                          )}
-                      </div>
-                      <div className="flex justify-start items-center">
-                        <label className="label font-semibold text-[16px] ">
-                          Correct Option
-                        </label>
-                        <select
-                          name="type"
-                          id="type"
-                          className="input border-black input-bordered w-full h-5 "
-                          onChange={(e) =>
-                            setCorrectOption(parseInt(e.target.value))
-                          }
-                          required
-                        >
-                          <option value={-1}>---</option>
-                          {[...Array(singleExam.numberOfOptions).keys()].map(
-                            (id) => (
-                              <option key={id} value={id}>
-                                {optionName[id]}
-                              </option>
-                            )
-                          )}
-                        </select>
-                      </div>
-                      <div className="flex justify-center items-center">
-                        <button
-                          id="addButton"
-                          type="submit"
-                          
-                          className={`btn btn-warning rounded-tr-none rounded-bl-none hover:bg-orange-400 h-12`}
-                        >
-                          {' '}
-                          Add{' '}
-                        </button>
-                      </div>
-                    </>
-                </div>
-                </form>
-                
+                  <div className="flex justify-start items-center">
+                    <label
+                      htmlFor=""
+                      className="label font-semibold text-[16px] "
+                    >
+                      Number of Options : {singleExam.numberOfOptions}
+                    </label>
+                  </div>
+                  <div className="grid grid-cols-1  gap-0 lg:gap-2">
+                    {singleExam.numberOfOptions > 0 &&
+                      [...Array(singleExam.numberOfOptions).keys()].map(
+                        (idx) => {
+                          return (
+                            <div key={idx} className='my-2'>
+                              <div>
+                                <label htmlFor="" className="text-lg">
+                                  {optionName[idx] + ')'}
+                                </label>
+                                <input
+                                  type="text"
+                                  placeholder={`Option ${idx + 1}`}
+                                  name={`textoption${idx}`}
+                                  id={`textoption${idx}`}
+                                  className="input w-full text-2xl font-bold input-bordered border-black "
+                                  required
+                                />
+                              </div>
+                              <button
+                                className="btn mt-2"
+                                onClick={(e) => addOptionValue(e, idx)}
+                              >
+                                {' '}
+                                Check {optionName[idx]}
+                              </button>
+                              <div className="text-2xl font-bold">
+                                {previewData && previewData !== '' && (
+                                  <>
+                                    <Latex>{previewData}</Latex>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+                          )
+                        }
+                      )}
+                  </div>
+                  <div className="flex justify-start items-center">
+                    <label className="label font-semibold text-[16px] ">
+                      Correct Option
+                    </label>
+                    <select
+                      name="type"
+                      id="type"
+                      className="input border-black input-bordered w-full h-5 "
+                      onChange={(e) =>
+                        setCorrectOption(parseInt(e.target.value))
+                      }
+                      required
+                    >
+                      <option value={-1}>---</option>
+                      {[...Array(singleExam.numberOfOptions).keys()].map(
+                        (id) => (
+                          <option key={id} value={id}>
+                            {optionName[id]}
+                          </option>
+                        )
+                      )}
+                    </select>
+                  </div>
+                  <div className="flex justify-center items-center">
+                    <button
+                      id="addButton"
+                      type="submit"
+
+                      className={`btn btn-warning rounded-tr-none rounded-bl-none hover:bg-orange-400 h-12`}
+                    >
+                      {' '}
+                      Add{' '}
+                    </button>
+                  </div>
+                </>
               </div>
-            )
-        }
+            </form>
+
+          </div>
+        )
+      }
 
 
     </div>

@@ -78,6 +78,7 @@ const SingleStudentWrittenANswer = () => {
     await axios
       .post('/api/teacher/checkscriptsingle', answer)
       .then((data) => {
+        window.scrollTo(0,0)
         setAnsTracker((prev) => prev + 1)
         setSendButtonEnabler(true)
         toast.success('Successfully updated')
@@ -191,6 +192,7 @@ const SingleStudentWrittenANswer = () => {
   //   .catch((e) => console.log(e))
   // }
   useEffect(() => {
+    window.scrollTo(0,0)
     setIsLoading(true)
     const teacher = JSON.parse(localStorage.getItem('user'))
     // console.log('user', teacherId)

@@ -2,8 +2,8 @@ import React from 'react'
 import axios from './../../utils/axios';
 import toast from 'react-hot-toast';
 
-export default function CommentAdder({ examId, studentId,subjectId }) {
-    console.log(examId,studentId);
+export default function CommentAdder({ examId, studentId,subjectId,questionNo }) {
+    // console.log(examId,studentId,subjectId);
     const addComment = async(e) =>{
         e.preventDefault();
         const comment = document.getElementById("comment").value;
@@ -11,6 +11,7 @@ export default function CommentAdder({ examId, studentId,subjectId }) {
             examId:examId,
             studentId:studentId,
             subjectId:subjectId,
+            questionNo:questionNo,
             comment:comment
         }
         console.log(data);
@@ -21,7 +22,7 @@ export default function CommentAdder({ examId, studentId,subjectId }) {
     }
     return (
         <div className="flex justify-start items-center mt-4 px-4 lg:px-10">
-            {/* <form  onSubmit={addComment}>
+            <form  onSubmit={addComment}>
             <div className='grid grid-cols-1'>
             <textarea
                 className="textarea textarea-info text-2xl font-bold border-black"
@@ -38,7 +39,7 @@ export default function CommentAdder({ examId, studentId,subjectId }) {
                 Add Comment
             </button>
             </div>
-            </form> */}
+            </form>
         </div>
     )
 }

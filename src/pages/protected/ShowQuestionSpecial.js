@@ -36,7 +36,7 @@ const ShowQuestionSpecial = () => {
   const [secondSet, setSecondSet] = useState(-1)
   const [numberOfOptions, setNumberOfOptions] = useState(0)
   const [specialExams, setSpecialExmas] = useState([])
-  const [questionId,setQuestionId] = useState("")
+  const [questionId, setQuestionId] = useState("")
 
   function arrayRemove(arr, value) {
     return arr.filter(function (ele) {
@@ -94,7 +94,7 @@ const ShowQuestionSpecial = () => {
   }
   const removeQuestion = (questionId) => {
     axios
-      .put('/api/special/updatequestionstatus', { questionId,examId:selectedExam })
+      .put('/api/special/updatequestionstatus', { questionId, examId: selectedExam })
       .then(({ data }) => {
         toast.success('Removed Successfuly')
         let prev = [...questions]
@@ -262,10 +262,10 @@ const ShowQuestionSpecial = () => {
             const slot = parseInt(data.slots) - selectedQuestions.length
             console.log(
               slot +
-                'aasdas ' +
-                selectedQuestions.length +
-                '  ' +
-                parseInt(data.slots)
+              'aasdas ' +
+              selectedQuestions.length +
+              '  ' +
+              parseInt(data.slots)
             )
             if (slot >= 0) {
               await axios
@@ -598,27 +598,27 @@ const ShowQuestionSpecial = () => {
                   <tr key={question.questionId}>
                     {(examType === 1 ||
                       (bothStatus === 1 && examType === 3)) && (
-                      <td className="w-[10px]">
-                        <div className="flex justify-center items-center">
-                          <input
-                            type="checkbox"
-                            name="single_checbox"
-                            id={`select_question` + question.questionId}
-                            className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                            onChange={(e) =>
-                              setQuestionBulk(e, question.questionId)
-                            }
-                          />
-                        </div>
-                      </td>
-                    )}
+                        <td className="w-[10px]">
+                          <div className="flex justify-center items-center">
+                            <input
+                              type="checkbox"
+                              name="single_checbox"
+                              id={`select_question` + question.questionId}
+                              className="w-4 h-4  border-black rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              onChange={(e) =>
+                                setQuestionBulk(e, question.questionId)
+                              }
+                            />
+                          </div>
+                        </td>
+                      )}
                     {(examType === 1 ||
                       (bothStatus === 1 && examType === 3)) && (
-                      <td className="bg-white">{idx + 1}.</td>
-                    )}
+                        <td className="bg-white">{idx + 1}.</td>
+                      )}
                     <td className="w-1/4">
                       {question.type === true ? (
-                        question.question
+                        <p className='w-96' style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{question.question}</p>
                       ) : (
                         <img
                           src={
@@ -632,56 +632,50 @@ const ShowQuestionSpecial = () => {
                     </td>
                     {(examType === 1 ||
                       (bothStatus === 1 && examType === 3)) && (
-                      <td className="w-fit lg:w-1/4">
-                        {question.type !== false && (
-                          <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-3 pr-0 lg:pr-10">
-                            {question.options.map((opt, idx) => {
-                              return (
-                                <div
-                                  key={idx}
-                                  className="grid grid-cols-1 lg:grid-cols-2 gap-x-2 gap-y-2 "
-                                >
-                                  <span className="flex justify-start lg:justify-end">
-                                    {`${optionName[idx]})  `}&nbsp;
-                                  </span>
-                                  <span className="flex justify-start">
-                                    {opt}
-                                  </span>
-                                </div>
-                              )
-                            })}
-                          </div>
-                        )}
-                      </td>
-                    )}
+                        <td className="w-fit lg:w-1/4">
+                          {question.type !== false && (
+                            <div className="grid grid-cols-1">
+                              {question.options.map((opt, idx) => {
+                                return (
+                                  <div key={idx}>
+                                    <span className="text-xl" style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>
+                                      {`${optionName[idx]})  ${opt}`}{' '}
+                                    </span>
+                                  </div>
+                                )
+                              })}
+                            </div>
+                          )}
+                        </td>
+                      )}
                     {(examType === 1 ||
                       (bothStatus === 1 && examType === 3)) && (
-                      <td className="w-[10px]">
-                        {optionName[question.correctOption]}
-                      </td>
-                    )}
+                        <td className="w-[10px]">
+                          {optionName[question.correctOption]}
+                        </td>
+                      )}
 
                     <td>
-                    <div className='grid grid-cols-1 gap-y-2'>
-                      <label
-                        htmlFor="option-changer"
-                        onClick={()=>setSelectedQuestionId(question.questionId)}
-                        className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                      >
-                        Change Answer
-                      </label>
-                      <DeactivateButton
-                        setter={setSelectedQuestionId}
-                        value={question.questionId}
-                      ></DeactivateButton>
-                      {
-                          question.type==true && <label
-                          htmlFor="question-update-modal"
-                          onClick={() => setQuestionId(question.questionId)}
-                          className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                      <div className='grid grid-cols-1 gap-y-2'>
+                        <label
+                          htmlFor="option-changer"
+                          onClick={() => setSelectedQuestionId(question.questionId)}
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
-                          update Question
+                          Change Answer
                         </label>
+                        <DeactivateButton
+                          setter={setSelectedQuestionId}
+                          value={question.questionId}
+                        ></DeactivateButton>
+                        {
+                          question.type == true && <label
+                            htmlFor="question-update-modal"
+                            onClick={() => setQuestionId(question.questionId)}
+                            className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          >
+                            update Question
+                          </label>
                         }
                       </div>
                     </td>

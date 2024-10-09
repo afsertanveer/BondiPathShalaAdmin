@@ -21,7 +21,7 @@ const SingleStudentSpecialWritten = () => {
   const [saveId, setSaveId] = useState(-1)
   const [totalAnsweredQuestion, setTotalAnsweredQuestion] = useState(-1)
   const [teacherId, setTeacherId] = useState(null)
-  const [subjectId,setSubjectId] = useState(null);
+  const [subjectId, setSubjectId] = useState(null);
 
   const navigate = useNavigate()
   let prevSource = []
@@ -117,7 +117,7 @@ const SingleStudentSpecialWritten = () => {
                 axios.post('/api/scripts/add', scriptCount).then((data) => {
                   toast.success('successfully updated the result')
                   setIsLoading(false)
-                  navigate('/dashboard/scripts/view')
+                  navigate('/dashboard/scripts/special/view')
                 })
               })
               .catch((e) => console.log(e))
@@ -133,7 +133,7 @@ const SingleStudentSpecialWritten = () => {
           axios.post('/api/scripts/add', scriptCount).then((data) => {
             toast.success('successfully updated the result')
             setIsLoading(false)
-            navigate('/dashboard/scripts/view')
+            navigate('/dashboard/scripts/special/view')
           })
         })
         .catch((e) => console.log(e))
@@ -237,6 +237,10 @@ const SingleStudentSpecialWritten = () => {
                           sendButtonEnabler={sendButtonEnabler}
                           prevSource={prevSource}
                         />
+                        <div className='flex justify-center items-center'>
+                          <CommentAdder studentId={params.studentId} examId={params.examId} subjectId={subjectId} questionNo={idx} />
+
+                        </div>
                         {index + 1 === answer.length && (
                           <form onSubmit={sendImage} className="my-4 ">
                             <input
@@ -283,18 +287,11 @@ const SingleStudentSpecialWritten = () => {
         {ansTracker === numberOfAnsweredQuestions && (
           <>
             <div className='flex justify-center items-center'>
-              <CommentAdder studentId={params.studentId} examId={params.examId} subjectId={subjectId} />
-
-            </div>
-
-            <div className='flex justify-center items-center'>
               <button className="btn mt-5" onClick={() => finalSave()}>
                 Finish The Process
               </button>
             </div>
           </>
-
-
         )}
       </div>
     </div>

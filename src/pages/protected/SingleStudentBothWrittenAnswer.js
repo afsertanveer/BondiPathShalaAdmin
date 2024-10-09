@@ -22,6 +22,7 @@ const SingleStudentBothWrittenAnswer = () => {
   const [totalAnsweredQuestion, setTotalAnsweredQuestion] = useState(-1)
   const [teacherId, setTeacherId] = useState(null)
   const [error, setError] = useState("");
+  const [subjectId, setSubjectId] = useState(null);
 
   const navigate = useNavigate()
   let prevSource = []
@@ -48,7 +49,8 @@ const SingleStudentBothWrittenAnswer = () => {
     setTracker(lastTracker)
     setEnabler(lastEnabler)
     e.preventDefault()
-
+    
+    setIsLoading(true)
 
     const form = e.target
     const idx = parseInt(form.index.value)
@@ -172,6 +174,7 @@ const SingleStudentBothWrittenAnswer = () => {
       )
       .then(({ data }) => {
         setSingleResult(data)
+        setSubjectId(data.subjectId);
         // console.log('result', data)
         setAnswerScripts(data.answerScript)
         let count = 0
@@ -222,7 +225,97 @@ const SingleStudentBothWrittenAnswer = () => {
       {/* {
         source.length>0 && source.map((sr)=><img key={sr} src={sr} alt='lhata'/>)
       } */}
+
       <div className="min-h-full mb-80 mx-0 px-0 lg:px-8 pe-8 lg:pe-0 ">
+        {/* <h1 className='bg-[#00a9ff]'>ASDADA</h1> */}
+        {ansTracker !== numberOfAnsweredQuestions &&
+          answerScripts.map((answer, idx) => (
+            <div key={idx}>
+              {answer !== null && tracker[idx] === 1 && (
+                <>
+                  <p className=" my-4 text-4xl font-extrabold  border-4  border-color-one   w-10 h-10 flex justify-center items-center rounded-full">
+                    {idx + 1}
+                  </p>
+                  <div className="grid grid-cols-1 px-2 py-1 border-4 border-color-one rounded-lg ">
+                    {Array.isArray(answer) === true &&
+                      answer.map((photo, index) => (
+                        <div key={index}>
+                          <CheckAnswerScript
+                            key={index}
+                            index={index}
+                            photo={photo}
+                            singleResult={singleResult}
+                            idx={idx}
+                            answer={answer}
+                            source={source}
+                            setSource={setSource}
+                            setSendButtonEnabler={setSendButtonEnabler}
+                            sendButtonEnabler={sendButtonEnabler}
+                            prevSource={prevSource}
+                          />
+
+                          {index + 1 === answer.length && (
+                            <>
+                              <div className='flex justify-center items-center'>
+                                <CommentAdder studentId={params.studentId} examId={params.examId} subjectId={subjectId} questionNo={idx} />
+
+                              </div>
+                              <form onSubmit={sendImage} className="my-4 ">
+                                <input
+                                  type="text"
+                                  className="input input-bordered  border-black hidden"
+                                  name="index"
+                                  id=""
+                                  defaultValue={idx}
+                                />
+                                <p className="ml-4 text-lg font-bold text-red">
+                                  Marks out of {singleResult.marksPerQuestion[idx]}
+                                </p>
+                                <div className="flex flex-col lg:flex-row ">
+                                  <input
+                                    type="text"
+                                    name="obtMarks"
+                                    id="obtMarks"
+                                    autoComplete="off"
+                                    className="input input-bordered  border-black"
+                                    onChange={(e) =>
+                                      checkNumber(e.target.value, idx)
+                                    }
+                                    required
+                                  />
+                                  <input
+                                    type="submit"
+                                    className="ml-0 lg:ml-4 mt-2 lg:mt-0 btn"
+                                    onClick={() => setSaveId(idx)}
+                                    value="Save Marks"
+                                    disabled={sendButtonEnabler}
+                                  />
+                                </div>
+                              </form>
+                            </>
+                          )}
+                        </div>
+                      ))}
+                  </div>
+                </>
+              )}
+            </div>
+          ))}
+
+        <div className="grid grid-cols-1 ">
+          {ansTracker === numberOfAnsweredQuestions && (
+            <>
+              <div className='flex justify-center items-center'>
+                <button className="btn mt-5" onClick={() => finalSave()}>
+                  Finish The Process
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* <div className="min-h-full mb-80 mx-0 px-0 lg:px-8 pe-8 lg:pe-0 ">
         {ansTracker !== numberOfAnsweredQuestions &&
           answerScripts.map((answer, idx) => (
             <div key={idx}>
@@ -309,7 +402,7 @@ const SingleStudentBothWrittenAnswer = () => {
 
           )}
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

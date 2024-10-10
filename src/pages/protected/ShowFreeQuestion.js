@@ -29,8 +29,8 @@ const ShowQuestions = () => {
   const [singleSecondExam, setSingleSecondExam] = useState({})
   const [selectedSet, setSelectedSet] = useState(-1)
   const [secondSet, setSecondSet] = useState(-1)
-  const [numberOfOptions,setNumberOfOptions]= useState(0);
-  const [questionId,setQuestionId] = useState("")
+  const [numberOfOptions, setNumberOfOptions] = useState(0);
+  const [questionId, setQuestionId] = useState("")
 
   const handleChangeSecondCourse = (e) => {
     setSecondSubjects([])
@@ -56,7 +56,7 @@ const ShowQuestions = () => {
   }
 
 
- 
+
   const handleChangeExam = (e) => {
     setQuestions([])
     setSelectedExam('')
@@ -120,7 +120,7 @@ const ShowQuestions = () => {
         .catch((e) => toast.error(e.response.data))
     }
   }
- 
+
   const handleSecondExam = (val) => {
     if (val !== '') {
       if (bothStatus === false) {
@@ -236,10 +236,10 @@ const ShowQuestions = () => {
             const slot = parseInt(data.slots) - selectedQuestions.length
             console.log(
               slot +
-                'aasdas ' +
-                selectedQuestions.length +
-                '  ' +
-                parseInt(data.slots)
+              'aasdas ' +
+              selectedQuestions.length +
+              '  ' +
+              parseInt(data.slots)
             )
             if (slot >= 0) {
               await axios
@@ -315,24 +315,23 @@ const ShowQuestions = () => {
       setIsLoading(false)
     })
     axios.get(`/api/freestudent/getfreeexamall`)
-    .then(({data} ) => {
-      // console.log(data);
-      setExams(data);      
-      if(data.length===0){
-        toast.error("No Data")
-      }
-      setIsLoading(false);
-    }).catch(e=>toast.error(e.response.data))
+      .then(({ data }) => {
+        // console.log(data);
+        setExams(data);
+        if (data.length === 0) {
+          toast.error("No Data")
+        }
+        setIsLoading(false);
+      }).catch(e => toast.error(e.response.data))
   }, [])
   return (
     <div className=" ">
       <div className="bg-white py-4 px-2 my-3 ">
         <div
-          className={` w-full  mx-auto grid grid-cols-1 lg:${
-            singleExam?.numberOfSet > 0 ? 'grid-cols-2' : 'grid-cols-1 '
-          } gap-4`}
+          className={` w-full  mx-auto grid grid-cols-1 lg:${singleExam?.numberOfSet > 0 ? 'grid-cols-2' : 'grid-cols-1 '
+            } gap-4`}
         >
-          
+
           <div className="form-control">
             <label className="label-text text-center" htmlFor="">
               Select Exam Name
@@ -446,7 +445,7 @@ const ShowQuestions = () => {
                     </td>
                     <td className="w-1/4">
                       {question.type === true ? (
-                        question.question
+                        <p className='w-96' style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>{question.question}</p>
                       ) : (
                         <img
                           src={
@@ -460,11 +459,11 @@ const ShowQuestions = () => {
                     </td>
                     <td className="w-1/5">
                       {question.type !== false && (
-                        <div className="grid grid-cols-1 lg:grid-cols-2">
+                        <div className="grid grid-cols-1">
                           {question.options.map((opt, idx) => {
                             return (
                               <div key={idx}>
-                                <span className="text-x">
+                                <span className="text-xl" style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>
                                   {`${optionName[idx]})  ${opt}`}{' '}
                                 </span>
                               </div>
@@ -488,25 +487,25 @@ const ShowQuestions = () => {
                     </td> */}
                     <td>
                       <div className='grid grid-cols-1 gap-y-2'>
-                      <label
-                        htmlFor="option-changer"
-                        onClick={()=>setSelectedQuestionId(question.questionId)}
-                        className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                      >
-                        Change Answer
-                      </label>
-                      <DeactivateButton
-                        setter={setSelectedQuestionId}
-                        value={question.questionId}
-                      ></DeactivateButton>
-                      {
-                          question.type==true && <label
-                          htmlFor="question-update-modal"
-                          onClick={() => setQuestionId(question.questionId)}
-                          className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                        <label
+                          htmlFor="option-changer"
+                          onClick={() => setSelectedQuestionId(question.questionId)}
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
-                          update Question
+                          Change Answer
                         </label>
+                        <DeactivateButton
+                          setter={setSelectedQuestionId}
+                          value={question.questionId}
+                        ></DeactivateButton>
+                        {
+                          question.type == true && <label
+                            htmlFor="question-update-modal"
+                            onClick={() => setQuestionId(question.questionId)}
+                            className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          >
+                            update Question
+                          </label>
                         }
                       </div>
                     </td>
@@ -521,7 +520,7 @@ const ShowQuestions = () => {
         singleExam={singleExam}
         questionId={questionId}
       />
-      <OptionChanger questionId={selectedQuestionId} numberOfOptions={numberOfOptions}/>
+      <OptionChanger questionId={selectedQuestionId} numberOfOptions={numberOfOptions} />
       <SpecialQuestionSender
         sendQuestionSpecial={sendQuestionSpecial}
         setIsLoading={setIsLoading}

@@ -22,6 +22,7 @@ const SingleStudentWrittenANswer = () => {
   const [totalAnsweredQuestion, setTotalAnsweredQuestion] = useState(-1)
   const [teacherId, setTeacherId] = useState(null);
   const [examName, setExamName] = useState("")
+  const [subjectId,setSubjectId] = useState(null);
 
 
   const navigate = useNavigate()
@@ -78,7 +79,7 @@ const SingleStudentWrittenANswer = () => {
     await axios
       .post('/api/teacher/checkscriptsingle', answer)
       .then((data) => {
-        window.scrollTo(0,0)
+        window.scrollTo(0, 0)
         setAnsTracker((prev) => prev + 1)
         setSendButtonEnabler(true)
         toast.success('Successfully updated')
@@ -192,7 +193,7 @@ const SingleStudentWrittenANswer = () => {
   //   .catch((e) => console.log(e))
   // }
   useEffect(() => {
-    window.scrollTo(0,0)
+    window.scrollTo(0, 0)
     setIsLoading(true)
     const teacher = JSON.parse(localStorage.getItem('user'))
     // console.log('user', teacherId)
@@ -204,6 +205,7 @@ const SingleStudentWrittenANswer = () => {
       .then(({ data }) => {
         setSingleResult(data)
         // console.log('result', data)
+        setSubjectId(data.subjectId);
         setAnswerScripts(data.answerScript)
         let count = 0
         for (let i = 0; i < data.answerScript.length; i++) {
@@ -276,38 +278,45 @@ const SingleStudentWrittenANswer = () => {
                           prevSource={prevSource}
                         />
                         {index + 1 === answer.length && (
-                          <form onSubmit={sendImage} className="my-4 ">
-                            <input
-                              type="text"
-                              className="input input-bordered  border-black hidden"
-                              name="index"
-                              id=""
-                              defaultValue={idx}
-                            />
-                            <p className="ml-4 text-lg font-bold text-red">
-                              Marks out of {singleResult.marksPerQuestion[idx]}
-                            </p>
-                            <div className="flex flex-col lg:flex-row ">
+                          <>
+                            <div className='flex justify-center items-center'>
+                              <CommentAdder studentId={params.studentId} examId={params.examId} subjectId={subjectId} questionNo={idx} />
+
+                            </div>
+                            <form onSubmit={sendImage} className="my-4 ">
                               <input
                                 type="text"
-                                name="obtMarks"
-                                id="obtMarks"
-                                autoComplete="off"
-                                className="input input-bordered  border-black"
-                                onChange={(e) =>
-                                  checkNumber(e.target.value, idx)
-                                }
-                                required
+                                className="input input-bordered  border-black hidden"
+                                name="index"
+                                id=""
+                                defaultValue={idx}
                               />
-                              <input
-                                type="submit"
-                                className="ml-0 lg:ml-4 mt-2 lg:mt-0 btn"
-                                onClick={() => setSaveId(idx)}
-                                value="Save Marks"
-                                disabled={sendButtonEnabler}
-                              />
-                            </div>
-                          </form>
+                              <p className="ml-4 text-lg font-bold text-red">
+                                Marks out of {singleResult.marksPerQuestion[idx]}
+                              </p>
+                              <div className="flex flex-col lg:flex-row ">
+                                <input
+                                  type="text"
+                                  name="obtMarks"
+                                  id="obtMarks"
+                                  autoComplete="off"
+                                  className="input input-bordered  border-black"
+                                  onChange={(e) =>
+                                    checkNumber(e.target.value, idx)
+                                  }
+                                  required
+                                />
+                                <input
+                                  type="submit"
+                                  className="ml-0 lg:ml-4 mt-2 lg:mt-0 btn"
+                                  onClick={() => setSaveId(idx)}
+                                  value="Save Marks"
+                                  disabled={sendButtonEnabler}
+                                />
+                              </div>
+                            </form>
+                          </>
+
                         )}
                       </div>
                     ))}
@@ -320,10 +329,6 @@ const SingleStudentWrittenANswer = () => {
       <div className="grid grid-cols-1 ">
         {ansTracker === numberOfAnsweredQuestions && (
           <>
-            <div className='flex justify-center items-center'>
-              <CommentAdder studentId={params.studentId} examId={params.examId} subjectId={null} />
-
-            </div>
 
             <div className='flex justify-center items-center'>
               <button className="btn mt-5" onClick={() => finalSave()}>

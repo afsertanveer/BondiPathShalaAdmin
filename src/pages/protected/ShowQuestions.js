@@ -1,16 +1,14 @@
-import React from 'react'
-import { useEffect } from 'react'
-import { useState } from 'react'
-import axios from '../../utils/axios'
-import Loader from './../../Shared/Loader'
+import React, { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
+import QuestionEdit from '../../components/QuestionAdder/QuestionEdit'
+import QuestionSender from '../../components/QuestionSender/QuestionSender'
 import DeactivateButton from '../../features/common/components/DeactivateButton'
 import PopUpModal from '../../features/common/components/PopUpModal'
+import axios from '../../utils/axios'
 import { optionName } from '../../utils/globalVariables'
-import QuestionSender from '../../components/QuestionSender/QuestionSender'
-import SpecialQuestionSender from './SpecialQuestionSender'
+import Loader from './../../Shared/Loader'
 import OptionChanger from './OptionChanger'
-import QuestionEdit from '../../components/QuestionAdder/QuestionEdit'
+import SpecialQuestionSender from './SpecialQuestionSender'
 const ShowQuestions = () => {
   const [courses, setCourses] = useState([])
   const [subjects, setSubjects] = useState([])
@@ -581,7 +579,7 @@ const ShowQuestions = () => {
                       ></DeactivateButton>
 
                         {
-                          question.type==true && <label
+                          question.type===true && <label
                           htmlFor="question-update-modal"
                           onClick={() => setQuestionId(question.questionId)}
                           className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"

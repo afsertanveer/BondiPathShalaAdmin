@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400;500;600;700&display=swap');
+html {
+  font-family: 'Baloo Da 2', cursive;
+}
 .App {
   text-align: center;
 }
@@ -12,7 +16,7 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
-.modal{
+.modal {
   display: flex !important;
   flex-wrap: wrap;
   justify-content: center;

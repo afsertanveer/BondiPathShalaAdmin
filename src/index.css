@@ -3,109 +3,103 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
   html {
-      font-family: 'Baloo Da 2', cursive;
+    font-family: 'Baloo Da 2', cursive;
   }
-  input[type=submit]{
-    background-color: #FF4B00;
-    color:white !important;
+  input[type='submit'] {
+    background-color: #ff4b00;
+    color: white !important;
   }
 
-  input[type=submit]:hover{
+  input[type='submit']:hover {
     background: linear-gradient(180deg, #616161 0%, #353535 100%);
   }
 
-  button{
-    background-color: #FF4B00 !important;
-    color:white !important;
+  button {
+    background-color: #ff4b00 !important;
+    color: white !important;
   }
-  
-  button:hover{
+
+  button:hover {
     background: linear-gradient(180deg, #616161 0%, #353535 100%);
   }
 
-  
-  th{
-    border: 1px solid #FF4B00 !important;
+  th {
+    border: 1px solid #ff4b00 !important;
     text-align: center;
   }
-  tr,td{
-    border: 1px solid #FF4B00 !important;
+  tr,
+  td {
+    border: 1px solid #ff4b00 !important;
     text-align: center;
   }
- 
 }
-.width-setter{
+.width-setter {
   min-width: 200px !important;
 }
-label{
+label {
   font-weight: 500;
   margin-right: 5px;
   min-width: 80px;
-  
 }
-.customTable{
+.customTable {
   margin-top: 20px;
 }
-.customTable thead th{
+.customTable thead th {
   background-color: #224156 !important;
   color: white;
 }
 
-.add-form input,select{
+.add-form input,
+select {
   height: 35px !important;
-  
 }
 /* th>div{
   min-width: 300px @i;
 } */
 
-.add-form .form-control{
+.add-form .form-control {
   padding: 0;
 }
-.add-form span{
-
+.add-form span {
   margin: 0 !important;
 }
 
-.add-form .label-text{
+.add-form .label-text {
   margin-bottom: 5px;
 }
 
-
-.add-form label{
+.add-form label {
   padding: 2px 8px !important;
   font-weight: 600 !important;
 }
 
 .loading-indicator:before {
-    content: '';
-    background: #00000080;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-  }
-  
+  content: '';
+  background: #00000080;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
 
-  .loading-indicator:after {
-    content: ' ';
-    position: fixed;
-    top: 40%;
-    left: 45%;
-    z-index: 10010;
-    color:white;
-    text-align:center;
-    font-weight:bold;
-    font-size:1.2rem;        
-    border: 16px solid #f3f3f3; /* Light grey */
-    border-top: 16px solid #0474bf; /* Blue */
-    border-radius: 50%;
-    width: 120px;
-    height: 120px;
-    animation: spin 2s linear infinite;
+.loading-indicator:after {
+  content: ' ';
+  position: fixed;
+  top: 40%;
+  left: 45%;
+  z-index: 10010;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #0474bf; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
 }

@@ -73,17 +73,17 @@ const AddExam = () => {
     formdata.append('questionType', questionType)
     formdata.append('numberOfSet', numberOfSet)
     formdata.append('totalMarksMcq', totalMarks)
-    const sendMessage = {
-      username: 'Bondiadmin',
-      password: 'Bp@@2025',
-      apicode: '1',
-      msisdn: '01580942301',
-      countrycode: '880',
-      cli: '2222',
-      messagetype: '1',
-      message: 'SingleSMS_JesonTest1',
-      messageid: '0',
-    }
+    // const sendMessage = {
+    //   username: 'Bondiadmin',
+    //   password: 'Bp@@2025',
+    //   apicode: '1',
+    //   msisdn: '01580942301',
+    //   countrycode: '880',
+    //   cli: '2222',
+    //   messagetype: '1',
+    //   message: 'SingleSMS_JesonTest1',
+    //   messageid: '0',
+    // }
     await axios
       .post(`/api/exam/createexam`, formdata, {
         headers: {
@@ -91,20 +91,20 @@ const AddExam = () => {
         },
       })
       .then(async ({ data }) => {
-        const response = await fetch(
-          'https://gpcmp.grameenphone.com/ecmapigw/webresources/ecmapigw.v2 ',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(sendMessage),
-          }
-        )
-        const dataD = await response.json();
-        console.log(dataD);
+        // const response = await fetch(
+        //   'https://gpcmp.grameenphone.com/ecmapigw/webresources/ecmapigw.v2 ',
+        //   {
+        //     method: 'POST',
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify(sendMessage),
+        //   }
+        // )
+        // const dataD = await response.json();
+        // console.log(dataD);
         toast.success('Exam Added Succesfully')
-        // window.location.reload(false);
+        window.location.reload(false);
       })
       .catch((e) => console.log(e))
   }

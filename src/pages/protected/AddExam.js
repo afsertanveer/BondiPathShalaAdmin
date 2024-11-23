@@ -91,18 +91,18 @@ const AddExam = () => {
         },
       })
       .then(async ({ data }) => {
-        const response = await fetch(
-          `https://gpcmp.grameenphone.com/gpcmpapi/messageplatform/controller.home?username=Bondiadmin&password=Bp@@2025&apicode=${6}&msisdn=01580942301&countrycode=880&cli=Bondiadmin&messagetype=${1}&message=CMPTestMes
-sage&messageid=${0}`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
-        )
-        const dataD = await response.json()
-        console.log(dataD)
+//         const response = await fetch(
+//           `https://gpcmp.grameenphone.com/gpcmpapi/messageplatform/controller.home?username=Bondiadmin&password=Bp@@2025&apicode=${6}&msisdn=01580942301&countrycode=880&cli=Bondiadmin&messagetype=${1}&message=CMPTestMes
+// sage&messageid=${0}`,
+//           {
+//             method: 'POST',
+//             headers: {
+//               'Content-Type': 'application/json',
+//             },
+//           }
+//         )
+//         const dataD = await response.json()
+//         console.log(dataD)
         toast.success('Exam Added Succesfully')
         window.location.reload(false)
       })

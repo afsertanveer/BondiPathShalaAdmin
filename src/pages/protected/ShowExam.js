@@ -1,19 +1,16 @@
-import React from 'react'
-import { useEffect } from 'react'
-import { useState } from 'react'
-import axios from '../../utils/axios'
-import Loader from './../../Shared/Loader'
+import moment from 'moment/moment'
+import React, { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
+import { Link } from 'react-router-dom'
+import Select from 'react-select'
+import ImageAdder from '../../components/ImageAdder/ImageAdder'
+import QuestionAdder from '../../components/QuestionAdder/QuestionAdder'
+import SolutionSheetAdder from '../../components/common/SolutionSheetAdder'
+import axios from '../../utils/axios'
+import { type } from '../../utils/globalVariables'
+import Loader from './../../Shared/Loader'
 import DeactivateButton from './../../features/common/components/DeactivateButton'
 import PopUpModal from './../../features/common/components/PopUpModal'
-import { optionName, type } from '../../utils/globalVariables'
-import { Fragment } from 'react'
-import Select from 'react-select'
-import moment from 'moment/moment'
-import ImageAdder from '../../components/ImageAdder/ImageAdder'
-import SolutionSheetAdder from '../../components/common/SolutionSheetAdder'
-import { Link } from 'react-router-dom'
-import QuestionAdder from '../../components/QuestionAdder/QuestionAdder'
 
 const ShowExam = () => {
   const [courses, setCourses] = useState([])
@@ -391,7 +388,7 @@ const ShowExam = () => {
         )
         .then(({ data }) => {
           setExams(data)
-          console.log(data);
+          // console.log(data);
           if (data.length === 0) {
             toast.error('No Data')
           }

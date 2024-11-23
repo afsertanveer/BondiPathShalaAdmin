@@ -391,6 +391,7 @@ const ShowExam = () => {
         )
         .then(({ data }) => {
           setExams(data)
+          console.log(data);
           if (data.length === 0) {
             toast.error('No Data')
           }

@@ -1,10 +1,10 @@
-import React, { Fragment, useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import axios from '../../utils/axios'
-import Loader from '../../Shared/Loader'
+import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
+import { useNavigate, useParams } from 'react-router-dom'
+import Loader from '../../Shared/Loader'
 import CheckAnswerScript from '../../components/Editor/CheckAnswerScript'
 import CommentAdder from '../../components/common/CommentAdder'
+import axios from '../../utils/axios'
 
 const SingleStudentBothWrittenAnswer = () => {
   const params = useParams()
@@ -21,8 +21,9 @@ const SingleStudentBothWrittenAnswer = () => {
   const [saveId, setSaveId] = useState(-1)
   const [totalAnsweredQuestion, setTotalAnsweredQuestion] = useState(-1)
   const [teacherId, setTeacherId] = useState(null)
-  const [error, setError] = useState("");
-  const [subjectId, setSubjectId] = useState(null);
+  const [error, setError] = useState('')
+  const [subjectId, setSubjectId] = useState(null)
+  const [singleStudentExamDetails, setSingleStudentExamDetails] = useState({})
 
   const navigate = useNavigate()
   let prevSource = []
@@ -49,7 +50,7 @@ const SingleStudentBothWrittenAnswer = () => {
     setTracker(lastTracker)
     setEnabler(lastEnabler)
     e.preventDefault()
-    
+
     setIsLoading(true)
 
     const form = e.target
@@ -58,11 +59,9 @@ const SingleStudentBothWrittenAnswer = () => {
     console.log(singleResult.marksPerQuestion[idx], obtainedMarks)
     // setError("Please Check the marking")
     //   return;
-    if (
-      parseFloat(obtainedMarks) > singleResult.marksPerQuestion[idx]
-    ) {
-      setError("Please Check the marking")
-      return;
+    if (parseFloat(obtainedMarks) > singleResult.marksPerQuestion[idx]) {
+      setError('Please Check the marking')
+      return
     }
     let answer
     // setIsLoading(true)
@@ -87,12 +86,25 @@ const SingleStudentBothWrittenAnswer = () => {
     //console.log(answer)
     await axios
       .post('/api/teacher/bothcheckscriptsingle', answer)
-      .then((data) => {
+      .then(async (data) => {
         setAnsTracker((prev) => prev + 1)
         setSendButtonEnabler(true)
         toast.success('Successfully updated')
-        setError("");
+        setError('')
         setSource([])
+        const details = {
+          examId: params.examId,
+          studentId: params.studentId,
+        }
+        console.log(details)
+        await axios
+          .get('/api/both/getexamsingle', {
+            params: details, // Pass query parameters correctly here
+          })
+          .then(({ data }) => {
+            console.log('hello form the other side', data)
+            setSingleStudentExamDetails(data)
+          })
         setIsLoading(false)
       })
       .catch((e) => console.log(e))
@@ -107,7 +119,7 @@ const SingleStudentBothWrittenAnswer = () => {
       teacherId: teacherId,
       examId: params.examId,
       noq: totalAnsweredQuestion,
-      examName: singleResult.examName
+      examName: singleResult.examName,
     }
     let answer
     for (let k = 0; k < vacantAnswerSubmitter.length; k++) {
@@ -166,6 +178,7 @@ const SingleStudentBothWrittenAnswer = () => {
   }
   useEffect(() => {
     setIsLoading(true)
+
     const teacher = JSON.parse(localStorage.getItem('user'))
     setTeacherId(teacher._id)
     axios
@@ -174,7 +187,7 @@ const SingleStudentBothWrittenAnswer = () => {
       )
       .then(({ data }) => {
         setSingleResult(data)
-        setSubjectId(data.subjectId);
+        setSubjectId(data.subjectId)
         // console.log('result', data)
         setAnswerScripts(data.answerScript)
         let count = 0
@@ -256,9 +269,13 @@ const SingleStudentBothWrittenAnswer = () => {
 
                           {index + 1 === answer.length && (
                             <>
-                              <div className='flex justify-center items-center'>
-                                <CommentAdder studentId={params.studentId} examId={params.examId} subjectId={subjectId} questionNo={idx} />
-
+                              <div className="flex justify-center items-center">
+                                <CommentAdder
+                                  studentId={params.studentId}
+                                  examId={params.examId}
+                                  subjectId={subjectId}
+                                  questionNo={idx}
+                                />
                               </div>
                               <form onSubmit={sendImage} className="my-4 ">
                                 <input
@@ -269,7 +286,8 @@ const SingleStudentBothWrittenAnswer = () => {
                                   defaultValue={idx}
                                 />
                                 <p className="ml-4 text-lg font-bold text-red">
-                                  Marks out of {singleResult.marksPerQuestion[idx]}
+                                  Marks out of{' '}
+                                  {singleResult.marksPerQuestion[idx]}
                                 </p>
                                 <div className="flex flex-col lg:flex-row ">
                                   <input
@@ -305,7 +323,27 @@ const SingleStudentBothWrittenAnswer = () => {
         <div className="grid grid-cols-1 ">
           {ansTracker === numberOfAnsweredQuestions && (
             <>
-              <div className='flex justify-center items-center'>
+              {singleStudentExamDetails ? (
+                <div className="px-44 py-5">
+                  {singleStudentExamDetails.obtainedMarks.map((marks, id) => (
+                    <div className="my-4 flex justify-center items-center">
+                      <div className="grid grid-cols-2 gap-10">
+                        <h1 className="text-2xl text-color-one font-semibold">
+                          Question: {id + 1}
+                        </h1>
+                        <h1 className="text-2xl text-color-one font-semibold">
+                          Marks: {marks}
+                        </h1>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <h1 className="text-3xl text-red">
+                  Please Check the script again
+                </h1>
+              )}
+              <div className="flex justify-center items-center">
                 <button className="btn mt-5" onClick={() => finalSave()}>
                   Finish The Process
                 </button>
@@ -408,4 +446,3 @@ const SingleStudentBothWrittenAnswer = () => {
 }
 
 export default SingleStudentBothWrittenAnswer
-

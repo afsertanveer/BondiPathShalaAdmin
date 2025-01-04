@@ -4,7 +4,7 @@ function SendMessage() {
   const sendMessage = async () => {
     const sms = {
       username: 'Bondiadmin',
-      password: 'Bp@@2025',
+      password: '4Q4Nu9$vuW2zhE@s',
       apicode: '1',
       msisdn: '01680178503',
       countrycode: '880',

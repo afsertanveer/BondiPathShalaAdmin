@@ -8,7 +8,7 @@ function SendMessage() {
       apicode: '1',
       msisdn: '01680178503',
       countrycode: '880',
-      cli: '2222',
+      cli: 'BP OTP',
       messagetype: '1',
       message: 'SingleSMS_JesonTest1',
       messageid: '0',

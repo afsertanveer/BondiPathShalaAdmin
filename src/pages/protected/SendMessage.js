@@ -19,6 +19,8 @@ function SendMessage() {
         'https://gpcmp.grameenphone.com/ecmapigw/webresources/ecmapigw.v2',
         {
           method: 'POST',
+
+          mode: 'no-cors',
           headers: {
             'Content-Type': 'application/json', // Set the content type
           },

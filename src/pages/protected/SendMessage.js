@@ -13,16 +13,30 @@ function SendMessage() {
       message: 'SingleSMS_JesonTest1',
       messageid: '0',
     };
-    const response = await fetch(
-      'https://gpcmp.grameenphone.com/ecmapigw/webresources/ecmapigw.v2',
-      {
-        method: 'POST',
-        body: sms,
-      },
-    );
-    const data = await response.json();
-    console.log(data);
+
+    try {
+      const response = await fetch(
+        'https://gpcmp.grameenphone.com/ecmapigw/webresources/ecmapigw.v2',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json', // Set the content type
+          },
+          body: JSON.stringify(sms), // Convert the JavaScript object to JSON
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('Response Data:', data);
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
   };
+
   return (
     <div>
       SendMessage

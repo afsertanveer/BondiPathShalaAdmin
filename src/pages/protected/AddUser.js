@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "../../utils/axios";
 import { toast } from "react-hot-toast";
 import Loader from "../../Shared/Loader";
+import axios from "../../utils/axios";
 
 const AddUser = () => {
   const [getPassword, setGetPassword] = useState("");
@@ -9,7 +9,7 @@ const AddUser = () => {
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState(null)
+  const [selectedCourse, setSelectedCourse] = useState("")
   const [selectedSubject, setSelectedSubject] = useState(null)
   const addOfficer = async (e) => {
     e.preventDefault();

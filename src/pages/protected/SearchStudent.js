@@ -67,9 +67,9 @@ const SearchStudent = () => {
     }
   });
   const setData = (id, password) => {
-    console.log(password);
+    // console.log(password);
     axios
-      .post(`/api/student/changepassword?password=${password}&studentId=${id}`)
+      .post(`/api/student/changepassword?studentId=${id}`,{password:password})
       .then(({ data }) => {
         toast.success('Password Reset Successfully');
       });

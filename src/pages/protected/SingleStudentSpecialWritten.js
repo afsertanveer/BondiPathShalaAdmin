@@ -166,13 +166,14 @@ const SingleStudentSpecialWritten = () => {
         // console.log('result', data)
         setSubjectId(data.subjectId);
         setAnswerScripts(data.answerScript)
+        // console.log(data.answerScript);
         let count = 0
         for (let i = 0; i < data.answerScript.length; i++) {
-          if (data.answerScript[i].length > 0) {
+          if (data.answerScript[i]?.length > 0) {
             count++
           }
         }
-        // console.log('setTotalAnsweredQuestion', count)
+        console.log('setTotalAnsweredQuestion', count)
         setTotalAnsweredQuestion(count)
         let answered = 0
         let vacantAnswer = []

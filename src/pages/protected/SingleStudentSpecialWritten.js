@@ -173,7 +173,7 @@ const SingleStudentSpecialWritten = () => {
             count++
           }
         }
-        console.log('setTotalAnsweredQuestion', count)
+        // console.log('setTotalAnsweredQuestion', count)
         setTotalAnsweredQuestion(count)
         let answered = 0
         let vacantAnswer = []
@@ -198,9 +198,9 @@ const SingleStudentSpecialWritten = () => {
             answered++
           }
         }
-        console.log(tr)
-        console.log(checker)
-        console.log(answered)
+        // console.log(tr)
+        // console.log(checker)
+        // console.log(answered)
         setTracker(tr)
         setEnabler(checker)
         setNumberOfAnsweredQuestions(answered)

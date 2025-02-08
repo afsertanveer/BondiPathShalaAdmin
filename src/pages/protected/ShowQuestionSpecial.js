@@ -188,7 +188,12 @@ const ShowQuestionSpecial = () => {
           )}`
         )
         .then(({ data }) => {
-          const newData = shuffle(data);
+          let newData;
+          if(parseInt(setName)!==0){
+            newData = shuffle(data);
+          }else{
+            newData = data;
+          }
           setQuestions(newData);
           setIsLoading(false)
           if (data.length === 0) {

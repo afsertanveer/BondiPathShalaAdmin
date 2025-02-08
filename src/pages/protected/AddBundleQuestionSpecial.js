@@ -334,7 +334,14 @@ const AddBundleQuestionSpecial = () => {
           )}
         </div>
       </div>
-      {slots === 0 && trackingSlot>slots (
+      {
+        slots===0 && <div className="flex justify-center items-center border-4 rounded-lg bg-white border-color-one py-8 px-4 my-10 mx-8">
+        <p className="text-[32px] font-extrabold text-success">
+          You have already added the questions for this set!
+        </p>
+      </div>
+      }
+      {slots && slots === 0 && trackingSlot>slots (
         <div className="flex justify-center items-center border-4 rounded-lg bg-white border-color-one py-8 px-4 my-10 mx-8">
           <p className="text-[32px] font-extrabold text-success">
             You have already added the questions for this set!

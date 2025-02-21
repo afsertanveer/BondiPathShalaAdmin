@@ -94,7 +94,7 @@ const ShowQuestionSpecial = () => {
   }
   const removeQuestion = (questionId) => {
     axios
-      .put('/api/special/updatequestionstatus', { questionId, examId: selectedExam })
+      .put('/api/special/updatequestionstatus', { questionId,subjectId:selectedSubject, examId: selectedExam })
       .then(({ data }) => {
         toast.success('Removed Successfuly')
         let prev = [...questions]

@@ -83,6 +83,10 @@ const AddSpecialMcq = () => {
     //   numberOfRetakes,
     //   numberOfSet,
     // }
+
+    console.log("number of questions: ",totalQuestionMcq);
+    console.log("mpm: ",marksPerMcq)
+    // return;
     const iLink = form.iLink.files[0];
     const formdata = new FormData();
 
@@ -113,7 +117,7 @@ const AddSpecialMcq = () => {
     formdata.append("totalQuestionMcq", totalQuestionMcq);
     formdata.append("subjectInfo", JSON.stringify(subjectInfo));
     formdata.append("marksPerMcq", marksPerMcq);
-    formdata.append("totalMarksMcq,", parseFloat(parseFloat(marksPerMcq)*parseInt(totalQuestionMcq)).toFixed(2));
+    formdata.append("totalMarksMcq", parseFloat(parseFloat(marksPerMcq)*parseInt(totalQuestionMcq)).toFixed(2));
     formdata.append("negativeMarks", negativeMarks);
     formdata.append("status", status);
     formdata.append("fixedSubject", JSON.stringify(selectedFixedSubject));
@@ -127,10 +131,10 @@ const AddSpecialMcq = () => {
     formdata.append("isAdmission",isAdmission)
     formdata.append("isOptionalAvailable",isOptionalAvailable)
 
-    // for (var pair of formdata.entries()) {
-    //   console.log(pair[0] + " - " + pair[1]);
-    // }
-
+    for (var pair of formdata.entries()) {
+      console.log(pair[0] + " - " + pair[1]);
+    }
+    // return;
     await axios
       .post(`${mcqSpcial}/createspecialmcqexam`, formdata, {
         headers: {

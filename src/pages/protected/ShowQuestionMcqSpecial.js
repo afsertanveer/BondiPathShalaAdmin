@@ -91,19 +91,19 @@ const ShowQuestionMcqSpecial = () => {
       setSingleSecondExam({})
     }
   }
-  const removeQuestion = (questionId) => {
-    axios
-      .put('/api/exam/updatequestionstatus', { questionId })
-      .then(({ data }) => {
-        toast.success('Removed Successfuly')
-        let prev = [...questions]
-        prev = prev.filter((pr) => pr.questionId !== questionId)
-        setQuestions(prev)
-      })
-      .catch((e) => console.log(e))
-
-    document.getElementById('my-modal-1').checked = false
-  }
+ const removeQuestion = (questionId) => {
+     axios
+       .put('/api/mcqspecialexam/updatequestionstatus', { questionId,subjectId:selectedSubject, examId: selectedExam })
+       .then(({ data }) => {
+         toast.success('Removed Successfuly')
+         let prev = [...questions]
+         prev = prev.filter((pr) => pr.questionId !== questionId)
+         setQuestions(prev)
+       })
+       .catch((e) => console.log(e))
+ 
+     document.getElementById('my-modal-1').checked = false
+   }
   const handleChangeCourse = (e) => {
     setSelectedSubject('')
     setSubjects([])
@@ -187,7 +187,12 @@ const ShowQuestionMcqSpecial = () => {
           )}`
         )
         .then(({ data }) => {
-          const newData = shuffle(data);
+          let newData ;
+          if(parseInt(setName)!==0){
+            newData = shuffle(data);
+          }else{
+            newData = data;
+          }
           setQuestions(newData);
           setIsLoading(false)
           if (data.length === 0) {

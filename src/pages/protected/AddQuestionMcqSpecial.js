@@ -47,7 +47,7 @@ const AddQuestionMcqSpecial = () => {
     formdata.append('questionText', questionText)
     formdata.append('type', isText)
     formdata.append('options', JSON.stringify(mcqOptions))
-    formdata.append('optionCount', numberOfOptions)
+    formdata.append('optionCount', parseInt(mcqOptions))
     formdata.append('correctOption', parseInt(correctOption))
     formdata.append('status', true)
     formdata.append('examId', singleExamId)
@@ -124,7 +124,7 @@ const AddQuestionMcqSpecial = () => {
       axios
         .get(`/api/mcqspecialexam/showspecialexambyid?examId=${singleExamId}`)
         .then(({ data }) => {
-          console.log(data);
+          // console.log("single exam",data);
           setsingleExam(data)
           setSubjects(data.questionMcq);
           setMcqOptions(data.numberOfOptions)

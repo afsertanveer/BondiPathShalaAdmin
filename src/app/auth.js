@@ -9,6 +9,7 @@ const checkAuth = () => {
     const isPublicPage = PUBLIC_ROUTES.some( r => window.location.href.includes(r))
 
     if(!TOKEN && !isPublicPage){
+        // console.log("unauthorized")
         window.location.href = '/login'
         return;
     }else{

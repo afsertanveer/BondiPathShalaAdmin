@@ -1,44 +1,340 @@
-import React from 'react'
-import { useEffect } from 'react'
-import { useState } from 'react'
-import axios from '../../utils/axios'
-import Loader from './../../Shared/Loader'
-import { toast } from 'react-hot-toast'
-import DeactivateButton from '../../features/common/components/DeactivateButton'
-import PopUpModal from '../../features/common/components/PopUpModal'
-import { optionName } from '../../utils/globalVariables'
-import QuestionSender from '../../components/QuestionSender/QuestionSender'
-import SpecialQuestionSender from './SpecialQuestionSender'
-import OptionChanger from './OptionChanger'
-import QuestionEdit from '../../components/QuestionAdder/QuestionEdit'
+import React from "react";
+import { useEffect } from "react";
+import { useState } from "react";
+import axios from "../../utils/axios";
+import Loader from "./../../Shared/Loader";
+import { toast } from "react-hot-toast";
+import DeactivateButton from "../../features/common/components/DeactivateButton";
+import PopUpModal from "../../features/common/components/PopUpModal";
+import { optionName } from "../../utils/globalVariables";
+import QuestionSender from "../../components/QuestionSender/QuestionSender";
+import SpecialQuestionSender from "./SpecialQuestionSender";
+import OptionChanger from "./OptionChanger";
+import QuestionEdit from "../../components/QuestionAdder/QuestionEdit";
+import McqSpecialQuestionSender from "./McqSpecialQuestionSender";
 const ShowBothQuestions = () => {
-  const [courses, setCourses] = useState([])
-  const [subjects, setSubjects] = useState([])
-  const [exams, setExams] = useState([])
-  const [secondsubjects, setSecondSubjects] = useState([])
-  const [secondexams, setSecondExams] = useState([])
-  const [questions, setQuestions] = useState([])
-  const [writtenQuestion, setWrittenQuestion] = useState({})
-  const [show, setShow] = useState(false)
-  const [selectedCourse, setSelectedCourse] = useState('')
-  const [selectedSubject, setSelectedSubject] = useState('')
-  const [selectedExam, setSelectedExam] = useState('')
-  const [examType, setExamType] = useState('')
-  const [questionCourse, setQuestionCourse] = useState('')
-  const [bothStatus, setBothStatus] = useState(false)
-  const [questionSubject, setQuestionSubject] = useState('')
-  const [selectedQuestionId, setSelectedQuestionId] = useState('')
-  const [questionExam, setQuestionExam] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [selectedQuestions, setSelectedQuestions] = useState([])
-  const [singleExam, setSingleExam] = useState({})
-  const [singleSecondExam, setSingleSecondExam] = useState({})
-  const [selectedSet, setSelectedSet] = useState(-1)
-  const [secondSet, setSecondSet] = useState(-1)
-  const [numberOfOptions, setNumberOfOptions] = useState(0)
-  const [questionId,setQuestionId] = useState("")
+  const [courses, setCourses] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+  const [exams, setExams] = useState([]);
+  const [secondsubjects, setSecondSubjects] = useState([]);
+  const [secondexams, setSecondExams] = useState([]);
+  const [questions, setQuestions] = useState([]);
+  const [writtenQuestion, setWrittenQuestion] = useState({});
+  const [show, setShow] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState("");
+  const [selectedSubject, setSelectedSubject] = useState("");
+  const [selectedExam, setSelectedExam] = useState("");
+  const [examType, setExamType] = useState("");
+  const [questionCourse, setQuestionCourse] = useState("");
+  const [bothStatus, setBothStatus] = useState(false);
+  const [questionSubject, setQuestionSubject] = useState("");
+  const [selectedQuestionId, setSelectedQuestionId] = useState("");
+  const [questionExam, setQuestionExam] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedQuestions, setSelectedQuestions] = useState([]);
+  const [singleExam, setSingleExam] = useState({});
+  const [singleSecondExam, setSingleSecondExam] = useState({});
+  const [selectedSet, setSelectedSet] = useState(-1);
+  const [secondSet, setSecondSet] = useState(-1);
+  const [numberOfOptions, setNumberOfOptions] = useState(0);
+  const [questionId, setQuestionId] = useState("");
 
   const sendQuestionSpecial = async (e) => {
+    e.preventDefault();
+    const examId = questionExam;
+    const questionSet = {
+      subjectId: questionSubject,
+      examId,
+      questionArray: selectedQuestions,
+      setName: secondSet,
+    };
+
+    await axios
+      .put("/api/special/addquestionmcqbulk", questionSet)
+      .then(({ data }) => {
+        toast.success("Successfully added all the questions");
+        e.target.reset();
+        document.getElementById("my-modal-special").checked = false;
+        window.location.reload(false);
+      })
+      .catch((e) => console.log(e));
+  };
+  const handleChangeCourse = (e) => {
+    setSelectedSubject("");
+    setSubjects([]);
+    setExams("");
+    setExams([]);
+    setQuestions([]);
+    setSelectedCourse(e.target.value);
+  };
+  const handleChangeSecondCourse = (e) => {
+    setQuestionCourse(e.target.value);
+    setSecondSubjects([]);
+    setSecondExams([]);
+    axios
+      .get(`/api/subject/getsubjectbycourse?courseId=${e.target.value}`)
+      .then(({ data }) => {
+        setSecondSubjects(data.data);
+        setIsLoading(false);
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const handleChangeSubject = (e) => {
+    setSelectedSubject(e.target.value);
+    setSelectedExam("");
+    setExams([]);
+    setQuestions([]);
+  };
+
+  const handleChangeExam = async (val) => {
+    if (val !== "") {
+      setSelectedExam(val);
+    }
+  };
+
+  const changeExamType = async (type) => {
+    if (type !== -1) {
+      if (type === 2) {
+        await axios
+          .get(
+            `/api/both/bothquestionbyexamid?examId=${selectedExam}&type=${type}`
+          )
+          .then(({ data }) => {
+            if (examType === "1") {
+              setShow(false);
+              setWrittenQuestion({});
+              setQuestions(data);
+            } else {
+              setShow(true);
+              setQuestions([]);
+              setWrittenQuestion(data);
+            }
+            setIsLoading(false);
+          })
+          .catch((e) => {
+            setQuestions([]);
+            setSelectedQuestions([]);
+            setWrittenQuestion({});
+            toast.error(e.response.data);
+          });
+      } else {
+        await axios
+          .get("/api/both/getbothexambyid?examId=" + selectedExam)
+          .then(({ data }) => {
+            setSingleExam(data);
+            setNumberOfOptions(data.numberOfOptions);
+          });
+      }
+    }
+  };
+
+  const handleSecondExam = (val) => {
+    if (val !== "") {
+      if (bothStatus === false) {
+        axios
+          .get(`/api/exam/getExamById?examId=${val}`)
+          .then(({ data }) => {
+            setSingleSecondExam(data);
+            setQuestionExam(val);
+          })
+          .catch((e) => console.log(e));
+      } else {
+        axios
+          .get("/api/both/getbothexambyid?examId=" + val)
+          .then(({ data }) => {
+            console.log(data);
+            setSingleSecondExam(data);
+            setQuestionExam(val);
+          });
+      }
+    } else {
+      setSecondExams("");
+      setSingleSecondExam({});
+    }
+  };
+
+  const handleChangeBothStatus = (val) => {
+    if (val === "0") {
+      setBothStatus(false);
+      axios
+        .get(`/api/exam/getexambysubquestion?subjectId=${questionSubject}`)
+        .then(({ data }) => {
+          setSecondExams(data);
+          setIsLoading(false);
+        })
+        .catch((e) => console.log(e));
+    } else {
+      setBothStatus(true);
+      axios
+        .get(`/api/both/getbothexambysubject?subjectId=${questionSubject}`)
+        .then(({ data }) => {
+          setSecondExams(data.examPage.exam);
+          if (data.examPage.exam.length === 0) {
+            // toast.error("No Data");
+          }
+          setIsLoading(false);
+        })
+        .catch((e) => toast.error(e.response.data));
+    }
+  };
+  function arrayRemove(arr, value) {
+    return arr.filter(function (ele) {
+      return ele !== value;
+    });
+  }
+  const setQuestionBulk = (e, id) => {
+    let prev = [...selectedQuestions];
+    if (document.getElementById(`select_question` + id).checked === true) {
+      prev.push(id);
+    } else {
+      const index = prev.indexOf(id);
+      if (index !== -1) {
+        prev = arrayRemove(prev, id);
+      }
+    }
+    setSelectedQuestions(prev);
+  };
+
+  const setQuestionBulkAll = () => {
+    let q = [];
+    const allCheckboxes = document.getElementsByName("single_checbox");
+    if (document.getElementById("all_check").checked === true) {
+      for (let i = 0; i < questions.length; i++) {
+        q.push(questions[i].questionId);
+      }
+      for (let i = 0; i < allCheckboxes.length; i++) {
+        allCheckboxes[i].checked = true;
+      }
+    } else {
+      q = [];
+      for (let i = 0; i < allCheckboxes.length; i++) {
+        allCheckboxes[i].checked = false;
+      }
+    }
+    setSelectedQuestions(q);
+  };
+  const sendQuestions = async (e) => {
+    e.preventDefault();
+    const examId = questionExam;
+    if (secondSet !== -1) {
+      const questionSet = {
+        examId,
+        questionArray: selectedQuestions,
+        setName: secondSet,
+      };
+      console.log(questionSet);
+      console.log(selectedQuestions.length);
+      let slot;
+      if (bothStatus) {
+        axios
+          .get(
+            `/api/both/slotAvailable?examId=${examId}&setName=${parseInt(
+              secondSet
+            )}`
+          )
+          .then(async ({ data }) => {
+            slot = parseInt(data.slots) - selectedQuestions.length;
+            if (slot >= 0) {
+              await axios
+                .put("/api/both/bothaddquestionmcqbulk", questionSet)
+                .then(({ data }) => {
+                  toast.success(
+                    "Successfully added all the questions to both Exam"
+                  );
+                  e.target.reset();
+                  document.getElementById("my-modal").checked = false;
+                  window.location.reload(false);
+                })
+                .catch((e) => console.log(e));
+            } else {
+              if (data.slots === 0) {
+                toast.error("No slot available");
+              } else if (data.slots === 1) {
+                toast.error("You can send only 1 photo");
+              } else {
+                toast.error(`You can transfer only  ${data.slots} photoes`);
+              }
+            }
+          });
+      } else {
+        axios
+          .get(
+            `/api/exam/slotAvailable?examId=${examId}&setName=${parseInt(
+              secondSet
+            )}`
+          )
+          .then(async ({ data }) => {
+            const slot = parseInt(data.slots) - selectedQuestions.length;
+            if (slot >= 0) {
+              await axios
+                .put("/api/exam/addQuestionMcqBulk", questionSet)
+                .then(({ data }) => {
+                  toast.success("Successfully transfered all the questions");
+                  e.target.reset();
+                  document.getElementById("my-modal").checked = false;
+                  window.location.reload(false);
+                })
+                .catch((e) => console.log(e));
+            } else {
+              if (data.slots === 0) {
+                toast.error("No slot available");
+              } else if (data.slots === 1) {
+                toast.error("You can send only 1 photo");
+              } else {
+                toast.error(`You can transfer  ${data.slots} photoes`);
+              }
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+            toast.error(e);
+          });
+      }
+    } else {
+      toast.error("Select correct Set");
+      // document.getElementById("my-modal").checked = false;
+      // window.location.reload(false);
+    }
+  };
+
+  const removeQuestion = (questionId) => {
+    axios
+      .put("/api/both/updatequestionstatus", {
+        questionId,
+        examId: selectedExam,
+      })
+      .then(({ data }) => {
+        toast.success("Removed Successfuly");
+        let prev = [...questions];
+        prev = prev.filter((pr) => pr.questionId !== questionId);
+        setQuestions(prev);
+      })
+      .catch((e) => console.log(e));
+
+    document.getElementById("my-modal-1").checked = false;
+  };
+  const handleChangeSet = (setName) => {
+    setSelectedSet(parseInt(setName));
+    if (parseInt(setName) !== -1) {
+      axios
+        .get(
+          `/api/both/questionByExamIdAndSet?examId=${selectedExam}&setName=${setName}`
+        )
+        .then(({ data }) => {
+          setQuestions(data);
+          setIsLoading(false);
+        })
+        .catch((e) => {
+          setQuestions([]);
+          setSelectedQuestions([]);
+          toast.error(e.response.data);
+        });
+    } else {
+      setQuestions([]);
+    }
+  };
+ const sendQuestionMcqSpecial = async (e) => {
     e.preventDefault()
     const examId = questionExam
     const questionSet = {
@@ -49,331 +345,58 @@ const ShowBothQuestions = () => {
     }
 
     await axios
-      .put('/api/special/addquestionmcqbulk', questionSet)
+      .put('/api/mcqspecialexam/addquestionmcqbulk', questionSet)
       .then(({ data }) => {
         toast.success('Successfully added all the questions')
         e.target.reset()
-        document.getElementById('my-modal-special').checked = false
-        window.location.reload(false)
+        document.getElementById('my-modal-mcq-special').checked = false
+        // window.location.reload(false)
       })
-      .catch((e) => console.log(e))
+      .catch((e) =>toast.error(e.response.data))
   }
-  const handleChangeCourse = (e) => {
-    setSelectedSubject('')
-    setSubjects([])
-    setExams('')
-    setExams([])
-    setQuestions([])
-    setSelectedCourse(e.target.value)
-  }
-  const handleChangeSecondCourse = (e) => {
-    setQuestionCourse(e.target.value)
-    setSecondSubjects([])
-    setSecondExams([])
-    axios
-      .get(`/api/subject/getsubjectbycourse?courseId=${e.target.value}`)
-      .then(({ data }) => {
-        setSecondSubjects(data.data)
-        setIsLoading(false)
-      })
-      .catch((e) => console.log(e))
-  }
-
-  const handleChangeSubject = (e) => {
-    setSelectedSubject(e.target.value)
-    setSelectedExam('')
-    setExams([])
-    setQuestions([])
-  }
-
-  const handleChangeExam = async (val) => {
-    if (val !== '') {
-      setSelectedExam(val)
-    }
-  }
-
-  const changeExamType = async (type) => {
-    if (type !== -1) {
-      if (type === 2) {
-        await axios
-          .get(
-            `/api/both/bothquestionbyexamid?examId=${selectedExam}&type=${type}`
-          )
-          .then(({ data }) => {
-            if (examType === '1') {
-              setShow(false)
-              setWrittenQuestion({})
-              setQuestions(data)
-            } else {
-              setShow(true)
-              setQuestions([])
-              setWrittenQuestion(data)
-            }
-            setIsLoading(false)
-          })
-          .catch((e) => {
-            setQuestions([])
-            setSelectedQuestions([])
-            setWrittenQuestion({})
-            toast.error(e.response.data)
-          })
-      } else {
-        await axios
-          .get('/api/both/getbothexambyid?examId=' + selectedExam)
-          .then(({ data }) => {
-            setSingleExam(data)
-            setNumberOfOptions(data.numberOfOptions);
-          })
-      }
-    }
-  }
-
-  const handleSecondExam = (val) => {
-    if (val !== '') {
-      if (bothStatus === false) {
-        axios
-          .get(`/api/exam/getExamById?examId=${val}`)
-          .then(({ data }) => {
-            setSingleSecondExam(data)
-            setQuestionExam(val)
-          })
-          .catch((e) => console.log(e))
-      } else {
-        axios
-          .get('/api/both/getbothexambyid?examId=' + val)
-          .then(({ data }) => {
-            console.log(data)
-            setSingleSecondExam(data)
-            setQuestionExam(val)
-          })
-      }
-    } else {
-      setSecondExams('')
-      setSingleSecondExam({})
-    }
-  }
-
-  const handleChangeBothStatus = (val) => {
-    if (val === '0') {
-      setBothStatus(false)
-      axios
-        .get(`/api/exam/getexambysubquestion?subjectId=${questionSubject}`)
-        .then(({ data }) => {
-          setSecondExams(data)
-          setIsLoading(false)
-        })
-        .catch((e) => console.log(e))
-    } else {
-      setBothStatus(true)
-      axios
-        .get(`/api/both/getbothexambysubject?subjectId=${questionSubject}`)
-        .then(({ data }) => {
-          setSecondExams(data.examPage.exam)
-          if (data.examPage.exam.length === 0) {
-            // toast.error("No Data");
-          }
-          setIsLoading(false)
-        })
-        .catch((e) => toast.error(e.response.data))
-    }
-  }
-  function arrayRemove(arr, value) {
-    return arr.filter(function (ele) {
-      return ele !== value
-    })
-  }
-  const setQuestionBulk = (e, id) => {
-    let prev = [...selectedQuestions]
-    if (document.getElementById(`select_question` + id).checked === true) {
-      prev.push(id)
-    } else {
-      const index = prev.indexOf(id)
-      if (index !== -1) {
-        prev = arrayRemove(prev, id)
-      }
-    }
-    setSelectedQuestions(prev)
-  }
-
-  const setQuestionBulkAll = () => {
-    let q = []
-    const allCheckboxes = document.getElementsByName('single_checbox')
-    if (document.getElementById('all_check').checked === true) {
-      for (let i = 0; i < questions.length; i++) {
-        q.push(questions[i].questionId)
-      }
-      for (let i = 0; i < allCheckboxes.length; i++) {
-        allCheckboxes[i].checked = true
-      }
-    } else {
-      q = []
-      for (let i = 0; i < allCheckboxes.length; i++) {
-        allCheckboxes[i].checked = false
-      }
-    }
-    setSelectedQuestions(q)
-  }
-  const sendQuestions = async (e) => {
-    e.preventDefault()
-    const examId = questionExam
-    if (secondSet !== -1) {
-      const questionSet = {
-        examId,
-        questionArray: selectedQuestions,
-        setName: secondSet,
-      }
-      console.log(questionSet)
-      console.log(selectedQuestions.length)
-      let slot
-      if (bothStatus) {
-        axios
-          .get(
-            `/api/both/slotAvailable?examId=${examId}&setName=${parseInt(
-              secondSet
-            )}`
-          )
-          .then(async ({ data }) => {
-            slot = parseInt(data.slots) - selectedQuestions.length
-            if (slot >= 0) {
-              await axios
-                .put('/api/both/bothaddquestionmcqbulk', questionSet)
-                .then(({ data }) => {
-                  toast.success(
-                    'Successfully added all the questions to both Exam'
-                  )
-                  e.target.reset()
-                  document.getElementById('my-modal').checked = false
-                  window.location.reload(false)
-                })
-                .catch((e) => console.log(e))
-            } else {
-              if (data.slots === 0) {
-                toast.error('No slot available')
-              } else if (data.slots === 1) {
-                toast.error('You can send only 1 photo')
-              } else {
-                toast.error(`You can transfer only  ${data.slots} photoes`)
-              }
-            }
-          })
-      } else {
-        axios
-          .get(
-            `/api/exam/slotAvailable?examId=${examId}&setName=${parseInt(
-              secondSet
-            )}`
-          )
-          .then(async ({ data }) => {
-            const slot = parseInt(data.slots) - selectedQuestions.length
-            if (slot >= 0) {
-              await axios
-                .put('/api/exam/addQuestionMcqBulk', questionSet)
-                .then(({ data }) => {
-                  toast.success('Successfully transfered all the questions')
-                  e.target.reset()
-                  document.getElementById('my-modal').checked = false
-                  window.location.reload(false)
-                })
-                .catch((e) => console.log(e))
-            } else {
-              if (data.slots === 0) {
-                toast.error('No slot available')
-              } else if (data.slots === 1) {
-                toast.error('You can send only 1 photo')
-              } else {
-                toast.error(`You can transfer  ${data.slots} photoes`)
-              }
-            }
-          })
-          .catch((e) => {
-            console.log(e)
-            toast.error(e)
-          })
-      }
-    } else {
-      toast.error('Select correct Set')
-      // document.getElementById("my-modal").checked = false;
-      // window.location.reload(false);
-    }
-  }
-
-  const removeQuestion = (questionId) => {
-    axios
-      .put('/api/both/updatequestionstatus', { questionId,examId:selectedExam })
-      .then(({ data }) => {
-        toast.success('Removed Successfuly')
-        let prev = [...questions]
-        prev = prev.filter((pr) => pr.questionId !== questionId)
-        setQuestions(prev)
-      })
-      .catch((e) => console.log(e))
-
-    document.getElementById('my-modal-1').checked = false
-  }
-  const handleChangeSet = (setName) => {
-    setSelectedSet(parseInt(setName))
-    if (parseInt(setName) !== -1) {
-      axios
-        .get(
-          `/api/both/questionByExamIdAndSet?examId=${selectedExam}&setName=${setName}`
-        )
-        .then(({ data }) => {
-          setQuestions(data)
-          setIsLoading(false)
-        })
-        .catch((e) => {
-          setQuestions([])
-          setSelectedQuestions([])
-          toast.error(e.response.data)
-        })
-    } else {
-      setQuestions([])
-    }
-  }
-
   useEffect(() => {
-    setIsLoading(true)
-    axios.get('/api/course/getallcourseadmin').then(({ data }) => {
-      setCourses(data.courses)
-      setIsLoading(false)
-    })
-    if (selectedCourse !== '') {
+    setIsLoading(true);
+    axios.get("/api/course/getallcourseadmin").then(({ data }) => {
+      setCourses(data.courses);
+      setIsLoading(false);
+    });
+    if (selectedCourse !== "") {
       axios
         .get(`/api/subject/getsubjectbycourse?courseId=${selectedCourse}`)
         .then(({ data }) => {
-          setSubjects(data.data)
-          setIsLoading(false)
+          setSubjects(data.data);
+          setIsLoading(false);
         })
-        .catch((e) => console.log(e))
+        .catch((e) => console.log(e));
     } else {
-      setSubjects([])
+      setSubjects([]);
     }
-    if (selectedSubject !== '') {
+    if (selectedSubject !== "") {
       axios
         .get(`/api/both/getbothexambysubject?subjectId=${selectedSubject}`)
         .then(({ data }) => {
           if (data.examPage.exam.length === 0) {
-            toast.error('No Data')
+            toast.error("No Data");
           } else {
-            setExams(data.examPage.exam)
+            setExams(data.examPage.exam);
           }
-          setIsLoading(false)
+          setIsLoading(false);
         })
-        .catch((e) => console.log(e))
+        .catch((e) => console.log(e));
     } else {
-      setExams([])
+      setExams([]);
     }
-    if (examType !== '') {
+    if (examType !== "") {
     } else {
-      setQuestions([])
+      setQuestions([]);
     }
-  }, [selectedCourse, selectedSubject, selectedExam, examType])
+  }, [selectedCourse, selectedSubject, selectedExam, examType]);
   return (
     <div className="px-0 lg:px-4 py-6 ">
       <div className="bg-white py-4 px-2 my-3 ">
         <div
           className={`w-full  mx-auto grid gird-cols-1 ${
-            singleExam?.numberOfSet > 0 ? 'lg:grid-cols-5' : 'lg:grid-cols-4'
+            singleExam?.numberOfSet > 0 ? "lg:grid-cols-5" : "lg:grid-cols-4"
           } gap-3`}
         >
           <div className="form-control">
@@ -452,7 +475,7 @@ const ShowBothQuestions = () => {
               <option value={2}>Written</option>
             </select>
           </div>
-          {singleExam?.numberOfSet > 0 && selectedExam !== '' && (
+          {singleExam?.numberOfSet > 0 && selectedExam !== "" && (
             <div className="form-control">
               <label className="label-text text-center" htmlFor="">
                 Select Set Name
@@ -491,6 +514,12 @@ const ShowBothQuestions = () => {
                 className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
               >
                 Send Questions to Special
+              </label>
+              <label
+                htmlFor="my-modal-mcq-special"
+                className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+              >
+                Send to MCQ Special
               </label>
             </div>
           )}
@@ -532,12 +561,20 @@ const ShowBothQuestions = () => {
                     <td className="text-center font-extrabold">{idx + 1}.</td>
                     <td className="w-1/4">
                       {question.type === true ? (
-                        <p className='w-96'  style={{whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}}>{question.question}</p>
+                        <p
+                          className="w-96"
+                          style={{
+                            whiteSpace: "pre-wrap",
+                            overflowWrap: "break-word",
+                          }}
+                        >
+                          {question.question}
+                        </p>
                       ) : (
                         <img
                           src={
                             process.env.REACT_APP_API_HOST +
-                            '/' +
+                            "/" +
                             question.question
                           }
                           alt="question"
@@ -550,11 +587,17 @@ const ShowBothQuestions = () => {
                           {question.options.map((opt, idx) => {
                             return (
                               <div key={idx}>
-                                <span className="text-x" style={{whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}}>
-                                  {`${optionName[idx]})  ${opt}`}{' '}
+                                <span
+                                  className="text-x"
+                                  style={{
+                                    whiteSpace: "pre-wrap",
+                                    overflowWrap: "break-word",
+                                  }}
+                                >
+                                  {`${optionName[idx]})  ${opt}`}{" "}
                                 </span>
                               </div>
-                            )
+                            );
                           })}
                         </div>
                       )}
@@ -562,29 +605,31 @@ const ShowBothQuestions = () => {
                     <td className="w-[10px]">
                       {optionName[question.correctOption]}
                     </td>
-                    
+
                     <td>
-                    <div className='grid grid-cols-1 gap-y-2'>
-                      <label
-                        htmlFor="option-changer"
-                        onClick={()=>setSelectedQuestionId(question.questionId)}
-                        className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
-                      >
-                        Change Answer
-                      </label>
-                      <DeactivateButton
-                        setter={setSelectedQuestionId}
-                        value={question.questionId}
-                      ></DeactivateButton>
-                      {
-                          question.type==true && <label
-                          htmlFor="question-update-modal"
-                          onClick={() => setQuestionId(question.questionId)}
-                          className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                      <div className="grid grid-cols-1 gap-y-2">
+                        <label
+                          htmlFor="option-changer"
+                          onClick={() =>
+                            setSelectedQuestionId(question.questionId)
+                          }
+                          className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
                         >
-                          update Question
+                          Change Answer
                         </label>
-                        }
+                        <DeactivateButton
+                          setter={setSelectedQuestionId}
+                          value={question.questionId}
+                        ></DeactivateButton>
+                        {question.type == true && (
+                          <label
+                            htmlFor="question-update-modal"
+                            onClick={() => setQuestionId(question.questionId)}
+                            className="btn bg-button text-sm hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+                          >
+                            update Question
+                          </label>
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -607,7 +652,7 @@ const ShowBothQuestions = () => {
                       <img
                         src={
                           process.env.REACT_APP_API_HOST +
-                          '/' +
+                          "/" +
                           writtenQuestion.questionILink
                         }
                         alt="question"
@@ -621,11 +666,11 @@ const ShowBothQuestions = () => {
           )}
         </div>
       )}
-      <QuestionEdit
-        singleExam={singleExam}
-        questionId={questionId}
+      <QuestionEdit singleExam={singleExam} questionId={questionId} />
+      <OptionChanger
+        questionId={selectedQuestionId}
+        numberOfOptions={numberOfOptions}
       />
-      <OptionChanger questionId={selectedQuestionId} numberOfOptions={numberOfOptions}/>
       <SpecialQuestionSender
         sendQuestionSpecial={sendQuestionSpecial}
         setIsLoading={setIsLoading}
@@ -636,7 +681,16 @@ const ShowBothQuestions = () => {
         setQuestionSubject={setQuestionSubject}
         setSecondSet={setSecondSet}
       />
-
+      <McqSpecialQuestionSender
+        sendQuestionMcqSpecial={sendQuestionMcqSpecial}
+        setIsLoading={setIsLoading}
+        courses={courses}
+        questionExam={questionExam}
+        setQuestionExam={setQuestionExam}
+        questionSubject={questionSubject}
+        setQuestionSubject={setQuestionSubject}
+        setSecondSet={setSecondSet}
+      />
       <QuestionSender
         sendQuestions={sendQuestions}
         handleChangeSecondCourse={handleChangeSecondCourse}
@@ -655,7 +709,7 @@ const ShowBothQuestions = () => {
         remove={removeQuestion}
       ></PopUpModal>
     </div>
-  )
-}
+  );
+};
 
-export default ShowBothQuestions
+export default ShowBothQuestions;

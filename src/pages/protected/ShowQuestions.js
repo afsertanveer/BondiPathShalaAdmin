@@ -9,6 +9,7 @@ import { optionName } from '../../utils/globalVariables'
 import Loader from './../../Shared/Loader'
 import OptionChanger from './OptionChanger'
 import SpecialQuestionSender from './SpecialQuestionSender'
+import McqSpecialQuestionSender from './McqSpecialQuestionSender'
 const ShowQuestions = () => {
   const [courses, setCourses] = useState([])
   const [subjects, setSubjects] = useState([])
@@ -289,6 +290,26 @@ const ShowQuestions = () => {
       // window.location.reload(false);
     }
   }
+  const sendQuestionMcqSpecial = async (e) => {
+    e.preventDefault()
+    const examId = questionExam
+    const questionSet = {
+      subjectId: questionSubject,
+      examId,
+      questionArray: selectedQuestions,
+      setName: secondSet,
+    }
+
+    await axios
+      .put('/api/mcqspecialexam/addquestionmcqbulk', questionSet)
+      .then(({ data }) => {
+        toast.success('Successfully added all the questions')
+        e.target.reset()
+        document.getElementById('my-modal-mcq-special').checked = false
+        // window.location.reload(false)
+      })
+      .catch((e) =>toast.error(e.response.data))
+  }
 
   const removeQuestion = (questionId) => {
     axios
@@ -475,6 +496,12 @@ const ShowQuestions = () => {
               >
                 Send Questions to Special
               </label>
+              <label
+            htmlFor="my-modal-mcq-special"
+            className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+          >
+            Send to MCQ Special
+          </label>
             </div>
           )}
           {questions.length > 0 && (
@@ -624,6 +651,16 @@ const ShowQuestions = () => {
         questionExam={questionExam}
         setSecondSet={setSecondSet}
       />
+      <McqSpecialQuestionSender
+              sendQuestionMcqSpecial={sendQuestionMcqSpecial}
+              setIsLoading={setIsLoading}
+              courses={courses}
+              questionExam={questionExam}
+              setQuestionExam={setQuestionExam}
+              questionSubject={questionSubject}
+              setQuestionSubject={setQuestionSubject}
+              setSecondSet={setSecondSet}
+            />
       <PopUpModal
         modalData={selectedQuestionId}
         remove={removeQuestion}

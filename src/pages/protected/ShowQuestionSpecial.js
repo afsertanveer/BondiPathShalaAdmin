@@ -12,6 +12,7 @@ import SpecialQuestionSender from './SpecialQuestionSender'
 import OptionChanger from './OptionChanger'
 import { shuffle } from '../../utils/globalFunction'
 import QuestionEdit from '../../components/QuestionAdder/QuestionEdit'
+import McqSpecialQuestionSender from './McqSpecialQuestionSender'
 const ShowQuestionSpecial = () => {
   const [courses, setCourses] = useState([])
   const [subjects, setSubjects] = useState([])
@@ -325,7 +326,26 @@ const ShowQuestionSpecial = () => {
       })
       .catch((e) => console.log(e))
   }
+ const sendQuestionMcqSpecial = async (e) => {
+    e.preventDefault()
+    const examId = questionExam
+    const questionSet = {
+      subjectId: questionSubject,
+      examId,
+      questionArray: selectedQuestions,
+      setName: secondSet,
+    }
 
+    await axios
+      .put('/api/mcqspecialexam/addquestionmcqbulk', questionSet)
+      .then(({ data }) => {
+        toast.success('Successfully added all the questions')
+        e.target.reset()
+        document.getElementById('my-modal-mcq-special').checked = false
+        // window.location.reload(false)
+      })
+      .catch((e) =>toast.error(e.response.data))
+  }
   useEffect(() => {
     setIsLoading(true)
     axios.get('/api/course/getallcourseadmin').then(({ data }) => {
@@ -536,6 +556,12 @@ const ShowQuestionSpecial = () => {
           >
             Send Questions to Special
           </label>
+          <label
+            htmlFor="my-modal-mcq-special"
+            className="btn bg-button hover:bg-gradient-to-r from-[#616161] from-0% to=[#353535] to-100% mr-2 mb-3 lg:mb-0 text-white"
+          >
+            Send to MCQ Special
+          </label>
         </div>
       )}
       {isLoading && <Loader></Loader>}
@@ -695,7 +721,16 @@ const ShowQuestionSpecial = () => {
         singleExam={singleExam}
         questionId={questionId}
       />
-
+<McqSpecialQuestionSender
+              sendQuestionMcqSpecial={sendQuestionMcqSpecial}
+              setIsLoading={setIsLoading}
+              courses={courses}
+              questionExam={questionExam}
+              setQuestionExam={setQuestionExam}
+              questionSubject={questionSubject}
+              setQuestionSubject={setQuestionSubject}
+              setSecondSet={setSecondSet}
+            />
       <OptionChanger
         questionId={selectedQuestionId}
         numberOfOptions={numberOfOptions}
